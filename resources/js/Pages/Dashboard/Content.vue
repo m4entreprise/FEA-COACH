@@ -20,6 +20,14 @@ const form = useForm({
     hero_subtitle: props.coach?.hero_subtitle || '',
     about_text: props.coach?.about_text || '',
     method_text: props.coach?.method_text || '',
+    method_title: props.coach?.method_title || '',
+    method_subtitle: props.coach?.method_subtitle || '',
+    method_step1_title: props.coach?.method_step1_title || '',
+    method_step1_description: props.coach?.method_step1_description || '',
+    method_step2_title: props.coach?.method_step2_title || '',
+    method_step2_description: props.coach?.method_step2_description || '',
+    method_step3_title: props.coach?.method_step3_title || '',
+    method_step3_description: props.coach?.method_step3_description || '',
     cta_text: props.coach?.cta_text || 'Réserver une séance',
     satisfaction_rate: props.coach?.satisfaction_rate || 100,
     average_rating: props.coach?.average_rating || 5.0,
@@ -521,34 +529,166 @@ const deletePhoto = () => {
                                     </h3>
                                 </div>
                                 <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
-                                    Expliquez votre approche unique et ce qui vous différencie
+                                    Personnalisez tous les éléments de la section "Ma méthode" de votre site
                                 </p>
-                                <div>
-                                    <div class="flex items-center justify-between">
-                                        <InputLabel for="method_text" value="Description de votre méthode" />
-                                        <span class="text-xs text-gray-500">
-                                            {{ methodTextCount }}/5000
-                                        </span>
+                                
+                                <div class="space-y-6">
+                                    <!-- Titre de la section -->
+                                    <div>
+                                        <InputLabel for="method_title" value="Titre de la section" />
+                                        <input
+                                            id="method_title"
+                                            type="text"
+                                            v-model="form.method_title"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Ma méthode de coaching"
+                                            maxlength="255"
+                                        />
+                                        <InputError class="mt-2" :message="form.errors.method_title" />
                                     </div>
-                                    <textarea
-                                        id="method_text"
-                                        v-model="form.method_text"
-                                        rows="8"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                        placeholder="Décrivez votre méthode d'entraînement, votre philosophie, vos principes clés..."
-                                        maxlength="5000"
-                                    ></textarea>
-                                    <InputError class="mt-2" :message="form.errors.method_text" />
-                                    <div class="mt-2 rounded-md bg-purple-50 p-3 dark:bg-purple-900/20">
+
+                                    <!-- Sous-titre -->
+                                    <div>
+                                        <InputLabel for="method_subtitle" value="Sous-titre" />
+                                        <input
+                                            id="method_subtitle"
+                                            type="text"
+                                            v-model="form.method_subtitle"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Une approche personnalisée et scientifique pour des résultats durables"
+                                            maxlength="255"
+                                        />
+                                        <InputError class="mt-2" :message="form.errors.method_subtitle" />
+                                    </div>
+
+                                    <!-- Description générale -->
+                                    <div>
+                                        <div class="flex items-center justify-between">
+                                            <InputLabel for="method_text" value="Description de votre méthode" />
+                                            <span class="text-xs text-gray-500">
+                                                {{ methodTextCount }}/5000
+                                            </span>
+                                        </div>
+                                        <textarea
+                                            id="method_text"
+                                            v-model="form.method_text"
+                                            rows="6"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Décrivez votre méthode d'entraînement, votre philosophie, vos principes clés..."
+                                            maxlength="5000"
+                                        ></textarea>
+                                        <InputError class="mt-2" :message="form.errors.method_text" />
+                                    </div>
+
+                                    <div class="border-t border-gray-300 dark:border-gray-600 pt-6">
+                                        <h4 class="text-md font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                                            Les 3 étapes de votre méthode
+                                        </h4>
+
+                                        <!-- Étape 1 -->
+                                        <div class="mb-6 rounded-lg border border-purple-200 bg-purple-50/50 p-4 dark:border-purple-800 dark:bg-purple-900/20">
+                                            <h5 class="text-sm font-semibold text-purple-900 dark:text-purple-100 mb-3">
+                                                1️⃣ Première étape
+                                            </h5>
+                                            <div class="space-y-3">
+                                                <div>
+                                                    <InputLabel for="method_step1_title" value="Titre de l'étape 1" />
+                                                    <input
+                                                        id="method_step1_title"
+                                                        type="text"
+                                                        v-model="form.method_step1_title"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="Ex: Évaluation"
+                                                        maxlength="255"
+                                                    />
+                                                    <InputError class="mt-2" :message="form.errors.method_step1_title" />
+                                                </div>
+                                                <div>
+                                                    <InputLabel for="method_step1_description" value="Description de l'étape 1" />
+                                                    <textarea
+                                                        id="method_step1_description"
+                                                        v-model="form.method_step1_description"
+                                                        rows="3"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="Ex: Bilan complet de votre condition physique et définition de vos objectifs personnalisés."
+                                                        maxlength="1000"
+                                                    ></textarea>
+                                                    <InputError class="mt-2" :message="form.errors.method_step1_description" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Étape 2 -->
+                                        <div class="mb-6 rounded-lg border border-purple-200 bg-purple-50/50 p-4 dark:border-purple-800 dark:bg-purple-900/20">
+                                            <h5 class="text-sm font-semibold text-purple-900 dark:text-purple-100 mb-3">
+                                                2️⃣ Deuxième étape
+                                            </h5>
+                                            <div class="space-y-3">
+                                                <div>
+                                                    <InputLabel for="method_step2_title" value="Titre de l'étape 2" />
+                                                    <input
+                                                        id="method_step2_title"
+                                                        type="text"
+                                                        v-model="form.method_step2_title"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="Ex: Programme"
+                                                        maxlength="255"
+                                                    />
+                                                    <InputError class="mt-2" :message="form.errors.method_step2_title" />
+                                                </div>
+                                                <div>
+                                                    <InputLabel for="method_step2_description" value="Description de l'étape 2" />
+                                                    <textarea
+                                                        id="method_step2_description"
+                                                        v-model="form.method_step2_description"
+                                                        rows="3"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="Ex: Plan d'entraînement sur mesure adapté à votre niveau et vos disponibilités."
+                                                        maxlength="1000"
+                                                    ></textarea>
+                                                    <InputError class="mt-2" :message="form.errors.method_step2_description" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Étape 3 -->
+                                        <div class="mb-4 rounded-lg border border-purple-200 bg-purple-50/50 p-4 dark:border-purple-800 dark:bg-purple-900/20">
+                                            <h5 class="text-sm font-semibold text-purple-900 dark:text-purple-100 mb-3">
+                                                3️⃣ Troisième étape
+                                            </h5>
+                                            <div class="space-y-3">
+                                                <div>
+                                                    <InputLabel for="method_step3_title" value="Titre de l'étape 3" />
+                                                    <input
+                                                        id="method_step3_title"
+                                                        type="text"
+                                                        v-model="form.method_step3_title"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="Ex: Suivi"
+                                                        maxlength="255"
+                                                    />
+                                                    <InputError class="mt-2" :message="form.errors.method_step3_title" />
+                                                </div>
+                                                <div>
+                                                    <InputLabel for="method_step3_description" value="Description de l'étape 3" />
+                                                    <textarea
+                                                        id="method_step3_description"
+                                                        v-model="form.method_step3_description"
+                                                        rows="3"
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="Ex: Accompagnement régulier et ajustements constants pour garantir vos progrès."
+                                                        maxlength="1000"
+                                                    ></textarea>
+                                                    <InputError class="mt-2" :message="form.errors.method_step3_description" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="rounded-md bg-purple-50 p-3 dark:bg-purple-900/20">
                                         <p class="text-xs text-purple-700 dark:text-purple-300">
-                                            <strong>💡 Conseils :</strong>
+                                            <strong>💡 Conseil :</strong> Tous ces champs sont personnalisables. Laissez-les vides pour utiliser les valeurs par défaut.
                                         </p>
-                                        <ul class="mt-1 list-inside list-disc space-y-1 text-xs text-purple-700 dark:text-purple-300">
-                                            <li>Décrivez votre approche étape par étape</li>
-                                            <li>Expliquez vos principes fondamentaux</li>
-                                            <li>Mentionnez les bénéfices concrets</li>
-                                            <li>Montrez ce qui vous rend unique</li>
-                                        </ul>
                                     </div>
                                 </div>
                             </div>

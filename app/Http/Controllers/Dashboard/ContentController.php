@@ -16,8 +16,13 @@ class ContentController extends Controller
     {
         $coach = $request->user()->coach;
 
+        $faqsCount = $coach ? $coach->faqs()->count() : 0;
+        $faqsActiveCount = $coach ? $coach->faqs()->where('is_active', true)->count() : 0;
+
         return Inertia::render('Dashboard/Content', [
             'coach' => $coach,
+            'faqsCount' => $faqsCount,
+            'faqsActiveCount' => $faqsActiveCount,
         ]);
     }
 

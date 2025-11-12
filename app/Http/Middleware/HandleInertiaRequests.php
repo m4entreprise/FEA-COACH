@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
             ],
+            'appDomain' => config('app.domain', 'localhost:8000'),
         ];
     }
 }

@@ -141,7 +141,7 @@ const user = computed(() => page.props.auth.user);
                                 <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">
                                     {{ stats.is_active ? 'Actif' : 'Inactif' }}
                                 </p>
-                                <a :href="`http://${coach.subdomain}.localhost:8000`" target="_blank" class="text-xs text-indigo-600 hover:text-indigo-800 dark:text-indigo-400">
+                                <a :href="`http://${coach.subdomain}.${$page.props.appDomain}`" target="_blank" class="text-xs text-indigo-600 hover:text-indigo-800 dark:text-indigo-400">
                                     Voir le site →
                                 </a>
                             </div>

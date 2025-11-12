@@ -20,13 +20,14 @@ class ContentController extends Controller
             ->where('is_active', true)
             ->orderBy('order')
             ->orderBy('created_at')
+            ->limit(5) // Limiter à 5 FAQs max pour l'aperçu
             ->get()
             ->map(fn($faq) => [
                 'id' => $faq->id,
                 'question' => $faq->question,
                 'answer' => $faq->answer,
+                'is_active' => $faq->is_active, // Pour déboguer
             ])
-            ->take(5) // Limiter à 5 FAQs max pour l'aperçu
             : collect();
         
         $faqsCount = $coach ? $coach->faqs()->count() : 0;

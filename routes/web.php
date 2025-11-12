@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminCoachController;
 use App\Http\Controllers\CoachSiteController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Dashboard\BrandingController;
 use App\Http\Controllers\Dashboard\ContentController;
 use App\Http\Controllers\Dashboard\GalleryController;
@@ -60,9 +61,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Main dashboard
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Branding management
     Route::get('/dashboard/branding', [BrandingController::class, 'edit'])->name('dashboard.branding');

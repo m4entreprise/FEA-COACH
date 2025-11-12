@@ -5,6 +5,7 @@ use App\Http\Controllers\CoachSiteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Dashboard\BrandingController;
 use App\Http\Controllers\Dashboard\ContentController;
+use App\Http\Controllers\Dashboard\FaqController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\PlansController;
 use App\Http\Controllers\ProfileController;
@@ -82,6 +83,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/dashboard/plans', [PlansController::class, 'store'])->name('dashboard.plans.store');
     Route::patch('/dashboard/plans/{plan}', [PlansController::class, 'update'])->name('dashboard.plans.update');
     Route::delete('/dashboard/plans/{plan}', [PlansController::class, 'destroy'])->name('dashboard.plans.destroy');
+
+    // FAQ management
+    Route::get('/dashboard/faq', [FaqController::class, 'index'])->name('dashboard.faq');
+    Route::post('/dashboard/faq', [FaqController::class, 'store'])->name('dashboard.faq.store');
+    Route::patch('/dashboard/faq/{faq}', [FaqController::class, 'update'])->name('dashboard.faq.update');
+    Route::delete('/dashboard/faq/{faq}', [FaqController::class, 'destroy'])->name('dashboard.faq.destroy');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

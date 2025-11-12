@@ -1,17 +1,42 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 const props = defineProps({
     coach: Object,
 });
 
 const form = useForm({
-    hero_title: props.coach.hero_title || '',
-    hero_subtitle: props.coach.hero_subtitle || '',
-    about_text: props.coach.about_text || '',
-    method_text: props.coach.method_text || '',
-    cta_text: props.coach.cta_text || 'Commencer maintenant',
+    hero_title: props.coach?.hero_title || '',
+    hero_subtitle: props.coach?.hero_subtitle || '',
+    about_text: props.coach?.about_text || '',
+    method_text: props.coach?.method_text || '',
+    cta_text: props.coach?.cta_text || 'Réserver une séance',
+});
+
+// Character counters
+const heroTitleCount = computed(() => form.hero_title.length);
+const heroSubtitleCount = computed(() => form.hero_subtitle.length);
+const aboutTextCount = computed(() => form.about_text.length);
+const methodTextCount = computed(() => form.method_text.length);
+const ctaTextCount = computed(() => form.cta_text.length);
+
+// Completion percentage
+const completionPercentage = computed(() => {
+    let filled = 0;
+    let total = 5;
+    
+    if (form.hero_title.trim()) filled++;
+    if (form.hero_subtitle.trim()) filled++;
+    if (form.about_text.trim()) filled++;
+    if (form.method_text.trim()) filled++;
+    if (form.cta_text.trim()) filled++;
+    
+    return Math.round((filled / total) * 100);
 });
 
 const submit = () => {
@@ -22,175 +47,358 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Contenu" />
+    <Head title="Contenu du site" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                Contenu du site
+                Gestion du Contenu
             </h2>
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                <!-- Success Message -->
+                <div v-if="$page.props.flash?.success" class="rounded-md bg-green-50 p-4 dark:bg-green-900/20">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-green-800 dark:text-green-200">
+                                {{ $page.props.flash.success }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completion Card -->
+                <div class="overflow-hidden rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg">
+                    <div class="p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-semibold">Complétion du contenu</h3>
+                                <p class="mt-1 text-sm text-blue-100">
+                                    {{ completionPercentage }}% des sections sont remplies
+                                </p>
+                            </div>
+                            <div class="text-4xl font-bold">
+                                {{ completionPercentage }}%
+                            </div>
+                        </div>
+                        <div class="mt-4 h-2 overflow-hidden rounded-full bg-blue-400">
+                            <div
+                                class="h-full bg-white transition-all duration-500"
+                                :style="{ width: completionPercentage + '%' }"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Card -->
+                <div class="rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <p class="text-sm text-blue-700 dark:text-blue-300">
+                                <strong>💡 Conseil :</strong> Personnalisez les textes de votre site public pour attirer vos clients. 
+                                Soyez authentique, clair et mettez en avant votre différence !
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Form -->
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-6">
                         <form @submit.prevent="submit" class="space-y-8">
                             <!-- Hero Section -->
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                                    Section Hero (page d'accueil)
-                                </h3>
-                                <div class="space-y-4">
+                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
+                                <div class="mb-4 flex items-center">
+                                    <svg class="mr-2 h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        🎯 Section Hero (Première impression)
+                                    </h3>
+                                </div>
+                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                    La première section que vos visiteurs verront. Faites-la percutante !
+                                </p>
+                                <div class="space-y-6">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                            Titre principal
-                                        </label>
+                                        <div class="flex items-center justify-between">
+                                            <InputLabel for="hero_title" value="Titre principal *" />
+                                            <span class="text-xs text-gray-500">
+                                                {{ heroTitleCount }}/255
+                                            </span>
+                                        </div>
                                         <input
+                                            id="hero_title"
                                             type="text"
                                             v-model="form.hero_title"
-                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                            placeholder="Transformez votre corps, transformez votre vie"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Transformez votre corps, libérez votre potentiel"
                                             maxlength="255"
+                                            required
                                         />
-                                        <p class="mt-1 text-sm text-gray-500">
-                                            Le titre principal affiché en grand sur la page d'accueil (max 255 caractères)
+                                        <InputError class="mt-2" :message="form.errors.hero_title" />
+                                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                            💡 Astuce : Utilisez un message inspirant et orienté résultat
                                         </p>
-                                        <div v-if="form.errors.hero_title" class="mt-1 text-sm text-red-600">
-                                            {{ form.errors.hero_title }}
-                                        </div>
                                     </div>
 
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                            Sous-titre
-                                        </label>
-                                        <input
-                                            type="text"
+                                        <div class="flex items-center justify-between">
+                                            <InputLabel for="hero_subtitle" value="Sous-titre" />
+                                            <span class="text-xs text-gray-500">
+                                                {{ heroSubtitleCount }}/500
+                                            </span>
+                                        </div>
+                                        <textarea
+                                            id="hero_subtitle"
                                             v-model="form.hero_subtitle"
-                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                            placeholder="Coaching sportif personnalisé pour atteindre vos objectifs"
+                                            rows="2"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Coaching sportif personnalisé pour atteindre vos objectifs de santé et de bien-être"
                                             maxlength="500"
-                                        />
-                                        <p class="mt-1 text-sm text-gray-500">
-                                            Le sous-titre affiché sous le titre principal (max 500 caractères)
+                                        ></textarea>
+                                        <InputError class="mt-2" :message="form.errors.hero_subtitle" />
+                                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                            💡 Astuce : Précisez votre proposition de valeur unique
                                         </p>
-                                        <div v-if="form.errors.hero_subtitle" class="mt-1 text-sm text-red-600">
-                                            {{ form.errors.hero_subtitle }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- About Section -->
+                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
+                                <div class="mb-4 flex items-center">
+                                    <svg class="mr-2 h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        👤 Section "À propos"
+                                    </h3>
+                                </div>
+                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                    Présentez-vous et créez une connexion avec vos futurs clients
+                                </p>
+                                <div>
+                                    <div class="flex items-center justify-between">
+                                        <InputLabel for="about_text" value="Texte de présentation" />
+                                        <span class="text-xs text-gray-500">
+                                            {{ aboutTextCount }}/5000
+                                        </span>
+                                    </div>
+                                    <textarea
+                                        id="about_text"
+                                        v-model="form.about_text"
+                                        rows="8"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                        placeholder="Parlez de votre parcours, vos qualifications, votre passion pour le coaching, ce qui vous motive..."
+                                        maxlength="5000"
+                                    ></textarea>
+                                    <InputError class="mt-2" :message="form.errors.about_text" />
+                                    <div class="mt-2 rounded-md bg-green-50 p-3 dark:bg-green-900/20">
+                                        <p class="text-xs text-green-700 dark:text-green-300">
+                                            <strong>💡 Conseils :</strong>
+                                        </p>
+                                        <ul class="mt-1 list-inside list-disc space-y-1 text-xs text-green-700 dark:text-green-300">
+                                            <li>Mentionnez vos certifications et formations</li>
+                                            <li>Partagez votre histoire personnelle</li>
+                                            <li>Expliquez pourquoi vous êtes devenu coach</li>
+                                            <li>Créez de l'empathie avec vos futurs clients</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Method Section -->
+                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
+                                <div class="mb-4 flex items-center">
+                                    <svg class="mr-2 h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        ⚡ Section "Ma méthode"
+                                    </h3>
+                                </div>
+                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                    Expliquez votre approche unique et ce qui vous différencie
+                                </p>
+                                <div>
+                                    <div class="flex items-center justify-between">
+                                        <InputLabel for="method_text" value="Description de votre méthode" />
+                                        <span class="text-xs text-gray-500">
+                                            {{ methodTextCount }}/5000
+                                        </span>
+                                    </div>
+                                    <textarea
+                                        id="method_text"
+                                        v-model="form.method_text"
+                                        rows="8"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                        placeholder="Décrivez votre méthode d'entraînement, votre philosophie, vos principes clés..."
+                                        maxlength="5000"
+                                    ></textarea>
+                                    <InputError class="mt-2" :message="form.errors.method_text" />
+                                    <div class="mt-2 rounded-md bg-purple-50 p-3 dark:bg-purple-900/20">
+                                        <p class="text-xs text-purple-700 dark:text-purple-300">
+                                            <strong>💡 Conseils :</strong>
+                                        </p>
+                                        <ul class="mt-1 list-inside list-disc space-y-1 text-xs text-purple-700 dark:text-purple-300">
+                                            <li>Décrivez votre approche étape par étape</li>
+                                            <li>Expliquez vos principes fondamentaux</li>
+                                            <li>Mentionnez les bénéfices concrets</li>
+                                            <li>Montrez ce qui vous rend unique</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CTA Section -->
+                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
+                                <div class="mb-4 flex items-center">
+                                    <svg class="mr-2 h-6 w-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                                    </svg>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        🚀 Appel à l'action (CTA)
+                                    </h3>
+                                </div>
+                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                    Le texte du bouton qui incitera vos visiteurs à passer à l'action
+                                </p>
+                                <div>
+                                    <div class="flex items-center justify-between">
+                                        <InputLabel for="cta_text" value="Texte du bouton principal *" />
+                                        <span class="text-xs text-gray-500">
+                                            {{ ctaTextCount }}/100
+                                        </span>
+                                    </div>
+                                    <input
+                                        id="cta_text"
+                                        type="text"
+                                        v-model="form.cta_text"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                        placeholder="Ex: Réserver une séance gratuite"
+                                        maxlength="100"
+                                        required
+                                    />
+                                    <InputError class="mt-2" :message="form.errors.cta_text" />
+                                    <div class="mt-2 rounded-md bg-orange-50 p-3 dark:bg-orange-900/20">
+                                        <p class="text-xs text-orange-700 dark:text-orange-300">
+                                            <strong>💡 Exemples efficaces :</strong>
+                                        </p>
+                                        <ul class="mt-1 list-inside list-disc space-y-1 text-xs text-orange-700 dark:text-orange-300">
+                                            <li>"Réserver ma séance découverte"</li>
+                                            <li>"Commencer ma transformation"</li>
+                                            <li>"Demander mon bilan gratuit"</li>
+                                            <li>"Me lancer maintenant"</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Preview Section -->
+                            <div class="rounded-lg border-2 border-dashed border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100 p-8 dark:border-gray-600 dark:from-gray-800 dark:to-gray-900">
+                                <div class="mb-4 flex items-center">
+                                    <svg class="mr-2 h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        👁️ Aperçu en temps réel
+                                    </h4>
+                                </div>
+                                <div class="space-y-4">
+                                    <!-- Hero Preview -->
+                                    <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+                                        <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                            Titre Hero
+                                        </p>
+                                        <p class="text-xl font-bold text-gray-900 dark:text-gray-100">
+                                            {{ form.hero_title || '(Aucun titre défini)' }}
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Subtitle Preview -->
+                                    <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+                                        <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                            Sous-titre
+                                        </p>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                                            {{ form.hero_subtitle || '(Aucun sous-titre défini)' }}
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- CTA Preview -->
+                                    <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+                                        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                            Bouton CTA
+                                        </p>
+                                        <button
+                                            type="button"
+                                            class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+                                            disabled
+                                        >
+                                            {{ form.cta_text || 'Texte du bouton' }}
+                                            <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Completion Stats -->
+                                    <div class="mt-4 grid grid-cols-2 gap-3">
+                                        <div class="rounded-lg bg-white p-3 text-center shadow-sm dark:bg-gray-800">
+                                            <p class="text-2xl font-bold text-indigo-600">{{ completionPercentage }}%</p>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400">Complet</p>
+                                        </div>
+                                        <div class="rounded-lg bg-white p-3 text-center shadow-sm dark:bg-gray-800">
+                                            <p class="text-2xl font-bold text-green-600">
+                                                {{ heroTitleCount + heroSubtitleCount + aboutTextCount + methodTextCount + ctaTextCount }}
+                                            </p>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400">Caractères</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="border-t border-gray-200 dark:border-gray-700"></div>
-
-                            <!-- About Section -->
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                                    Section "À propos"
-                                </h3>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Texte de présentation
-                                    </label>
-                                    <textarea
-                                        v-model="form.about_text"
-                                        rows="6"
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                        placeholder="Parlez de votre expérience, vos qualifications, votre passion..."
-                                        maxlength="5000"
-                                    ></textarea>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        Présentez-vous et votre approche du coaching (max 5000 caractères)
-                                    </p>
-                                    <div v-if="form.errors.about_text" class="mt-1 text-sm text-red-600">
-                                        {{ form.errors.about_text }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="border-t border-gray-200 dark:border-gray-700"></div>
-
-                            <!-- Method Section -->
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                                    Section "Ma méthode"
-                                </h3>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Description de votre méthode
-                                    </label>
-                                    <textarea
-                                        v-model="form.method_text"
-                                        rows="6"
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                        placeholder="Décrivez votre approche, votre méthode d'entraînement, votre philosophie..."
-                                        maxlength="5000"
-                                    ></textarea>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        Expliquez votre méthode de coaching et ce qui vous différencie (max 5000 caractères)
-                                    </p>
-                                    <div v-if="form.errors.method_text" class="mt-1 text-sm text-red-600">
-                                        {{ form.errors.method_text }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="border-t border-gray-200 dark:border-gray-700"></div>
-
-                            <!-- CTA Section -->
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                                    Appel à l'action
-                                </h3>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Texte du bouton CTA
-                                    </label>
-                                    <input
-                                        type="text"
-                                        v-model="form.cta_text"
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                        placeholder="Commencer maintenant"
-                                        maxlength="100"
-                                    />
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        Le texte affiché sur les boutons d'appel à l'action (max 100 caractères)
-                                    </p>
-                                    <div v-if="form.errors.cta_text" class="mt-1 text-sm text-red-600">
-                                        {{ form.errors.cta_text }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Preview Box -->
-                            <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
-                                <h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                                    Aperçu rapide
-                                </h4>
-                                <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                                    <p><strong>Hero:</strong> {{ form.hero_title || '(vide)' }}</p>
-                                    <p><strong>Sous-titre:</strong> {{ form.hero_subtitle || '(vide)' }}</p>
-                                    <p><strong>CTA:</strong> {{ form.cta_text || '(vide)' }}</p>
-                                </div>
-                            </div>
-
-                            <!-- Submit Button -->
-                            <div class="flex items-center justify-end space-x-4">
-                                <p v-if="form.recentlySuccessful" class="text-sm text-green-600">
-                                    Enregistré avec succès !
-                                </p>
-                                <button
-                                    type="submit"
-                                    :disabled="form.processing"
-                                    class="inline-flex items-center px-6 py-3 bg-indigo-600 border border-transparent rounded-md font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 transition"
-                                >
-                                    <svg v-if="form.processing" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            <!-- Submit Actions -->
+                            <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+                                <div class="flex items-center gap-2">
+                                    <svg v-if="form.recentlySuccessful" class="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                     </svg>
-                                    {{ form.processing ? 'Enregistrement...' : 'Enregistrer les modifications' }}
-                                </button>
+                                    <p v-if="form.recentlySuccessful" class="text-sm font-medium text-green-600 dark:text-green-400">
+                                        ✅ Modifications enregistrées avec succès !
+                                    </p>
+                                </div>
+                                <div class="flex gap-3">
+                                    <PrimaryButton
+                                        type="submit"
+                                        :disabled="form.processing"
+                                        :class="{ 'opacity-25': form.processing }"
+                                        class="inline-flex items-center"
+                                    >
+                                        <svg v-if="!form.processing" class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <svg v-else class="mr-2 h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        {{ form.processing ? 'Enregistrement en cours...' : 'Enregistrer les modifications' }}
+                                    </PrimaryButton>
+                                </div>
                             </div>
                         </form>
                     </div>

@@ -63,6 +63,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Plans
                                 </NavLink>
+                                <NavLink
+                                    :href="route('dashboard.faq')"
+                                    :active="route().current('dashboard.faq')"
+                                >
+                                    FAQ
+                                </NavLink>
                             </div>
                         </div>
 
@@ -193,6 +199,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('dashboard.plans')"
                         >
                             Plans
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('dashboard.faq')"
+                            :active="route().current('dashboard.faq')"
+                        >
+                            FAQ
                         </ResponsiveNavLink>
                     </div>
 

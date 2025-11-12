@@ -56,6 +56,14 @@ class Coach extends Model implements HasMedia
     }
 
     /**
+     * Get the FAQs for the coach.
+     */
+    public function faqs(): HasMany
+    {
+        return $this->hasMany(Faq::class);
+    }
+
+    /**
      * Register media collections.
      */
     public function registerMediaCollections(): void

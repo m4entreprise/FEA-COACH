@@ -35,6 +35,8 @@ class Coach extends Model implements HasMedia
         'pricing_subtitle',
         'transformations_title',
         'transformations_subtitle',
+        'final_cta_title',
+        'final_cta_subtitle',
         'cta_text',
         'satisfaction_rate',
         'average_rating',

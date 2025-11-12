@@ -68,6 +68,8 @@ class ContentController extends Controller
             'pricing_subtitle' => ['nullable', 'string', 'max:255'],
             'transformations_title' => ['nullable', 'string', 'max:255'],
             'transformations_subtitle' => ['nullable', 'string', 'max:255'],
+            'final_cta_title' => ['nullable', 'string', 'max:255'],
+            'final_cta_subtitle' => ['nullable', 'string', 'max:500'],
             'cta_text' => ['required', 'string', 'max:100'],
             'satisfaction_rate' => ['required', 'integer', 'min:0', 'max:100'],
             'average_rating' => ['required', 'numeric', 'min:0', 'max:5'],

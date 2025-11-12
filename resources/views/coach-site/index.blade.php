@@ -325,10 +325,10 @@
 <section id="contact" class="py-20 bg-gradient-to-br from-primary to-secondary text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl sm:text-4xl font-bold mb-6">
-            Prêt à commencer votre transformation ?
+            {{ $coach->final_cta_title ?? 'Prêt à commencer votre transformation ?' }}
         </h2>
         <p class="text-xl mb-8 text-white/90">
-            Ne laissez pas vos objectifs être de simples rêves. Agissez maintenant !
+            {{ $coach->final_cta_subtitle ?? 'Ne laissez pas vos objectifs être de simples rêves. Agissez maintenant !' }}
         </p>
         <a href="#tarifs" class="inline-flex items-center px-8 py-4 bg-white text-primary text-lg font-bold rounded-lg hover:bg-gray-100 transition-all shadow-xl">
             {{ $coach->cta_text ?? 'Découvrir les formules' }}

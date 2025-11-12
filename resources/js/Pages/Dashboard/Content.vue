@@ -32,6 +32,8 @@ const form = useForm({
     pricing_subtitle: props.coach?.pricing_subtitle || '',
     transformations_title: props.coach?.transformations_title || '',
     transformations_subtitle: props.coach?.transformations_subtitle || '',
+    final_cta_title: props.coach?.final_cta_title || '',
+    final_cta_subtitle: props.coach?.final_cta_subtitle || '',
     cta_text: props.coach?.cta_text || 'Réserver une séance',
     satisfaction_rate: props.coach?.satisfaction_rate || 100,
     average_rating: props.coach?.average_rating || 5.0,
@@ -838,6 +840,57 @@ const deletePhoto = () => {
                                     <div class="rounded-md bg-teal-50 p-3 dark:bg-teal-900/20">
                                         <p class="text-xs text-teal-700 dark:text-teal-300">
                                             <strong>💡 Conseil :</strong> Pour gérer vos transformations (photos avant/après, descriptions), rendez-vous dans le menu "Transformations". Ici vous ne modifiez que le titre et le sous-titre de cette section.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Final CTA Section -->
+                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
+                                <div class="mb-4 flex items-center">
+                                    <svg class="mr-2 h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                                    </svg>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        🎯 Section "Appel à l'action finale"
+                                    </h3>
+                                </div>
+                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                    Personnalisez le titre et sous-titre de la section d'appel à l'action en fin de page (actuellement : "Prêt à commencer votre transformation ?")
+                                </p>
+                                
+                                <div class="space-y-6">
+                                    <!-- Titre CTA finale -->
+                                    <div>
+                                        <InputLabel for="final_cta_title" value="Titre de l'appel à l'action final" />
+                                        <input
+                                            id="final_cta_title"
+                                            type="text"
+                                            v-model="form.final_cta_title"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Prêt à commencer votre transformation ?"
+                                            maxlength="255"
+                                        />
+                                        <InputError class="mt-2" :message="form.errors.final_cta_title" />
+                                    </div>
+
+                                    <!-- Sous-titre CTA finale -->
+                                    <div>
+                                        <InputLabel for="final_cta_subtitle" value="Sous-titre" />
+                                        <textarea
+                                            id="final_cta_subtitle"
+                                            v-model="form.final_cta_subtitle"
+                                            rows="2"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Ne laissez pas vos objectifs être de simples rêves. Agissez maintenant !"
+                                            maxlength="500"
+                                        ></textarea>
+                                        <InputError class="mt-2" :message="form.errors.final_cta_subtitle" />
+                                    </div>
+
+                                    <div class="rounded-md bg-purple-50 p-3 dark:bg-purple-900/20">
+                                        <p class="text-xs text-purple-700 dark:text-purple-300">
+                                            <strong>💡 Astuce :</strong> Cette section apparaît juste avant le footer. Le texte du bouton se modifie dans la section "Appel à l'action (CTA)" ci-dessus.
                                         </p>
                                     </div>
                                 </div>

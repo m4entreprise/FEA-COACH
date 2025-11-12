@@ -322,15 +322,15 @@
 </section>
 
 <!-- Contact/CTA Section -->
-<section id="contact" class="py-20 bg-gradient-to-br from-primary to-secondary text-white">
+<section id="contact" class="py-20 text-white" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-6">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-white">
             {{ $coach->final_cta_title ?? 'Prêt à commencer votre transformation ?' }}
         </h2>
-        <p class="text-xl mb-8 text-white/90">
+        <p class="text-xl mb-8 text-white opacity-90">
             {{ $coach->final_cta_subtitle ?? 'Ne laissez pas vos objectifs être de simples rêves. Agissez maintenant !' }}
         </p>
-        <a href="#tarifs" class="inline-flex items-center px-8 py-4 bg-white text-primary text-lg font-bold rounded-lg hover:bg-gray-100 transition-all shadow-xl">
+        <a href="#tarifs" class="inline-flex items-center px-8 py-4 bg-white text-lg font-bold rounded-lg hover:bg-gray-100 transition-all shadow-xl" style="color: {{ $coach->color_primary ?? '#3B82F6' }};">
             {{ $coach->cta_text ?? 'Découvrir les formules' }}
             <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>

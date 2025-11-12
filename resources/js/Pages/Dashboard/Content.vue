@@ -399,14 +399,9 @@ const submit = () => {
                                             :key="faq.id"
                                             class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800"
                                         >
-                                            <div class="flex items-center justify-between">
-                                                <h5 class="font-semibold text-gray-900 dark:text-gray-100">
-                                                    {{ faq.question }}
-                                                </h5>
-                                                <span v-if="faq.is_active !== undefined" class="text-xs px-2 py-1 rounded" :class="faq.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
-                                                    {{ faq.is_active ? 'Actif' : 'Inactif' }}
-                                                </span>
-                                            </div>
+                                            <h5 class="font-semibold text-gray-900 dark:text-gray-100">
+                                                {{ faq.question }}
+                                            </h5>
                                             <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                                                 {{ faq.answer }}
                                             </p>

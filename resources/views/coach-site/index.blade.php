@@ -285,83 +285,37 @@
             </p>
         </div>
 
-        <div x-data="{ openFaq: null }" class="space-y-4">
-            <!-- FAQ Item 1 -->
-            <div class="bg-gray-50 rounded-lg overflow-hidden">
-                <button @click="openFaq = openFaq === 1 ? null : 1" 
-                        class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">Combien de temps dure un programme ?</span>
-                    <svg class="w-5 h-5 text-gray-500 transition-transform" 
-                         :class="{ 'transform rotate-180': openFaq === 1 }"
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-                <div x-show="openFaq === 1" 
-                     x-transition
-                     class="px-6 pb-4 text-gray-600"
-                     style="display: none;">
-                    Les programmes sont généralement prévus sur 3 à 6 mois pour obtenir des résultats optimaux et durables. La durée peut varier selon vos objectifs et votre engagement.
-                </div>
+        @if($faqs && $faqs->count() > 0)
+            <div x-data="{ openFaq: null }" class="space-y-4">
+                @foreach($faqs as $index => $faq)
+                    <!-- FAQ Item {{ $index + 1 }} -->
+                    <div class="bg-gray-50 rounded-lg overflow-hidden">
+                        <button @click="openFaq = openFaq === {{ $index + 1 }} ? null : {{ $index + 1 }}" 
+                                class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
+                            <span class="font-semibold text-gray-900">{{ $faq->question }}</span>
+                            <svg class="w-5 h-5 text-gray-500 transition-transform" 
+                                 :class="{ 'transform rotate-180': openFaq === {{ $index + 1 }} }"
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="openFaq === {{ $index + 1 }}" 
+                             x-transition
+                             class="px-6 pb-4 text-gray-600"
+                             style="display: none;">
+                            {!! nl2br(e($faq->answer)) !!}
+                        </div>
+                    </div>
+                @endforeach
             </div>
-
-            <!-- FAQ Item 2 -->
-            <div class="bg-gray-50 rounded-lg overflow-hidden">
-                <button @click="openFaq = openFaq === 2 ? null : 2" 
-                        class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">Où se déroulent les séances ?</span>
-                    <svg class="w-5 h-5 text-gray-500 transition-transform" 
-                         :class="{ 'transform rotate-180': openFaq === 2 }"
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-                <div x-show="openFaq === 2" 
-                     x-transition
-                     class="px-6 pb-4 text-gray-600"
-                     style="display: none;">
-                    Selon la formule choisie, les séances peuvent se dérouler en salle de sport, à domicile ou en ligne. Nous adaptons le format à vos préférences et contraintes.
-                </div>
+        @else
+            <div class="text-center py-12">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p class="mt-4 text-gray-600">Aucune question fréquente pour le moment.</p>
             </div>
-
-            <!-- FAQ Item 3 -->
-            <div class="bg-gray-50 rounded-lg overflow-hidden">
-                <button @click="openFaq = openFaq === 3 ? null : 3" 
-                        class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">Dois-je suivre un régime strict ?</span>
-                    <svg class="w-5 h-5 text-gray-500 transition-transform" 
-                         :class="{ 'transform rotate-180': openFaq === 3 }"
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-                <div x-show="openFaq === 3" 
-                     x-transition
-                     class="px-6 pb-4 text-gray-600"
-                     style="display: none;">
-                    Non, pas de régime strict ! Je vous propose un rééquilibrage alimentaire progressif et personnalisé, adapté à votre mode de vie et vos préférences. L'objectif est de créer de bonnes habitudes durables.
-                </div>
-            </div>
-
-            <!-- FAQ Item 4 -->
-            <div class="bg-gray-50 rounded-lg overflow-hidden">
-                <button @click="openFaq = openFaq === 4 ? null : 4" 
-                        class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
-                    <span class="font-semibold text-gray-900">Que se passe-t-il si je ne peux pas me rendre à une séance ?</span>
-                    <svg class="w-5 h-5 text-gray-500 transition-transform" 
-                         :class="{ 'transform rotate-180': openFaq === 4 }"
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-                <div x-show="openFaq === 4" 
-                     x-transition
-                     class="px-6 pb-4 text-gray-600"
-                     style="display: none;">
-                    Les séances peuvent être reportées avec un préavis de 24h. En cas d'empêchement, nous trouverons ensemble un nouveau créneau adapté à votre emploi du temps.
-                </div>
-            </div>
-        </div>
+        @endif
     </div>
 </section>
 

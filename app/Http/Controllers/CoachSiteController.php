@@ -24,16 +24,21 @@ class CoachSiteController extends Controller
             'plans' => function ($query) {
                 $query->where('is_active', true)->orderBy('price');
             },
+            'faqs' => function ($query) {
+                $query->where('is_active', true)->orderBy('order')->orderBy('created_at');
+            },
         ]);
 
         // Get the data as arrays for better debugging
         $activePlans = $coach->plans;
         $transformations = $coach->transformations;
+        $faqs = $coach->faqs;
 
         return view('coach-site.index', [
             'coach' => $coach,
             'plans' => $activePlans,
             'transformations' => $transformations,
+            'faqs' => $faqs,
         ]);
     }
 }

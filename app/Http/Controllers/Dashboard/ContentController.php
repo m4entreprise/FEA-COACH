@@ -26,7 +26,6 @@ class ContentController extends Controller
                 'id' => $faq->id,
                 'question' => $faq->question,
                 'answer' => $faq->answer,
-                'is_active' => $faq->is_active, // Pour déboguer
             ])
             : collect();
         

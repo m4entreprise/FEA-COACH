@@ -16,11 +16,25 @@ class ContentController extends Controller
     {
         $coach = $request->user()->coach;
 
+        $faqs = $coach ? $coach->faqs()
+            ->where('is_active', true)
+            ->orderBy('order')
+            ->orderBy('created_at')
+            ->get()
+            ->map(fn($faq) => [
+                'id' => $faq->id,
+                'question' => $faq->question,
+                'answer' => $faq->answer,
+            ])
+            ->take(5) // Limiter à 5 FAQs max pour l'aperçu
+            : collect();
+        
         $faqsCount = $coach ? $coach->faqs()->count() : 0;
         $faqsActiveCount = $coach ? $coach->faqs()->where('is_active', true)->count() : 0;
 
         return Inertia::render('Dashboard/Content', [
             'coach' => $coach,
+            'faqs' => $faqs,
             'faqsCount' => $faqsCount,
             'faqsActiveCount' => $faqsActiveCount,
         ]);

@@ -8,6 +8,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
     coach: Object,
+    faqs: Array,
     faqsCount: Number,
     faqsActiveCount: Number,
 });
@@ -387,10 +388,60 @@ const submit = () => {
                                     </div>
                                 </div>
                                 
-                                <div v-if="faqsActiveCount === 0" class="mt-4 rounded-md bg-yellow-100 p-3 dark:bg-yellow-900/30">
-                                    <p class="text-xs text-yellow-800 dark:text-yellow-200">
-                                        <strong>💡 Astuce :</strong> Créez au moins 3-5 FAQs pour répondre aux questions récurrentes de vos clients potentiels et gagner leur confiance !
-                                    </p>
+                                <!-- FAQ Preview / Empty State -->
+                                <div v-if="faqs && faqs.length > 0" class="mt-6">
+                                    <h4 class="mb-3 text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                        📝 Aperçu de vos FAQs actives ({{ faqs.length }} affichées, max 5)
+                                    </h4>
+                                    <div class="space-y-3">
+                                        <div
+                                            v-for="faq in faqs"
+                                            :key="faq.id"
+                                            class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800"
+                                        >
+                                            <h5 class="font-semibold text-gray-900 dark:text-gray-100">
+                                                {{ faq.question }}
+                                            </h5>
+                                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                                                {{ faq.answer }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div v-if="faqsActiveCount > 5" class="mt-3 text-center">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            + {{ faqsActiveCount - 5 }} autre(s) FAQ(s) active(s) · 
+                                            <a :href="route('dashboard.faq')" class="text-yellow-600 hover:text-yellow-500 font-medium">
+                                                Voir toutes
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div v-else class="mt-4 rounded-md bg-yellow-100 p-4 dark:bg-yellow-900/30">
+                                    <div class="flex">
+                                        <svg class="h-5 w-5 text-yellow-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        <div class="ml-3">
+                                            <h4 class="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
+                                                Aucune FAQ active
+                                            </h4>
+                                            <p class="mt-1 text-xs text-yellow-700 dark:text-yellow-300">
+                                                <strong>💡 Astuce :</strong> Créez au moins 3-5 FAQs pour répondre aux questions récurrentes de vos clients potentiels et gagner leur confiance !
+                                            </p>
+                                            <div class="mt-3">
+                                                <a
+                                                    :href="route('dashboard.faq')"
+                                                    class="inline-flex items-center rounded-md bg-yellow-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-yellow-500"
+                                                >
+                                                    <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                                    </svg>
+                                                    Créer ma première FAQ
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

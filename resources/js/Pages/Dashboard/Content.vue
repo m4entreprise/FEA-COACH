@@ -148,7 +148,8 @@ const uploadPhoto = () => {
     }, {
         preserveScroll: true,
         onSuccess: () => {
-            router.reload({ only: ['profilePhotoUrl'] });
+            // Reload the page to get the updated photo URL
+            router.reload();
         },
     });
 };

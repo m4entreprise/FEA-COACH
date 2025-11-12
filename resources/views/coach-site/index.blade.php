@@ -51,11 +51,11 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <!-- Image -->
             <div class="relative">
-                @if($coach->hasMedia('logo'))
+                @if($coach->hasMedia('profile'))
                     <div class="relative rounded-2xl overflow-hidden shadow-2xl">
-                        <img src="{{ $coach->getFirstMediaUrl('logo') }}" 
+                        <img src="{{ $coach->getFirstMediaUrl('profile') }}" 
                              alt="{{ $coach->name }}" 
-                             class="w-full h-auto">
+                             class="w-full h-auto object-cover aspect-square">
                     </div>
                 @else
                     <div class="aspect-square bg-gradient-to-br from-primary to-secondary rounded-2xl shadow-2xl flex items-center justify-center">

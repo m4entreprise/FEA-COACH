@@ -203,10 +203,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
             <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                Leurs transformations
+                {{ $coach->transformations_title ?? 'Leurs transformations' }}
             </h2>
             <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                Des résultats réels de personnes comme vous
+                {{ $coach->transformations_subtitle ?? 'Des résultats réels de personnes comme vous' }}
             </p>
         </div>
 

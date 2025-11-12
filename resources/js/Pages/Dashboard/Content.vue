@@ -30,6 +30,8 @@ const form = useForm({
     method_step3_description: props.coach?.method_step3_description || '',
     pricing_title: props.coach?.pricing_title || '',
     pricing_subtitle: props.coach?.pricing_subtitle || '',
+    transformations_title: props.coach?.transformations_title || '',
+    transformations_subtitle: props.coach?.transformations_subtitle || '',
     cta_text: props.coach?.cta_text || 'Réserver une séance',
     satisfaction_rate: props.coach?.satisfaction_rate || 100,
     average_rating: props.coach?.average_rating || 5.0,
@@ -785,6 +787,57 @@ const deletePhoto = () => {
                                     <div class="rounded-md bg-emerald-50 p-3 dark:bg-emerald-900/20">
                                         <p class="text-xs text-emerald-700 dark:text-emerald-300">
                                             <strong>💡 Conseil :</strong> Pour gérer vos plans (prix, descriptions, CTA), rendez-vous dans le menu "Plans". Ici vous ne modifiez que le titre et le sous-titre de cette section.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Transformations Section -->
+                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
+                                <div class="mb-4 flex items-center">
+                                    <svg class="mr-2 h-6 w-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        📈 Section "Transformations"
+                                    </h3>
+                                </div>
+                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                    Personnalisez le titre et sous-titre de votre section transformations (les transformations se gèrent dans le menu "Transformations")
+                                </p>
+                                
+                                <div class="space-y-6">
+                                    <!-- Titre de la section transformations -->
+                                    <div>
+                                        <InputLabel for="transformations_title" value="Titre de la section transformations" />
+                                        <input
+                                            id="transformations_title"
+                                            type="text"
+                                            v-model="form.transformations_title"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Leurs transformations"
+                                            maxlength="255"
+                                        />
+                                        <InputError class="mt-2" :message="form.errors.transformations_title" />
+                                    </div>
+
+                                    <!-- Sous-titre -->
+                                    <div>
+                                        <InputLabel for="transformations_subtitle" value="Sous-titre" />
+                                        <input
+                                            id="transformations_subtitle"
+                                            type="text"
+                                            v-model="form.transformations_subtitle"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Des résultats réels de personnes comme vous"
+                                            maxlength="255"
+                                        />
+                                        <InputError class="mt-2" :message="form.errors.transformations_subtitle" />
+                                    </div>
+
+                                    <div class="rounded-md bg-teal-50 p-3 dark:bg-teal-900/20">
+                                        <p class="text-xs text-teal-700 dark:text-teal-300">
+                                            <strong>💡 Conseil :</strong> Pour gérer vos transformations (photos avant/après, descriptions), rendez-vous dans le menu "Transformations". Ici vous ne modifiez que le titre et le sous-titre de cette section.
                                         </p>
                                     </div>
                                 </div>

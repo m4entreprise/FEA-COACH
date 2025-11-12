@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Dashboard\BrandingController;
 use App\Http\Controllers\Dashboard\ContentController;
 use App\Http\Controllers\Dashboard\GalleryController;
+use App\Http\Controllers\Dashboard\PlansController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -75,6 +76,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/gallery', [GalleryController::class, 'index'])->name('dashboard.gallery');
     Route::post('/dashboard/gallery', [GalleryController::class, 'store'])->name('dashboard.gallery.store');
     Route::delete('/dashboard/gallery/{transformation}', [GalleryController::class, 'destroy'])->name('dashboard.gallery.destroy');
+
+    // Plans management
+    Route::get('/dashboard/plans', [PlansController::class, 'index'])->name('dashboard.plans');
+    Route::post('/dashboard/plans', [PlansController::class, 'store'])->name('dashboard.plans.store');
+    Route::patch('/dashboard/plans/{plan}', [PlansController::class, 'update'])->name('dashboard.plans.update');
+    Route::delete('/dashboard/plans/{plan}', [PlansController::class, 'destroy'])->name('dashboard.plans.destroy');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

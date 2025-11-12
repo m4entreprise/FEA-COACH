@@ -159,13 +159,17 @@
             </p>
         </div>
 
-        @if($coach->plans->count() > 0)
+        @if($coach->plans && $coach->plans->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($coach->plans->count(), 4) }} gap-8">
                 @foreach($coach->plans as $plan)
                     <div class="bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all p-8 flex flex-col">
                         <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ $plan->name }}</h3>
                         <div class="text-4xl font-extrabold text-primary mb-4">
-                            {{ number_format($plan->price, 0, ',', ' ') }}€
+                            @if($plan->price)
+                                {{ number_format($plan->price, 2, ',', ' ') }}€
+                            @else
+                                <span class="text-2xl">Prix sur demande</span>
+                            @endif
                         </div>
                         <p class="text-gray-600 mb-6 flex-grow">{{ $plan->description }}</p>
                         
@@ -204,7 +208,7 @@
             </p>
         </div>
 
-        @if($coach->transformations->count() > 0)
+        @if($coach->transformations && $coach->transformations->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($coach->transformations as $transformation)
                     <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
@@ -242,7 +246,7 @@
 
                         <!-- Content -->
                         <div class="p-6">
-                            <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $transformation->title }}</h3>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $transformation->title ?? 'Transformation' }}</h3>
                             @if($transformation->description)
                                 <p class="text-gray-600 text-sm">{{ $transformation->description }}</p>
                             @endif

@@ -3,8 +3,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { Head, useForm } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import TextInput from '@/Components/TextInput.vue';
+import { Head, useForm, router } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
     coach: Object,
@@ -46,6 +47,74 @@ const submit = () => {
     form.post(route('dashboard.content.update'), {
         preserveScroll: true,
     });
+};
+
+// FAQ Management
+const showFaqModal = ref(false);
+const editingFaq = ref(null);
+
+const faqForm = useForm({
+    question: '',
+    answer: '',
+    order: 0,
+    is_active: true,
+});
+
+const openCreateFaqModal = () => {
+    editingFaq.value = null;
+    faqForm.reset();
+    faqForm.clearErrors();
+    faqForm.is_active = true;
+    faqForm.order = 0;
+    showFaqModal.value = true;
+};
+
+const openEditFaqModal = (faq) => {
+    editingFaq.value = faq;
+    faqForm.question = faq.question;
+    faqForm.answer = faq.answer;
+    faqForm.order = faq.order;
+    faqForm.is_active = faq.is_active;
+    faqForm.clearErrors();
+    showFaqModal.value = true;
+};
+
+const closeFaqModal = () => {
+    showFaqModal.value = false;
+    editingFaq.value = null;
+    faqForm.reset();
+    faqForm.clearErrors();
+};
+
+const submitFaq = () => {
+    if (editingFaq.value) {
+        faqForm.patch(route('dashboard.faq.update', editingFaq.value.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeFaqModal();
+                router.reload({ only: ['faqs', 'faqsCount', 'faqsActiveCount'] });
+            },
+        });
+    } else {
+        faqForm.post(route('dashboard.faq.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeFaqModal();
+                router.reload({ only: ['faqs', 'faqsCount', 'faqsActiveCount'] });
+            },
+        });
+    }
+};
+
+const deleteFaq = (faq) => {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer cette question ?\n"${faq.question}"`)) {
+        router.delete(route('dashboard.faq.destroy', faq.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                router.reload({ only: ['faqs', 'faqsCount', 'faqsActiveCount'] });
+            },
+        });
+    }
 };
 </script>
 
@@ -321,19 +390,15 @@ const submit = () => {
                                             ❓ Section FAQ (Questions fréquentes)
                                         </h3>
                                     </div>
-                                    <a
-                                        :href="route('dashboard.faq')"
-                                        class="inline-flex items-center rounded-md bg-yellow-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 transition-colors"
-                                    >
-                                        <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <PrimaryButton @click="openCreateFaqModal" class="bg-yellow-600 hover:bg-yellow-500">
+                                        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                         </svg>
-                                        Gérer mes FAQs
-                                    </a>
+                                        Nouvelle Question
+                                    </PrimaryButton>
                                 </div>
-                                <p class="mb-4 text-sm text-gray-700 dark:text-gray-300">
-                                    Les FAQs répondent aux questions les plus fréquentes de vos visiteurs et améliorent leur expérience
+                                <p class="mb-6 text-sm text-gray-700 dark:text-gray-300">
+                                    Gérez vos questions fréquentes directement depuis cette page
                                 </p>
                                 
                                 <!-- FAQ Stats -->
@@ -388,59 +453,80 @@ const submit = () => {
                                     </div>
                                 </div>
                                 
-                                <!-- FAQ Preview / Empty State -->
-                                <div v-if="faqs && faqs.length > 0" class="mt-6">
-                                    <h4 class="mb-3 text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                        📝 Aperçu de vos FAQs actives ({{ faqs.length }} affichées, max 5)
-                                    </h4>
-                                    <div class="space-y-3">
-                                        <div
-                                            v-for="faq in faqs"
-                                            :key="faq.id"
-                                            class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800"
-                                        >
-                                            <h5 class="font-semibold text-gray-900 dark:text-gray-100">
+                                <!-- FAQs List -->
+                                <div v-if="faqs && faqs.length > 0" class="mt-6 space-y-3">
+                                    <div
+                                        v-for="faq in faqs"
+                                        :key="faq.id"
+                                        class="rounded-lg bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:bg-gray-800"
+                                    >
+                                        <!-- Status Badge & Order -->
+                                        <div class="mb-3 flex items-start justify-between">
+                                            <div class="flex items-center gap-3">
+                                                <span
+                                                    :class="[
+                                                        faq.is_active
+                                                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                                            : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
+                                                        'inline-flex rounded-full px-2 py-1 text-xs font-semibold'
+                                                    ]"
+                                                >
+                                                    {{ faq.is_active ? 'Actif' : 'Inactif' }}
+                                                </span>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400">
+                                                    Ordre: {{ faq.order }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Question -->
+                                        <div class="mb-2">
+                                            <h5 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
                                                 {{ faq.question }}
                                             </h5>
-                                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                                        </div>
+
+                                        <!-- Answer -->
+                                        <div class="mb-4">
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-line">
                                                 {{ faq.answer }}
                                             </p>
                                         </div>
-                                    </div>
-                                    <div v-if="faqsActiveCount > 5" class="mt-3 text-center">
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">
-                                            + {{ faqsActiveCount - 5 }} autre(s) FAQ(s) active(s) · 
-                                            <a :href="route('dashboard.faq')" class="text-yellow-600 hover:text-yellow-500 font-medium">
-                                                Voir toutes
-                                            </a>
-                                        </p>
+
+                                        <!-- Actions -->
+                                        <div class="flex gap-2">
+                                            <button
+                                                @click="openEditFaqModal(faq)"
+                                                class="flex-1 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+                                            >
+                                                Modifier
+                                            </button>
+                                            <button
+                                                @click="deleteFaq(faq)"
+                                                class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                            >
+                                                Supprimer
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 
-                                <div v-else class="mt-4 rounded-md bg-yellow-100 p-4 dark:bg-yellow-900/30">
-                                    <div class="flex">
-                                        <svg class="h-5 w-5 text-yellow-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
-                                        <div class="ml-3">
-                                            <h4 class="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
-                                                Aucune FAQ active
-                                            </h4>
-                                            <p class="mt-1 text-xs text-yellow-700 dark:text-yellow-300">
-                                                <strong>💡 Astuce :</strong> Créez au moins 3-5 FAQs pour répondre aux questions récurrentes de vos clients potentiels et gagner leur confiance !
-                                            </p>
-                                            <div class="mt-3">
-                                                <a
-                                                    :href="route('dashboard.faq')"
-                                                    class="inline-flex items-center rounded-md bg-yellow-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-yellow-500"
-                                                >
-                                                    <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                                    </svg>
-                                                    Créer ma première FAQ
-                                                </a>
-                                            </div>
-                                        </div>
+                                <!-- Empty State -->
+                                <div v-else class="mt-6 rounded-lg bg-white p-12 text-center shadow-sm dark:bg-gray-800">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Aucune question</h3>
+                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                        Commencez par créer votre première question fréquemment posée.
+                                    </p>
+                                    <div class="mt-6">
+                                        <PrimaryButton @click="openCreateFaqModal" class="bg-yellow-600 hover:bg-yellow-500">
+                                            <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Créer une Question
+                                        </PrimaryButton>
                                     </div>
                                 </div>
                             </div>
@@ -540,6 +626,114 @@ const submit = () => {
                             </div>
                         </form>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Modal Create/Edit -->
+        <div
+            v-if="showFaqModal"
+            class="fixed inset-0 z-50 overflow-y-auto"
+            aria-labelledby="modal-title"
+            role="dialog"
+            aria-modal="true"
+        >
+            <div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+                <!-- Background overlay -->
+                <div
+                    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                    aria-hidden="true"
+                    @click="closeFaqModal"
+                ></div>
+
+                <!-- Modal panel -->
+                <div class="inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all dark:bg-gray-800 sm:my-8 sm:w-full sm:max-w-lg sm:align-middle">
+                    <form @submit.prevent="submitFaq">
+                        <div class="bg-white px-4 pb-4 pt-5 dark:bg-gray-800 sm:p-6 sm:pb-4">
+                            <h3 class="mb-4 text-lg font-medium leading-6 text-gray-900 dark:text-gray-100" id="modal-title">
+                                {{ editingFaq ? 'Modifier la question' : 'Créer une nouvelle question' }}
+                            </h3>
+
+                            <div class="space-y-4">
+                                <!-- Question -->
+                                <div>
+                                    <InputLabel for="faq_question" value="Question *" />
+                                    <TextInput
+                                        id="faq_question"
+                                        v-model="faqForm.question"
+                                        type="text"
+                                        class="mt-1 block w-full"
+                                        required
+                                        placeholder="Ex: Combien coûte un accompagnement ?"
+                                    />
+                                    <InputError class="mt-2" :message="faqForm.errors.question" />
+                                </div>
+
+                                <!-- Answer -->
+                                <div>
+                                    <InputLabel for="faq_answer" value="Réponse *" />
+                                    <textarea
+                                        id="faq_answer"
+                                        v-model="faqForm.answer"
+                                        rows="5"
+                                        required
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-indigo-600 dark:focus:ring-indigo-600"
+                                        placeholder="Rédigez votre réponse détaillée..."
+                                    ></textarea>
+                                    <InputError class="mt-2" :message="faqForm.errors.answer" />
+                                </div>
+
+                                <!-- Order -->
+                                <div>
+                                    <InputLabel for="faq_order" value="Ordre d'affichage" />
+                                    <TextInput
+                                        id="faq_order"
+                                        v-model="faqForm.order"
+                                        type="number"
+                                        min="0"
+                                        class="mt-1 block w-full"
+                                        placeholder="0"
+                                    />
+                                    <InputError class="mt-2" :message="faqForm.errors.order" />
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                        Les questions sont triées par ordre croissant (0 = en premier)
+                                    </p>
+                                </div>
+
+                                <!-- Is Active -->
+                                <div class="flex items-center">
+                                    <input
+                                        id="faq_is_active"
+                                        v-model="faqForm.is_active"
+                                        type="checkbox"
+                                        class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600 dark:border-gray-700 dark:bg-gray-900 dark:ring-offset-gray-800"
+                                    />
+                                    <label for="faq_is_active" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                                        Question active (visible sur le site public)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="bg-gray-50 px-4 py-3 dark:bg-gray-700 sm:flex sm:flex-row-reverse sm:px-6">
+                            <PrimaryButton
+                                type="submit"
+                                class="w-full justify-center sm:ml-3 sm:w-auto"
+                                :class="{ 'opacity-25': faqForm.processing }"
+                                :disabled="faqForm.processing"
+                            >
+                                {{ editingFaq ? 'Mettre à jour' : 'Créer' }}
+                            </PrimaryButton>
+                            <button
+                                type="button"
+                                @click="closeFaqModal"
+                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-600 dark:text-gray-100 dark:ring-gray-500 dark:hover:bg-gray-500 sm:mt-0 sm:w-auto"
+                            >
+                                Annuler
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

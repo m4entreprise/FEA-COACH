@@ -12,6 +12,7 @@ const props = defineProps({
     faqs: Array,
     faqsCount: Number,
     faqsActiveCount: Number,
+    profilePhotoUrl: String,
 });
 
 const form = useForm({
@@ -112,6 +113,53 @@ const deleteFaq = (faq) => {
             preserveScroll: true,
             onSuccess: () => {
                 router.reload({ only: ['faqs', 'faqsCount', 'faqsActiveCount'] });
+            },
+        });
+    }
+};
+
+// Profile Photo Management
+const photoInput = ref(null);
+const photoPreview = ref(props.profilePhotoUrl);
+
+const selectPhoto = () => {
+    photoInput.value?.click();
+};
+
+const updatePhotoPreview = () => {
+    const photo = photoInput.value?.files[0];
+
+    if (!photo) return;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        photoPreview.value = e.target.result;
+    };
+
+    reader.readAsDataURL(photo);
+};
+
+const uploadPhoto = () => {
+    if (!photoInput.value?.files[0]) return;
+
+    router.post(route('dashboard.content.profile-photo.upload'), {
+        profile_photo: photoInput.value.files[0],
+    }, {
+        preserveScroll: true,
+        onSuccess: () => {
+            router.reload({ only: ['profilePhotoUrl'] });
+        },
+    });
+};
+
+const deletePhoto = () => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer votre photo de profil ?')) {
+        router.delete(route('dashboard.content.profile-photo.delete'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                photoPreview.value = null;
+                router.reload({ only: ['profilePhotoUrl'] });
             },
         });
     }
@@ -245,6 +293,97 @@ const deleteFaq = (faq) => {
                                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
                                             💡 Astuce : Précisez votre proposition de valeur unique
                                         </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Profile Photo Section -->
+                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
+                                <div class="mb-4 flex items-center">
+                                    <svg class="mr-2 h-6 w-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        📸 Photo de profil
+                                    </h3>
+                                </div>
+                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                    Ajoutez votre photo pour personnaliser votre profil
+                                </p>
+
+                                <div class="flex flex-col items-center gap-6 sm:flex-row">
+                                    <!-- Photo Preview -->
+                                    <div class="flex-shrink-0">
+                                        <div v-if="photoPreview" class="relative">
+                                            <img
+                                                :src="photoPreview"
+                                                alt="Photo de profil"
+                                                class="h-32 w-32 rounded-full object-cover shadow-lg ring-4 ring-gray-200 dark:ring-gray-700"
+                                            />
+                                            <button
+                                                @click="deletePhoto"
+                                                type="button"
+                                                class="absolute -right-2 -top-2 rounded-full bg-red-600 p-2 text-white shadow-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                            >
+                                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div v-else class="flex h-32 w-32 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
+                                            <svg class="h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <!-- Upload Controls -->
+                                    <div class="flex-1">
+                                        <input
+                                            ref="photoInput"
+                                            type="file"
+                                            accept="image/*"
+                                            class="hidden"
+                                            @change="updatePhotoPreview"
+                                        />
+                                        
+                                        <div class="space-y-3">
+                                            <div class="flex gap-3">
+                                                <button
+                                                    @click="selectPhoto"
+                                                    type="button"
+                                                    class="inline-flex items-center rounded-md bg-pink-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-offset-2"
+                                                >
+                                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                                    </svg>
+                                                    Choisir une photo
+                                                </button>
+                                                
+                                                <button
+                                                    v-if="photoInput?.files?.length"
+                                                    @click="uploadPhoto"
+                                                    type="button"
+                                                    class="inline-flex items-center rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
+                                                >
+                                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    Enregistrer la photo
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="rounded-md bg-pink-50 p-3 dark:bg-pink-900/20">
+                                                <p class="text-xs text-pink-700 dark:text-pink-300">
+                                                    <strong>💡 Conseils :</strong>
+                                                </p>
+                                                <ul class="mt-1 list-inside list-disc space-y-1 text-xs text-pink-700 dark:text-pink-300">
+                                                    <li>Utilisez une photo professionnelle et souriante</li>
+                                                    <li>Format carré recommandé (500x500px minimum)</li>
+                                                    <li>Formats acceptés : JPG, PNG, WEBP (max 2MB)</li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

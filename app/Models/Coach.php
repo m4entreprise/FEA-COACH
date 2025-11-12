@@ -75,5 +75,9 @@ class Coach extends Model implements HasMedia
         $this->addMediaCollection('hero')
             ->singleFile()
             ->useFallbackUrl('/images/default-hero.jpg');
+
+        $this->addMediaCollection('profile')
+            ->singleFile()
+            ->useFallbackUrl('/images/default-profile.jpg');
     }
 }

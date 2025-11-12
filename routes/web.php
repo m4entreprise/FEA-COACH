@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCoachController;
 use App\Http\Controllers\CoachSiteController;
 use App\Http\Controllers\Dashboard\BrandingController;
 use App\Http\Controllers\Dashboard\ContentController;
@@ -34,6 +35,21 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/coaches', [AdminCoachController::class, 'index'])->name('admin.coaches.index');
+    Route::get('/coaches/create', [AdminCoachController::class, 'create'])->name('admin.coaches.create');
+    Route::post('/coaches', [AdminCoachController::class, 'store'])->name('admin.coaches.store');
+    Route::get('/coaches/{coach}/edit', [AdminCoachController::class, 'edit'])->name('admin.coaches.edit');
+    Route::patch('/coaches/{coach}', [AdminCoachController::class, 'update'])->name('admin.coaches.update');
+    Route::delete('/coaches/{coach}', [AdminCoachController::class, 'destroy'])->name('admin.coaches.destroy');
 });
 
 /*

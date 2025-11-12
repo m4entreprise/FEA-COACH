@@ -20,6 +20,29 @@ const coach = computed(() => user.value.coach);
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <!-- Admin Access Banner -->
+                <div v-if="user.role === 'admin'" class="mb-6 overflow-hidden bg-blue-600 shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold mb-1">🔐 Accès Administrateur</h3>
+                                <p class="text-blue-100">
+                                    Vous avez accès au panel d'administration pour gérer tous les coachs.
+                                </p>
+                            </div>
+                            <Link
+                                :href="route('admin.coaches.index')"
+                                class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-blue-600 shadow-sm hover:bg-blue-50"
+                            >
+                                Panel Admin
+                                <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Welcome Section -->
                 <div class="mb-6 overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-6 text-gray-900 dark:text-gray-100">

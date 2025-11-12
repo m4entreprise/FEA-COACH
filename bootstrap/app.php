@@ -16,7 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        //
+        // Register middleware aliases
+        $middleware->alias([
+            'resolve.coach' => \App\Http\Middleware\ResolveCoachFromHost::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

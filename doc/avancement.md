@@ -58,11 +58,40 @@ Plateforme multi-tenant SaaS pour coachs sportifs permettant à chaque coach d'a
 
 ---
 
+### Phase 6 : Configuration de la base de données
+- [x] Exécution des migrations (12 migrations exécutées avec succès)
+- [x] Base de données `FEA-COACH` créée
+
+### Phase 7 : Seeders et données de test
+- [x] `CoachSeeder` créé (3 coachs + 1 admin)
+- [x] `PlanSeeder` créé (4 plans par coach)
+- [x] `CoachTransformationSeeder` créé (3-4 transformations par coach actif)
+- [x] Seeders exécutés avec succès
+- [x] Données de test générées :
+  - 3 coachs (Pierre Martin, Sophie Dubois, Thomas Leroy)
+  - 4 utilisateurs (3 coachs + 1 admin)
+  - 12 plans tarifaires
+  - 8 transformations
+
+---
+
+### Phase 8 : Routage et contrôleurs
+- [x] Enregistrement du middleware `ResolveCoachFromHost`
+- [x] Configuration du routage wildcard pour sous-domaines
+- [x] `CoachSiteController` créé (affichage site public)
+- [x] `Dashboard/BrandingController` créé (logo, couleurs)
+- [x] `Dashboard/ContentController` créé (textes)
+- [x] `Dashboard/GalleryController` créé (transformations)
+- [x] Routes configurées (publiques + dashboard)
+- [x] Configuration APP_DOMAIN ajoutée
+
+---
+
 ## 🚧 En cours
 
-### Phase 6 : Configuration de la base de données
-- [ ] Exécution des migrations
-- [ ] Création de seeders de test
+### Phase 9 : Vues et interface
+- [ ] Création des vues Blade pour sites publics
+- [ ] Création des pages Vue/Inertia pour dashboard
 
 ---
 
@@ -150,10 +179,12 @@ Plateforme multi-tenant SaaS pour coachs sportifs permettant à chaque coach d'a
 2. ✅ ~~Installer les dépendances de base~~
 3. ✅ ~~Configurer l'environnement de développement~~
 4. ✅ ~~Créer les migrations et modèles~~
-5. 🔄 Exécuter les migrations dans la base de données
-6. 🔄 Créer des seeders pour données de test
+5. ✅ ~~Exécuter les migrations dans la base de données~~
+6. ✅ ~~Créer des seeders pour données de test~~
 7. 🔄 Configurer le routage multi-tenant
 8. 🔄 Créer les contrôleurs de base
+9. 🔄 Développer les vues Blade publiques
+10. 🔄 Créer le dashboard Inertia/Vue
 
 ### Packages installés
 - **Laravel 11.31** (PHP 8.2)
@@ -188,4 +219,4 @@ database/
 
 ---
 
-_Dernière mise à jour : 12 novembre 2025, 13:57 UTC+01:00_
+_Dernière mise à jour : 12 novembre 2025, 14:20 UTC+01:00_

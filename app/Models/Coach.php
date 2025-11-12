@@ -24,11 +24,15 @@ class Coach extends Model implements HasMedia
         'about_text',
         'method_text',
         'cta_text',
+        'satisfaction_rate',
+        'average_rating',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'satisfaction_rate' => 'integer',
+        'average_rating' => 'decimal:1',
     ];
 
     /**

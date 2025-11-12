@@ -57,6 +57,8 @@ class ContentController extends Controller
             'about_text' => ['nullable', 'string', 'max:5000'],
             'method_text' => ['nullable', 'string', 'max:5000'],
             'cta_text' => ['required', 'string', 'max:100'],
+            'satisfaction_rate' => ['required', 'integer', 'min:0', 'max:100'],
+            'average_rating' => ['required', 'numeric', 'min:0', 'max:5'],
         ]);
 
         $coach->update($validated);

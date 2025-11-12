@@ -50,16 +50,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Branding management
     Route::get('/dashboard/branding', [BrandingController::class, 'edit'])->name('dashboard.branding');
-    Route::put('/dashboard/branding', [BrandingController::class, 'update']);
+    Route::post('/dashboard/branding', [BrandingController::class, 'update'])->name('dashboard.branding.update');
 
     // Content management
     Route::get('/dashboard/content', [ContentController::class, 'edit'])->name('dashboard.content');
-    Route::put('/dashboard/content', [ContentController::class, 'update']);
+    Route::post('/dashboard/content', [ContentController::class, 'update'])->name('dashboard.content.update');
 
     // Gallery management
     Route::get('/dashboard/gallery', [GalleryController::class, 'index'])->name('dashboard.gallery');
-    Route::post('/dashboard/gallery', [GalleryController::class, 'store']);
-    Route::delete('/dashboard/gallery/{transformation}', [GalleryController::class, 'destroy']);
+    Route::post('/dashboard/gallery', [GalleryController::class, 'store'])->name('dashboard.gallery.store');
+    Route::delete('/dashboard/gallery/{transformation}', [GalleryController::class, 'destroy'])->name('dashboard.gallery.destroy');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

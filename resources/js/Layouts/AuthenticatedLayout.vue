@@ -39,6 +39,24 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Dashboard
                                 </NavLink>
+                                <NavLink
+                                    :href="route('dashboard.branding')"
+                                    :active="route().current('dashboard.branding')"
+                                >
+                                    Branding
+                                </NavLink>
+                                <NavLink
+                                    :href="route('dashboard.content')"
+                                    :active="route().current('dashboard.content')"
+                                >
+                                    Contenu
+                                </NavLink>
+                                <NavLink
+                                    :href="route('dashboard.gallery')"
+                                    :active="route().current('dashboard.gallery')"
+                                >
+                                    Galerie
+                                </NavLink>
                             </div>
                         </div>
 
@@ -145,6 +163,24 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('dashboard')"
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('dashboard.branding')"
+                            :active="route().current('dashboard.branding')"
+                        >
+                            Branding
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('dashboard.content')"
+                            :active="route().current('dashboard.content')"
+                        >
+                            Contenu
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('dashboard.gallery')"
+                            :active="route().current('dashboard.gallery')"
+                        >
+                            Galerie
                         </ResponsiveNavLink>
                     </div>
 

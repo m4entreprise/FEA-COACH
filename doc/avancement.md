@@ -9,6 +9,26 @@
 
 Plateforme multi-tenant SaaS pour coachs sportifs permettant à chaque coach d'avoir son propre site personnalisable via un sous-domaine (ex: `coach-name.kineseducation.academy`).
 
+### État actuel : Interface complète ✅
+
+**Progression globale : 80%**
+
+| Phase | Statut | Description |
+|-------|--------|-------------|
+| 0-5 | ✅ Complète | Setup, packages, modèles, migrations |
+| 6-7 | ✅ Complète | Base de données & seeders |
+| 8 | ✅ Complète | Routage & contrôleurs |
+| 9-10 | ✅ Complète | Vues Blade & dashboard Vue |
+| 11-13 | ⏳ À venir | Infrastructure, tests, production |
+
+**Données disponibles :**
+- ✅ 3 coachs (2 actifs + 1 inactif)
+- ✅ 4 utilisateurs (3 coachs + 1 admin)
+- ✅ 12 plans tarifaires
+- ✅ 8 transformations avant/après
+- ✅ 4 contrôleurs fonctionnels
+- ✅ Routes multi-tenant configurées
+
 ### Architecture
 - **Backend :** Laravel 11 (PHP 8.2/8.3)
 - **Frontend public :** Blade + TailwindCSS + Alpine.js
@@ -87,59 +107,64 @@ Plateforme multi-tenant SaaS pour coachs sportifs permettant à chaque coach d'a
 
 ---
 
+### Phase 9-10 : Interfaces utilisateur
+- [x] Layout Blade principal créé avec théming dynamique (CSS variables)
+- [x] Vue publique `coach-site/index.blade.php` créée
+- [x] Sections du site public :
+  - [x] Hero section avec image de fond
+  - [x] About section avec statistiques
+  - [x] Method section avec 3 étapes
+  - [x] Plans/Pricing section
+  - [x] Transformations gallery (avant/après)
+  - [x] FAQ section avec Alpine.js
+  - [x] Contact/CTA section
+- [x] Alpine.js installé et configuré
+- [x] Navigation responsive avec menu mobile
+- [x] Dashboard Vue/Inertia :
+  - [x] `Dashboard/Branding.vue` (logo, couleurs, hero)
+  - [x] `Dashboard/Content.vue` (textes du site)
+  - [x] `Dashboard/Gallery.vue` (transformations avec modal)
+  - [x] Page d'accueil dashboard améliorée avec stats
+- [x] Navigation dashboard mise à jour
+- [x] Routes nommées pour les updates
+- [x] Build Vite réussi
+
+---
+
 ## 🚧 En cours
 
-### Phase 9 : Vues et interface
-- [ ] Création des vues Blade pour sites publics
-- [ ] Création des pages Vue/Inertia pour dashboard
+### Phase 11 : Infrastructure & Déploiement
+- [ ] Configuration Redis pour cache et queues
+- [ ] Configuration Supervisor pour queues
+- [ ] Tests de l'application complète
 
 ---
 
 ## 📝 Prochaines étapes
 
-### Phase 7 : Routage et contrôleurs
-- [ ] Configuration du routage wildcard pour sous-domaines
-- [ ] Enregistrement du middleware dans bootstrap/app.php
-- [ ] Contrôleur pour le site public des coachs
-- [ ] Contrôleurs dashboard (Branding, Content, Gallery)
-
-### Phase 8 : Vues publiques (Blade)
-
-### Phase 6 : Frontend public
-- [ ] Layout Blade principal
-- [ ] Composants Blade (hero, about, method, etc.)
-- [ ] Système de théming avec variables CSS
-- [ ] Intégration Alpine.js
-
-### Phase 7 : Dashboard Coach (Inertia + Vue)
-- [ ] Pages dashboard :
-  - [ ] Branding (logo, couleurs)
-  - [ ] Content (textes des sections)
-  - [ ] Gallery (avant/après)
-  - [ ] Plans (optionnel)
-- [ ] Composants Vue :
-  - [ ] ImageUploader
-  - [ ] ColorPicker
-  - [ ] TextEditor
-  - [ ] TransformationsManager
-
-### Phase 8 : Infrastructure
+### Phase 11 : Infrastructure & Déploiement
 - [ ] Configuration Redis pour cache et queues
 - [ ] Configuration Supervisor pour queues
-- [ ] Configuration cron pour schedule
-- [ ] Scripts de déploiement Forge
+- [ ] Configuration cron (`schedule:run`)
+- [ ] Scripts de déploiement Laravel Forge
+- [ ] Configuration stockage S3/compatible
+- [ ] Configuration des emails (SMTP)
 
-### Phase 9 : Tests & qualité
+### Phase 12 : Tests & Qualité
 - [ ] Tests de feature (multi-tenancy)
-- [ ] Tests d'isolation des données
+- [ ] Tests d'isolation des données par coach
+- [ ] Tests d'upload de médias
 - [ ] Installation Laravel Telescope (staging)
 - [ ] Configuration des backups automatiques
+- [ ] Tests de performance
 
-### Phase 10 : Production
-- [ ] Configuration DNS wildcard
-- [ ] Certificat SSL Let's Encrypt
-- [ ] Optimisation performances
-- [ ] Documentation admin
+### Phase 13 : Production
+- [ ] Configuration DNS wildcard (`*.domain.com`)
+- [ ] Certificat SSL Let's Encrypt (wildcard)
+- [ ] Optimisation performances (cache, CDN)
+- [ ] Documentation administrateur
+- [ ] Guide d'onboarding pour nouveaux coachs
+- [ ] Monitoring et alertes
 
 ---
 
@@ -181,10 +206,13 @@ Plateforme multi-tenant SaaS pour coachs sportifs permettant à chaque coach d'a
 4. ✅ ~~Créer les migrations et modèles~~
 5. ✅ ~~Exécuter les migrations dans la base de données~~
 6. ✅ ~~Créer des seeders pour données de test~~
-7. 🔄 Configurer le routage multi-tenant
-8. 🔄 Créer les contrôleurs de base
-9. 🔄 Développer les vues Blade publiques
-10. 🔄 Créer le dashboard Inertia/Vue
+7. ✅ ~~Configurer le routage multi-tenant~~
+8. ✅ ~~Créer les contrôleurs de base~~
+9. ✅ ~~Développer les vues Blade publiques~~
+10. ✅ ~~Créer les pages dashboard Inertia/Vue~~
+11. ✅ ~~Implémenter l'upload de médias~~
+12. 🔄 Tester le système multi-tenant
+13. 🔄 Configurer l'infrastructure de production
 
 ### Packages installés
 - **Laravel 11.31** (PHP 8.2)
@@ -194,29 +222,60 @@ Plateforme multi-tenant SaaS pour coachs sportifs permettant à chaque coach d'a
 - **Spatie Activity Log 4.10** (logs d'activité)
 - **Spatie Backup 9.3** (sauvegardes)
 - **TailwindCSS** + **Vite** (pré-configurés)
+- **Alpine.js 3.x** (interactivité sites publics)
 
 ### Structure créée
+
 ```
 app/
 ├── Models/
-│   ├── Coach.php (avec HasMedia)
-│   ├── CoachTransformation.php (avec HasMedia)
+│   ├── Coach.php (HasMedia: logo, hero)
+│   ├── CoachTransformation.php (HasMedia: before, after)
 │   ├── Plan.php
 │   └── User.php (étendu avec role, coach_id)
-└── Http/
-    └── Middleware/
-        └── ResolveCoachFromHost.php
+├── Http/
+│   ├── Controllers/
+│   │   ├── CoachSiteController.php (site public)
+│   │   └── Dashboard/
+│   │       ├── BrandingController.php (logo, couleurs)
+│   │       ├── ContentController.php (textes)
+│   │       └── GalleryController.php (transformations)
+│   └── Middleware/
+│       └── ResolveCoachFromHost.php (multi-tenant)
 
 database/
-└── migrations/
-    ├── 2025_11_12_*_create_coaches_table.php
-    ├── 2025_11_12_*_create_coach_transformations_table.php
-    ├── 2025_11_12_*_create_plans_table.php
-    ├── 2025_11_12_*_add_role_and_coach_id_to_users_table.php
-    ├── 2025_11_12_*_create_media_table.php (Spatie)
-    └── 2025_11_12_*_create_activity_log_table.php (Spatie)
+├── migrations/ (12 fichiers)
+│   ├── *_create_coaches_table.php
+│   ├── *_create_coach_transformations_table.php
+│   ├── *_create_plans_table.php
+│   ├── *_add_role_and_coach_id_to_users_table.php
+│   ├── *_create_media_table.php (Spatie)
+│   └── *_create_activity_log_table.php (Spatie)
+└── seeders/
+    ├── DatabaseSeeder.php
+    ├── CoachSeeder.php (3 coachs + 1 admin)
+    ├── PlanSeeder.php (12 plans)
+    └── CoachTransformationSeeder.php (8 transformations)
+
+routes/
+└── web.php (wildcard + dashboard routes)
+
+bootstrap/
+└── app.php (middleware 'resolve.coach' enregistré)
 ```
 
 ---
 
-_Dernière mise à jour : 12 novembre 2025, 14:20 UTC+01:00_
+---
+
+## 📚 Documentation complémentaire
+
+- **`concept.md`** - Vision technique et architecture complète
+- **`test-accounts.md`** - Liste des comptes de test et configuration locale
+- **`database-schema.md`** - Schéma détaillé de la base de données
+- **`PHASE-6-SUMMARY.md`** - Résumé détaillé de la Phase 6 (BDD & seeders)
+- **`PHASE-8-SUMMARY.md`** - Résumé détaillé de la Phase 8 (Routing & contrôleurs)
+
+---
+
+_Dernière mise à jour : 12 novembre 2025, 14:45 UTC+01:00_

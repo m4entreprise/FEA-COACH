@@ -79,7 +79,7 @@
                 <!-- Stats -->
                 <div class="grid grid-cols-3 gap-6 mt-8">
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-primary mb-1">{{ $coach->transformations->count() }}+</div>
+                        <div class="text-3xl font-bold text-primary mb-1">{{ isset($transformations) ? $transformations->count() : 0 }}+</div>
                         <div class="text-sm text-gray-600">Transformations</div>
                     </div>
                     <div class="text-center">
@@ -159,9 +159,9 @@
             </p>
         </div>
 
-        @if($coach->plans && $coach->plans->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($coach->plans->count(), 4) }} gap-8">
-                @foreach($coach->plans as $plan)
+        @if(isset($plans) && $plans->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($plans->count(), 4) }} gap-8">
+                @foreach($plans as $plan)
                     <div class="bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all p-8 flex flex-col">
                         <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ $plan->name }}</h3>
                         <div class="text-4xl font-extrabold text-primary mb-4">
@@ -208,9 +208,9 @@
             </p>
         </div>
 
-        @if($coach->transformations && $coach->transformations->count() > 0)
+        @if(isset($transformations) && $transformations->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($coach->transformations as $transformation)
+                @foreach($transformations as $transformation)
                     <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                         <!-- Before/After Images -->
                         <div class="grid grid-cols-2">

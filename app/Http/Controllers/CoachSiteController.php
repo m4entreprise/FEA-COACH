@@ -16,18 +16,24 @@ class CoachSiteController extends Controller
         // Get the coach from the container (set by ResolveCoachFromHost middleware)
         $coach = app(Coach::class);
 
-        // Load relationships
-        $coach->load([
+        // Load relationships with explicit eager loading
+        $coach->loadMissing([
             'transformations' => function ($query) {
                 $query->orderBy('order');
             },
             'plans' => function ($query) {
-                $query->where('is_active', true);
+                $query->where('is_active', true)->orderBy('price');
             },
         ]);
 
+        // Get the data as arrays for better debugging
+        $activePlans = $coach->plans;
+        $transformations = $coach->transformations;
+
         return view('coach-site.index', [
             'coach' => $coach,
+            'plans' => $activePlans,
+            'transformations' => $transformations,
         ]);
     }
 }

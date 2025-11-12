@@ -154,10 +154,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
             <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                Mes formules de coaching
+                {{ $coach->pricing_title ?? 'Mes formules de coaching' }}
             </h2>
             <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                Choisissez la formule qui correspond le mieux à vos objectifs
+                {{ $coach->pricing_subtitle ?? 'Choisissez la formule qui correspond le mieux à vos objectifs' }}
             </p>
         </div>
 

@@ -64,6 +64,8 @@ class ContentController extends Controller
             'method_step2_description' => ['nullable', 'string', 'max:1000'],
             'method_step3_title' => ['nullable', 'string', 'max:255'],
             'method_step3_description' => ['nullable', 'string', 'max:1000'],
+            'pricing_title' => ['nullable', 'string', 'max:255'],
+            'pricing_subtitle' => ['nullable', 'string', 'max:255'],
             'cta_text' => ['required', 'string', 'max:100'],
             'satisfaction_rate' => ['required', 'integer', 'min:0', 'max:100'],
             'average_rating' => ['required', 'numeric', 'min:0', 'max:5'],

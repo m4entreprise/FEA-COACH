@@ -28,6 +28,8 @@ const form = useForm({
     method_step2_description: props.coach?.method_step2_description || '',
     method_step3_title: props.coach?.method_step3_title || '',
     method_step3_description: props.coach?.method_step3_description || '',
+    pricing_title: props.coach?.pricing_title || '',
+    pricing_subtitle: props.coach?.pricing_subtitle || '',
     cta_text: props.coach?.cta_text || 'Réserver une séance',
     satisfaction_rate: props.coach?.satisfaction_rate || 100,
     average_rating: props.coach?.average_rating || 5.0,
@@ -733,6 +735,57 @@ const deletePhoto = () => {
                                             <li>"Demander mon bilan gratuit"</li>
                                             <li>"Me lancer maintenant"</li>
                                         </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pricing Section -->
+                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
+                                <div class="mb-4 flex items-center">
+                                    <svg class="mr-2 h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        💰 Section "Tarifs"
+                                    </h3>
+                                </div>
+                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                    Personnalisez le titre et sous-titre de votre section tarifs (les plans se gèrent dans le menu "Plans")
+                                </p>
+                                
+                                <div class="space-y-6">
+                                    <!-- Titre de la section tarifs -->
+                                    <div>
+                                        <InputLabel for="pricing_title" value="Titre de la section tarifs" />
+                                        <input
+                                            id="pricing_title"
+                                            type="text"
+                                            v-model="form.pricing_title"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Mes formules de coaching"
+                                            maxlength="255"
+                                        />
+                                        <InputError class="mt-2" :message="form.errors.pricing_title" />
+                                    </div>
+
+                                    <!-- Sous-titre -->
+                                    <div>
+                                        <InputLabel for="pricing_subtitle" value="Sous-titre" />
+                                        <input
+                                            id="pricing_subtitle"
+                                            type="text"
+                                            v-model="form.pricing_subtitle"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Choisissez la formule qui correspond le mieux à vos objectifs"
+                                            maxlength="255"
+                                        />
+                                        <InputError class="mt-2" :message="form.errors.pricing_subtitle" />
+                                    </div>
+
+                                    <div class="rounded-md bg-emerald-50 p-3 dark:bg-emerald-900/20">
+                                        <p class="text-xs text-emerald-700 dark:text-emerald-300">
+                                            <strong>💡 Conseil :</strong> Pour gérer vos plans (prix, descriptions, CTA), rendez-vous dans le menu "Plans". Ici vous ne modifiez que le titre et le sous-titre de cette section.
+                                        </p>
                                     </div>
                                 </div>
                             </div>

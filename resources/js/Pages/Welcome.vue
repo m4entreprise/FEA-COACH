@@ -32,9 +32,15 @@ defineProps({
                         <template v-else>
                             <Link
                                 :href="route('login')"
-                                class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-medium transition"
+                                class="px-4 py-2 text-white hover:text-purple-300 transition"
                             >
                                 Connexion
+                            </Link>
+                            <Link
+                                :href="route('register')"
+                                class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-medium transition"
+                            >
+                                Créer mon site
                             </Link>
                         </template>
                     </div>
@@ -63,17 +69,17 @@ defineProps({
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <Link
-                        :href="route('login')"
+                        :href="route('register')"
                         class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-lg shadow-lg transition transform hover:scale-105"
                     >
-                        Accéder à mon espace
+                        Créer mon site gratuitement
                     </Link>
-                    <a
-                        href="#features"
+                    <Link
+                        :href="route('login')"
                         class="px-8 py-4 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-bold rounded-lg border border-white/20 transition"
                     >
-                        Découvrir les fonctionnalités
-                    </a>
+                        Se connecter
+                    </Link>
                 </div>
             </div>
         </section>
@@ -256,12 +262,20 @@ defineProps({
                 <p class="text-xl text-gray-300 mb-8">
                     Rejoignez les diplômés FEA qui ont déjà créé leur site professionnel et commencez à développer votre clientèle dès aujourd'hui.
                 </p>
-                <Link
-                    :href="route('login')"
-                    class="inline-block px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-lg shadow-lg transition transform hover:scale-105"
-                >
-                    Commencer maintenant
-                </Link>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Link
+                        :href="route('register')"
+                        class="inline-block px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-lg shadow-lg transition transform hover:scale-105"
+                    >
+                        Créer mon site maintenant
+                    </Link>
+                    <Link
+                        :href="route('login')"
+                        class="inline-block px-8 py-4 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-bold rounded-lg border border-white/20 transition"
+                    >
+                        J'ai déjà un compte
+                    </Link>
+                </div>
             </div>
         </section>
 
@@ -281,8 +295,16 @@ defineProps({
                     <div>
                         <h3 class="text-white font-semibold mb-4">Partenaires</h3>
                         <ul class="space-y-2 text-gray-400">
-                            <li>M4 Entreprise</li>
-                            <li>Fitness Education Academy</li>
+                            <li>
+                                <a href="https://m4entreprise.be/" target="_blank" rel="noopener" class="hover:text-purple-300 transition">
+                                    M4 Entreprise
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://fitnesseducation.academy/" target="_blank" rel="noopener" class="hover:text-purple-300 transition">
+                                    Fitness Education Academy
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     

@@ -31,21 +31,22 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'name' => $request->email, // Nom temporaire, sera mis à jour dans l'onboarding
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'coach', // Par défaut, les nouveaux utilisateurs sont des coachs
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Rediriger vers l'onboarding au lieu du dashboard
+        return redirect(route('onboarding.step1', absolute: false));
     }
 }

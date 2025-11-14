@@ -12,10 +12,10 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    // Redirection vers l'onboarding pour l'inscription
-    Route::get('register', function () {
-        return redirect()->route('onboarding.step1');
-    })->name('register');
+    Route::get('register', [RegisteredUserController::class, 'create'])
+        ->name('register');
+    
+    Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');

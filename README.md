@@ -1,10 +1,10 @@
-# FEA-COACH
+# Ignite Coach
 
 Plateforme SaaS multi-tenant pour coachs sportifs permettant à chaque coach d'avoir son propre site personnalisable via sous-domaine.
 
 ## 🎯 Concept
 
-FEA-COACH est une solution permettant aux coachs sportifs de créer rapidement leur site web personnalisé accessible via un sous-domaine unique (ex: `coach-name.kineseducation.academy`). Chaque coach peut gérer son contenu, ses couleurs, ses images et ses tarifs via un dashboard simple et intuitif.
+Ignite Coach est une solution (anciennement FEA-COACH) permettant aux coachs sportifs de créer rapidement leur site web personnalisé accessible via un sous-domaine unique (ex: `coach-name.kineseducation.academy`). Chaque coach peut gérer son contenu, ses couleurs, ses images et ses tarifs via un dashboard simple et intuitif.
 
 ## 🏗️ Architecture
 
@@ -65,6 +65,8 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
+En local, vous pouvez aussi démarrer rapidement avec SQLite en laissant la configuration par défaut de `.env.example` (`DB_CONNECTION=sqlite`).
+
 5. Exécuter les migrations et seeders
 ```bash
 php artisan migrate:fresh --seed
@@ -100,10 +102,14 @@ Le serveur sera accessible sur `http://localhost:8000`
 
 ### Tables principales
 
-- **coaches**: Profils des coachs (slug, couleurs, contenus)
-- **users**: Utilisateurs (avec role et coach_id)
+- **coaches**: Profils des coachs (slug, couleurs, contenus, statistiques, sections personnalisées)
+- **users**: Utilisateurs (avec role, coach_id, champs d'onboarding, statut d'abonnement, essais, etc.)
 - **coach_transformations**: Galerie avant/après
-- **plans**: Forfaits et tarifs
+- **plans**: Plans tarifaires des coachs
+- **faqs**: Questions fréquentes par coach
+- **promo_code_requests**: Demandes de codes promo
+- **promo_code_batches**: Lots de codes promo pré-générés
+- **contact_messages**: Messages envoyés via le formulaire de contact
 - **media**: Gestion des fichiers (Spatie)
 - **activity_log**: Logs d'activité (Spatie)
 
@@ -133,25 +139,48 @@ Le serveur sera accessible sur `http://localhost:8000`
   - Upload logo (preview instantané)
   - Upload image hero (preview instantané)
   - Sélecteur de couleurs (primaire/secondaire)
-- ✅ Gestion du contenu :
-  - Titre et sous-titre hero
-  - Texte "À propos"
-  - Description de la méthode
-  - Texte des boutons CTA
+- ✅ Gestion du contenu (page `/dashboard/content`) :
+  - Hero (titre, sous-titre)
+  - À propos (texte + statistiques personnalisables)
+  - Méthode (titre, sous-titre, description + 3 étapes)
+  - Sections Tarifs, Transformations, FAQ et Appel à l'action final (titres/sous-titres)
+  - Texte des boutons d'appel à l'action
+- ✅ Gestion de la photo de profil (upload/suppression avec preview)
 - ✅ Gestion de la galerie :
   - Ajout transformations avec modal
   - Upload images avant/après
   - Suppression avec confirmation
   - Réorganisation (à venir)
+- ✅ Gestion des plans tarifaires (création, édition, suppression, activation) via `/dashboard/plans`
+- ✅ Gestion des FAQs (création, édition, suppression, activation) intégrée au contenu
+- ✅ Dashboard enrichi avec statistiques (complétion du profil, nombre de plans, transformations, statut du site)
 - ✅ Validation temps réel
 - ✅ Feedback visuel (succès/erreur)
 - ✅ Navigation fluide (Inertia SPA)
+
+### Onboarding & activation des comptes
+
+- ✅ Onboarding en 3 étapes après connexion
+  - Step 1 : type de compte (diplômé FEA / non diplômé)
+  - Step 2 : informations légales (nom, prénom, TVA, adresse)
+  - Step 3 : activation par code promo ou paiement (Stripe à intégrer)
+- ✅ Activation automatique du compte et du profil coach lors de l'approbation d'une demande de code promo
+- ✅ Redirection intelligente vers le dashboard une fois l'onboarding complété
+
+### Panel Admin (multi-tenant)
+
+- ✅ Panel d'administration dédié (`/admin`) protégé par middleware `admin`
+- ✅ Gestion des coachs : création, édition, suppression
+- ✅ Gestion des sous-domaines personnalisés
+- ✅ Activation/désactivation des coachs
+- ✅ Génération automatique du sous-domaine à partir du nom
 
 ### Architecture multi-tenant
 
 - **Pattern**: Single database avec filtrage par `coach_id`
 - **Résolution**: Middleware `ResolveCoachFromHost` pour détecter le coach depuis le sous-domaine
 - **Isolation**: Toutes les données sont filtrées par `coach_id`
+- **Domaine**: Configuration basée sur `APP_DOMAIN` (ex: `localhost:8000` en local, `votre-domaine.com` en production) avec DNS wildcard (`*.votre-domaine.com`)
 
 ## 🧪 Tests et développement
 
@@ -173,50 +202,39 @@ Après le seeding, vous aurez accès aux comptes suivants :
 ```
 Fichier : `C:\Windows\System32\drivers\etc\hosts` (nécessite droits admin)
 
-### Guide de test complet
-
-Voir [`GUIDE-TESTING.md`](./GUIDE-TESTING.md) pour les scénarios de test détaillés.
-
 ## 📚 Documentation
 
 Voir le dossier `/doc` pour plus de détails :
 
 - [`concept.md`](./doc/concept.md) - Vision technique et architecture complète
-- [`avancement.md`](./doc/avancement.md) - Suivi détaillé du développement
-- [`database-schema.md`](./doc/database-schema.md) - Schéma de base de données
-- [`test-accounts.md`](./doc/test-accounts.md) - Comptes de test et configuration
-
-### Résumés des phases
-
-- [`PHASE-6-SUMMARY.md`](./PHASE-6-SUMMARY.md) - Base de données & seeders
-- [`PHASE-8-SUMMARY.md`](./PHASE-8-SUMMARY.md) - Routage & contrôleurs
-- [`PHASE-9-10-SUMMARY.md`](./PHASE-9-10-SUMMARY.md) - Interfaces utilisateur (Blade + Vue)
+- [`FEA-proposition-commerciale.md`](./doc/FEA-proposition-commerciale.md) - Proposition commerciale et positionnement du produit
 
 ## 📊 Statut du projet
 
-**Version actuelle :** 0.8 (Phases 0-10 complétées)  
-**Progression :** 80%
+**Statut actuel :** cœur fonctionnel en place (multi-tenant, sites publics, dashboard, contenu, onboarding, panel admin). La facturation et les tests automatisés restent à finaliser.
 
 ### ✅ Fonctionnalités complétées
 
 - ✅ Setup Laravel 11 + packages
 - ✅ Modèles & migrations
-- ✅ Multi-tenancy (single database)
-- ✅ Seeders avec données de test
-- ✅ Contrôleurs & routes
-- ✅ Sites publics (Blade + Alpine.js)
-- ✅ Dashboard (Vue 3 + Inertia)
-- ✅ Upload de médias (logo, hero, transformations)
-- ✅ Théming dynamique
+- ✅ Multi-tenancy (single database, résolution par sous-domaine)
+- ✅ Seeders avec données de test et comptes de démo
+- ✅ Sites publics (Blade + Alpine.js) avec sections complètes (Hero, À propos, Méthode, Tarifs, Transformations, FAQ, CTA, CTA final)
+- ✅ Dashboard (Vue 3 + Inertia) avec mode sombre
+- ✅ Gestion avancée du contenu (stats, méthode, tarifs, transformations, FAQ, CTA final, photo de profil)
+- ✅ Upload de médias (logo, hero, transformations) via Spatie Media Library
+- ✅ Gestion des plans tarifaires (création/édition/suppression/activation)
+- ✅ Système de FAQ dynamique (CRUD et affichage public)
+- ✅ Onboarding en 3 étapes + activation par code promo
+- ✅ Panel Admin pour la gestion des coachs et des sous-domaines
 
 ### 🔄 En cours / À venir
 
+- ⏳ Intégration Stripe complète pour la gestion des abonnements
 - ⏳ Tests automatisés (Feature, Unit)
-- ⏳ Configuration production (Redis, Supervisor)
-- ⏳ Optimisation performances
-- ⏳ Déploiement
-- ⏳ Gestion des plans/abonnements (Stripe)
-- ⏳ Analytics intégrés
+- ⏳ Optimisation des performances et de la mise en cache
+- ⏳ Configuration production (Redis, Supervisor, workers)
+- ⏳ Analytics intégrés et métriques business
 
 ## 🚀 Déploiement
 
@@ -231,6 +249,7 @@ Voir le dossier `/doc` pour plus de détails :
 - Stockage S3 ou compatible
 - DNS wildcard configuré (`*.domain.com`)
 - Certificat SSL wildcard (Let's Encrypt)
+- Variable d'environnement `APP_DOMAIN` configurée (ex: `localhost:8000` en local, `kineseducation.academy` en production)
 
 ### Laravel Forge (recommandé)
 

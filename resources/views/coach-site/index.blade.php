@@ -363,7 +363,7 @@
         @endif
 
         <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8">
-            <form method="POST" action="{{ route('coach.contact') }}" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form method="POST" action="/contact" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 @csrf
 
                 <div class="md:col-span-1">

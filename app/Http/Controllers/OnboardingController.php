@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coach;
+use App\Models\PromoCodeRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -97,6 +98,30 @@ class OnboardingController extends Controller
             'user' => $user,
             'stripePublicKey' => config('services.stripe.key'),
         ]);
+    }
+
+    /**
+     * Soumettre une demande de code promo
+     */
+    public function requestPromoCode(Request $request)
+    {
+        $request->validate([
+            'message' => 'nullable|string|max:1000',
+        ]);
+
+        $user = Auth::user();
+
+        // Créer la demande
+        PromoCodeRequest::create([
+            'user_id' => $user->id,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'email' => $user->email,
+            'message' => $request->message,
+            'status' => 'pending',
+        ]);
+
+        return back()->with('success', 'Votre demande a été envoyée ! Vous recevrez un email avec votre code promo une fois validée par notre équipe.');
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminCoachController;
+use App\Http\Controllers\Admin\PromoCodeRequestController;
 use App\Http\Controllers\CoachSiteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Dashboard\BrandingController;
@@ -51,6 +52,11 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/coaches/{coach}/edit', [AdminCoachController::class, 'edit'])->name('admin.coaches.edit');
     Route::patch('/coaches/{coach}', [AdminCoachController::class, 'update'])->name('admin.coaches.update');
     Route::delete('/coaches/{coach}', [AdminCoachController::class, 'destroy'])->name('admin.coaches.destroy');
+    
+    // Promo code requests
+    Route::get('/promo-requests', [PromoCodeRequestController::class, 'index'])->name('admin.promo-requests.index');
+    Route::post('/promo-requests/{promoCodeRequest}/approve', [PromoCodeRequestController::class, 'approve'])->name('admin.promo-requests.approve');
+    Route::post('/promo-requests/{promoCodeRequest}/reject', [PromoCodeRequestController::class, 'reject'])->name('admin.promo-requests.reject');
 });
 
 /*
@@ -67,6 +73,7 @@ Route::middleware(['auth'])->prefix('onboarding')->group(function () {
     Route::post('/step2', [OnboardingController::class, 'storeStep2'])->name('onboarding.step2.store');
     
     Route::get('/step3', [OnboardingController::class, 'step3'])->name('onboarding.step3');
+    Route::post('/request-promo', [OnboardingController::class, 'requestPromoCode'])->name('onboarding.request-promo');
     Route::post('/validate-promo', [OnboardingController::class, 'validatePromoCode'])->name('onboarding.validate-promo');
     Route::post('/process-payment', [OnboardingController::class, 'processPayment'])->name('onboarding.process-payment');
 });

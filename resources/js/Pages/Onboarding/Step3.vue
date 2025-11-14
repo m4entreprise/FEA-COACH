@@ -7,8 +7,14 @@ const props = defineProps({
     stripePublicKey: String,
 });
 
+const showRequestForm = ref(false);
+
 const promoForm = useForm({
     promo_code: '',
+});
+
+const requestForm = useForm({
+    message: '',
 });
 
 const paymentForm = useForm({
@@ -17,6 +23,15 @@ const paymentForm = useForm({
 
 const submitPromoCode = () => {
     promoForm.post(route('onboarding.validate-promo'));
+};
+
+const submitPromoRequest = () => {
+    requestForm.post(route('onboarding.request-promo'), {
+        onSuccess: () => {
+            showRequestForm.value = false;
+            requestForm.reset();
+        }
+    });
 };
 
 const submitPayment = () => {
@@ -89,26 +104,61 @@ const submitPayment = () => {
                         </p>
                     </div>
 
-                    <!-- Info Box -->
-                    <div class="p-4 bg-purple-500/10 border border-purple-400/30 rounded-lg">
+                    <!-- Success Message -->
+                    <div v-if="$page.props.flash.success" class="p-4 bg-green-500/10 border border-green-400/30 rounded-lg">
+                        <p class="text-sm text-green-300">{{ $page.props.flash.success }}</p>
+                    </div>
+
+                    <!-- Request Form Toggle -->
+                    <div v-if="!showRequestForm" class="p-4 bg-purple-500/10 border border-purple-400/30 rounded-lg">
                         <div class="flex items-start space-x-3">
                             <svg class="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <div class="text-sm text-purple-300">
-                                <p class="font-medium mb-1">Vous n'avez pas reçu votre code ?</p>
-                                <p>
-                                    Contactez Fitness Education Academy pour obtenir votre code promotionnel :
-                                </p>
-                                <a 
-                                    href="https://fitnesseducation.academy/contact" 
-                                    target="_blank"
-                                    class="text-purple-400 hover:text-purple-300 underline font-medium mt-1 inline-block"
+                                <p class="font-medium mb-2">Vous n'avez pas reçu votre code ?</p>
+                                <button 
+                                    @click="showRequestForm = true"
+                                    type="button"
+                                    class="text-purple-400 hover:text-purple-300 underline font-medium"
                                 >
-                                    fitnesseducation.academy/contact →
-                                </a>
+                                    Demander un code promo FEA →
+                                </button>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Request Form -->
+                    <div v-else class="p-6 bg-purple-500/10 border border-purple-400/30 rounded-lg space-y-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-lg font-semibold text-white">Demander un code promo</h3>
+                            <button 
+                                @click="showRequestForm = false"
+                                type="button"
+                                class="text-gray-400 hover:text-white"
+                            >
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <textarea
+                            v-model="requestForm.message"
+                            rows="4"
+                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition resize-none"
+                            placeholder="Message optionnel : Présentez-vous et expliquez pourquoi vous demandez un code promo FEA..."
+                        ></textarea>
+                        
+                        <button 
+                            @click="submitPromoRequest"
+                            type="button"
+                            :disabled="requestForm.processing"
+                            class="w-full px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition disabled:opacity-50"
+                        >
+                            <span v-if="!requestForm.processing">Envoyer ma demande</span>
+                            <span v-else>Envoi...</span>
+                        </button>
                     </div>
 
                     <!-- Navigation Buttons -->

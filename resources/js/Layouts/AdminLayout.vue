@@ -39,6 +39,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Gestion Coachs
                                 </NavLink>
+                                <NavLink
+                                    :href="route('admin.promo-requests.index')"
+                                    :active="route().current('admin.promo-requests.*')"
+                                >
+                                    Demandes FEA
+                                </NavLink>
                             </div>
                         </div>
 
@@ -146,6 +152,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('admin.coaches.*')"
                         >
                             Gestion Coachs
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.promo-requests.index')"
+                            :active="route().current('admin.promo-requests.*')"
+                        >
+                            Demandes FEA
                         </ResponsiveNavLink>
                     </div>
 

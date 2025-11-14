@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\ContentController;
 use App\Http\Controllers\Dashboard\FaqController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\PlansController;
+use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,24 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/coaches/{coach}/edit', [AdminCoachController::class, 'edit'])->name('admin.coaches.edit');
     Route::patch('/coaches/{coach}', [AdminCoachController::class, 'update'])->name('admin.coaches.update');
     Route::delete('/coaches/{coach}', [AdminCoachController::class, 'destroy'])->name('admin.coaches.destroy');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Onboarding Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->prefix('onboarding')->group(function () {
+    Route::get('/step1', [OnboardingController::class, 'step1'])->name('onboarding.step1');
+    Route::post('/step1', [OnboardingController::class, 'storeStep1'])->name('onboarding.step1.store');
+    
+    Route::get('/step2', [OnboardingController::class, 'step2'])->name('onboarding.step2');
+    Route::post('/step2', [OnboardingController::class, 'storeStep2'])->name('onboarding.step2.store');
+    
+    Route::get('/step3', [OnboardingController::class, 'step3'])->name('onboarding.step3');
+    Route::post('/validate-promo', [OnboardingController::class, 'validatePromoCode'])->name('onboarding.validate-promo');
+    Route::post('/process-payment', [OnboardingController::class, 'processPayment'])->name('onboarding.process-payment');
 });
 
 /*

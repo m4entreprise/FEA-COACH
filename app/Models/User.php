@@ -24,6 +24,15 @@ class User extends Authenticatable
         'password',
         'role',
         'coach_id',
+        'first_name',
+        'last_name',
+        'vat_number',
+        'legal_address',
+        'is_fea_graduate',
+        'fea_promo_code',
+        'onboarding_completed',
+        'stripe_customer_id',
+        'subscription_status',
     ];
 
     /**
@@ -46,6 +55,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_fea_graduate' => 'boolean',
+            'onboarding_completed' => 'boolean',
         ];
     }
 

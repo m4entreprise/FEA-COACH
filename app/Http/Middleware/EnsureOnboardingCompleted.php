@@ -23,6 +23,11 @@ class EnsureOnboardingCompleted
             return $next($request);
         }
 
+        // Les admins n'ont pas besoin de compléter l'onboarding
+        if ($user->role === 'admin') {
+            return $next($request);
+        }
+
         // Si l'onboarding n'est pas complété et qu'on n'est pas déjà sur une route d'onboarding
         if (!$user->onboarding_completed && !$request->routeIs('onboarding.*')) {
             return redirect()->route('onboarding.step1');

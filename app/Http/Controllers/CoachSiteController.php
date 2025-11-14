@@ -63,6 +63,14 @@ class CoachSiteController extends Controller
             'message' => $validated['message'],
         ]);
 
+        // Réponse JSON pour les requêtes AJAX (Alpine.js)
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Votre message a bien été envoyé. Nous vous répondrons rapidement.',
+            ]);
+        }
+
+        // Fallback classique en POST (sans JS)
         return back()->with('success', 'Votre message a bien été envoyé. Nous vous répondrons rapidement.');
     }
 }

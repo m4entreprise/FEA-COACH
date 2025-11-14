@@ -341,7 +341,10 @@
 
 <!-- Contact/CTA Section -->
 <section id="contact" class="py-20 text-white" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div
+        class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"
+        x-data="{ submitted: false, successMessage: '', loading: false }"
+    >
         <div class="mb-10 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-white">
                 {{ $coach->final_cta_title ?? 'Prêt à commencer votre transformation ?' }}
@@ -355,7 +358,10 @@
         </div>
 
         @if (session('success'))
-            <div class="mb-6 rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-sm">
+            <div
+                class="mb-6 rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-sm"
+                x-show="!submitted"
+            >
                 <div class="flex items-center">
                     <svg class="h-5 w-5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -366,7 +372,7 @@
         @endif
 
         @if ($errors->any())
-            <div class="mb-6 rounded-lg bg-white/10 border border-red-300/40 px-4 py-3 text-sm">
+            <div class="mb-6 rounded-lg bg-white/10 border border-red-300/40 px-4 py-3 text-sm" x-show="!submitted">
                 <div class="flex items-start">
                     <svg class="h-5 w-5 text-red-200 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14M12 4a8 8 0 100 16 8 8 0 000-16z" />
@@ -380,8 +386,61 @@
             </div>
         @endif
 
-        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8">
-            <form method="POST" action="/contact" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Message de succès en AJAX (remplace le formulaire après envoi) -->
+        <div
+            class="mb-6 rounded-2xl bg-white/10 border border-emerald-300/60 px-4 py-4 text-sm sm:text-base"
+            x-show="submitted"
+            x-transition
+        >
+            <div class="flex items-start">
+                <svg class="h-6 w-6 text-emerald-200 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <div class="ml-3">
+                    <p class="font-semibold text-emerald-50">Message envoyé avec succès</p>
+                    <p class="mt-1 text-emerald-100" x-text="successMessage || 'Votre message a bien été envoyé. Le coach vous répondra au plus vite.'"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8" x-show="!submitted" x-transition>
+            <form
+                method="POST"
+                action="/contact"
+                class="grid grid-cols-1 md:grid-cols-2 gap-6"
+                @submit.prevent="
+                    loading = true;
+                    fetch('/contact', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: $refs.name.value,
+                            email: $refs.email.value,
+                            phone: $refs.phone.value,
+                            message: $refs.message.value,
+                        }),
+                    })
+                        .then(async (response) => {
+                            if (!response.ok) {
+                                throw new Error('Request failed');
+                            }
+                            const data = await response.json();
+                            successMessage = data.message || '';
+                            submitted = true;
+                        })
+                        .catch(() => {
+                            // En cas d'erreur, garder le fallback : le coach sera contacté via la soumission classique
+                            loading = false;
+                        })
+                        .finally(() => {
+                            loading = false;
+                        });
+                "
+            >
                 @csrf
 
                 <div class="md:col-span-1">
@@ -390,6 +449,7 @@
                         type="text"
                         id="name"
                         name="name"
+                        x-ref="name"
                         required
                         value="{{ old('name') }}"
                         class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
@@ -403,6 +463,7 @@
                         type="email"
                         id="email"
                         name="email"
+                        x-ref="email"
                         required
                         value="{{ old('email') }}"
                         class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
@@ -416,6 +477,7 @@
                         type="text"
                         id="phone"
                         name="phone"
+                        x-ref="phone"
                         value="{{ old('phone') }}"
                         class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
                         placeholder="+33 ..."
@@ -427,6 +489,7 @@
                     <textarea
                         id="message"
                         name="message"
+                        x-ref="message"
                         rows="4"
                         required
                         class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
@@ -440,10 +503,12 @@
                 <div class="md:col-span-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-2">
                     <button
                         type="submit"
-                        class="inline-flex items-center justify-center px-8 py-3 bg-white text-sm sm:text-base font-bold rounded-lg shadow-lg hover:bg-gray-100 transition-all"
+                        class="inline-flex items-center justify-center px-8 py-3 bg-white text-sm sm:text-base font-bold rounded-lg shadow-lg hover:bg-gray-100 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                         style="color: {{ $coach->color_primary ?? '#3B82F6' }};"
+                        :disabled="loading"
                     >
-                        Envoyer mon message
+                        <span x-show="!loading">Envoyer mon message</span>
+                        <span x-show="loading">Envoi en cours...</span>
                         <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                         </svg>

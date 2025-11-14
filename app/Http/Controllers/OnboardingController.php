@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coach;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class OnboardingController extends Controller
@@ -116,6 +118,9 @@ class OnboardingController extends Controller
             $user->onboarding_completed = true;
             $user->save();
 
+            // Créer le profil Coach
+            $this->createCoachProfile($user);
+
             return redirect()->route('dashboard')->with('success', 'Bienvenue ! Vous bénéficiez de 1 mois offert grâce à votre code FEA.');
         }
 
@@ -160,9 +165,53 @@ class OnboardingController extends Controller
             $user->onboarding_completed = true;
             $user->save();
 
+            // Créer le profil Coach
+            $this->createCoachProfile($user);
+
             return redirect()->route('dashboard')->with('success', 'Bienvenue ! Votre abonnement est actif.');
         } catch (\Exception $e) {
             return back()->withErrors(['payment' => 'Erreur lors du paiement : ' . $e->getMessage()]);
         }
+    }
+
+    /**
+     * Créer le profil Coach pour l'utilisateur
+     */
+    private function createCoachProfile(User $user): void
+    {
+        // Vérifier si le profil Coach existe déjà
+        if ($user->coach_id) {
+            return;
+        }
+
+        // Générer un slug unique à partir du nom complet
+        $fullName = trim($user->first_name . ' ' . $user->last_name);
+        $baseSlug = Str::slug($fullName);
+        $slug = $baseSlug;
+        $counter = 1;
+
+        // S'assurer que le slug est unique
+        while (Coach::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        // Créer le profil Coach
+        $coach = Coach::create([
+            'name' => $fullName,
+            'slug' => $slug,
+            'primary_color' => '#9333ea', // Purple par défaut
+            'secondary_color' => '#ec4899', // Pink par défaut
+            'is_active' => true,
+            'hero_title' => 'Transformez votre vie dès aujourd\'hui',
+            'hero_subtitle' => 'Coaching personnalisé pour atteindre vos objectifs',
+            'about_text' => 'Bienvenue ! Je suis ' . $fullName . ', votre coach sportif dédié.',
+            'method_text' => 'Ma méthode repose sur un accompagnement personnalisé et adapté à vos besoins.',
+            'cta_text' => 'Réserver ma séance découverte',
+        ]);
+
+        // Associer le coach à l'utilisateur
+        $user->coach_id = $coach->id;
+        $user->save();
     }
 }

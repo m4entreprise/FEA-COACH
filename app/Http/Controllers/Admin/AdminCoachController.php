@@ -14,31 +14,54 @@ use Inertia\Inertia;
 class AdminCoachController extends Controller
 {
     /**
-     * Display a listing of coaches.
+     * Display a listing of all users (coaches and pending)
      */
     public function index()
     {
-        $coaches = Coach::with('user')
+        // Liste TOUS les utilisateurs non-admin, avec leur profil coach s'il existe
+        $users = User::with('coach')
+            ->where('role', '!=', 'admin')
             ->orderBy('created_at', 'desc')
             ->get()
-            ->map(function ($coach) {
+            ->map(function ($user) {
+                $coach = $user->coach;
+                
                 return [
-                    'id' => $coach->id,
-                    'name' => $coach->name,
-                    'slug' => $coach->slug,
-                    'subdomain' => $coach->subdomain,
-                    'is_active' => $coach->is_active,
-                    'user_email' => $coach->user?->email ?? 'N/A',
-                    'user_name' => $coach->user?->name ?? 'N/A',
-                    'is_fea_graduate' => $coach->user?->is_fea_graduate ?? false,
-                    'subscription_status' => $coach->user?->subscription_status ?? null,
-                    'trial_ends_at' => $coach->user?->trial_ends_at?->format('d/m/Y') ?? null,
-                    'created_at' => $coach->created_at->format('d/m/Y'),
+                    'id' => $user->id,
+                    'user_id' => $user->id,
+                    'coach_id' => $coach?->id,
+                    
+                    // Infos utilisateur
+                    'email' => $user->email,
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'full_name' => trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: $user->name,
+                    
+                    // Statuts
+                    'is_fea_graduate' => $user->is_fea_graduate ?? false,
+                    'onboarding_completed' => $user->onboarding_completed ?? false,
+                    'setup_completed' => $user->setup_completed ?? false,
+                    'subscription_status' => $user->subscription_status,
+                    'trial_ends_at' => $user->trial_ends_at?->format('d/m/Y'),
+                    'trial_expired' => $user->trial_ends_at ? $user->trial_ends_at->isPast() : false,
+                    'trial_days_left' => $user->trial_ends_at && !$user->trial_ends_at->isPast() 
+                        ? $user->trial_ends_at->diffInDays(now()) 
+                        : null,
+                    
+                    // Infos coach si existe
+                    'has_coach_profile' => $coach !== null,
+                    'coach_name' => $coach?->name,
+                    'slug' => $coach?->slug,
+                    'subdomain' => $coach?->subdomain,
+                    'is_active' => $coach?->is_active ?? false,
+                    
+                    // Dates
+                    'created_at' => $user->created_at->format('d/m/Y H:i'),
                 ];
             });
 
         return Inertia::render('Admin/Coaches/Index', [
-            'coaches' => $coaches,
+            'users' => $users,
         ]);
     }
 

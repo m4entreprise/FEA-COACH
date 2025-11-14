@@ -1,11 +1,14 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 const props = defineProps({
     users: Array,
 });
+
+const page = usePage();
+const appDomain = computed(() => page.props.appDomain);
 
 // Statistiques
 const stats = computed(() => {
@@ -174,8 +177,15 @@ const getStatusText = (user) => {
                                                 <div class="font-medium text-gray-900 dark:text-gray-100">
                                                     {{ user.coach_name }}
                                                 </div>
-                                                <div v-if="user.subdomain" class="text-xs text-gray-500 dark:text-gray-400">
-                                                    <code class="font-mono">{{ user.subdomain }}</code>
+                                                <div v-if="user.subdomain && appDomain" class="text-xs text-gray-500 dark:text-gray-400">
+                                                    <a
+                                                        :href="`http://${user.subdomain}.${appDomain}`"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                                                    >
+                                                        {{ user.subdomain }}.{{ appDomain }}
+                                                    </a>
                                                 </div>
                                             </div>
                                             <span v-else class="text-sm text-gray-500 dark:text-gray-400">

@@ -113,7 +113,7 @@ const getStatusText = (user) => {
                                             Statut
                                         </th>
                                         <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
-                                            Profil Coach
+                                            Site Coach
                                         </th>
                                         <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                             Période d'essai

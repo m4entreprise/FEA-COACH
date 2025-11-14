@@ -143,7 +143,7 @@
     <!-- Footer -->
     <footer class="bg-gray-900 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Logo & Description -->
                 <div>
                     @if($coach->hasMedia('logo'))
@@ -164,21 +164,6 @@
                         <li><a href="#methode" class="text-gray-400 hover:text-white transition-colors">Ma méthode</a></li>
                         <li><a href="#tarifs" class="text-gray-400 hover:text-white transition-colors">Tarifs</a></li>
                         <li><a href="#resultats" class="text-gray-400 hover:text-white transition-colors">Résultats</a></li>
-                        <li>
-                            <a href="https://{{ config('app.domain') }}" class="text-gray-400 hover:text-white transition-colors">
-                                Je crée mon site
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Legal Info -->
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Informations légales</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white transition-colors">Conditions générales de vente (CGV)</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a></li>
-                        <li>TVA : BE 0896.755.397</li>
                     </ul>
                 </div>
 

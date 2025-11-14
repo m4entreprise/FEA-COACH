@@ -282,7 +282,7 @@ defineProps({
         <!-- Footer -->
         <footer class="py-12 px-4 border-t border-white/10">
             <div class="max-w-7xl mx-auto">
-                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div class="grid md:grid-cols-4 gap-8 mb-8">
                     <div>
                         <div class="text-2xl font-bold text-white mb-4">
                             Ignite <span class="text-purple-400">Coach</span>
@@ -315,6 +315,30 @@ defineProps({
                                 <Link v-if="canLogin" :href="route('login')" class="text-gray-400 hover:text-purple-400 transition">
                                     Connexion
                                 </Link>
+                            </li>
+                            <li>
+                                <Link :href="route('register')" class="text-gray-400 hover:text-purple-400 transition">
+                                    Je crée mon site
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-white font-semibold mb-4">Informations légales</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li>
+                                <a href="#" class="hover:text-purple-300 transition">
+                                    Conditions générales de vente (CGV)
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:text-purple-300 transition">
+                                    Politique de confidentialité
+                                </a>
+                            </li>
+                            <li>
+                                TVA : BE 0896.755.397
                             </li>
                         </ul>
                     </div>

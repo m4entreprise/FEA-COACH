@@ -131,7 +131,7 @@ const submit = () => {
 
             <!-- Back to Home -->
             <div class="mt-6 text-center">
-                <Link :href="route('dashboard')" class="text-sm text-gray-400 hover:text-purple-400 transition">
+                <Link href="/" class="text-sm text-gray-400 hover:text-purple-400 transition">
                     ← Retour à l'accueil
                 </Link>
             </div>

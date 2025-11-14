@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coach;
 use App\Models\PromoCodeRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -70,12 +71,12 @@ class PromoCodeRequestController extends Controller
         $slug = $baseSlug;
         $counter = 1;
 
-        while (\App\Models\Coach::where('slug', $slug)->exists()) {
+        while (Coach::where('slug', $slug)->exists()) {
             $slug = $baseSlug . '-' . $counter;
             $counter++;
         }
 
-        $coach = \App\Models\Coach::create([
+        $coach = Coach::create([
             'name' => $fullName,
             'slug' => $slug,
             'primary_color' => '#9333ea',

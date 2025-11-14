@@ -52,7 +52,7 @@ class AdminCoachController extends Controller
                     'has_coach_profile' => $coach !== null,
                     'coach_name' => $coach?->name,
                     'slug' => $coach?->slug,
-                    'subdomain' => $coach?->subdomain,
+                    'subdomain' => $coach?->subdomain ?? $coach?->slug,
                     'is_active' => $coach?->is_active ?? false,
                     
                     // Dates

@@ -116,6 +116,8 @@ class AdminCoachController extends Controller
                 'user_id' => $coach->user_id,
                 'user_email' => $coach->user->email,
                 'user_name' => $coach->user->name,
+                'is_fea_graduate' => $coach->user->is_fea_graduate ?? false,
+                'trial_ends_at' => $coach->user->trial_ends_at?->format('Y-m-d') ?? null,
             ],
         ]);
     }
@@ -133,16 +135,23 @@ class AdminCoachController extends Controller
             'color_secondary' => ['required', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'is_active' => ['boolean'],
             'password' => ['nullable', 'string', 'min:8'],
+            'is_fea_graduate' => ['boolean'],
+            'trial_ends_at' => ['nullable', 'date'],
         ]);
 
         // Update user account
         $userUpdate = [
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'is_fea_graduate' => $validated['is_fea_graduate'] ?? false,
         ];
 
         if (!empty($validated['password'])) {
             $userUpdate['password'] = Hash::make($validated['password']);
+        }
+
+        if (!empty($validated['trial_ends_at'])) {
+            $userUpdate['trial_ends_at'] = $validated['trial_ends_at'];
         }
 
         $coach->user->update($userUpdate);

@@ -41,9 +41,9 @@ const skip = () => {
     <Head title="Étape 4 : Sections Avancées" />
     
     <WizardLayout :current-step="currentStep" :total-steps="totalSteps">
-        <div class="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-8 md:p-12 max-h-[80vh] overflow-y-auto">
+        <div class="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-8 md:p-12">
             <!-- Header -->
-            <div class="text-center mb-12 sticky top-0 bg-slate-900/90 backdrop-blur-xl pb-6 z-10">
+            <div class="text-center mb-12">
                 <div class="inline-flex items-center justify-center w-20 h-20 bg-orange-500/20 rounded-full mb-6">
                     <span class="text-5xl">⚡</span>
                 </div>
@@ -54,9 +54,12 @@ const skip = () => {
                     Personnalisez les sections qui feront la différence
                 </p>
             </div>
+            
+            <!-- Scrollable Content -->
+            <div class="max-h-[50vh] overflow-y-auto pr-2 mb-8 space-y-6"  style="scrollbar-width: thin; scrollbar-color: rgba(139, 92, 246, 0.3) transparent;">
 
             <!-- CTA Button -->
-            <div class="mb-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/30 rounded-2xl p-6">
+            <div class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/30 rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-white mb-3 flex items-center">
                     <span class="text-xl mr-2">🚀</span>
                     Texte du bouton principal
@@ -70,7 +73,7 @@ const skip = () => {
             </div>
 
             <!-- Method Steps -->
-            <div class="mb-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-400/30 rounded-2xl p-6">
+            <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-400/30 rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-white mb-4">📋 Les 3 étapes de votre méthode</h3>
                 
                 <div class="space-y-4">
@@ -100,7 +103,7 @@ const skip = () => {
             </div>
 
             <!-- Pricing Section -->
-            <div class="mb-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-400/30 rounded-2xl p-6">
+            <div class="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-400/30 rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-white mb-3 flex items-center">
                     <span class="text-xl mr-2">💰</span>
                     Section Tarifs
@@ -122,7 +125,7 @@ const skip = () => {
             </div>
 
             <!-- Transformations Section -->
-            <div class="mb-6 bg-gradient-to-r from-teal-500/10 to-blue-500/10 border border-teal-400/30 rounded-2xl p-6">
+            <div class="bg-gradient-to-r from-teal-500/10 to-blue-500/10 border border-teal-400/30 rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-white mb-3 flex items-center">
                     <span class="text-xl mr-2">📈</span>
                     Section Transformations
@@ -144,7 +147,7 @@ const skip = () => {
             </div>
 
             <!-- Final CTA -->
-            <div class="mb-8 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-400/30 rounded-2xl p-6">
+            <div class="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-400/30 rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-white mb-3 flex items-center">
                     <span class="text-xl mr-2">🎯</span>
                     Appel à l'action final
@@ -164,9 +167,10 @@ const skip = () => {
                     ></textarea>
                 </div>
             </div>
+            </div>
 
             <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 sticky bottom-0 bg-slate-900/90 backdrop-blur-xl pt-6">
+            <div class="flex flex-col sm:flex-row gap-4">
                 <button
                     @click="skip"
                     type="button"

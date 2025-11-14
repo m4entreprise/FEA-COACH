@@ -23,10 +23,10 @@ defineProps({
                     <div v-if="canLogin" class="flex items-center space-x-4">
                         <Link
                             v-if="$page.props.auth.user"
-                            :href="route('dashboard')"
+                            :href="$page.props.auth.user.onboarding_completed ? route('dashboard') : route('onboarding.step1')"
                             class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-medium transition"
                         >
-                            Dashboard
+                            {{ $page.props.auth.user.onboarding_completed ? 'Dashboard' : 'Continuer mon inscription' }}
                         </Link>
                         
                         <template v-else>

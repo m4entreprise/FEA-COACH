@@ -1,10 +1,20 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head, useForm, router } from '@inertiajs/vue3';
+import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     user: Object,
+    promoRequest: Object,
     stripePublicKey: String,
+});
+
+// Rediriger automatiquement si le compte est déjà activé
+onMounted(() => {
+    if (props.promoRequest && props.promoRequest.status === 'approved') {
+        setTimeout(() => {
+            router.visit(route('dashboard'));
+        }, 2000);
+    }
 });
 
 const showRequestForm = ref(false);
@@ -85,7 +95,69 @@ const submitPayment = () => {
                     </p>
                 </div>
 
-                <form @submit.prevent="submitPromoCode" class="space-y-6">
+                <!-- Demande en cours -->
+                <div v-if="promoRequest && promoRequest.status === 'pending'" class="space-y-4">
+                    <div class="p-6 bg-yellow-500/10 border-2 border-yellow-400/30 rounded-xl text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-500/20 rounded-full mb-4">
+                            <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Demande en cours de vérification</h3>
+                        <p class="text-gray-300 mb-4">
+                            Votre demande de code promotionnel FEA a bien été reçue et est actuellement en cours d'examen par notre équipe.
+                        </p>
+                        <div class="p-4 bg-white/5 rounded-lg text-left">
+                            <p class="text-sm text-gray-400 mb-1">Demandé le {{ new Date(promoRequest.created_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}</p>
+                            <p v-if="promoRequest.message" class="text-sm text-gray-300 mt-2">
+                                <span class="font-medium">Votre message :</span> {{ promoRequest.message }}
+                            </p>
+                        </div>
+                        <p class="text-sm text-purple-300 mt-4">
+                            💌 Vous recevrez un email dès que votre compte sera activé
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Demande approuvée - redirection auto -->
+                <div v-else-if="promoRequest && promoRequest.status === 'approved'" class="space-y-4">
+                    <div class="p-6 bg-green-500/10 border-2 border-green-400/30 rounded-xl text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-full mb-4">
+                            <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Compte activé !</h3>
+                        <p class="text-gray-300">
+                            Votre compte a été validé. Redirection vers votre dashboard...
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Demande rejetée -->
+                <div v-else-if="promoRequest && promoRequest.status === 'rejected'" class="space-y-4">
+                    <div class="p-6 bg-red-500/10 border-2 border-red-400/30 rounded-xl">
+                        <h3 class="text-xl font-bold text-white mb-2">Demande non approuvée</h3>
+                        <p class="text-gray-300 mb-4">
+                            Malheureusement, votre demande n'a pas pu être validée.
+                        </p>
+                        <div v-if="promoRequest.admin_notes" class="p-4 bg-white/5 rounded-lg mb-4">
+                            <p class="text-sm text-gray-300">
+                                <span class="font-medium">Raison :</span> {{ promoRequest.admin_notes }}
+                            </p>
+                        </div>
+                        <button 
+                            @click="showRequestForm = true; promoRequest = null"
+                            type="button"
+                            class="w-full px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition"
+                        >
+                            Faire une nouvelle demande
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Formulaire code promo (si pas de demande) -->
+                <form v-else @submit.prevent="submitPromoCode" class="space-y-6">
                     <!-- Code Promo Input -->
                     <div>
                         <label for="promo_code" class="block text-sm font-medium text-gray-200 mb-2">
@@ -109,8 +181,8 @@ const submitPayment = () => {
                         <p class="text-sm text-green-300">{{ $page.props.flash.success }}</p>
                     </div>
 
-                    <!-- Request Form Toggle -->
-                    <div v-if="!showRequestForm" class="p-4 bg-purple-500/10 border border-purple-400/30 rounded-lg">
+                    <!-- Request Form Toggle (seulement si pas de demande en cours) -->
+                    <div v-if="!showRequestForm && !promoRequest" class="p-4 bg-purple-500/10 border border-purple-400/30 rounded-lg">
                         <div class="flex items-start space-x-3">
                             <svg class="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -170,6 +242,7 @@ const submitPayment = () => {
                             ← Retour
                         </a>
                         <button
+                            v-if="!promoRequest || promoRequest.status === 'rejected'"
                             type="submit"
                             :disabled="promoForm.processing"
                             class="flex-1 px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-xl shadow-lg transition transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
@@ -185,6 +258,16 @@ const submitPayment = () => {
                         </button>
                     </div>
                 </form>
+
+                <!-- Navigation pour demande en attente -->
+                <div v-if="promoRequest && promoRequest.status === 'pending'" class="flex gap-4 pt-4">
+                    <a
+                        :href="route('onboarding.step2')"
+                        class="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold rounded-xl transition text-center"
+                    >
+                        ← Retour
+                    </a>
+                </div>
             </div>
 
             <!-- Non diplômé : Paiement Stripe -->

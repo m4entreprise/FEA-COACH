@@ -94,8 +94,14 @@ class OnboardingController extends Controller
             return redirect()->route('dashboard');
         }
 
+        // Charger la demande de code promo existante si présente
+        $promoRequest = PromoCodeRequest::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
         return Inertia::render('Onboarding/Step3', [
             'user' => $user,
+            'promoRequest' => $promoRequest,
             'stripePublicKey' => config('services.stripe.key'),
         ]);
     }
@@ -110,6 +116,15 @@ class OnboardingController extends Controller
         ]);
 
         $user = Auth::user();
+
+        // Vérifier s'il y a déjà une demande en attente
+        $existingRequest = PromoCodeRequest::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->exists();
+
+        if ($existingRequest) {
+            return back()->withErrors(['message' => 'Vous avez déjà une demande en cours de traitement.']);
+        }
 
         // Créer la demande
         PromoCodeRequest::create([

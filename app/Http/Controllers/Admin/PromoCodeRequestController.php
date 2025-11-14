@@ -41,9 +41,55 @@ class PromoCodeRequestController extends Controller
         $promoCodeRequest->admin_notes = $request->admin_notes;
         $promoCodeRequest->save();
 
-        // TODO: Envoyer un email à l'utilisateur avec le code promo
+        // Activer directement le compte de l'utilisateur
+        $user = $promoCodeRequest->user;
+        if ($user && !$user->onboarding_completed) {
+            $user->fea_promo_code = $promoCode;
+            $user->subscription_status = 'active_promo';
+            $user->onboarding_completed = true;
+            $user->save();
 
-        return redirect()->back()->with('success', 'Demande approuvée. Code promo : ' . $promoCode);
+            // Créer le profil Coach si nécessaire
+            if (!$user->coach_id) {
+                $this->createCoachProfile($user);
+            }
+        }
+
+        // TODO: Envoyer un email à l'utilisateur pour lui dire que son compte est activé
+
+        return redirect()->back()->with('success', 'Demande approuvée et compte activé ! Code : ' . $promoCode);
+    }
+
+    /**
+     * Créer le profil Coach pour l'utilisateur
+     */
+    private function createCoachProfile($user): void
+    {
+        $fullName = trim($user->first_name . ' ' . $user->last_name);
+        $baseSlug = Str::slug($fullName);
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (\App\Models\Coach::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        $coach = \App\Models\Coach::create([
+            'name' => $fullName,
+            'slug' => $slug,
+            'primary_color' => '#9333ea',
+            'secondary_color' => '#ec4899',
+            'is_active' => true,
+            'hero_title' => 'Transformez votre vie dès aujourd\'hui',
+            'hero_subtitle' => 'Coaching personnalisé pour atteindre vos objectifs',
+            'about_text' => 'Bienvenue ! Je suis ' . $fullName . ', votre coach sportif dédié.',
+            'method_text' => 'Ma méthode repose sur un accompagnement personnalisé et adapté à vos besoins.',
+            'cta_text' => 'Réserver ma séance découverte',
+        ]);
+
+        $user->coach_id = $coach->id;
+        $user->save();
     }
 
     /**

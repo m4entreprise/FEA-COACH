@@ -21,6 +21,8 @@ const form = useForm({
     method_step3_description: props.coach.method_step3_description || '',
     pricing_title: props.coach.pricing_title || '',
     pricing_subtitle: props.coach.pricing_subtitle || '',
+    intermediate_cta_title: props.coach.intermediate_cta_title || '',
+    intermediate_cta_subtitle: props.coach.intermediate_cta_subtitle || '',
     transformations_title: props.coach.transformations_title || '',
     transformations_subtitle: props.coach.transformations_subtitle || '',
     final_cta_title: props.coach.final_cta_title || '',
@@ -118,6 +120,29 @@ const skip = () => {
                         class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
                         placeholder="Choisissez la formule qui vous correspond"
                     />
+                </div>
+            </div>
+
+            <!-- Intermediate CTA -->
+            <div class="mb-8 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/30 rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-white mb-3 flex items-center">
+                    <span class="text-xl mr-2">⚡</span>
+                    CTA intermédiaire (après Méthode)
+                </h3>
+                <p class="text-xs text-gray-400 mb-4">Section d'appel à l'action entre "Méthode" et "Tarifs"</p>
+                <div class="space-y-3">
+                    <input
+                        type="text"
+                        v-model="form.intermediate_cta_title"
+                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                        placeholder="Prêt à transformer votre corps et votre vie ?"
+                    />
+                    <textarea
+                        v-model="form.intermediate_cta_subtitle"
+                        rows="2"
+                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm resize-none"
+                        placeholder="Ne restez pas seul face à vos objectifs..."
+                    ></textarea>
                 </div>
             </div>
 

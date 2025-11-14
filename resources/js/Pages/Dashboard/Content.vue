@@ -35,6 +35,8 @@ const form = useForm({
     final_cta_title: props.coach?.final_cta_title || '',
     final_cta_subtitle: props.coach?.final_cta_subtitle || '',
     cta_text: props.coach?.cta_text || 'Réserver une séance',
+    intermediate_cta_title: props.coach?.intermediate_cta_title || '',
+    intermediate_cta_subtitle: props.coach?.intermediate_cta_subtitle || '',
     satisfaction_rate: props.coach?.satisfaction_rate || 100,
     average_rating: props.coach?.average_rating || 5.0,
 });
@@ -840,6 +842,57 @@ const deletePhoto = () => {
                                     <div class="rounded-md bg-teal-50 p-3 dark:bg-teal-900/20">
                                         <p class="text-xs text-teal-700 dark:text-teal-300">
                                             <strong>💡 Conseil :</strong> Pour gérer vos transformations (photos avant/après, descriptions), rendez-vous dans le menu "Transformations". Ici vous ne modifiez que le titre et le sous-titre de cette section.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Intermediate CTA Section -->
+                            <div class="rounded-lg border border-gray-200 bg-gradient-to-r from-orange-50 to-red-50 p-6 dark:border-gray-700 dark:from-orange-900/20 dark:to-red-900/20">
+                                <div class="mb-4 flex items-center">
+                                    <svg class="mr-2 h-6 w-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        ⚡ Section CTA intermédiaire (après Méthode)
+                                    </h3>
+                                </div>
+                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                    Section d'appel à l'action qui apparaît entre "Ma méthode" et "Tarifs" pour encourager le visiteur à passer à l'action.
+                                </p>
+                                
+                                <div class="space-y-6">
+                                    <!-- Titre CTA intermédiaire -->
+                                    <div>
+                                        <InputLabel for="intermediate_cta_title" value="Titre de la section CTA" />
+                                        <input
+                                            id="intermediate_cta_title"
+                                            type="text"
+                                            v-model="form.intermediate_cta_title"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Prêt à transformer votre corps et votre vie ?"
+                                            maxlength="255"
+                                        />
+                                        <InputError class="mt-2" :message="form.errors.intermediate_cta_title" />
+                                    </div>
+
+                                    <!-- Sous-titre CTA intermédiaire -->
+                                    <div>
+                                        <InputLabel for="intermediate_cta_subtitle" value="Sous-titre" />
+                                        <textarea
+                                            id="intermediate_cta_subtitle"
+                                            v-model="form.intermediate_cta_subtitle"
+                                            rows="2"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                            placeholder="Ex: Ne restez pas seul face à vos objectifs. Bénéficiez d'un accompagnement personnalisé qui vous mènera au succès."
+                                            maxlength="500"
+                                        ></textarea>
+                                        <InputError class="mt-2" :message="form.errors.intermediate_cta_subtitle" />
+                                    </div>
+
+                                    <div class="rounded-md bg-orange-50 p-3 dark:bg-orange-900/20">
+                                        <p class="text-xs text-orange-700 dark:text-orange-300">
+                                            <strong>💡 Astuce :</strong> Cette section apparaît entre "Ma méthode" et "Tarifs". Le bouton utilise automatiquement votre texte CTA défini ci-dessus et redirige vers la section Tarifs.
                                         </p>
                                     </div>
                                 </div>

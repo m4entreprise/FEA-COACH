@@ -38,6 +38,8 @@ class Coach extends Model implements HasMedia
         'final_cta_title',
         'final_cta_subtitle',
         'cta_text',
+        'intermediate_cta_title',
+        'intermediate_cta_subtitle',
         'satisfaction_rate',
         'average_rating',
         'is_active',

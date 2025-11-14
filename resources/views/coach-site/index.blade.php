@@ -149,6 +149,24 @@
     </div>
 </section>
 
+<!-- CTA Section -->
+<section class="py-20 text-white" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-6">
+            {{ $coach->intermediate_cta_title ?? 'Prêt à transformer votre corps et votre vie ?' }}
+        </h2>
+        <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            {{ $coach->intermediate_cta_subtitle ?? 'Ne restez pas seul face à vos objectifs. Bénéficiez d\'un accompagnement personnalisé qui vous mènera au succès.' }}
+        </p>
+        <a href="#tarifs" class="inline-flex items-center justify-center px-8 py-4 bg-white text-lg font-bold rounded-lg hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105" style="color: {{ $coach->color_primary ?? '#3B82F6' }};">
+            {{ $coach->cta_text ?? 'Commencer maintenant' }}
+            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+        </a>
+    </div>
+</section>
+
 <!-- Pricing Section -->
 <section id="tarifs" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -28,8 +28,8 @@ class AdminCoachController extends Controller
                     'slug' => $coach->slug,
                     'subdomain' => $coach->subdomain,
                     'is_active' => $coach->is_active,
-                    'user_email' => $coach->user->email,
-                    'user_name' => $coach->user->name,
+                    'user_email' => $coach->user?->email ?? 'N/A',
+                    'user_name' => $coach->user?->name ?? 'N/A',
                     'created_at' => $coach->created_at->format('d/m/Y'),
                 ];
             });

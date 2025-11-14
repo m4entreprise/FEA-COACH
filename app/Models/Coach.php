@@ -82,6 +82,14 @@ class Coach extends Model implements HasMedia
     }
 
     /**
+     * Get the contact messages for the coach.
+     */
+    public function contactMessages(): HasMany
+    {
+        return $this->hasMany(ContactMessage::class);
+    }
+
+    /**
      * Register media collections.
      */
     public function registerMediaCollections(): void

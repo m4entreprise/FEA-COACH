@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard\ContentController;
 use App\Http\Controllers\Dashboard\FaqController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\PlansController;
+use App\Http\Controllers\Dashboard\ContactController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
 use App\Http\Controllers\ProfileController;
@@ -26,6 +27,7 @@ Route::domain('{coach_slug}.' . config('app.domain', 'localhost'))
     ->middleware(['web', 'resolve.coach'])
     ->group(function () {
         Route::get('/', [CoachSiteController::class, 'show'])->name('coach.site');
+        Route::post('/contact', [CoachSiteController::class, 'contact'])->name('coach.contact');
     });
 
 /*
@@ -128,6 +130,11 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/plans', [PlansController::class, 'store'])->name('dashboard.plans.store');
     Route::patch('/dashboard/plans/{plan}', [PlansController::class, 'update'])->name('dashboard.plans.update');
     Route::delete('/dashboard/plans/{plan}', [PlansController::class, 'destroy'])->name('dashboard.plans.destroy');
+
+    // Contact messages management
+    Route::get('/dashboard/contact', [ContactController::class, 'index'])->name('dashboard.contact');
+    Route::patch('/dashboard/contact/{contactMessage}/read', [ContactController::class, 'markAsRead'])->name('dashboard.contact.read');
+    Route::delete('/dashboard/contact/{contactMessage}', [ContactController::class, 'destroy'])->name('dashboard.contact.destroy');
 
     // FAQ management
     Route::get('/dashboard/faq', [FaqController::class, 'index'])->name('dashboard.faq');

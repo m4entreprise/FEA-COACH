@@ -69,6 +69,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     FAQ
                                 </NavLink>
+                                <NavLink
+                                    :href="route('dashboard.contact')"
+                                    :active="route().current('dashboard.contact')"
+                                >
+                                    Contact
+                                </NavLink>
                             </div>
                         </div>
 
@@ -205,6 +211,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('dashboard.faq')"
                         >
                             FAQ
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('dashboard.contact')"
+                            :active="route().current('dashboard.contact')"
+                        >
+                            Contact
                         </ResponsiveNavLink>
                     </div>
 

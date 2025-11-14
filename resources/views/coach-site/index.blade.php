@@ -323,19 +323,119 @@
 
 <!-- Contact/CTA Section -->
 <section id="contact" class="py-20 text-white" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-white">
-            {{ $coach->final_cta_title ?? 'Prêt à commencer votre transformation ?' }}
-        </h2>
-        <p class="text-xl mb-8 text-white opacity-90">
-            {{ $coach->final_cta_subtitle ?? 'Ne laissez pas vos objectifs être de simples rêves. Agissez maintenant !' }}
-        </p>
-        <a href="#tarifs" class="inline-flex items-center px-8 py-4 bg-white text-lg font-bold rounded-lg hover:bg-gray-100 transition-all shadow-xl" style="color: {{ $coach->color_primary ?? '#3B82F6' }};">
-            {{ $coach->cta_text ?? 'Découvrir les formules' }}
-            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
-        </a>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-10 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-white">
+                {{ $coach->final_cta_title ?? 'Prêt à commencer votre transformation ?' }}
+            </h2>
+            <p class="text-lg sm:text-xl mb-4 text-white/90">
+                {{ $coach->final_cta_subtitle ?? 'Ne laissez pas vos objectifs être de simples rêves. Agissez maintenant !' }}
+            </p>
+            <p class="text-sm text-white/80">
+                Remplissez le formulaire ci-dessous, le coach recevra votre message directement dans son tableau de bord.
+            </p>
+        </div>
+
+        @if (session('success'))
+            <div class="mb-6 rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-sm">
+                <div class="flex items-center">
+                    <svg class="h-5 w-5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span class="ml-3 text-emerald-50">{{ session('success') }}</span>
+                </div>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="mb-6 rounded-lg bg-white/10 border border-red-300/40 px-4 py-3 text-sm">
+                <div class="flex items-start">
+                    <svg class="h-5 w-5 text-red-200 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14M12 4a8 8 0 100 16 8 8 0 000-16z" />
+                    </svg>
+                    <ul class="ml-3 space-y-1 text-red-50">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8">
+            <form method="POST" action="{{ route('coach.contact') }}" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @csrf
+
+                <div class="md:col-span-1">
+                    <label for="name" class="block text-sm font-medium text-white mb-1">Nom complet *</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        value="{{ old('name') }}"
+                        class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
+                        placeholder="Votre nom"
+                    >
+                </div>
+
+                <div class="md:col-span-1">
+                    <label for="email" class="block text-sm font-medium text-white mb-1">Email *</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        value="{{ old('email') }}"
+                        class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
+                        placeholder="vous@example.com"
+                    >
+                </div>
+
+                <div class="md:col-span-1">
+                    <label for="phone" class="block text-sm font-medium text-white mb-1">Téléphone (optionnel)</label>
+                    <input
+                        type="text"
+                        id="phone"
+                        name="phone"
+                        value="{{ old('phone') }}"
+                        class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
+                        placeholder="+33 ..."
+                    >
+                </div>
+
+                <div class="md:col-span-2">
+                    <label for="message" class="block text-sm font-medium text-white mb-1">Message *</label>
+                    <textarea
+                        id="message"
+                        name="message"
+                        rows="4"
+                        required
+                        class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
+                        placeholder="Parlez de vos objectifs, de votre niveau actuel, de vos disponibilités..."
+                    >{{ old('message') }}</textarea>
+                    <p class="mt-2 text-xs text-white/70">
+                        En envoyant ce message, vous serez recontacté(e) par le coach pour discuter de votre situation et des prochaines étapes.
+                    </p>
+                </div>
+
+                <div class="md:col-span-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-2">
+                    <button
+                        type="submit"
+                        class="inline-flex items-center justify-center px-8 py-3 bg-white text-sm sm:text-base font-bold rounded-lg shadow-lg hover:bg-gray-100 transition-all"
+                        style="color: {{ $coach->color_primary ?? '#3B82F6' }};"
+                    >
+                        Envoyer mon message
+                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </button>
+                    <p class="text-xs text-white/70 sm:text-right">
+                        Réponse généralement sous 24 à 48h.
+                    </p>
+                </div>
+            </form>
+        </div>
     </div>
 </section>
 

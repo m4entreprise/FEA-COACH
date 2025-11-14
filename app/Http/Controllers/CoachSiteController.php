@@ -41,4 +41,28 @@ class CoachSiteController extends Controller
             'faqs' => $faqs,
         ]);
     }
+
+    /**
+     * Handle contact form submissions from the public site.
+     */
+    public function contact(Request $request)
+    {
+        $coach = app(Coach::class);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'message' => ['required', 'string', 'max:2000'],
+        ]);
+
+        $coach->contactMessages()->create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
+            'message' => $validated['message'],
+        ]);
+
+        return back()->with('success', 'Votre message a bien été envoyé. Nous vous répondrons rapidement.');
+    }
 }

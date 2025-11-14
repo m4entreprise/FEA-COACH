@@ -226,6 +226,24 @@ const user = computed(() => page.props.auth.user);
                             </p>
                         </div>
                     </Link>
+                    <!-- Contact Card -->
+                    <Link :href="route('dashboard.contact')" class="block">
+                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
+                            <div class="flex items-center mb-4">
+                                <div class="flex-shrink-0 bg-red-100 dark:bg-red-900 rounded-lg p-3">
+                                    <svg class="h-8 w-8 text-red-600 dark:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-9 4v8" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Contact</h4>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                Consultez et gérez les messages reçus depuis le formulaire de contact de votre site.
+                            </p>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>

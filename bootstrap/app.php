@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'resolve.coach' => \App\Http\Middleware\ResolveCoachFromHost::class,
             'admin' => \App\Http\Middleware\IsAdmin::class,
             'onboarding.completed' => \App\Http\Middleware\EnsureOnboardingCompleted::class,
+            'setup.completed' => \App\Http\Middleware\EnsureSetupCompleted::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

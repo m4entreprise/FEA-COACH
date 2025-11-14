@@ -10,6 +10,7 @@ use App\Http\Controllers\Dashboard\FaqController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\PlansController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\SetupWizardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     
     // Promo code requests
     Route::get('/promo-requests', [PromoCodeRequestController::class, 'index'])->name('admin.promo-requests.index');
+    Route::post('/promo-requests/generate-batch', [PromoCodeRequestController::class, 'generateBatch'])->name('admin.promo-requests.generate-batch');
     Route::post('/promo-requests/{promoCodeRequest}/approve', [PromoCodeRequestController::class, 'approve'])->name('admin.promo-requests.approve');
     Route::post('/promo-requests/{promoCodeRequest}/reject', [PromoCodeRequestController::class, 'reject'])->name('admin.promo-requests.reject');
 });
@@ -80,11 +82,29 @@ Route::middleware(['auth'])->prefix('onboarding')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| Setup Wizard Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'onboarding.completed'])->prefix('setup')->group(function () {
+    Route::get('/', [SetupWizardController::class, 'index'])->name('setup.index');
+    Route::get('/step/{step}', [SetupWizardController::class, 'showStep'])->name('setup.step');
+    Route::post('/check-slug', [SetupWizardController::class, 'checkSlugAvailability'])->name('setup.check-slug');
+    Route::post('/step/1', [SetupWizardController::class, 'saveStep1'])->name('setup.step1.save');
+    Route::post('/step/2', [SetupWizardController::class, 'saveStep2'])->name('setup.step2.save');
+    Route::post('/step/3', [SetupWizardController::class, 'saveStep3'])->name('setup.step3.save');
+    Route::post('/step/4', [SetupWizardController::class, 'saveStep4'])->name('setup.step4.save');
+    Route::post('/step/5', [SetupWizardController::class, 'saveStep5'])->name('setup.step5.save');
+    Route::post('/skip/{step}', [SetupWizardController::class, 'skipStep'])->name('setup.skip');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Dashboard Routes
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'verified', 'onboarding.completed'])->group(function () {
+Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'])->group(function () {
     // Main dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

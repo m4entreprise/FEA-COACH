@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Coach;
+use App\Models\PromoCodeBatch;
 use App\Models\PromoCodeRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -20,9 +22,59 @@ class PromoCodeRequestController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $batches = PromoCodeBatch::with(['creator', 'codes'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($batch) {
+                return [
+                    'id' => $batch->id,
+                    'label' => $batch->label,
+                    'notes' => $batch->notes,
+                    'quantity' => $batch->quantity,
+                    'codes_count' => $batch->codes->count(),
+                    'created_by' => $batch->creator?->name,
+                    'created_at' => $batch->created_at->format('d/m/Y H:i'),
+                    'codes' => $batch->codes->pluck('code'),
+                ];
+            });
+
         return Inertia::render('Admin/PromoCodeRequests/Index', [
             'requests' => $requests,
+            'batches' => $batches,
         ]);
+    }
+
+    /**
+     * Générer un batch de codes promo
+     */
+    public function generateBatch(Request $request)
+    {
+        $data = $request->validate([
+            'quantity' => 'required|integer|min:1|max:500',
+            'label' => 'nullable|string|max:255',
+            'notes' => 'nullable|string|max:2000',
+        ]);
+
+        $user = Auth::user();
+
+        $batch = PromoCodeBatch::create([
+            'created_by' => $user->id,
+            'quantity' => $data['quantity'],
+            'label' => $data['label'] ?? null,
+            'notes' => $data['notes'] ?? null,
+        ]);
+
+        // Générer les codes
+        for ($i = 0; $i < $batch->quantity; $i++) {
+            $code = 'FEA-' . strtoupper(Str::random(8));
+
+            $batch->codes()->create([
+                'code' => $code,
+                'status' => 'unused',
+            ]);
+        }
+
+        return redirect()->back()->with('success', $batch->quantity.' codes promo FEA ont été générés.');
     }
 
     /**
@@ -56,6 +108,7 @@ class PromoCodeRequestController extends Controller
             }
         }
 
+        // L'utilisateur sera redirigé vers le setup wizard à sa prochaine connexion
         // TODO: Envoyer un email à l'utilisateur pour lui dire que son compte est activé
 
         return redirect()->back()->with('success', 'Demande approuvée et compte activé ! Code : ' . $promoCode);

@@ -161,7 +161,7 @@ class OnboardingController extends Controller
             // Créer le profil Coach
             $this->createCoachProfile($user);
 
-            return redirect()->route('dashboard')->with('success', 'Bienvenue ! Vous bénéficiez de 1 mois offert grâce à votre code FEA.');
+            return redirect()->route('setup.index')->with('success', 'Bienvenue ! Vous bénéficiez de 1 mois offert. Configurons maintenant votre site !');
         }
 
         return back()->withErrors(['promo_code' => 'Code promo invalide. Veuillez vérifier votre code ou contacter FEA.']);
@@ -208,7 +208,7 @@ class OnboardingController extends Controller
             // Créer le profil Coach
             $this->createCoachProfile($user);
 
-            return redirect()->route('dashboard')->with('success', 'Bienvenue ! Votre abonnement est actif.');
+            return redirect()->route('setup.index')->with('success', 'Bienvenue ! Votre abonnement est actif. Configurons votre site !');
         } catch (\Exception $e) {
             return back()->withErrors(['payment' => 'Erreur lors du paiement : ' . $e->getMessage()]);
         }

@@ -31,6 +31,8 @@ class User extends Authenticatable
         'is_fea_graduate',
         'fea_promo_code',
         'onboarding_completed',
+        'setup_completed',
+        'setup_step',
         'stripe_customer_id',
         'subscription_status',
     ];
@@ -57,6 +59,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_fea_graduate' => 'boolean',
             'onboarding_completed' => 'boolean',
+            'setup_completed' => 'boolean',
         ];
     }
 

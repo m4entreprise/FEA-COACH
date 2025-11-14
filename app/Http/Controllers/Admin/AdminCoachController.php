@@ -30,6 +30,9 @@ class AdminCoachController extends Controller
                     'is_active' => $coach->is_active,
                     'user_email' => $coach->user?->email ?? 'N/A',
                     'user_name' => $coach->user?->name ?? 'N/A',
+                    'is_fea_graduate' => $coach->user?->is_fea_graduate ?? false,
+                    'subscription_status' => $coach->user?->subscription_status ?? null,
+                    'trial_ends_at' => $coach->user?->trial_ends_at?->format('d/m/Y') ?? null,
                     'created_at' => $coach->created_at->format('d/m/Y'),
                 ];
             });

@@ -100,6 +100,7 @@ class PromoCodeRequestController extends Controller
             $user->fea_promo_code = $promoCode;
             $user->subscription_status = 'active_promo';
             $user->onboarding_completed = true;
+            $user->trial_ends_at = now()->addMonth();
             $user->save();
 
             // Créer le profil Coach si nécessaire

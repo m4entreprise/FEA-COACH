@@ -35,6 +35,7 @@ class User extends Authenticatable
         'setup_step',
         'stripe_customer_id',
         'subscription_status',
+        'trial_ends_at',
     ];
 
     /**
@@ -60,6 +61,7 @@ class User extends Authenticatable
             'is_fea_graduate' => 'boolean',
             'onboarding_completed' => 'boolean',
             'setup_completed' => 'boolean',
+            'trial_ends_at' => 'datetime',
         ];
     }
 

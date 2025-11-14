@@ -71,6 +71,12 @@ const deleteCoach = (coachId, coachName) => {
                                             Sous-domaine
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                            Origine
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                            Fin période d'essai
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                             Statut
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
@@ -98,6 +104,28 @@ const deleteCoach = (coachId, coachName) => {
                                             <code class="text-sm font-mono text-blue-600 dark:text-blue-400">
                                                 {{ coach.subdomain }}
                                             </code>
+                                        </td>
+                                        <td class="whitespace-nowrap px-6 py-4">
+                                            <span
+                                                v-if="coach.is_fea_graduate"
+                                                class="inline-flex rounded-full bg-purple-100 px-2 text-xs font-semibold leading-5 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+                                            >
+                                                FEA
+                                            </span>
+                                            <span
+                                                v-else
+                                                class="inline-flex rounded-full bg-gray-100 px-2 text-xs font-semibold leading-5 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+                                            >
+                                                Standard
+                                            </span>
+                                        </td>
+                                        <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                            <span v-if="coach.trial_ends_at">
+                                                {{ coach.trial_ends_at }}
+                                            </span>
+                                            <span v-else>
+                                                —
+                                            </span>
                                         </td>
                                         <td class="whitespace-nowrap px-6 py-4">
                                             <span v-if="coach.is_active" class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 dark:bg-green-900 dark:text-green-200">

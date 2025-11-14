@@ -54,12 +54,9 @@ const skip = () => {
                     Personnalisez les sections qui feront la différence
                 </p>
             </div>
-            
-            <!-- Scrollable Content -->
-            <div class="max-h-[50vh] overflow-y-auto pr-2 mb-8 space-y-6"  style="scrollbar-width: thin; scrollbar-color: rgba(139, 92, 246, 0.3) transparent;">
 
             <!-- CTA Button -->
-            <div class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/30 rounded-2xl p-6">
+            <div class="mb-8 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/30 rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-white mb-3 flex items-center">
                     <span class="text-xl mr-2">🚀</span>
                     Texte du bouton principal
@@ -73,7 +70,7 @@ const skip = () => {
             </div>
 
             <!-- Method Steps -->
-            <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-400/30 rounded-2xl p-6">
+            <div class="mb-8 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-400/30 rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-white mb-4">📋 Les 3 étapes de votre méthode</h3>
                 
                 <div class="space-y-4">
@@ -103,7 +100,7 @@ const skip = () => {
             </div>
 
             <!-- Pricing Section -->
-            <div class="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-400/30 rounded-2xl p-6">
+            <div class="mb-8 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-400/30 rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-white mb-3 flex items-center">
                     <span class="text-xl mr-2">💰</span>
                     Section Tarifs
@@ -125,7 +122,7 @@ const skip = () => {
             </div>
 
             <!-- Transformations Section -->
-            <div class="bg-gradient-to-r from-teal-500/10 to-blue-500/10 border border-teal-400/30 rounded-2xl p-6">
+            <div class="mb-8 bg-gradient-to-r from-teal-500/10 to-blue-500/10 border border-teal-400/30 rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-white mb-3 flex items-center">
                     <span class="text-xl mr-2">📈</span>
                     Section Transformations
@@ -147,7 +144,7 @@ const skip = () => {
             </div>
 
             <!-- Final CTA -->
-            <div class="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-400/30 rounded-2xl p-6">
+            <div class="mb-10 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-400/30 rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-white mb-3 flex items-center">
                     <span class="text-xl mr-2">🎯</span>
                     Appel à l'action final
@@ -166,7 +163,6 @@ const skip = () => {
                         placeholder="Ne laissez pas vos objectifs être de simples rêves..."
                     ></textarea>
                 </div>
-            </div>
             </div>
 
             <!-- Action Buttons -->

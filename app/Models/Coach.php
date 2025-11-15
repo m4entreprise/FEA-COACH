@@ -43,6 +43,12 @@ class Coach extends Model implements HasMedia
         'satisfaction_rate',
         'average_rating',
         'legal_terms',
+        'facebook_url',
+        'instagram_url',
+        'twitter_url',
+        'linkedin_url',
+        'youtube_url',
+        'tiktok_url',
         'is_active',
     ];
 

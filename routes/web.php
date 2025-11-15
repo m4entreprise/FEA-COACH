@@ -11,9 +11,6 @@ use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\PlansController;
 use App\Http\Controllers\Dashboard\ContactController;
 use App\Http\Controllers\Dashboard\ClientController;
-use App\Http\Controllers\Dashboard\ClientMeasurementController;
-use App\Http\Controllers\Dashboard\ClientDocumentController;
-use App\Http\Controllers\Dashboard\ClientAssessmentController;
 use App\Http\Controllers\Dashboard\LegalController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
@@ -151,30 +148,13 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     // Clients management
     Route::get('/dashboard/clients', [ClientController::class, 'index'])->name('dashboard.clients.index');
     Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('dashboard.clients.store');
-    Route::get('/dashboard/clients/{client}', [ClientController::class, 'show'])->name('dashboard.clients.show');
     Route::patch('/dashboard/clients/{client}', [ClientController::class, 'update'])->name('dashboard.clients.update');
     Route::delete('/dashboard/clients/{client}', [ClientController::class, 'destroy'])->name('dashboard.clients.destroy');
     
-    // Client notes management (ancien système)
+    // Client notes management
     Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'storeNote'])->name('dashboard.clients.notes.store');
     Route::patch('/dashboard/clients/notes/{note}', [ClientController::class, 'updateNote'])->name('dashboard.clients.notes.update');
     Route::delete('/dashboard/clients/notes/{note}', [ClientController::class, 'destroyNote'])->name('dashboard.clients.notes.destroy');
-    
-    // Client measurements
-    Route::post('/dashboard/clients/{client}/measurements', [ClientMeasurementController::class, 'store'])->name('dashboard.clients.measurements.store');
-    Route::patch('/dashboard/clients/{client}/measurements/{measurement}', [ClientMeasurementController::class, 'update'])->name('dashboard.clients.measurements.update');
-    Route::delete('/dashboard/clients/{client}/measurements/{measurement}', [ClientMeasurementController::class, 'destroy'])->name('dashboard.clients.measurements.destroy');
-    
-    // Client documents
-    Route::post('/dashboard/clients/{client}/documents', [ClientDocumentController::class, 'store'])->name('dashboard.clients.documents.store');
-    Route::get('/dashboard/clients/{client}/documents/{document}/download', [ClientDocumentController::class, 'download'])->name('dashboard.clients.documents.download');
-    Route::delete('/dashboard/clients/{client}/documents/{document}', [ClientDocumentController::class, 'destroy'])->name('dashboard.clients.documents.destroy');
-    
-    // Client assessments
-    Route::post('/dashboard/clients/{client}/assessments', [ClientAssessmentController::class, 'store'])->name('dashboard.clients.assessments.store');
-    Route::patch('/dashboard/clients/{client}/assessments/{assessment}', [ClientAssessmentController::class, 'update'])->name('dashboard.clients.assessments.update');
-    Route::post('/dashboard/clients/{client}/assessments/{assessment}/complete', [ClientAssessmentController::class, 'complete'])->name('dashboard.clients.assessments.complete');
-    Route::delete('/dashboard/clients/{client}/assessments/{assessment}', [ClientAssessmentController::class, 'destroy'])->name('dashboard.clients.assessments.destroy');
 
     // Legal terms management
     Route::get('/dashboard/legal', [LegalController::class, 'edit'])->name('dashboard.legal');

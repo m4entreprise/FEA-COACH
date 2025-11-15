@@ -238,28 +238,22 @@
 
             <!-- Bottom Footer -->
             <div class="border-t border-gray-800 mt-12 pt-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                <div class="text-center space-y-2">
                     <!-- Copyright & Legal -->
-                    <div class="text-gray-400 text-sm text-center md:text-left">
-                        <p>&copy; {{ date('Y') }} {{ $coach->name }}. Tous droits réservés.</p>
+                    <div class="text-gray-400 text-sm">
+                        <span>&copy; {{ date('Y') }} {{ $coach->name }}. Tous droits réservés.</span>
+                        <span class="mx-2">•</span>
+                        <a href="/mentions-legales" class="hover:text-white transition-colors">Mentions légales</a>
                         @if($coach->user && $coach->user->vat_number)
-                            <p class="mt-1">N° TVA : {{ $coach->user->vat_number }}</p>
+                            <span class="mx-2">•</span>
+                            <span>N° TVA : {{ $coach->user->vat_number }}</span>
                         @endif
                     </div>
                     
-                    <!-- Legal Links & Branding -->
-                    <div class="text-gray-400 text-sm text-center md:text-right space-y-1">
-                        <div class="space-x-4">
-                            <a href="/mentions-legales" class="hover:text-white transition-colors">Mentions légales</a>
-                            <span>•</span>
-                            <a href="/mentions-legales#cgv" class="hover:text-white transition-colors">CGV</a>
-                            <span>•</span>
-                            <a href="/mentions-legales#privacy" class="hover:text-white transition-colors">Confidentialité</a>
-                        </div>
-                        <p class="text-xs">
-                            Propulsé par <a href="https://ignitecoach.fr" target="_blank" class="text-primary hover:text-white transition-colors font-medium">Ignite Coach</a>
-                        </p>
-                    </div>
+                    <!-- Branding -->
+                    <p class="text-xs text-gray-500">
+                        Propulsé par <a href="https://ignitecoach.fr" target="_blank" class="text-primary hover:text-white transition-colors font-medium">Ignite Coach</a>
+                    </p>
                 </div>
             </div>
         </div>

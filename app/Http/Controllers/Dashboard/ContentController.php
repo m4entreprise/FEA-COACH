@@ -75,6 +75,12 @@ class ContentController extends Controller
             'intermediate_cta_subtitle' => ['nullable', 'string', 'max:500'],
             'satisfaction_rate' => ['required', 'integer', 'min:0', 'max:100'],
             'average_rating' => ['required', 'numeric', 'min:0', 'max:5'],
+            'facebook_url' => ['nullable', 'url', 'max:255'],
+            'instagram_url' => ['nullable', 'url', 'max:255'],
+            'twitter_url' => ['nullable', 'url', 'max:255'],
+            'linkedin_url' => ['nullable', 'url', 'max:255'],
+            'youtube_url' => ['nullable', 'url', 'max:255'],
+            'tiktok_url' => ['nullable', 'url', 'max:255'],
         ]);
 
         $coach->update($validated);

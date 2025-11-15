@@ -234,10 +234,17 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Informations légales</h3>
                     <ul class="space-y-3">
-                        @if($coach->user && $coach->user->vat_number)
+                        @php
+                            // S'assurer que la relation user est chargée
+                            if (!$coach->relationLoaded('user')) {
+                                $coach->load('user');
+                            }
+                            $vatNumber = $coach->user?->vat_number ?? null;
+                        @endphp
+                        @if($vatNumber)
                             <li class="text-gray-400">
                                 <span class="text-sm">N° TVA</span>
-                                <p class="font-medium text-white">{{ $coach->user->vat_number }}</p>
+                                <p class="font-medium text-white">{{ $vatNumber }}</p>
                             </li>
                         @endif
                         <li>

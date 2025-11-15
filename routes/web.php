@@ -11,6 +11,7 @@ use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\PlansController;
 use App\Http\Controllers\Dashboard\ContactController;
 use App\Http\Controllers\Dashboard\ClientController;
+use App\Http\Controllers\Dashboard\LegalController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
 use App\Http\Controllers\ProfileController;
@@ -153,6 +154,10 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'storeNote'])->name('dashboard.clients.notes.store');
     Route::patch('/dashboard/clients/notes/{note}', [ClientController::class, 'updateNote'])->name('dashboard.clients.notes.update');
     Route::delete('/dashboard/clients/notes/{note}', [ClientController::class, 'destroyNote'])->name('dashboard.clients.notes.destroy');
+
+    // Legal terms management
+    Route::get('/dashboard/legal', [LegalController::class, 'edit'])->name('dashboard.legal');
+    Route::post('/dashboard/legal', [LegalController::class, 'update'])->name('dashboard.legal.update');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

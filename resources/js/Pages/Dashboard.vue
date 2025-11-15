@@ -280,6 +280,25 @@ const user = computed(() => page.props.auth.user);
                             </p>
                         </div>
                     </Link>
+
+                    <!-- Legal Card -->
+                    <Link :href="route('dashboard.legal')" class="block group">
+                        <div class="bg-gradient-to-br from-white to-slate-50 dark:from-gray-800 dark:to-slate-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer border border-slate-200/50 dark:border-slate-500/30 backdrop-blur-xl transform group-hover:scale-105 group-hover:-translate-y-1">
+                            <div class="flex items-center mb-4">
+                                <div class="flex-shrink-0 bg-gradient-to-br from-slate-600 to-slate-700 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">Mentions légales</h4>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                                Personnalisez vos CGV et mentions légales avec votre numéro de TVA.
+                            </p>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>

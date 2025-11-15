@@ -87,6 +87,12 @@ const page = usePage();
                                 >
                                     Contact
                                 </NavLink>
+                                <NavLink
+                                    :href="route('dashboard.legal')"
+                                    :active="route().current('dashboard.legal')"
+                                >
+                                    Légal
+                                </NavLink>
                             </div>
                         </div>
 
@@ -229,6 +235,12 @@ const page = usePage();
                             :active="route().current('dashboard.contact')"
                         >
                             Contact
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('dashboard.legal')"
+                            :active="route().current('dashboard.legal')"
+                        >
+                            Légal
                         </ResponsiveNavLink>
                     </div>
 

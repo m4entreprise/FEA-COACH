@@ -66,7 +66,6 @@
                     Informations légales
                 </h2>
                 <div class="space-y-2 text-gray-700">
-                    <p><strong>Nom commercial :</strong> {{ $coach->name }}</p>
                     @if($coach->user && $coach->user->legal_address)
                         <p><strong>Adresse :</strong> {{ $coach->user->legal_address }}</p>
                     @endif

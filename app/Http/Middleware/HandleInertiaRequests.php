@@ -29,14 +29,25 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+        $coachLogoUrl = null;
+
+        // Get coach logo if user is authenticated and has a coach profile
+        if ($user && $user->coach) {
+            $coach = $user->coach;
+            if ($coach->hasMedia('logo')) {
+                $coachLogoUrl = $coach->getFirstMediaUrl('logo');
+            }
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user() ? [
-                    'id' => $request->user()->id,
-                    'name' => $request->user()->name,
-                    'email' => $request->user()->email,
-                    'role' => $request->user()->role,
+                'user' => $user ? [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role,
                 ] : null,
             ],
             'flash' => [
@@ -44,6 +55,7 @@ class HandleInertiaRequests extends Middleware
                 'error' => fn () => $request->session()->get('error'),
             ],
             'appDomain' => config('app.domain', 'localhost:8000'),
+            'coachLogoUrl' => $coachLogoUrl,
         ];
     }
 }

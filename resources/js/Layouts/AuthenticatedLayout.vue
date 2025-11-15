@@ -5,9 +5,10 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+const page = usePage();
 </script>
 
 <template>
@@ -22,10 +23,21 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
+                                <Link :href="route('dashboard')" class="flex items-center">
+                                    <!-- Coach Logo if available -->
+                                    <img 
+                                        v-if="page.props.coachLogoUrl" 
+                                        :src="page.props.coachLogoUrl" 
+                                        alt="Logo" 
+                                        class="h-10 w-auto object-contain"
                                     />
+                                    <!-- Ignite Coach text if no logo -->
+                                    <span 
+                                        v-else
+                                        class="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
+                                    >
+                                        Ignite Coach
+                                    </span>
                                 </Link>
                             </div>
 

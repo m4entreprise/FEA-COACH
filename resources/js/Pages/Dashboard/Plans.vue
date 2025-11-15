@@ -83,35 +83,41 @@ const deletePlan = (plan) => {
             </h2>
         </template>
 
-        <div class="py-12">
+        <div class="py-12 bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 min-h-screen">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <!-- Success Message -->
-                <div v-if="$page.props.flash?.success" class="mb-4 rounded-md bg-green-50 p-4 dark:bg-green-900/20">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-green-800 dark:text-green-200">
-                                {{ $page.props.flash.success }}
-                            </p>
-                        </div>
+                <div v-if="$page.props.flash?.success" class="mb-6 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 shadow-xl p-6 text-white transform hover:scale-[1.01] transition-all duration-300 backdrop-blur-xl border border-green-400/20">
+                    <div class="flex items-center">
+                        <svg class="h-6 w-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <p class="font-semibold">✨ {{ $page.props.flash.success }}</p>
                     </div>
                 </div>
 
                 <!-- Header with Add Button -->
-                <div class="mb-6 flex items-center justify-between">
-                    <p class="text-sm text-gray-600 dark:text-gray-400">
-                        Créez et gérez vos offres tarifaires affichées sur votre site public.
-                    </p>
-                    <PrimaryButton @click="openCreateModal">
-                        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Nouveau Plan
-                    </PrimaryButton>
+                <div class="mb-8 rounded-2xl bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 shadow-xl border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3 shadow-lg">
+                                <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">💰 Vos Plans Tarifaires</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    Créez et gérez vos offres tarifaires affichées sur votre site public.
+                                </p>
+                            </div>
+                        </div>
+                        <button @click="openCreateModal" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 border border-transparent rounded-xl font-bold text-sm text-white shadow-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200">
+                            <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Nouveau Plan
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Plans Grid -->
@@ -119,7 +125,7 @@ const deletePlan = (plan) => {
                     <div
                         v-for="plan in plans"
                         :key="plan.id"
-                        class="overflow-hidden rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md dark:bg-gray-800"
+                        class="overflow-hidden rounded-2xl bg-gradient-to-br from-white to-emerald-50 dark:from-gray-800 dark:to-emerald-900/20 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 border border-emerald-200/50 dark:border-emerald-500/30 backdrop-blur-xl"
                     >
                         <div class="p-6">
                             <!-- Status Badge -->
@@ -161,18 +167,18 @@ const deletePlan = (plan) => {
                             </p>
 
                             <!-- Actions -->
-                            <div class="mt-6 flex gap-2">
+                            <div class="mt-6 flex gap-3">
                                 <button
                                     @click="openEditModal(plan)"
-                                    class="flex-1 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+                                    class="flex-1 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200"
                                 >
-                                    Modifier
+                                    ✏️ Modifier
                                 </button>
                                 <button
                                     @click="deletePlan(plan)"
-                                    class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                    class="rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200"
                                 >
-                                    Supprimer
+                                    🗑️
                                 </button>
                             </div>
                         </div>
@@ -180,22 +186,24 @@ const deletePlan = (plan) => {
                 </div>
 
                 <!-- Empty State -->
-                <div v-else class="rounded-lg bg-white p-12 text-center shadow-sm dark:bg-gray-800">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Aucun plan</h3>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <div v-else class="rounded-2xl bg-gradient-to-br from-white to-emerald-50 dark:from-gray-800 dark:to-emerald-900/20 shadow-xl border border-emerald-200/50 dark:border-emerald-500/30 backdrop-blur-xl p-12 text-center">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-4 shadow-lg">
+                            <svg class="h-12 w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">💰 Aucun plan</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
                         Commencez par créer votre premier plan tarifaire.
                     </p>
-                    <div class="mt-6">
-                        <PrimaryButton @click="openCreateModal">
-                            <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Créer un Plan
-                        </PrimaryButton>
-                    </div>
+                    <button @click="openCreateModal" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl shadow-lg hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Créer un Plan
+                    </button>
                 </div>
 
                 <!-- Modal Create/Edit -->
@@ -209,28 +217,35 @@ const deletePlan = (plan) => {
                     <div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
                         <!-- Background overlay -->
                         <div
-                            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                            class="fixed inset-0 bg-gradient-to-br from-slate-900/80 via-purple-900/80 to-slate-900/80 backdrop-blur-sm transition-opacity"
                             aria-hidden="true"
                             @click="closeModal"
                         ></div>
 
                         <!-- Modal panel -->
-                        <div class="inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all dark:bg-gray-800 sm:my-8 sm:w-full sm:max-w-lg sm:align-middle">
+                        <div class="inline-block transform overflow-hidden rounded-2xl bg-gradient-to-br from-white to-emerald-50 dark:from-gray-800 dark:to-emerald-900/20 text-left align-bottom shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle border border-emerald-200/50 dark:border-emerald-500/30 backdrop-blur-xl">
                             <form @submit.prevent="submit">
-                                <div class="bg-white px-4 pb-4 pt-5 dark:bg-gray-800 sm:p-6 sm:pb-4">
-                                    <h3 class="mb-4 text-lg font-medium leading-6 text-gray-900 dark:text-gray-100" id="modal-title">
-                                        {{ editingPlan ? 'Modifier le plan' : 'Créer un nouveau plan' }}
-                                    </h3>
+                                <div class="px-6 pt-6 pb-4 sm:p-8 sm:pb-6">
+                                    <div class="flex items-center mb-6">
+                                        <div class="flex-shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3 shadow-lg">
+                                            <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent" id="modal-title">
+                                            {{ editingPlan ? '✏️ Modifier le plan' : '✨ Créer un nouveau plan' }}
+                                        </h3>
+                                    </div>
 
-                                    <div class="space-y-4">
+                                    <div class="space-y-6">
                                         <!-- Name -->
                                         <div>
-                                            <InputLabel for="name" value="Nom du plan *" />
+                                            <InputLabel for="name" value="🎯 Nom du plan *" />
                                             <TextInput
                                                 id="name"
                                                 v-model="form.name"
                                                 type="text"
-                                                class="mt-1 block w-full"
+                                                class="mt-1 block w-full rounded-xl shadow-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
                                                 required
                                                 placeholder="Ex: Découverte, Suivi Mensuel..."
                                             />
@@ -239,30 +254,30 @@ const deletePlan = (plan) => {
 
                                         <!-- Price -->
                                         <div>
-                                            <InputLabel for="price" value="Prix (€)" />
+                                            <InputLabel for="price" value="💵 Prix (€)" />
                                             <TextInput
                                                 id="price"
                                                 v-model="form.price"
                                                 type="number"
                                                 step="0.01"
                                                 min="0"
-                                                class="mt-1 block w-full"
+                                                class="mt-1 block w-full rounded-xl shadow-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
                                                 placeholder="Ex: 49.99"
                                             />
                                             <InputError class="mt-2" :message="form.errors.price" />
-                                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                Laissez vide pour "Prix sur demande"
+                                            <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                                💡 Laissez vide pour "Prix sur demande"
                                             </p>
                                         </div>
 
                                         <!-- Description -->
                                         <div>
-                                            <InputLabel for="description" value="Description" />
+                                            <InputLabel for="description" value="📝 Description" />
                                             <textarea
                                                 id="description"
                                                 v-model="form.description"
                                                 rows="3"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-indigo-600 dark:focus:ring-indigo-600"
+                                                class="mt-1 block w-full rounded-xl border-gray-300 shadow-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 dark:border-gray-700 dark:bg-gray-700/50 dark:text-gray-300 backdrop-blur-sm transition-all duration-200"
                                                 placeholder="Décrivez les avantages de ce plan..."
                                             ></textarea>
                                             <InputError class="mt-2" :message="form.errors.description" />
@@ -270,49 +285,55 @@ const deletePlan = (plan) => {
 
                                         <!-- CTA URL -->
                                         <div>
-                                            <InputLabel for="cta_url" value="URL de réservation (optionnel)" />
+                                            <InputLabel for="cta_url" value="🔗 URL de réservation (optionnel)" />
                                             <TextInput
                                                 id="cta_url"
                                                 v-model="form.cta_url"
                                                 type="url"
-                                                class="mt-1 block w-full"
+                                                class="mt-1 block w-full rounded-xl shadow-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
                                                 placeholder="https://calendly.com/..."
                                             />
                                             <InputError class="mt-2" :message="form.errors.cta_url" />
-                                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                Lien vers Calendly, formulaire de contact, etc.
+                                            <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                                💡 Lien vers Calendly, formulaire de contact, etc.
                                             </p>
                                         </div>
 
                                         <!-- Is Active -->
-                                        <div class="flex items-center">
+                                        <div class="flex items-center p-4 rounded-xl bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-200/30 dark:border-emerald-500/20">
                                             <input
                                                 id="is_active"
                                                 v-model="form.is_active"
                                                 type="checkbox"
-                                                class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600 dark:border-gray-700 dark:bg-gray-900 dark:ring-offset-gray-800"
+                                                class="h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-600 dark:border-gray-700 dark:bg-gray-700 dark:ring-offset-gray-800"
                                             />
-                                            <label for="is_active" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
-                                                Plan actif (visible sur le site public)
+                                            <label for="is_active" class="ml-3 block text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                ✅ Plan actif (visible sur le site public)
                                             </label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Modal Footer -->
-                                <div class="bg-gray-50 px-4 py-3 dark:bg-gray-700 sm:flex sm:flex-row-reverse sm:px-6">
-                                    <PrimaryButton
+                                <div class="bg-gradient-to-r from-emerald-50/50 to-green-50/50 dark:from-emerald-900/20 dark:to-green-900/20 px-6 py-4 sm:px-8 sm:flex sm:flex-row-reverse gap-3 border-t border-emerald-200/30 dark:border-emerald-500/20">
+                                    <button
                                         type="submit"
-                                        class="w-full justify-center sm:ml-3 sm:w-auto"
-                                        :class="{ 'opacity-25': form.processing }"
                                         :disabled="form.processing"
+                                        class="w-full inline-flex justify-center items-center rounded-xl border border-transparent shadow-lg px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-base font-bold text-white hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all duration-200"
                                     >
-                                        {{ editingPlan ? 'Mettre à jour' : 'Créer' }}
-                                    </PrimaryButton>
+                                        <svg v-if="form.processing" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <svg v-else class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        {{ form.processing ? 'Enregistrement...' : (editingPlan ? '✨ Mettre à jour' : '✨ Créer') }}
+                                    </button>
                                     <button
                                         type="button"
                                         @click="closeModal"
-                                        class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-600 dark:text-gray-100 dark:ring-gray-500 dark:hover:bg-gray-500 sm:mt-0 sm:w-auto"
+                                        class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 dark:border-gray-600 shadow-md px-6 py-3 bg-white dark:bg-gray-700 text-base font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto transition-all duration-200"
                                     >
                                         Annuler
                                     </button>

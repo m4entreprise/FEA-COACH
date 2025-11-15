@@ -13,9 +13,9 @@ const page = usePage();
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900">
             <nav
-                class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800"
+                class="border-b border-purple-200/50 bg-white/80 backdrop-blur-xl dark:border-purple-500/30 dark:bg-gray-800/80 shadow-lg"
             >
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -98,7 +98,7 @@ const page = usePage();
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                                class="inline-flex items-center rounded-xl border border-purple-200/50 bg-white/50 backdrop-blur-sm px-4 py-2 text-sm font-semibold leading-4 text-gray-700 transition duration-200 ease-in-out hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:border-purple-300 hover:shadow-md focus:outline-none dark:bg-gray-800/50 dark:text-gray-300 dark:border-purple-500/30 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -143,7 +143,7 @@ const page = usePage();
                                     showingNavigationDropdown =
                                         !showingNavigationDropdown
                                 "
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
+                                class="inline-flex items-center justify-center rounded-xl p-2 text-gray-600 transition duration-200 ease-in-out hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-600 focus:outline-none dark:text-gray-400 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 dark:hover:text-purple-400 border border-purple-200/50 dark:border-purple-500/30"
                             >
                                 <svg
                                     class="h-6 w-6"
@@ -185,7 +185,7 @@ const page = usePage();
                         block: showingNavigationDropdown,
                         hidden: !showingNavigationDropdown,
                     }"
-                    class="sm:hidden"
+                    class="sm:hidden bg-white/80 backdrop-blur-xl dark:bg-gray-800/80 border-t border-purple-200/50 dark:border-purple-500/30"
                 >
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
@@ -234,7 +234,7 @@ const page = usePage();
 
                     <!-- Responsive Settings Options -->
                     <div
-                        class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600"
+                        class="border-t border-purple-200/50 pb-1 pt-4 dark:border-purple-500/30"
                     >
                         <div class="px-4">
                             <div
@@ -265,7 +265,7 @@ const page = usePage();
 
             <!-- Page Heading -->
             <header
-                class="bg-white shadow dark:bg-gray-800"
+                class="bg-white/80 backdrop-blur-xl shadow-lg border-b border-purple-200/50 dark:bg-gray-800/80 dark:border-purple-500/30"
                 v-if="$slots.header"
             >
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">

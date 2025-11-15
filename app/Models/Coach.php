@@ -17,6 +17,7 @@ class Coach extends Model implements HasMedia
         'name',
         'slug',
         'subdomain',
+        'site_layout',
         'color_primary',
         'color_secondary',
         'hero_title',
@@ -104,6 +105,19 @@ class Coach extends Model implements HasMedia
     public function clients(): HasMany
     {
         return $this->hasMany(Client::class);
+    }
+
+    /**
+     * Get the site layout with fallback to default if invalid.
+     */
+    public function getSiteLayoutOrDefaultAttribute(): string
+    {
+        $key = $this->site_layout ?: config('coach_site.default_layout', 'classic');
+        $layouts = config('coach_site.layouts', []);
+
+        return array_key_exists($key, $layouts)
+            ? $key
+            : config('coach_site.default_layout', 'classic');
     }
 
     /**

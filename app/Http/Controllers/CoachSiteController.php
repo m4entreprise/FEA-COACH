@@ -35,7 +35,25 @@ class CoachSiteController extends Controller
         $transformations = $coach->transformations;
         $faqs = $coach->faqs;
 
-        return view('coach-site.index', [
+        // Determine which layout to use based on coach's site_layout setting
+        $config = config('coach_site');
+        $layouts = $config['layouts'] ?? [];
+        $defaultKey = $config['default_layout'] ?? 'classic';
+
+        // Get layout key from coach with fallback to default
+        $layoutKey = method_exists($coach, 'getSiteLayoutOrDefaultAttribute')
+            ? $coach->site_layout_or_default
+            : ($coach->site_layout ?: $defaultKey);
+
+        // Fallback if layout key is not found in config
+        if (! isset($layouts[$layoutKey])) {
+            $layoutKey = $defaultKey;
+        }
+
+        // Get the view name from config, with final fallback
+        $viewName = $layouts[$layoutKey]['view'] ?? 'coach-site.layouts.classic';
+
+        return view($viewName, [
             'coach' => $coach,
             'plans' => $activePlans,
             'transformations' => $transformations,

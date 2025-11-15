@@ -5,11 +5,14 @@ import { ref } from 'vue';
 
 const props = defineProps({
     coach: Object,
+    availableLayouts: Object,
+    defaultLayout: String,
 });
 
 const form = useForm({
     color_primary: props.coach.color_primary || '#3B82F6',
     color_secondary: props.coach.color_secondary || '#10B981',
+    site_layout: props.coach.site_layout || props.defaultLayout || 'classic',
     logo: null,
     hero: null,
 });
@@ -108,6 +111,48 @@ const submit = () => {
                                         </p>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 dark:border-gray-700"></div>
+
+                            <!-- Layout Selection Section -->
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                                    Choix du layout
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div
+                                        v-for="(layout, key) in availableLayouts"
+                                        :key="key"
+                                        @click="form.site_layout = key"
+                                        :class="[
+                                            'relative cursor-pointer rounded-lg border-2 p-4 transition-all',
+                                            form.site_layout === key
+                                                ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20'
+                                                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                                        ]"
+                                    >
+                                        <!-- Selected Indicator -->
+                                        <div
+                                            v-if="form.site_layout === key"
+                                            class="absolute top-2 right-2 h-6 w-6 flex items-center justify-center rounded-full bg-indigo-600 text-white"
+                                        >
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+
+                                        <h4 class="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                            {{ layout.label }}
+                                        </h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            {{ layout.description }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <p class="mt-3 text-sm text-gray-500">
+                                    Le layout détermine la présentation visuelle de votre site public. Vous pourrez toujours le changer plus tard.
+                                </p>
                             </div>
 
                             <div class="border-t border-gray-200 dark:border-gray-700"></div>

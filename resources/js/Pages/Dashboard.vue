@@ -20,12 +20,12 @@ const user = computed(() => page.props.auth.user);
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-2xl font-bold leading-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                 Dashboard
             </h2>
         </template>
 
-        <div class="py-12">
+        <div class="py-12 bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 min-h-screen">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <!-- Admin Access Banner -->
                 <div v-if="user.role === 'admin'" class="mb-8 overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 shadow-xl sm:rounded-2xl border border-blue-400/20 backdrop-blur-xl transform hover:scale-[1.02] transition-all duration-300">

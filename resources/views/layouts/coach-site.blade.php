@@ -235,40 +235,17 @@
                     <h3 class="text-lg font-semibold mb-4">Informations légales</h3>
                     <ul class="space-y-3">
                         @php
-                            // DEBUG: Afficher les informations pour comprendre le problème
-                            $debugInfo = [
-                                'coach_id' => $coach->id,
-                                'coach_user_id' => $coach->user_id ?? 'NULL',
-                            ];
-                            
                             // S'assurer que la relation user est chargée
                             if (!$coach->relationLoaded('user')) {
                                 $coach->load('user');
                             }
-                            
-                            $debugInfo['user_exists'] = $coach->user ? 'OUI' : 'NON';
-                            $debugInfo['user_id_from_relation'] = $coach->user?->id ?? 'NULL';
-                            $debugInfo['vat_from_user'] = $coach->user?->vat_number ?? 'NULL';
-                            
                             $vatNumber = $coach->user?->vat_number ?? null;
                         @endphp
-                        
-                        <!-- DEBUG TEMPORAIRE - À RETIRER APRÈS -->
-                        <li class="text-yellow-400 text-xs">
-                            <details>
-                                <summary>🔍 Debug Info (cliquez)</summary>
-                                <pre class="mt-2 text-xs bg-gray-800 p-2 rounded">{{ json_encode($debugInfo, JSON_PRETTY_PRINT) }}</pre>
-                            </details>
-                        </li>
                         
                         @if($vatNumber)
                             <li class="text-gray-400">
                                 <span class="text-sm">N° TVA</span>
                                 <p class="font-medium text-white">{{ $vatNumber }}</p>
-                            </li>
-                        @else
-                            <li class="text-gray-500 text-xs italic">
-                                (N° TVA non renseigné)
                             </li>
                         @endif
                         

@@ -58,7 +58,8 @@ const submit = () => {
                         Personnalisez l'apparence et l'identité de votre site
                     </p>
                 </div>
-                <a :href="route('coach.site', { slug: $page.props.auth.user.coach.slug })"
+                <a v-if="props.coach?.slug"
+                   :href="route('coach.site', { slug: props.coach.slug })"
                    target="_blank"
                    class="inline-flex items-center px-4 py-2 rounded-xl border border-purple-200/50 dark:border-purple-500/30 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm text-sm font-semibold text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

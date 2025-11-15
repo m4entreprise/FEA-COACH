@@ -10,6 +10,7 @@ use App\Http\Controllers\Dashboard\FaqController;
 use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\PlansController;
 use App\Http\Controllers\Dashboard\ContactController;
+use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
 use App\Http\Controllers\ProfileController;
@@ -141,6 +142,17 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/faq', [FaqController::class, 'store'])->name('dashboard.faq.store');
     Route::patch('/dashboard/faq/{faq}', [FaqController::class, 'update'])->name('dashboard.faq.update');
     Route::delete('/dashboard/faq/{faq}', [FaqController::class, 'destroy'])->name('dashboard.faq.destroy');
+
+    // Clients management
+    Route::get('/dashboard/clients', [ClientController::class, 'index'])->name('dashboard.clients.index');
+    Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('dashboard.clients.store');
+    Route::patch('/dashboard/clients/{client}', [ClientController::class, 'update'])->name('dashboard.clients.update');
+    Route::delete('/dashboard/clients/{client}', [ClientController::class, 'destroy'])->name('dashboard.clients.destroy');
+    
+    // Client notes management
+    Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'storeNote'])->name('dashboard.clients.notes.store');
+    Route::patch('/dashboard/clients/notes/{note}', [ClientController::class, 'updateNote'])->name('dashboard.clients.notes.update');
+    Route::delete('/dashboard/clients/notes/{note}', [ClientController::class, 'destroyNote'])->name('dashboard.clients.notes.destroy');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

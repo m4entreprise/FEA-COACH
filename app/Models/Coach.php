@@ -92,6 +92,14 @@ class Coach extends Model implements HasMedia
     }
 
     /**
+     * Get the clients for the coach.
+     */
+    public function clients(): HasMany
+    {
+        return $this->hasMany(Client::class);
+    }
+
+    /**
      * Register media collections.
      */
     public function registerMediaCollections(): void

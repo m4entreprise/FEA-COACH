@@ -242,6 +242,26 @@ const user = computed(() => page.props.auth.user);
                             </p>
                         </div>
                     </Link>
+
+                    <!-- Clients Card -->
+                    <Link :href="route('dashboard.clients.index')" class="block group">
+                        <div class="bg-gradient-to-br from-white to-indigo-50 dark:from-gray-800 dark:to-indigo-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer border border-indigo-200/50 dark:border-indigo-500/30 backdrop-blur-xl transform group-hover:scale-105 group-hover:-translate-y-1">
+                            <div class="flex items-center mb-4">
+                                <div class="flex-shrink-0 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">Clients</h4>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                                Gérez vos clients et centralisez leurs informations et notes.
+                            </p>
+                        </div>
+                    </Link>
+
                     <!-- Contact Card -->
                     <Link :href="route('dashboard.contact')" class="block group">
                         <div class="bg-gradient-to-br from-white to-rose-50 dark:from-gray-800 dark:to-rose-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer border border-rose-200/50 dark:border-rose-500/30 backdrop-blur-xl transform group-hover:scale-105 group-hover:-translate-y-1">

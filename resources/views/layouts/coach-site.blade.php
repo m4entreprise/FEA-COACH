@@ -143,7 +143,7 @@
     <!-- Footer -->
     <footer class="bg-gray-900 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
                 <!-- À propos -->
                 <div class="lg:col-span-2">
                     @if($coach->hasMedia('logo'))
@@ -211,13 +211,43 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Navigation</h3>
                     <ul class="space-y-3">
-                        <li><a href="#accueil" class="text-gray-400 hover:text-white transition-colors">Accueil</a></li>
-                        <li><a href="#a-propos" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
-                        <li><a href="#methode" class="text-gray-400 hover:text-white transition-colors">Ma méthode</a></li>
-                        <li><a href="#tarifs" class="text-gray-400 hover:text-white transition-colors">Tarifs</a></li>
-                        <li><a href="#resultats" class="text-gray-400 hover:text-white transition-colors">Résultats</a></li>
-                        <li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
-                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li>
+                            <a href="#accueil" class="text-gray-400 hover:text-white transition-colors inline-flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                                </svg>
+                                Retourner en haut
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#contact" class="text-gray-400 hover:text-white transition-colors inline-flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                                Me contacter
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Informations légales -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Informations légales</h3>
+                    <ul class="space-y-3">
+                        @if($coach->user && $coach->user->vat_number)
+                            <li class="text-gray-400">
+                                <span class="text-sm">N° TVA</span>
+                                <p class="font-medium text-white">{{ $coach->user->vat_number }}</p>
+                            </li>
+                        @endif
+                        <li>
+                            <a href="/mentions-legales" class="text-gray-400 hover:text-white transition-colors inline-flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                Mentions légales
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -239,15 +269,9 @@
             <!-- Bottom Footer -->
             <div class="border-t border-gray-800 mt-12 pt-8">
                 <div class="text-center space-y-2">
-                    <!-- Copyright & Legal -->
+                    <!-- Copyright -->
                     <div class="text-gray-400 text-sm">
                         <span>&copy; {{ date('Y') }} {{ $coach->name }}. Tous droits réservés.</span>
-                        <span class="mx-2">•</span>
-                        <a href="/mentions-legales" class="hover:text-white transition-colors">Mentions légales</a>
-                        @if($coach->user && $coach->user->vat_number)
-                            <span class="mx-2">•</span>
-                            <span>N° TVA : {{ $coach->user->vat_number }}</span>
-                        @endif
                     </div>
                     
                     <!-- Branding -->

@@ -13,9 +13,9 @@ const page = usePage();
 
 <template>
     <div>
-        <div class="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900">
+        <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
             <nav
-                class="border-b border-purple-200/50 dark:border-purple-500/30 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-lg"
+                class="border-b border-purple-200/50 dark:border-purple-500/30 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl shadow-lg"
             >
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -74,12 +74,6 @@ const page = usePage();
                                     :active="route().current('dashboard.plans')"
                                 >
                                     Plans
-                                </NavLink>
-                                <NavLink
-                                    :href="route('dashboard.faq')"
-                                    :active="route().current('dashboard.faq')"
-                                >
-                                    FAQ
                                 </NavLink>
                                 <NavLink
                                     :href="route('dashboard.contact')"
@@ -217,12 +211,6 @@ const page = usePage();
                             :active="route().current('dashboard.plans')"
                         >
                             Plans
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('dashboard.faq')"
-                            :active="route().current('dashboard.faq')"
-                        >
-                            FAQ
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             :href="route('dashboard.contact')"

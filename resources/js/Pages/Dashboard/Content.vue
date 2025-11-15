@@ -201,41 +201,35 @@ const deletePhoto = () => {
             </h2>
         </template>
 
-        <div class="py-12">
+        <div class="py-12 bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 min-h-screen">
             <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                 <!-- Success Message -->
-                <div v-if="$page.props.flash?.success" class="rounded-md bg-green-50 p-4 dark:bg-green-900/20">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-green-800 dark:text-green-200">
-                                {{ $page.props.flash.success }}
-                            </p>
-                        </div>
+                <div v-if="$page.props.flash?.success" class="rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 shadow-xl p-6 text-white transform hover:scale-[1.01] transition-all duration-300 backdrop-blur-xl border border-green-400/20">
+                    <div class="flex items-center">
+                        <svg class="h-6 w-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <p class="font-semibold">✨ {{ $page.props.flash.success }}</p>
                     </div>
                 </div>
 
                 <!-- Completion Card -->
-                <div class="overflow-hidden rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg">
-                    <div class="p-6 text-white">
+                <div class="overflow-hidden rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 shadow-xl hover:shadow-2xl transform hover:scale-[1.01] transition-all duration-300">
+                    <div class="p-8 text-white">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-lg font-semibold">Complétion du contenu</h3>
-                                <p class="mt-1 text-sm text-blue-100">
+                                <h3 class="text-2xl font-bold">📊 Complétion du contenu</h3>
+                                <p class="mt-2 text-sm text-blue-100">
                                     {{ completionPercentage }}% des sections sont remplies
                                 </p>
                             </div>
-                            <div class="text-4xl font-bold">
+                            <div class="text-5xl font-bold">
                                 {{ completionPercentage }}%
                             </div>
                         </div>
-                        <div class="mt-4 h-2 overflow-hidden rounded-full bg-blue-400">
+                        <div class="mt-6 h-3 overflow-hidden rounded-full bg-blue-400/50 backdrop-blur-sm">
                             <div
-                                class="h-full bg-white transition-all duration-500"
+                                class="h-full bg-white shadow-lg transition-all duration-500"
                                 :style="{ width: completionPercentage + '%' }"
                             ></div>
                         </div>
@@ -243,37 +237,41 @@ const deletePhoto = () => {
                 </div>
 
                 <!-- Info Card -->
-                <div class="rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="ml-3 flex-1">
-                            <p class="text-sm text-blue-700 dark:text-blue-300">
-                                <strong>💡 Conseil :</strong> Personnalisez les textes de votre site public pour attirer vos clients. 
-                                Soyez authentique, clair et mettez en avant votre différence !
-                            </p>
+                <div class="rounded-2xl bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 shadow-xl border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl transform hover:scale-[1.01] transition-all duration-300">
+                    <div class="p-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-3 shadow-lg">
+                                <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">💡 Personnalisez votre contenu</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    Personnalisez les textes de votre site public pour attirer vos clients. Soyez authentique, clair et mettez en avant votre différence !
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Main Form -->
-                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                    <div class="p-6">
+                <div class="overflow-hidden bg-gradient-to-br from-white to-slate-50 dark:from-gray-800 dark:to-slate-900 shadow-xl sm:rounded-2xl border border-slate-200/50 dark:border-slate-500/30 backdrop-blur-xl">
+                    <div class="p-8">
                         <form @submit.prevent="submit" class="space-y-8">
                             <!-- Hero Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-indigo-200/50 bg-gradient-to-br from-white to-indigo-50 p-8 dark:border-indigo-500/30 dark:from-gray-800 dark:to-indigo-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                                         🎯 Section Hero (Première impression)
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     La première section que vos visiteurs verront. Faites-la percutante !
                                 </p>
                                 <div class="space-y-6">
@@ -323,16 +321,18 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- Profile Photo Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-pink-200/50 bg-gradient-to-br from-white to-pink-50 p-8 dark:border-pink-500/30 dark:from-gray-800 dark:to-pink-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
                                         📸 Photo de profil
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Ajoutez votre photo pour personnaliser votre profil
                                 </p>
 
@@ -377,7 +377,7 @@ const deletePhoto = () => {
                                                 <button
                                                     @click="selectPhoto"
                                                     type="button"
-                                                    class="inline-flex items-center rounded-md bg-pink-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-offset-2"
+                                                    class="inline-flex items-center rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:from-pink-600 hover:to-rose-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200"
                                                 >
                                                     <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -389,7 +389,7 @@ const deletePhoto = () => {
                                                     v-if="photoInput?.files?.length"
                                                     @click="uploadPhoto"
                                                     type="button"
-                                                    class="inline-flex items-center rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
+                                                    class="inline-flex items-center rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200"
                                                 >
                                                     <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -398,7 +398,7 @@ const deletePhoto = () => {
                                                 </button>
                                             </div>
                                             
-                                            <div class="rounded-md bg-pink-50 p-3 dark:bg-pink-900/20">
+                                            <div class="rounded-xl bg-pink-50 p-4 dark:bg-pink-900/20 border border-pink-200/30 dark:border-pink-500/20">
                                                 <p class="text-xs text-pink-700 dark:text-pink-300">
                                                     <strong>💡 Conseils :</strong>
                                                 </p>
@@ -414,16 +414,18 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- Statistics Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-blue-200/50 bg-gradient-to-br from-white to-blue-50 p-8 dark:border-blue-500/30 dark:from-gray-800 dark:to-blue-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                                         📊 Statistiques
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Personnalisez vos statistiques affichées sur le site public
                                 </p>
 
@@ -477,7 +479,7 @@ const deletePhoto = () => {
                                 </div>
 
                                 <!-- Info Box -->
-                                <div class="mt-6 rounded-md bg-blue-50 p-3 dark:bg-blue-900/20">
+                                <div class="mt-6 rounded-xl bg-blue-50 p-4 dark:bg-blue-900/20 border border-blue-200/30 dark:border-blue-500/20">
                                     <p class="text-xs text-blue-700 dark:text-blue-300">
                                         <strong>💡 Conseil :</strong>
                                     </p>
@@ -490,16 +492,18 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- About Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-green-200/50 bg-gradient-to-br from-white to-green-50 p-8 dark:border-green-500/30 dark:from-gray-800 dark:to-green-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                                         👤 Section "À propos"
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Présentez-vous et créez une connexion avec vos futurs clients
                                 </p>
                                 <div>
@@ -518,7 +522,7 @@ const deletePhoto = () => {
                                         maxlength="5000"
                                     ></textarea>
                                     <InputError class="mt-2" :message="form.errors.about_text" />
-                                    <div class="mt-2 rounded-md bg-green-50 p-3 dark:bg-green-900/20">
+                                    <div class="mt-2 rounded-xl bg-green-50 p-4 dark:bg-green-900/20 border border-green-200/30 dark:border-green-500/20">
                                         <p class="text-xs text-green-700 dark:text-green-300">
                                             <strong>💡 Conseils :</strong>
                                         </p>
@@ -533,16 +537,18 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- Method Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-purple-200/50 bg-gradient-to-br from-white to-purple-50 p-8 dark:border-purple-500/30 dark:from-gray-800 dark:to-purple-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                                         ⚡ Section "Ma méthode"
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Personnalisez tous les éléments de la section "Ma méthode" de votre site
                                 </p>
                                 
@@ -699,7 +705,7 @@ const deletePhoto = () => {
                                         </div>
                                     </div>
 
-                                    <div class="rounded-md bg-purple-50 p-3 dark:bg-purple-900/20">
+                                    <div class="rounded-xl bg-purple-50 p-4 dark:bg-purple-900/20 border border-purple-200/30 dark:border-purple-500/20">
                                         <p class="text-xs text-purple-700 dark:text-purple-300">
                                             <strong>💡 Conseil :</strong> Tous ces champs sont personnalisables. Laissez-les vides pour utiliser les valeurs par défaut.
                                         </p>
@@ -708,16 +714,18 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- CTA Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-orange-200/50 bg-gradient-to-br from-white to-orange-50 p-8 dark:border-orange-500/30 dark:from-gray-800 dark:to-orange-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
                                         🚀 Appel à l'action (CTA)
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Le texte du bouton qui incitera vos visiteurs à passer à l'action
                                 </p>
                                 <div>
@@ -737,7 +745,7 @@ const deletePhoto = () => {
                                         required
                                     />
                                     <InputError class="mt-2" :message="form.errors.cta_text" />
-                                    <div class="mt-2 rounded-md bg-orange-50 p-3 dark:bg-orange-900/20">
+                                    <div class="mt-2 rounded-xl bg-orange-50 p-4 dark:bg-orange-900/20 border border-orange-200/30 dark:border-orange-500/20">
                                         <p class="text-xs text-orange-700 dark:text-orange-300">
                                             <strong>💡 Exemples efficaces :</strong>
                                         </p>
@@ -752,16 +760,18 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- Pricing Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-emerald-200/50 bg-gradient-to-br from-white to-emerald-50 p-8 dark:border-emerald-500/30 dark:from-gray-800 dark:to-emerald-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
                                         💰 Section "Tarifs"
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Personnalisez le titre et sous-titre de votre section tarifs (les plans se gèrent dans le menu "Plans")
                                 </p>
                                 
@@ -794,7 +804,7 @@ const deletePhoto = () => {
                                         <InputError class="mt-2" :message="form.errors.pricing_subtitle" />
                                     </div>
 
-                                    <div class="rounded-md bg-emerald-50 p-3 dark:bg-emerald-900/20">
+                                    <div class="rounded-xl bg-emerald-50 p-4 dark:bg-emerald-900/20 border border-emerald-200/30 dark:border-emerald-500/20">
                                         <p class="text-xs text-emerald-700 dark:text-emerald-300">
                                             <strong>💡 Conseil :</strong> Pour gérer vos plans (prix, descriptions, CTA), rendez-vous dans le menu "Plans". Ici vous ne modifiez que le titre et le sous-titre de cette section.
                                         </p>
@@ -803,16 +813,18 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- Transformations Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-teal-200/50 bg-gradient-to-br from-white to-teal-50 p-8 dark:border-teal-500/30 dark:from-gray-800 dark:to-teal-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">
                                         📈 Section "Transformations"
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Personnalisez le titre et sous-titre de votre section transformations (les transformations se gèrent dans le menu "Transformations")
                                 </p>
                                 
@@ -845,7 +857,7 @@ const deletePhoto = () => {
                                         <InputError class="mt-2" :message="form.errors.transformations_subtitle" />
                                     </div>
 
-                                    <div class="rounded-md bg-teal-50 p-3 dark:bg-teal-900/20">
+                                    <div class="rounded-xl bg-teal-50 p-4 dark:bg-teal-900/20 border border-teal-200/30 dark:border-teal-500/20">
                                         <p class="text-xs text-teal-700 dark:text-teal-300">
                                             <strong>💡 Conseil :</strong> Pour gérer vos transformations (photos avant/après, descriptions), rendez-vous dans le menu "Transformations". Ici vous ne modifiez que le titre et le sous-titre de cette section.
                                         </p>
@@ -854,16 +866,18 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- Intermediate CTA Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gradient-to-r from-orange-50 to-red-50 p-6 dark:border-gray-700 dark:from-orange-900/20 dark:to-red-900/20">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-orange-200/50 bg-gradient-to-r from-orange-50 to-red-50 p-8 dark:border-orange-500/30 dark:from-orange-900/20 dark:to-red-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
                                         ⚡ Section CTA intermédiaire (après Méthode)
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Section d'appel à l'action qui apparaît entre "Ma méthode" et "Tarifs" pour encourager le visiteur à passer à l'action.
                                 </p>
                                 
@@ -896,7 +910,7 @@ const deletePhoto = () => {
                                         <InputError class="mt-2" :message="form.errors.intermediate_cta_subtitle" />
                                     </div>
 
-                                    <div class="rounded-md bg-orange-50 p-3 dark:bg-orange-900/20">
+                                    <div class="rounded-xl bg-orange-50 p-4 dark:bg-orange-900/20 border border-orange-200/30 dark:border-orange-500/20">
                                         <p class="text-xs text-orange-700 dark:text-orange-300">
                                             <strong>💡 Astuce :</strong> Cette section apparaît entre "Ma méthode" et "Tarifs". Le bouton utilise automatiquement votre texte CTA défini ci-dessus et redirige vers la section Tarifs.
                                         </p>
@@ -905,16 +919,18 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- Final CTA Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-purple-200/50 bg-gradient-to-br from-white to-purple-50 p-8 dark:border-purple-500/30 dark:from-gray-800 dark:to-purple-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                                         🎯 Section "Appel à l'action finale"
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Personnalisez le titre et sous-titre de la section d'appel à l'action en fin de page (actuellement : "Prêt à commencer votre transformation ?")
                                 </p>
                                 
@@ -947,7 +963,7 @@ const deletePhoto = () => {
                                         <InputError class="mt-2" :message="form.errors.final_cta_subtitle" />
                                     </div>
 
-                                    <div class="rounded-md bg-purple-50 p-3 dark:bg-purple-900/20">
+                                    <div class="rounded-xl bg-purple-50 p-4 dark:bg-purple-900/20 border border-purple-200/30 dark:border-purple-500/20">
                                         <p class="text-xs text-purple-700 dark:text-purple-300">
                                             <strong>💡 Astuce :</strong> Cette section apparaît juste avant le footer. Le texte du bouton se modifie dans la section "Appel à l'action (CTA)" ci-dessus.
                                         </p>
@@ -956,16 +972,18 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- Social Media Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gradient-to-r from-blue-50 to-cyan-50 p-6 dark:border-gray-700 dark:from-blue-900/20 dark:to-cyan-900/20">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border border-blue-200/50 bg-gradient-to-r from-blue-50 to-cyan-50 p-8 dark:border-blue-500/30 dark:from-blue-900/20 dark:to-cyan-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                                         📱 Réseaux sociaux
                                     </h3>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Ajoutez vos liens de réseaux sociaux pour les afficher dans le footer de votre site public
                                 </p>
                                 
@@ -1091,7 +1109,7 @@ const deletePhoto = () => {
                                     </div>
                                 </div>
 
-                                <div class="mt-6 rounded-md bg-blue-50 p-3 dark:bg-blue-900/20">
+                                <div class="mt-6 rounded-xl bg-blue-50 p-4 dark:bg-blue-900/20 border border-blue-200/30 dark:border-blue-500/20">
                                     <p class="text-xs text-blue-700 dark:text-blue-300">
                                         <strong>💡 Conseil :</strong> Ajoutez uniquement les réseaux sociaux où vous êtes actif. Les icônes apparaîtront automatiquement dans le footer de votre site. Pensez à vérifier que vos liens sont corrects et commencent par "https://".
                                     </p>
@@ -1099,30 +1117,32 @@ const deletePhoto = () => {
                             </div>
 
                             <!-- FAQ Section -->
-                            <div class="rounded-lg border border-gray-200 bg-gradient-to-r from-yellow-50 to-amber-50 p-6 dark:border-gray-700 dark:from-yellow-900/20 dark:to-amber-900/20">
-                                <div class="mb-4 flex items-center justify-between">
+                            <div class="rounded-2xl border border-yellow-200/50 bg-gradient-to-r from-yellow-50 to-amber-50 p-8 dark:border-yellow-500/30 dark:from-yellow-900/20 dark:to-amber-900/20 shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-xl">
+                                <div class="mb-6 flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <svg class="mr-2 h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        <div class="flex-shrink-0 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-xl p-3 shadow-lg">
+                                            <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <h3 class="ml-4 text-2xl font-bold bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent">
                                             ❓ Section FAQ (Questions fréquentes)
                                         </h3>
                                     </div>
-                                    <PrimaryButton @click="openCreateFaqModal" class="bg-yellow-600 hover:bg-yellow-500">
+                                    <button @click="openCreateFaqModal" class="inline-flex items-center rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:from-yellow-600 hover:to-amber-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200">
                                         <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                         </svg>
                                         Nouvelle Question
-                                    </PrimaryButton>
+                                    </button>
                                 </div>
-                                <p class="mb-6 text-sm text-gray-700 dark:text-gray-300">
+                                <p class="mb-6 text-gray-600 dark:text-gray-400">
                                     Gérez vos questions fréquentes directement depuis cette page
                                 </p>
                                 
                                 <!-- FAQ Stats -->
                                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                                    <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+                                    <div class="rounded-xl bg-white/50 p-4 shadow-md dark:bg-gray-800/50 backdrop-blur-sm border border-yellow-200/30 dark:border-yellow-500/20">
                                         <div class="flex items-center justify-between">
                                             <div>
                                                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total FAQs</p>
@@ -1138,7 +1158,7 @@ const deletePhoto = () => {
                                         </div>
                                     </div>
                                     
-                                    <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+                                    <div class="rounded-xl bg-white/50 p-4 shadow-md dark:bg-gray-800/50 backdrop-blur-sm border border-green-200/30 dark:border-green-500/20">
                                         <div class="flex items-center justify-between">
                                             <div>
                                                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">FAQs actives</p>
@@ -1154,7 +1174,7 @@ const deletePhoto = () => {
                                         </div>
                                     </div>
                                     
-                                    <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+                                    <div class="rounded-xl bg-white/50 p-4 shadow-md dark:bg-gray-800/50 backdrop-blur-sm border border-orange-200/30 dark:border-orange-500/20">
                                         <div class="flex items-center justify-between">
                                             <div>
                                                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Statut</p>
@@ -1177,7 +1197,7 @@ const deletePhoto = () => {
                                     <div
                                         v-for="faq in faqs"
                                         :key="faq.id"
-                                        class="rounded-lg bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:bg-gray-800"
+                                        class="rounded-xl bg-white/50 p-5 shadow-md transition-all hover:shadow-xl dark:bg-gray-800/50 backdrop-blur-sm border border-yellow-200/30 dark:border-yellow-500/20 hover:scale-[1.01] duration-200"
                                     >
                                         <!-- Status Badge & Order -->
                                         <div class="mb-3 flex items-start justify-between">
@@ -1216,13 +1236,13 @@ const deletePhoto = () => {
                                         <div class="flex gap-2">
                                             <button
                                                 @click="openEditFaqModal(faq)"
-                                                class="flex-1 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+                                                class="flex-1 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200"
                                             >
                                                 Modifier
                                             </button>
                                             <button
                                                 @click="deleteFaq(faq)"
-                                                class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                                class="rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200"
                                             >
                                                 Supprimer
                                             </button>
@@ -1231,7 +1251,7 @@ const deletePhoto = () => {
                                 </div>
                                 
                                 <!-- Empty State -->
-                                <div v-else class="mt-6 rounded-lg bg-white p-12 text-center shadow-sm dark:bg-gray-800">
+                                <div v-else class="mt-6 rounded-2xl bg-white/50 p-12 text-center shadow-md dark:bg-gray-800/50 backdrop-blur-sm border border-yellow-200/30 dark:border-yellow-500/20">
                                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
@@ -1240,30 +1260,32 @@ const deletePhoto = () => {
                                         Commencez par créer votre première question fréquemment posée.
                                     </p>
                                     <div class="mt-6">
-                                        <PrimaryButton @click="openCreateFaqModal" class="bg-yellow-600 hover:bg-yellow-500">
+                                        <button @click="openCreateFaqModal" class="inline-flex items-center rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:from-yellow-600 hover:to-amber-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200">
                                             <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                             </svg>
                                             Créer une Question
-                                        </PrimaryButton>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Preview Section -->
-                            <div class="rounded-lg border-2 border-dashed border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100 p-8 dark:border-gray-600 dark:from-gray-800 dark:to-gray-900">
-                                <div class="mb-4 flex items-center">
-                                    <svg class="mr-2 h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                    </svg>
-                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            <div class="rounded-2xl border-2 border-dashed border-indigo-300 bg-gradient-to-br from-indigo-50 to-purple-50 p-8 dark:border-indigo-500/50 dark:from-indigo-900/20 dark:to-purple-900/20 shadow-xl backdrop-blur-xl">
+                                <div class="mb-6 flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-3 shadow-lg">
+                                        <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </div>
+                                    <h4 class="ml-4 text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                                         👁️ Aperçu en temps réel
                                     </h4>
                                 </div>
                                 <div class="space-y-4">
                                     <!-- Hero Preview -->
-                                    <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+                                    <div class="rounded-xl bg-white/70 p-4 shadow-md dark:bg-gray-800/70 backdrop-blur-sm border border-indigo-200/30 dark:border-indigo-500/20">
                                         <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                                             Titre Hero
                                         </p>
@@ -1273,7 +1295,7 @@ const deletePhoto = () => {
                                     </div>
                                     
                                     <!-- Subtitle Preview -->
-                                    <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+                                    <div class="rounded-xl bg-white/70 p-4 shadow-md dark:bg-gray-800/70 backdrop-blur-sm border border-indigo-200/30 dark:border-indigo-500/20">
                                         <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                                             Sous-titre
                                         </p>
@@ -1283,13 +1305,13 @@ const deletePhoto = () => {
                                     </div>
                                     
                                     <!-- CTA Preview -->
-                                    <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+                                    <div class="rounded-xl bg-white/70 p-4 shadow-md dark:bg-gray-800/70 backdrop-blur-sm border border-indigo-200/30 dark:border-indigo-500/20">
                                         <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                                             Bouton CTA
                                         </p>
                                         <button
                                             type="button"
-                                            class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+                                            class="inline-flex items-center rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-lg"
                                             disabled
                                         >
                                             {{ form.cta_text || 'Texte du bouton' }}
@@ -1301,11 +1323,11 @@ const deletePhoto = () => {
                                     
                                     <!-- Completion Stats -->
                                     <div class="mt-4 grid grid-cols-2 gap-3">
-                                        <div class="rounded-lg bg-white p-3 text-center shadow-sm dark:bg-gray-800">
+                                        <div class="rounded-xl bg-white/70 p-3 text-center shadow-md dark:bg-gray-800/70 backdrop-blur-sm border border-indigo-200/30 dark:border-indigo-500/20">
                                             <p class="text-2xl font-bold text-indigo-600">{{ completionPercentage }}%</p>
                                             <p class="text-xs text-gray-600 dark:text-gray-400">Complet</p>
                                         </div>
-                                        <div class="rounded-lg bg-white p-3 text-center shadow-sm dark:bg-gray-800">
+                                        <div class="rounded-xl bg-white/70 p-3 text-center shadow-md dark:bg-gray-800/70 backdrop-blur-sm border border-green-200/30 dark:border-green-500/20">
                                             <p class="text-2xl font-bold text-green-600">
                                                 {{ heroTitleCount + heroSubtitleCount + aboutTextCount + methodTextCount + ctaTextCount }}
                                             </p>
@@ -1326,21 +1348,20 @@ const deletePhoto = () => {
                                     </p>
                                 </div>
                                 <div class="flex gap-3">
-                                    <PrimaryButton
+                                    <button
                                         type="submit"
                                         :disabled="form.processing"
-                                        :class="{ 'opacity-25': form.processing }"
-                                        class="inline-flex items-center"
+                                        class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 border border-transparent rounded-xl font-bold text-white shadow-xl hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all duration-200"
                                     >
-                                        <svg v-if="!form.processing" class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        <svg v-else class="mr-2 h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <svg v-if="form.processing" class="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
-                                        {{ form.processing ? 'Enregistrement en cours...' : 'Enregistrer les modifications' }}
-                                    </PrimaryButton>
+                                        <svg v-else class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        {{ form.processing ? 'Enregistrement en cours...' : '💾 Enregistrer les modifications' }}
+                                    </button>
                                 </div>
                             </div>
                         </form>

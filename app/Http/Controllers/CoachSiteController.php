@@ -18,6 +18,7 @@ class CoachSiteController extends Controller
 
         // Load relationships with explicit eager loading
         $coach->loadMissing([
+            'user',
             'transformations' => function ($query) {
                 $query->orderBy('order');
             },

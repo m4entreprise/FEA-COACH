@@ -60,24 +60,6 @@
                 </div>
             @endif
 
-            <!-- Informations légales complémentaires -->
-            <div class="mt-12 pt-8 border-t border-gray-300">
-                <h2 class="text-2xl font-bold mb-4" style="color: {{ $coach->color_primary ?? '#8B5CF6' }}">
-                    Informations légales
-                </h2>
-                <div class="space-y-2 text-gray-700">
-                    @if($coach->user && $coach->user->legal_address)
-                        <p><strong>Adresse :</strong> {{ $coach->user->legal_address }}</p>
-                    @endif
-                    @if($coach->user && $coach->user->email)
-                        <p><strong>Email :</strong> {{ $coach->user->email }}</p>
-                    @endif
-                    @if($coach->user && $coach->user->vat_number)
-                        <p><strong>N° TVA :</strong> {{ $coach->user->vat_number }}</p>
-                    @endif
-                </div>
-            </div>
-
             <!-- Bouton retour -->
             <div class="mt-8 text-center">
                 <a href="/" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all" style="background: linear-gradient(to right, {{ $coach->color_primary ?? '#8B5CF6' }}, {{ $coach->color_secondary ?? '#EC4899' }})">

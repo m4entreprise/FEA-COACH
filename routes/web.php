@@ -30,6 +30,7 @@ Route::domain('{coach_slug}.' . config('app.domain', 'localhost'))
     ->group(function () {
         Route::get('/', [CoachSiteController::class, 'show'])->name('coach.site');
         Route::post('/contact', [CoachSiteController::class, 'contact'])->name('coach.contact');
+        Route::get('/mentions-legales', [CoachSiteController::class, 'legal'])->name('coach.legal');
     });
 
 /*

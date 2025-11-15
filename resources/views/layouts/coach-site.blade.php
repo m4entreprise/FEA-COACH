@@ -164,6 +164,7 @@
                         <li><a href="#methode" class="text-gray-400 hover:text-white transition-colors">Ma méthode</a></li>
                         <li><a href="#tarifs" class="text-gray-400 hover:text-white transition-colors">Tarifs</a></li>
                         <li><a href="#resultats" class="text-gray-400 hover:text-white transition-colors">Résultats</a></li>
+                        <li><a href="/mentions-legales" class="text-gray-400 hover:text-white transition-colors">Mentions légales & CGV</a></li>
                     </ul>
                 </div>
 
@@ -181,6 +182,12 @@
 
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
                 <p>&copy; {{ date('Y') }} {{ $coach->name }}. Tous droits réservés.</p>
+                @if($coach->user && $coach->user->vat_number)
+                    <p class="mt-2 text-sm">N° TVA : {{ $coach->user->vat_number }}</p>
+                @endif
+                <p class="mt-2 text-sm">
+                    <a href="/mentions-legales" class="hover:text-white transition-colors">Mentions légales & CGV</a>
+                </p>
             </div>
         </div>
     </footer>

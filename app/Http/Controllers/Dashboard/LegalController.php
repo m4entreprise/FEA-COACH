@@ -25,6 +25,7 @@ class LegalController extends Controller
 
         return Inertia::render('Dashboard/Legal', [
             'coach' => $coach,
+            'user' => auth()->user(),
             'defaultLegalTerms' => $defaultLegalTerms,
         ]);
     }
@@ -41,10 +42,21 @@ class LegalController extends Controller
         }
 
         $validated = $request->validate([
+            'vat_number' => 'nullable|string|max:255',
             'legal_terms' => 'nullable|string|max:50000',
         ]);
 
-        $coach->update($validated);
+        // Mise à jour du numéro de TVA dans le modèle User
+        if (isset($validated['vat_number'])) {
+            auth()->user()->update([
+                'vat_number' => $validated['vat_number'],
+            ]);
+        }
+
+        // Mise à jour des mentions légales dans le modèle Coach
+        $coach->update([
+            'legal_terms' => $validated['legal_terms'] ?? null,
+        ]);
 
         return back()->with('success', 'Mentions légales enregistrées avec succès !');
     }

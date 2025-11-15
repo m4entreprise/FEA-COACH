@@ -7,11 +7,13 @@ import InputError from '@/Components/InputError.vue';
 const props = defineProps({
     coach: Object,
     defaultLegalTerms: String,
+    user: Object,
 });
 
 const showPreview = ref(false);
 
 const form = useForm({
+    vat_number: props.user?.vat_number || '',
     legal_terms: props.coach.legal_terms || props.defaultLegalTerms,
 });
 
@@ -104,6 +106,38 @@ const copyToClipboard = () => {
                                     </svg>
                                     {{ showPreview ? 'Masquer' : 'Voir' }} l'aperçu
                                 </button>
+                            </div>
+
+                            <!-- Numéro de TVA -->
+                            <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6">
+                                <div class="flex items-start gap-3 mb-4">
+                                    <div class="text-purple-600 dark:text-purple-400">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-semibold text-purple-900 dark:text-purple-100 mb-2">Numéro de TVA</h3>
+                                        <p class="text-sm text-purple-800 dark:text-purple-200 mb-3">
+                                            Ce numéro sera affiché dans le footer de votre site public et dans vos mentions légales.
+                                        </p>
+                                        <div>
+                                            <label class="block text-sm font-medium text-purple-900 dark:text-purple-100 mb-2">
+                                                N° TVA (si applicable)
+                                            </label>
+                                            <input
+                                                v-model="form.vat_number"
+                                                type="text"
+                                                class="w-full md:w-1/2 px-4 py-2 rounded-lg border border-purple-300 dark:border-purple-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                                placeholder="BE0123456789"
+                                            />
+                                            <InputError :message="form.errors.vat_number" class="mt-1" />
+                                            <p class="mt-2 text-xs text-purple-700 dark:text-purple-300">
+                                                Laissez vide si vous n'êtes pas assujetti à la TVA.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Aperçu -->

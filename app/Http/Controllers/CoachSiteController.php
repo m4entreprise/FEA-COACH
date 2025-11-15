@@ -73,4 +73,17 @@ class CoachSiteController extends Controller
         // Fallback classique en POST (sans JS)
         return back()->with('success', 'Votre message a bien été envoyé. Nous vous répondrons rapidement.');
     }
+
+    /**
+     * Display the coach's legal terms and CGV.
+     */
+    public function legal(Request $request): View
+    {
+        $coach = app(Coach::class);
+        $coach->load('user');
+
+        return view('coach-site.legal', [
+            'coach' => $coach,
+        ]);
+    }
 }

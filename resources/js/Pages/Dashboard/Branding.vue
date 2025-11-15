@@ -10,15 +10,15 @@ const props = defineProps({
 });
 
 const form = useForm({
-    color_primary: props.coach.color_primary || '#3B82F6',
-    color_secondary: props.coach.color_secondary || '#10B981',
-    site_layout: props.coach.site_layout || props.defaultLayout || 'classic',
+    color_primary: props.coach?.color_primary || '#3B82F6',
+    color_secondary: props.coach?.color_secondary || '#10B981',
+    site_layout: props.coach?.site_layout || props.defaultLayout || 'classic',
     logo: null,
     hero: null,
 });
 
-const logoPreview = ref(props.coach.media?.find(m => m.collection_name === 'logo')?.original_url || null);
-const heroPreview = ref(props.coach.media?.find(m => m.collection_name === 'hero')?.original_url || null);
+const logoPreview = ref(props.coach?.media?.find(m => m.collection_name === 'logo')?.original_url || null);
+const heroPreview = ref(props.coach?.media?.find(m => m.collection_name === 'hero')?.original_url || null);
 
 const handleLogoChange = (event) => {
     const file = event.target.files[0];
@@ -52,7 +52,7 @@ const submit = () => {
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                        🎨 Branding & Identité Visuelle
+                        Branding & Identité Visuelle
                     </h2>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                         Personnalisez l'apparence et l'identité de votre site
@@ -78,7 +78,7 @@ const submit = () => {
                     <div class="absolute top-0 right-0 -mt-4 -mr-4 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
                     <div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-pink-400/20 rounded-full blur-2xl"></div>
                     <div class="relative z-10">
-                        <h3 class="text-2xl font-bold mb-2">✨ Créez votre identité unique</h3>
+                        <h3 class="text-2xl font-bold mb-2">Créez votre identité unique</h3>
                         <p class="text-purple-100">Personnalisez les couleurs, le logo et l'apparence de votre site pour refléter votre marque.</p>
                     </div>
                 </div>
@@ -97,7 +97,7 @@ const submit = () => {
                                     </div>
                                     <div>
                                         <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">
-                                            🎨 Palette de couleurs
+                                            Palette de couleurs
                                         </h3>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Définissez les couleurs principales de votre marque
@@ -109,7 +109,7 @@ const submit = () => {
                                     <!-- Primary Color -->
                                     <div class="group space-y-4">
                                         <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">
-                                            💜 Couleur primaire
+                                            Couleur primaire
                                         </label>
                                         <div class="flex items-stretch gap-4">
                                             <input
@@ -144,7 +144,7 @@ const submit = () => {
                                     <!-- Secondary Color -->
                                     <div class="group space-y-4">
                                         <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">
-                                            🌈 Couleur secondaire
+                                            Couleur secondaire
                                         </label>
                                         <div class="flex items-stretch gap-4">
                                             <input
@@ -180,7 +180,6 @@ const submit = () => {
                                 <!-- Color Preview -->
                                 <div class="p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 rounded-2xl border-2 border-dashed border-gray-300 dark:border-gray-700">
                                     <h4 class="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
-                                        <span>🔍</span>
                                         Aperçu en contexte
                                     </h4>
                                     <div class="flex flex-wrap gap-4">
@@ -202,7 +201,7 @@ const submit = () => {
                                             :style="{ backgroundColor: form.color_primary + '20', color: form.color_primary }"
                                             class="px-4 py-2 rounded-full text-sm font-semibold"
                                         >
-                                            🏷️ Badge
+                                            Badge
                                         </span>
                                         <span 
                                             :style="{ color: form.color_primary }"
@@ -231,7 +230,7 @@ const submit = () => {
                                     </div>
                                     <div>
                                         <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">
-                                            📐 Style de mise en page
+                                            Style de mise en page
                                         </h3>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Choisissez le style visuel de votre site public
@@ -239,7 +238,7 @@ const submit = () => {
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div v-if="availableLayouts" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div
                                         v-for="(layout, key) in availableLayouts"
                                         :key="key"
@@ -302,7 +301,7 @@ const submit = () => {
                                     </div>
                                     <div>
                                         <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">
-                                            🏷️ Logo
+                                            Logo
                                         </h3>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Téléchargez le logo de votre marque
@@ -383,7 +382,7 @@ const submit = () => {
                                     </div>
                                     <div>
                                         <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">
-                                            🖼️ Image Hero
+                                            Image Hero
                                         </h3>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Image d'arrière-plan de la page d'accueil
@@ -469,7 +468,7 @@ const submit = () => {
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                             <span class="text-sm font-semibold text-green-700 dark:text-green-300">
-                                                ✅ Enregistré avec succès !
+                                                Enregistré avec succès !
                                             </span>
                                         </div>
                                     </transition>

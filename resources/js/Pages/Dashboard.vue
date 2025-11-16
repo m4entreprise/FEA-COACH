@@ -325,12 +325,12 @@ onMounted(() => {
                             </div>
                         </div>
                         <div class="mt-auto">
-                            <a 
-                                href="mailto:support@fea-coach.com"
-                                class="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-semibold rounded-lg hover:from-purple-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg text-center"
+                            <Link 
+                                :href="route('dashboard.support')"
+                                class="w-full inline-flex justify-center px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-semibold rounded-lg hover:from-purple-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg text-center"
                             >
                                 Contacter le support
-                            </a>
+                            </Link>
                         </div>
                     </div>
 

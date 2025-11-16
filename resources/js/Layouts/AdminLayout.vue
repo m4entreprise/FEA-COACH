@@ -45,6 +45,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Demandes FEA
                                 </NavLink>
+                                <NavLink
+                                    :href="route('admin.support-tickets.index')"
+                                    :active="route().current('admin.support-tickets.*')"
+                                >
+                                    Support
+                                </NavLink>
                             </div>
                         </div>
 
@@ -158,6 +164,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('admin.promo-requests.*')"
                         >
                             Demandes FEA
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.support-tickets.index')"
+                            :active="route().current('admin.support-tickets.*')"
+                        >
+                            Support
                         </ResponsiveNavLink>
                     </div>
 

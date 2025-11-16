@@ -82,6 +82,12 @@ const page = usePage();
                                     Clients
                                 </NavLink>
                                 <NavLink
+                                    :href="route('dashboard.support')"
+                                    :active="route().current('dashboard.support')"
+                                >
+                                    Support
+                                </NavLink>
+                                <NavLink
                                     :href="route('dashboard.contact')"
                                     :active="route().current('dashboard.contact')"
                                 >
@@ -229,6 +235,12 @@ const page = usePage();
                             :active="route().current('dashboard.clients.*')"
                         >
                             Clients
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('dashboard.support')"
+                            :active="route().current('dashboard.support')"
+                        >
+                            Support
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             :href="route('dashboard.contact')"

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminCoachController;
 use App\Http\Controllers\Admin\PromoCodeRequestController;
+use App\Http\Controllers\Admin\SupportTicketController as AdminSupportController;
 use App\Http\Controllers\CoachSiteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Dashboard\BrandingController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Dashboard\ContactController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\LegalController;
 use App\Http\Controllers\Dashboard\SubscriptionController;
+use App\Http\Controllers\Dashboard\SupportTicketController as DashboardSupportController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
 use App\Http\Controllers\ProfileController;
@@ -65,6 +67,11 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::post('/promo-requests/generate-batch', [PromoCodeRequestController::class, 'generateBatch'])->name('admin.promo-requests.generate-batch');
     Route::post('/promo-requests/{promoCodeRequest}/approve', [PromoCodeRequestController::class, 'approve'])->name('admin.promo-requests.approve');
     Route::post('/promo-requests/{promoCodeRequest}/reject', [PromoCodeRequestController::class, 'reject'])->name('admin.promo-requests.reject');
+
+    // Support tickets management
+    Route::get('/support-tickets', [AdminSupportController::class, 'index'])->name('admin.support-tickets.index');
+    Route::post('/support-tickets/{supportTicket}/reply', [AdminSupportController::class, 'reply'])->name('admin.support-tickets.reply');
+    Route::patch('/support-tickets/{supportTicket}/status', [AdminSupportController::class, 'updateStatus'])->name('admin.support-tickets.status');
 });
 
 /*
@@ -140,6 +147,12 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::get('/dashboard/contact', [ContactController::class, 'index'])->name('dashboard.contact');
     Route::patch('/dashboard/contact/{contactMessage}/read', [ContactController::class, 'markAsRead'])->name('dashboard.contact.read');
     Route::delete('/dashboard/contact/{contactMessage}', [ContactController::class, 'destroy'])->name('dashboard.contact.destroy');
+
+    // Support tickets (coach/user)
+    Route::get('/dashboard/support', [DashboardSupportController::class, 'index'])->name('dashboard.support');
+    Route::post('/dashboard/support', [DashboardSupportController::class, 'store'])->name('dashboard.support.store');
+    Route::post('/dashboard/support/{supportTicket}/reply', [DashboardSupportController::class, 'reply'])->name('dashboard.support.reply');
+    Route::post('/dashboard/support/{supportTicket}/close', [DashboardSupportController::class, 'close'])->name('dashboard.support.close');
 
     // FAQ management
     Route::get('/dashboard/faq', [FaqController::class, 'index'])->name('dashboard.faq');

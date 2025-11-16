@@ -165,11 +165,18 @@ const handleManageSubscription = () => {
                         </h3>
                         
                         <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-8 text-white mb-6">
-                            <div class="flex items-baseline gap-2 mb-4">
-                                <span class="text-5xl font-bold">39€</span>
-                                <span class="text-xl text-indigo-100">/mois</span>
+                            <div class="mb-4">
+                                <div class="flex items-baseline gap-2 mb-2">
+                                    <span class="text-5xl font-bold">30€</span>
+                                    <span class="text-xl text-indigo-100">HTVA/mois</span>
+                                </div>
+                                <div class="bg-white/20 rounded-lg px-4 py-2 inline-block">
+                                    <p class="text-sm font-semibold">
+                                        🎉 -10€ HTVA offerts par Fitness Education Academy
+                                    </p>
+                                </div>
                             </div>
-                            <p class="text-indigo-100 mb-6">
+                            <p class="text-indigo-100">
                                 Tout ce dont vous avez besoin pour développer votre activité de coaching en ligne
                             </p>
                         </div>
@@ -216,7 +223,7 @@ const handleManageSubscription = () => {
                 </div>
 
                 <!-- FAQ Section -->
-                <div class="overflow-hidden rounded-2xl bg-white shadow-xl dark:from-gray-800 border border-gray-200/50 dark:border-gray-500/30 backdrop-blur-xl">
+                <div class="overflow-hidden rounded-2xl bg-gradient-to-br from-white to-slate-50 shadow-xl dark:from-gray-800 dark:to-gray-900 border border-gray-200/50 dark:border-gray-500/30 backdrop-blur-xl">
                     <div class="p-8">
                         <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                             Questions fréquentes

@@ -1,9 +1,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
-defineProps({
+const props = defineProps({
     coach: Object,
     stats: Object,
     recentTransformations: Array,
@@ -13,6 +13,19 @@ defineProps({
 
 const page = usePage();
 const user = computed(() => page.props.auth.user);
+
+// Modal for profile completion
+const showProfileModal = ref(false);
+
+const openProfileModal = () => {
+    if (props.stats && props.stats.profile_completion < 100) {
+        showProfileModal.value = true;
+    }
+};
+
+const closeProfileModal = () => {
+    showProfileModal.value = false;
+};
 </script>
 
 <template>
@@ -79,7 +92,11 @@ const user = computed(() => page.props.auth.user);
                 <!-- Quick Stats -->
                 <div v-if="coach && stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <!-- Profile Completion -->
-                    <div class="bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-blue-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-blue-200/50 dark:border-blue-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group">
+                    <div 
+                        @click="openProfileModal" 
+                        :class="[stats.profile_completion < 100 ? 'cursor-pointer' : 'cursor-default']"
+                        class="bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-blue-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-blue-200/50 dark:border-blue-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group"
+                    >
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -300,6 +317,113 @@ const user = computed(() => page.props.auth.user);
                         </div>
                     </Link>
                 </div>
+
+                <!-- Profile Completion Modal -->
+                <Transition
+                    enter-active-class="transition ease-out duration-200"
+                    enter-from-class="opacity-0"
+                    enter-to-class="opacity-100"
+                    leave-active-class="transition ease-in duration-150"
+                    leave-from-class="opacity-100"
+                    leave-to-class="opacity-0"
+                >
+                    <div v-if="showProfileModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click="closeProfileModal">
+                        <div 
+                            class="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden border-2 border-blue-500/30"
+                            @click.stop
+                        >
+                            <!-- Modal Header -->
+                            <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <div>
+                                            <h3 class="text-2xl font-bold">Complétion du profil</h3>
+                                            <p class="text-blue-100 text-sm mt-1">{{ stats.profile_completion }}% complété</p>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        @click="closeProfileModal" 
+                                        class="text-white hover:bg-white/20 rounded-full p-2 transition-colors"
+                                    >
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <!-- Progress Bar -->
+                                <div class="mt-4 h-3 overflow-hidden rounded-full bg-blue-400/50 backdrop-blur-sm">
+                                    <div
+                                        class="h-full bg-white shadow-lg transition-all duration-500"
+                                        :style="{ width: stats.profile_completion + '%' }"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Body -->
+                            <div class="p-6 overflow-y-auto max-h-[calc(80vh-12rem)]">
+                                <div v-if="stats.profile_missing_fields && stats.profile_missing_fields.length > 0">
+                                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                        Pour compléter votre profil à 100%, il vous manque les éléments suivants :
+                                    </p>
+                                    
+                                    <div class="space-y-3">
+                                        <Link
+                                            v-for="field in stats.profile_missing_fields"
+                                            :key="field.field"
+                                            :href="route(field.route)"
+                                            class="block group"
+                                        >
+                                            <div class="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-lg transition-all duration-200 bg-white dark:bg-gray-900/50">
+                                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                                                    <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <p class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                                        {{ field.label }}
+                                                    </p>
+                                                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                                                        Cliquez pour compléter
+                                                    </p>
+                                                </div>
+                                                <svg class="h-5 w-5 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                </svg>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                </div>
+                                <div v-else class="text-center py-8">
+                                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 mb-4">
+                                        <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                                        Félicitations ! 🎉
+                                    </h4>
+                                    <p class="text-gray-600 dark:text-gray-400">
+                                        Votre profil est complet à 100% !
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Modal Footer -->
+                            <div class="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+                                <button 
+                                    @click="closeProfileModal"
+                                    class="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
+                                >
+                                    Fermer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </Transition>
             </div>
         </div>
     </AuthenticatedLayout>

@@ -86,40 +86,61 @@ const positionTooltip = () => {
 
     let top, left, arrow;
 
-    // Determine best position - prioritize NOT covering the target element
-    // Try to position to the side first, then above/below
-    if (spaceRight > tooltipWidth + padding) {
-        // Position right (best option - doesn't cover element)
-        top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
-        left = rect.right + padding;
-        arrow = 'left';
-    } else if (spaceLeft > tooltipWidth + padding) {
-        // Position left (second best)
-        top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
-        left = rect.left - tooltipWidth - padding;
-        arrow = 'right';
-    } else if (spaceBelow > tooltipHeight + padding) {
-        // Position below
-        top = rect.bottom + padding;
-        left = Math.max(padding, Math.min(rect.left, window.innerWidth - tooltipWidth - padding));
-        arrow = 'top';
-    } else if (spaceAbove > tooltipHeight + padding) {
-        // Position above
-        top = rect.top - tooltipHeight - padding;
-        left = Math.max(padding, Math.min(rect.left, window.innerWidth - tooltipWidth - padding));
-        arrow = 'bottom';
+    // Simple positioning - just check if tooltip would overlap target element
+    // Default position: bottom right corner
+    const defaultTop = window.innerHeight - tooltipHeight - padding - 20;
+    const defaultLeft = window.innerWidth - tooltipWidth - padding - 20;
+    
+    // Check if default position overlaps with target element
+    const tooltipRect = {
+        top: defaultTop,
+        left: defaultLeft,
+        bottom: defaultTop + tooltipHeight,
+        right: defaultLeft + tooltipWidth,
+    };
+    
+    // Check overlap
+    const overlaps = !(
+        tooltipRect.right < rect.left ||
+        tooltipRect.left > rect.right ||
+        tooltipRect.bottom < rect.top ||
+        tooltipRect.top > rect.bottom
+    );
+    
+    if (!overlaps) {
+        // Use bottom right position
+        top = defaultTop;
+        left = defaultLeft;
     } else {
-        // Not enough space anywhere - position to side of element even if cramped
-        if (spaceRight >= spaceLeft) {
-            top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
-            left = rect.right + 10;
-            arrow = 'left';
+        // Try top left corner
+        const altTop = padding + 20;
+        const altLeft = padding + 20;
+        
+        const altTooltipRect = {
+            top: altTop,
+            left: altLeft,
+            bottom: altTop + tooltipHeight,
+            right: altLeft + tooltipWidth,
+        };
+        
+        const altOverlaps = !(
+            altTooltipRect.right < rect.left ||
+            altTooltipRect.left > rect.right ||
+            altTooltipRect.bottom < rect.top ||
+            altTooltipRect.top > rect.bottom
+        );
+        
+        if (!altOverlaps) {
+            top = altTop;
+            left = altLeft;
         } else {
-            top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
-            left = Math.max(10, rect.left - tooltipWidth - 10);
-            arrow = 'right';
+            // Use center if both corners overlap
+            top = (window.innerHeight - tooltipHeight) / 2;
+            left = (window.innerWidth - tooltipWidth) / 2;
         }
     }
+    
+    arrow = 'none';
 
     tooltipPosition.value = {
         top: `${top}px`,
@@ -252,17 +273,17 @@ onMounted(() => {
         leave-to-class="opacity-0"
     >
         <div v-if="isVisible" class="fixed inset-0 z-[10000]">
-            <!-- Overlay with cutout for target element -->
-            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" style="pointer-events: none;"></div>
+            <!-- Blurred overlay with cutout for target element -->
+            <div class="absolute inset-0 bg-black/70" style="pointer-events: none; backdrop-filter: blur(3px);"></div>
 
-            <!-- Spotlight effect - highlight the target element -->
+            <!-- Clear spotlight on target element - no glow, just shows the element clearly -->
             <div
                 v-if="currentStep?.target"
-                class="absolute rounded-xl shadow-2xl transition-all duration-300 pointer-events-none"
+                class="absolute rounded-xl transition-all duration-300 pointer-events-none"
                 :style="{
                     ...spotlightStyle,
-                    boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 30px 10px rgba(147, 51, 234, 0.5)',
-                    border: '3px solid rgba(147, 51, 234, 0.8)',
+                    boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.7)',
+                    backgroundColor: 'transparent',
                 }"
             ></div>
 

@@ -159,6 +159,10 @@ const handleOnboardingSkip = () => {
     });
 };
 
+const startTutorial = () => {
+    showOnboarding.value = true;
+};
+
 onMounted(() => {
     // Show onboarding if user hasn't completed it
     if (!props.hasCompletedOnboarding) {
@@ -174,9 +178,20 @@ onMounted(() => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                Dashboard
-            </h2>
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                    Dashboard
+                </h2>
+                <button
+                    @click="startTutorial"
+                    class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 shadow-lg transform hover:scale-105 transition-all duration-200"
+                >
+                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Tutoriel
+                </button>
+            </div>
         </template>
 
         <!-- Onboarding Tour -->

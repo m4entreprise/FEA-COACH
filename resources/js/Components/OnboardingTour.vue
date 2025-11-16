@@ -142,6 +142,24 @@ const positionTooltip = () => {
     
     arrow = 'none';
 
+    // Ensure tooltip stays within viewport bounds
+    // Check if it goes off the bottom
+    if (top + tooltipHeight > window.innerHeight - padding) {
+        top = window.innerHeight - tooltipHeight - padding;
+    }
+    // Check if it goes off the top
+    if (top < padding) {
+        top = padding;
+    }
+    // Check if it goes off the right
+    if (left + tooltipWidth > window.innerWidth - padding) {
+        left = window.innerWidth - tooltipWidth - padding;
+    }
+    // Check if it goes off the left
+    if (left < padding) {
+        left = padding;
+    }
+
     tooltipPosition.value = {
         top: `${top}px`,
         left: `${left}px`,

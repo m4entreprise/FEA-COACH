@@ -80,7 +80,7 @@ class DashboardController extends Controller
     {
         $fieldLabels = [
             'name' => 'Nom du coach',
-            'subdomain' => 'Sous-domaine',
+            'slug' => 'Sous-domaine',
             'color_primary' => 'Couleur principale',
             'color_secondary' => 'Couleur secondaire',
             'hero_title' => 'Titre principal',
@@ -93,7 +93,7 @@ class DashboardController extends Controller
 
         $fieldRoutes = [
             'name' => 'dashboard.branding',
-            'subdomain' => 'dashboard.branding',
+            'slug' => 'dashboard.branding',
             'color_primary' => 'dashboard.branding',
             'color_secondary' => 'dashboard.branding',
             'hero_title' => 'dashboard.content',
@@ -106,7 +106,7 @@ class DashboardController extends Controller
 
         $fields = [
             'name' => !empty($coach->name),
-            'subdomain' => !empty($coach->subdomain),
+            'slug' => !empty($coach->slug),
             'color_primary' => !empty($coach->color_primary),
             'color_secondary' => !empty($coach->color_secondary),
             'hero_title' => !empty($coach->hero_title),

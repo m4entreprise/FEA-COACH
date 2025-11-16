@@ -37,6 +37,15 @@ class DashboardController extends Controller
 
         // Calculate stats
         $profileData = $this->calculateProfileCompletion($coach);
+        
+        // Calculate subscription info
+        $subscriptionInfo = [
+            'status' => $user->subscription_status ?? 'trial',
+            'trial_ends_at' => $user->trial_ends_at,
+            'is_on_trial' => $user->subscription_status === 'trial' || $user->subscription_status === null,
+            'trial_days_left' => $user->trial_ends_at ? max(0, now()->diffInDays($user->trial_ends_at, false)) : null,
+        ];
+        
         $stats = [
             'total_plans' => $coach->plans()->count(),
             'active_plans' => $coach->plans()->where('is_active', true)->count(),
@@ -44,6 +53,7 @@ class DashboardController extends Controller
             'is_active' => $coach->is_active,
             'profile_completion' => $profileData['percentage'],
             'profile_missing_fields' => $profileData['missing_fields'],
+            'subscription' => $subscriptionInfo,
         ];
 
         // Get recent transformations (for quick view)

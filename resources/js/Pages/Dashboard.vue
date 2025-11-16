@@ -117,39 +117,66 @@ const closeProfileModal = () => {
                         </div>
                     </div>
 
-                    <!-- Active Plans -->
+                    <!-- Subscription Status -->
                     <div class="bg-gradient-to-br from-white to-emerald-50 dark:from-gray-800 dark:to-emerald-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-emerald-200/50 dark:border-emerald-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
+                        <div class="flex flex-col h-full">
+                            <div class="flex items-center mb-4">
+                                <div class="flex-shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                                        {{ stats.subscription.is_on_trial ? 'Période d\'essai' : 'Abonnement' }}
+                                    </p>
+                                    <p v-if="stats.subscription.is_on_trial" class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                                        {{ stats.subscription.trial_days_left }} jours restants
+                                    </p>
+                                    <p v-else class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                                        {{ stats.subscription.status === 'active' ? 'Actif' : 'Inactif' }}
+                                    </p>
+                                </div>
                             </div>
-                            <div class="ml-5">
-                                <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">Plans actifs</p>
-                                <p class="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
-                                    {{ stats.active_plans }}
-                                </p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1">sur {{ stats.total_plans }} total</p>
+                            <div v-if="stats.subscription.trial_ends_at" class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                                Expire le {{ new Date(stats.subscription.trial_ends_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) }}
                             </div>
+                            <button 
+                                class="mt-auto w-full px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-sm font-semibold rounded-lg hover:from-emerald-600 hover:to-green-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
+                            >
+                                {{ stats.subscription.is_on_trial ? 'S\'abonner maintenant' : 'Gérer l\'abonnement' }}
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Transformations -->
+                    <!-- Support -->
                     <div class="bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        <div class="flex flex-col h-full">
+                            <div class="flex items-center mb-4">
+                                <div class="flex-shrink-0 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">Support</p>
+                                    <p class="text-lg font-bold text-gray-900 dark:text-gray-100">
+                                        Besoin d'aide ?
+                                    </p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 flex-1">
+                                Notre équipe est là pour vous accompagner dans l'utilisation de la plateforme.
+                            </p>
+                            <a 
+                                href="mailto:support@fea-coach.com"
+                                class="mt-auto w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-semibold rounded-lg hover:from-purple-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg text-center inline-flex items-center justify-center gap-2"
+                            >
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                 </svg>
-                            </div>
-                            <div class="ml-5">
-                                <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">Transformations</p>
-                                <p class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text text-transparent">
-                                    {{ stats.total_transformations }}
-                                </p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1">témoignages</p>
-                            </div>
+                                Contacter le support
+                            </a>
                         </div>
                     </div>
 

@@ -25,6 +25,8 @@ class DashboardController extends Controller
         $coach = $user->coach()->with([
             'plans',
             'transformations',
+            'faqs',
+            'user',
         ])->first();
 
         if (!$coach) {
@@ -89,6 +91,11 @@ class DashboardController extends Controller
             'method_text' => 'Texte "Ma méthode"',
             'logo' => 'Logo',
             'hero' => 'Image hero',
+            'plans' => 'Au moins 1 plan tarifaire',
+            'transformations' => 'Au moins 1 transformation',
+            'faqs' => 'Au moins 1 FAQ',
+            'vat_number' => 'Numéro de TVA',
+            'legal_terms' => 'Mentions légales',
         ];
 
         $fieldRoutes = [
@@ -102,6 +109,11 @@ class DashboardController extends Controller
             'method_text' => 'dashboard.content',
             'logo' => 'dashboard.branding',
             'hero' => 'dashboard.branding',
+            'plans' => 'dashboard.plans',
+            'transformations' => 'dashboard.gallery',
+            'faqs' => 'dashboard.content',
+            'vat_number' => 'dashboard.legal',
+            'legal_terms' => 'dashboard.legal',
         ];
 
         $fields = [
@@ -115,6 +127,11 @@ class DashboardController extends Controller
             'method_text' => !empty($coach->method_text),
             'logo' => $coach->hasMedia('logo'),
             'hero' => $coach->hasMedia('hero'),
+            'plans' => $coach->plans()->count() > 0,
+            'transformations' => $coach->transformations()->count() > 0,
+            'faqs' => $coach->faqs()->count() > 0,
+            'vat_number' => !empty($coach->user->vat_number),
+            'legal_terms' => !empty($coach->legal_terms),
         ];
 
         $completed = count(array_filter($fields));

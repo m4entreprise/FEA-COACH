@@ -40,17 +40,25 @@ class DashboardController extends Controller
         
         // Calculate subscription info
         // Détecte la période d'essai : statut trial, null, ou active_promo (pour les comptes FEA)
-        $isOnTrial = ($user->subscription_status === 'trial' 
-                      || $user->subscription_status === null 
-                      || $user->subscription_status === 'active_promo') 
-                     && $user->trial_ends_at 
+        $isOnTrial = ($user->subscription_status === 'trial'
+                      || $user->subscription_status === null
+                      || $user->subscription_status === 'active_promo')
+                     && $user->trial_ends_at
                      && now()->isBefore($user->trial_ends_at);
-        
+
+        $trialDaysLeft = null;
+        if ($user->trial_ends_at) {
+            $secondsLeft = now()->diffInSeconds($user->trial_ends_at, false);
+            $trialDaysLeft = $secondsLeft > 0
+                ? (int) ceil($secondsLeft / 86400)
+                : 0;
+        }
+
         $subscriptionInfo = [
             'status' => $user->subscription_status ?? 'trial',
             'trial_ends_at' => $user->trial_ends_at,
             'is_on_trial' => $isOnTrial,
-            'trial_days_left' => $user->trial_ends_at ? max(0, now()->diffInDays($user->trial_ends_at, false)) : null,
+            'trial_days_left' => $trialDaysLeft,
         ];
         
         $stats = [

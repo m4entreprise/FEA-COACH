@@ -4,22 +4,26 @@
 
 echo "🚀 Déploiement du tutoriel d'onboarding..."
 
-# 1. Exécuter la migration
+# 1. Mettre à jour l'autoloader
+echo "🔄 Mise à jour de l'autoloader Composer..."
+composer dump-autoload
+
+# 2. Exécuter la migration
 echo "📊 Migration de la base de données..."
 php artisan migrate --force
 
-# 2. Vider les caches
+# 3. Vider les caches
 echo "🧹 Nettoyage des caches..."
 php artisan config:clear
 php artisan cache:clear
 php artisan route:clear
 php artisan view:clear
 
-# 3. Recompiler les assets si nécessaire
+# 4. Recompiler les assets si nécessaire
 echo "📦 Compilation des assets..."
 npm run build
 
-# 4. Optimiser pour la production
+# 5. Optimiser pour la production
 echo "⚡ Optimisation..."
 php artisan config:cache
 php artisan route:cache

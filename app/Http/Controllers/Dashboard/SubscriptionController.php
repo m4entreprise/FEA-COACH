@@ -16,10 +16,14 @@ class SubscriptionController extends Controller
         $user = $request->user();
         
         // Calculate subscription info
+        $isOnTrial = ($user->subscription_status === 'trial' || $user->subscription_status === null) 
+                     && $user->trial_ends_at 
+                     && now()->isBefore($user->trial_ends_at);
+        
         $subscriptionInfo = [
             'status' => $user->subscription_status ?? 'trial',
             'trial_ends_at' => $user->trial_ends_at,
-            'is_on_trial' => $user->subscription_status === 'trial' || $user->subscription_status === null,
+            'is_on_trial' => $isOnTrial,
             'trial_days_left' => $user->trial_ends_at ? max(0, now()->diffInDays($user->trial_ends_at, false)) : null,
             'stripe_customer_id' => $user->stripe_customer_id,
         ];

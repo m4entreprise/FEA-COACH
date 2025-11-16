@@ -90,60 +90,53 @@ const closeProfileModal = () => {
                 </div>
 
                 <!-- Quick Stats -->
-                <div v-if="coach && stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div v-if="coach && stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 items-stretch">
                     <!-- Profile Completion -->
                     <div 
                         @click="openProfileModal" 
                         :class="[stats.profile_completion < 100 ? 'cursor-pointer' : 'cursor-default']"
-                        class="bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-blue-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-blue-200/50 dark:border-blue-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group"
+                        class="bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-blue-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-blue-200/50 dark:border-blue-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full"
                     >
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
                             </div>
-                            <div class="text-right">
+                            <div class="ml-5">
                                 <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">Profil</p>
                                 <p class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
                                     {{ stats.profile_completion }}%
                                 </p>
                             </div>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700 overflow-hidden shadow-inner">
+                        <div class="mt-auto w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700 overflow-hidden shadow-inner">
                             <div class="bg-gradient-to-r from-blue-600 to-blue-500 h-3 rounded-full transition-all duration-500 ease-out shadow-lg" :style="`width: ${stats.profile_completion}%`"></div>
                         </div>
                     </div>
 
                     <!-- Subscription Status -->
-                    <div class="bg-gradient-to-br from-white to-emerald-50 dark:from-gray-800 dark:to-emerald-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-emerald-200/50 dark:border-emerald-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group">
-                        <div class="flex flex-col h-full">
-                            <div class="flex items-center mb-4">
-                                <div class="flex-shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                    </svg>
-                                </div>
-                                <div class="ml-4 flex-1">
-                                    <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">
-                                        Abonnement
-                                    </p>
-                                    <p v-if="stats.subscription.is_on_trial" class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
-                                        Essai - {{ stats.subscription.trial_days_left }} jours
-                                    </p>
-                                    <p v-else class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
-                                        {{ stats.subscription.status === 'active' ? 'Actif' : 'Inactif' }}
-                                    </p>
-                                </div>
+                    <div class="bg-gradient-to-br from-white to-emerald-50 dark:from-gray-800 dark:to-emerald-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-emerald-200/50 dark:border-emerald-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
                             </div>
-                            <div v-if="stats.subscription.trial_ends_at" class="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                                Expire le {{ new Date(stats.subscription.trial_ends_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) }}
+                            <div class="ml-5">
+                                <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">Abonnement</p>
+                                <p v-if="stats.subscription.is_on_trial" class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                                    Essai - {{ stats.subscription.trial_days_left }} jours
+                                </p>
+                                <p v-else class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                                    {{ stats.subscription.status === 'active' ? 'Actif' : 'Inactif' }}
+                                </p>
                             </div>
+                        </div>
+                        <div class="mt-auto">
                             <Link 
                                 :href="route('dashboard.subscription')"
-                                class="mt-auto w-full px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-sm font-semibold rounded-lg hover:from-emerald-600 hover:to-green-700 transform hover:scale-105 transition-all duration-200 shadow-lg text-center"
+                                class="w-full px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-sm font-semibold rounded-lg hover:from-emerald-600 hover:to-green-700 transform hover:scale-105 transition-all duration-200 shadow-lg text-center"
                             >
                                 {{ stats.subscription.is_on_trial ? 'S\'abonner maintenant' : 'Gérer l\'abonnement' }}
                             </Link>
@@ -151,38 +144,32 @@ const closeProfileModal = () => {
                     </div>
 
                     <!-- Support -->
-                    <div class="bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group">
-                        <div class="flex flex-col h-full">
-                            <div class="flex items-center mb-4">
-                                <div class="flex-shrink-0 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
-                                    </svg>
-                                </div>
-                                <div class="ml-4 flex-1">
-                                    <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">Support</p>
-                                    <p class="text-lg font-bold text-gray-900 dark:text-gray-100">
-                                        Besoin d'aide ?
-                                    </p>
-                                </div>
+                    <div class="bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                </svg>
                             </div>
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 flex-1">
-                                Notre équipe est là pour vous accompagner dans l'utilisation de la plateforme.
-                            </p>
+                            <div class="ml-5">
+                                <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">Support</p>
+                                <p class="text-lg font-bold text-gray-900 dark:text-gray-100">
+                                    Besoin d'aide ?
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
                             <a 
                                 href="mailto:support@fea-coach.com"
-                                class="mt-auto w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-semibold rounded-lg hover:from-purple-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg text-center inline-flex items-center justify-center gap-2"
+                                class="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-semibold rounded-lg hover:from-purple-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg text-center"
                             >
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                </svg>
                                 Contacter le support
                             </a>
                         </div>
                     </div>
 
                     <!-- Status -->
-                    <div :class="[stats.is_active ? 'from-white to-green-50 dark:from-gray-800 dark:to-green-900/20 border-green-200/50 dark:border-green-500/30' : 'from-white to-red-50 dark:from-gray-800 dark:to-red-900/20 border-red-200/50 dark:border-red-500/30', 'bg-gradient-to-br overflow-hidden shadow-lg sm:rounded-2xl p-6 border backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group']">
+                    <div :class="[stats.is_active ? 'from-white to-green-50 dark:from-gray-800 dark:to-green-900/20 border-green-200/50 dark:border-green-500/30' : 'from-white to-red-50 dark:from-gray-800 dark:to-red-900/20 border-red-200/50 dark:border-red-500/30', 'bg-gradient-to-br overflow-hidden shadow-lg sm:rounded-2xl p-6 border backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full']">
                         <div class="flex items-center">
                             <div :class="[stats.is_active ? 'from-green-500 to-green-600' : 'from-red-500 to-red-600', 'flex-shrink-0 bg-gradient-to-br rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300']">
                                 <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

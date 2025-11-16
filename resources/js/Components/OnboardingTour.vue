@@ -97,93 +97,16 @@ const positionTooltip = () => {
         height: `${rect.height}px`,
     };
     
-    // Calculate position based on available space
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-    const spaceRight = window.innerWidth - rect.right;
-    const spaceLeft = rect.left;
-
-    let top, left, arrow;
-
-    // Simple positioning - just check if tooltip would overlap target element
-    // Default position: bottom right corner
-    const defaultTop = window.innerHeight - tooltipHeight - padding - 20;
-    const defaultLeft = window.innerWidth - tooltipWidth - padding - 20;
-    
-    // Check if default position overlaps with target element
-    const tooltipRect = {
-        top: defaultTop,
-        left: defaultLeft,
-        bottom: defaultTop + tooltipHeight,
-        right: defaultLeft + tooltipWidth,
-    };
-    
-    // Check overlap
-    const overlaps = !(
-        tooltipRect.right < rect.left ||
-        tooltipRect.left > rect.right ||
-        tooltipRect.bottom < rect.top ||
-        tooltipRect.top > rect.bottom
-    );
-    
-    if (!overlaps) {
-        // Use bottom right position
-        top = defaultTop;
-        left = defaultLeft;
-    } else {
-        // Try top left corner
-        const altTop = padding + 20;
-        const altLeft = padding + 20;
-        
-        const altTooltipRect = {
-            top: altTop,
-            left: altLeft,
-            bottom: altTop + tooltipHeight,
-            right: altLeft + tooltipWidth,
-        };
-        
-        const altOverlaps = !(
-            altTooltipRect.right < rect.left ||
-            altTooltipRect.left > rect.right ||
-            altTooltipRect.bottom < rect.top ||
-            altTooltipRect.top > rect.bottom
-        );
-        
-        if (!altOverlaps) {
-            top = altTop;
-            left = altLeft;
-        } else {
-            // Use center if both corners overlap
-            top = (window.innerHeight - tooltipHeight) / 2;
-            left = (window.innerWidth - tooltipWidth) / 2;
-        }
-    }
-    
-    arrow = 'none';
-
-    // Ensure tooltip stays within viewport bounds
-    // Check if it goes off the bottom
-    if (top + tooltipHeight > window.innerHeight - padding) {
-        top = window.innerHeight - tooltipHeight - padding;
-    }
-    // Check if it goes off the top
-    if (top < padding) {
-        top = padding;
-    }
-    // Check if it goes off the right
-    if (left + tooltipWidth > window.innerWidth - padding) {
-        left = window.innerWidth - tooltipWidth - padding;
-    }
-    // Check if it goes off the left
-    if (left < padding) {
-        left = padding;
-    }
+    // Tooltip : position fixe en bas à droite pour garantir qu'elle reste visible.
+    // On accepte qu'elle recouvre parfois la carte pour favoriser la lisibilité.
+    const margin = 24;
 
     tooltipPosition.value = {
-        top: `${top}px`,
-        left: `${left}px`,
+        bottom: `${margin}px`,
+        right: `${margin}px`,
     };
-    arrowPosition.value = arrow;
+
+    arrowPosition.value = 'none';
 };
 
 const scrollToElement = () => {

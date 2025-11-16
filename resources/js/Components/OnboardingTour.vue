@@ -42,6 +42,23 @@ watch(currentStepIndex, () => {
     });
 });
 
+// Update spotlight position on scroll
+const handleScroll = () => {
+    if (isVisible.value && currentStep.value?.target) {
+        nextTick(() => {
+            positionTooltip();
+        });
+    }
+};
+
+watch(isVisible, (newValue) => {
+    if (newValue) {
+        window.addEventListener('scroll', handleScroll, true);
+    } else {
+        window.removeEventListener('scroll', handleScroll, true);
+    }
+});
+
 const positionTooltip = () => {
     if (!currentStep.value?.target) return;
 
@@ -317,7 +334,7 @@ onMounted(() => {
             >
                 <div
                     :key="currentStepIndex"
-                    class="absolute bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border-2 border-purple-500/30 w-[400px] max-w-[90vw] z-[10002]"
+                    class="absolute bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border-2 border-purple-500/30 w-[400px] max-w-[90vw] max-h-[90vh] flex flex-col overflow-hidden z-[10002]"
                     :style="tooltipPosition"
                 >
                     <!-- Arrow -->
@@ -363,8 +380,8 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <!-- Content -->
-                    <div class="p-6">
+                    <!-- Content (scrollable) -->
+                    <div class="p-6 overflow-y-auto flex-1">
                         <div class="text-gray-700 dark:text-gray-300 leading-relaxed" v-html="currentStep.content"></div>
                     </div>
 

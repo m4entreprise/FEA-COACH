@@ -19,6 +19,7 @@ const tooltipPosition = ref({ top: '0px', left: '0px' });
 const arrowPosition = ref('bottom');
 const isVisible = ref(props.show);
 const spotlightStyle = ref({});
+const tooltipRef = ref(null);
 
 const currentStep = computed(() => props.steps[currentStepIndex.value]);
 const isFirstStep = computed(() => currentStepIndex.value === 0);
@@ -69,8 +70,9 @@ const positionTooltip = () => {
     }
 
     const rect = targetElement.getBoundingClientRect();
-    const tooltipWidth = 400;
-    const tooltipHeight = 300;
+    const tooltipElement = tooltipRef.value;
+    const tooltipWidth = tooltipElement?.offsetWidth || 400;
+    const tooltipHeight = tooltipElement?.offsetHeight || 300;
     const padding = 20;
 
     // Highlight the target element with proper z-index
@@ -334,6 +336,7 @@ onMounted(() => {
             >
                 <div
                     :key="currentStepIndex"
+                    ref="tooltipRef"
                     class="absolute bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border-2 border-purple-500/30 w-[400px] max-w-[90vw] max-h-[90vh] flex flex-col overflow-hidden z-[10002]"
                     :style="tooltipPosition"
                 >

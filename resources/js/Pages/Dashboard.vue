@@ -1,7 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import OnboardingTour from '@/Components/OnboardingTour.vue';
+import { Head, Link, usePage, router } from '@inertiajs/vue3';
+import { computed, ref, onMounted } from 'vue';
 
 const props = defineProps({
     coach: Object,
@@ -9,6 +10,10 @@ const props = defineProps({
     recentTransformations: Array,
     isAdmin: Boolean,
     error: String,
+    hasCompletedOnboarding: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const page = usePage();
@@ -26,6 +31,142 @@ const openProfileModal = () => {
 const closeProfileModal = () => {
     showProfileModal.value = false;
 };
+
+// Onboarding Tour
+const showOnboarding = ref(false);
+
+const onboardingSteps = [
+    {
+        target: '[data-tour="welcome"]',
+        icon: '👋',
+        title: 'Bienvenue sur FEA Coach !',
+        content: '<p class="mb-3">Bienvenue dans votre espace de gestion ! Ce tableau de bord vous permet de <strong>créer et gérer facilement votre site de coaching professionnel</strong>.</p><p>Laissez-nous vous guider à travers les principales fonctionnalités.</p>',
+    },
+    {
+        target: '[data-tour="profile"]',
+        icon: '📊',
+        title: 'Complétion de votre profil',
+        content: '<p class="mb-3">Ici vous pouvez suivre la <strong>complétion de votre profil</strong>. Plus votre profil est complet, plus votre site sera attractif pour vos clients potentiels.</p><p>Cliquez sur cette carte pour voir ce qu\'il vous reste à compléter !</p>',
+    },
+    {
+        target: '[data-tour="subscription"]',
+        icon: '💳',
+        title: 'Votre abonnement',
+        content: '<p class="mb-3">Suivez l\'état de votre abonnement et votre période d\'essai. Vous bénéficiez d\'une <strong>période d\'essai gratuite</strong> pour tester toutes les fonctionnalités.</p><p>Vous pourrez gérer votre abonnement directement depuis cette section.</p>',
+    },
+    {
+        target: '[data-tour="support"]',
+        icon: '🆘',
+        title: 'Support disponible',
+        content: '<p class="mb-3">Besoin d\'aide ? Notre équipe de support est là pour vous accompagner !</p><p>N\'hésitez pas à nous contacter si vous avez des questions ou besoin d\'assistance.</p>',
+    },
+    {
+        target: '[data-tour="site-status"]',
+        icon: '👁️',
+        title: 'Statut de votre site',
+        content: '<p class="mb-3">Vérifiez si votre site est <strong>actif</strong> ou <strong>inactif</strong>.</p><p>Cliquez sur "Voir le site" pour prévisualiser votre site public à tout moment !</p>',
+    },
+    {
+        target: '[data-tour="branding"]',
+        icon: '🎨',
+        title: 'Personnalisation visuelle',
+        content: '<p class="mb-3">Créez l\'identité visuelle de votre site : <strong>logo, couleurs, image hero</strong>.</p><p>Donnez à votre site un aspect professionnel qui reflète votre marque personnelle.</p>',
+    },
+    {
+        target: '[data-tour="content"]',
+        icon: '✍️',
+        title: 'Gestion du contenu',
+        content: '<p class="mb-3">Éditez tous les <strong>textes de votre site</strong> : titre, description, section "À propos", méthode de coaching.</p><p>Racontez votre histoire et présentez vos services de manière convaincante.</p>',
+    },
+    {
+        target: '[data-tour="gallery"]',
+        icon: '📸',
+        title: 'Galerie de transformations',
+        content: '<p class="mb-3">Ajoutez vos <strong>photos avant/après</strong> pour montrer les résultats obtenus par vos clients.</p><p>Les transformations sont un excellent moyen de prouver l\'efficacité de votre coaching !</p>',
+    },
+    {
+        target: '[data-tour="plans"]',
+        icon: '💰',
+        title: 'Vos offres tarifaires',
+        content: '<p class="mb-3">Définissez vos <strong>plans de coaching</strong> et vos tarifs.</p><p>Créez différentes offres adaptées aux besoins de vos clients.</p>',
+    },
+    {
+        target: '[data-tour="clients"]',
+        icon: '👥',
+        title: 'Gestion des clients',
+        content: '<p class="mb-3">Centralisez les <strong>informations de vos clients</strong> et ajoutez des notes pour suivre leur progression.</p><p>Un outil essentiel pour un coaching personnalisé et efficace.</p>',
+    },
+    {
+        target: '[data-tour="contact"]',
+        icon: '📧',
+        title: 'Messages de contact',
+        content: '<p class="mb-3">Consultez tous les <strong>messages reçus</strong> via le formulaire de contact de votre site.</p><p>Ne manquez aucune opportunité de nouveau client !</p>',
+    },
+    {
+        target: '[data-tour="legal"]',
+        icon: '⚖️',
+        title: 'Mentions légales',
+        content: '<p class="mb-3">Personnalisez vos <strong>CGV et mentions légales</strong> avec votre numéro de TVA.</p><p>Restez en conformité légale facilement.</p>',
+    },
+    {
+        target: null,
+        icon: '🎓',
+        title: 'Service exclusif FEA',
+        content: `
+            <div class="space-y-4">
+                <p class="text-base font-semibold text-purple-900 dark:text-purple-100">
+                    Ce service est proposé <strong>exclusivement aux diplômés de Fitness Education Academy</strong> 🎓
+                </p>
+                
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 border-2 border-green-500/30">
+                    <p class="text-lg font-bold text-green-700 dark:text-green-300 mb-2">
+                        💰 Tarif préférentiel
+                    </p>
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">
+                        20€ HTVA/mois
+                    </p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        <span class="line-through">30€ HTVA/mois</span> - <strong>Économisez 10€/mois</strong> grâce à FEA !
+                    </p>
+                </div>
+
+                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-200/30 dark:border-blue-500/20">
+                    <p class="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                        <strong>⚠️ Important :</strong> À la fin de votre période d'essai, <strong>poursuivez votre abonnement</strong> pour continuer à bénéficier de ce tarif exclusif réservé aux diplômés FEA. Cette réduction est valable tant que votre abonnement reste actif !
+                    </p>
+                </div>
+
+                <p class="text-center text-sm text-gray-600 dark:text-gray-400 pt-2">
+                    Vous êtes maintenant prêt à créer un site professionnel qui attirera vos futurs clients ! 🚀
+                </p>
+            </div>
+        `,
+    },
+];
+
+const handleOnboardingComplete = () => {
+    showOnboarding.value = false;
+    // Save to backend that user completed onboarding
+    router.post(route('dashboard.onboarding.complete'), {}, {
+        preserveScroll: true,
+    });
+};
+
+const handleOnboardingSkip = () => {
+    showOnboarding.value = false;
+    router.post(route('dashboard.onboarding.complete'), {}, {
+        preserveScroll: true,
+    });
+};
+
+onMounted(() => {
+    // Show onboarding if user hasn't completed it
+    if (!props.hasCompletedOnboarding) {
+        setTimeout(() => {
+            showOnboarding.value = true;
+        }, 500);
+    }
+});
 </script>
 
 <template>
@@ -37,6 +178,15 @@ const closeProfileModal = () => {
                 Dashboard
             </h2>
         </template>
+
+        <!-- Onboarding Tour -->
+        <OnboardingTour
+            :steps="onboardingSteps"
+            :show="showOnboarding"
+            @complete="handleOnboardingComplete"
+            @skip="handleOnboardingSkip"
+            @close="handleOnboardingSkip"
+        />
 
         <div class="py-12 bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 min-h-screen">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -78,7 +228,7 @@ const closeProfileModal = () => {
                 </div>
 
                 <!-- Welcome Section -->
-                <div class="mb-8 overflow-hidden bg-gradient-to-br from-white to-purple-50 shadow-xl sm:rounded-3xl dark:from-gray-800 dark:to-purple-900/20 border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl transform hover:scale-[1.01] transition-all duration-300">
+                <div data-tour="welcome" class="mb-8 overflow-hidden bg-gradient-to-br from-white to-purple-50 shadow-xl sm:rounded-3xl dark:from-gray-800 dark:to-purple-900/20 border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl transform hover:scale-[1.01] transition-all duration-300">
                     <div class="p-8 text-gray-900 dark:text-gray-100">
                         <h3 class="text-3xl font-bold mb-3 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                             Bienvenue, {{ user.name }} ! 👋
@@ -93,6 +243,7 @@ const closeProfileModal = () => {
                 <div v-if="coach && stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 items-stretch">
                     <!-- Profile Completion -->
                     <div 
+                        data-tour="profile"
                         @click="openProfileModal" 
                         :class="[stats.profile_completion < 100 ? 'cursor-pointer' : 'cursor-default']"
                         class="bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-blue-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-blue-200/50 dark:border-blue-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full"
@@ -116,7 +267,7 @@ const closeProfileModal = () => {
                     </div>
 
                     <!-- Subscription Status -->
-                    <div class="bg-gradient-to-br from-white to-emerald-50 dark:from-gray-800 dark:to-emerald-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-emerald-200/50 dark:border-emerald-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full">
+                    <div data-tour="subscription" class="bg-gradient-to-br from-white to-emerald-50 dark:from-gray-800 dark:to-emerald-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-emerald-200/50 dark:border-emerald-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
                                 <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,7 +295,7 @@ const closeProfileModal = () => {
                     </div>
 
                     <!-- Support -->
-                    <div class="bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full">
+                    <div data-tour="support" class="bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
                                 <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +320,7 @@ const closeProfileModal = () => {
                     </div>
 
                     <!-- Status -->
-                    <div :class="[stats.is_active ? 'from-white to-green-50 dark:from-gray-800 dark:to-green-900/20 border-green-200/50 dark:border-green-500/30' : 'from-white to-red-50 dark:from-gray-800 dark:to-red-900/20 border-red-200/50 dark:border-red-500/30', 'bg-gradient-to-br overflow-hidden shadow-lg sm:rounded-2xl p-6 border backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full']">
+                    <div data-tour="site-status" :class="[stats.is_active ? 'from-white to-green-50 dark:from-gray-800 dark:to-green-900/20 border-green-200/50 dark:border-green-500/30' : 'from-white to-red-50 dark:from-gray-800 dark:to-red-900/20 border-red-200/50 dark:border-red-500/30', 'bg-gradient-to-br overflow-hidden shadow-lg sm:rounded-2xl p-6 border backdrop-blur-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group flex flex-col h-full']">
                         <div class="flex items-center">
                             <div :class="[stats.is_active ? 'from-green-500 to-green-600' : 'from-red-500 to-red-600', 'flex-shrink-0 bg-gradient-to-br rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300']">
                                 <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -200,7 +351,7 @@ const closeProfileModal = () => {
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <!-- Branding Card -->
-                    <Link :href="route('dashboard.branding')" class="block group">
+                    <Link data-tour="branding" :href="route('dashboard.branding')" class="block group">
                         <div class="bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-blue-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer border border-blue-200/50 dark:border-blue-500/30 backdrop-blur-xl transform group-hover:scale-105 group-hover:-translate-y-1">
                             <div class="flex items-center mb-4">
                                 <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -219,7 +370,7 @@ const closeProfileModal = () => {
                     </Link>
 
                     <!-- Content Card -->
-                    <Link :href="route('dashboard.content')" class="block group">
+                    <Link data-tour="content" :href="route('dashboard.content')" class="block group">
                         <div class="bg-gradient-to-br from-white to-emerald-50 dark:from-gray-800 dark:to-emerald-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer border border-emerald-200/50 dark:border-emerald-500/30 backdrop-blur-xl transform group-hover:scale-105 group-hover:-translate-y-1">
                             <div class="flex items-center mb-4">
                                 <div class="flex-shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -238,7 +389,7 @@ const closeProfileModal = () => {
                     </Link>
 
                     <!-- Gallery Card -->
-                    <Link :href="route('dashboard.gallery')" class="block group">
+                    <Link data-tour="gallery" :href="route('dashboard.gallery')" class="block group">
                         <div class="bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl transform group-hover:scale-105 group-hover:-translate-y-1">
                             <div class="flex items-center mb-4">
                                 <div class="flex-shrink-0 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -257,7 +408,7 @@ const closeProfileModal = () => {
                     </Link>
 
                     <!-- Plans Card -->
-                    <Link :href="route('dashboard.plans')" class="block group">
+                    <Link data-tour="plans" :href="route('dashboard.plans')" class="block group">
                         <div class="bg-gradient-to-br from-white to-amber-50 dark:from-gray-800 dark:to-amber-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer border border-amber-200/50 dark:border-amber-500/30 backdrop-blur-xl transform group-hover:scale-105 group-hover:-translate-y-1">
                             <div class="flex items-center mb-4">
                                 <div class="flex-shrink-0 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -276,7 +427,7 @@ const closeProfileModal = () => {
                     </Link>
 
                     <!-- Clients Card -->
-                    <Link :href="route('dashboard.clients.index')" class="block group">
+                    <Link data-tour="clients" :href="route('dashboard.clients.index')" class="block group">
                         <div class="bg-gradient-to-br from-white to-indigo-50 dark:from-gray-800 dark:to-indigo-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer border border-indigo-200/50 dark:border-indigo-500/30 backdrop-blur-xl transform group-hover:scale-105 group-hover:-translate-y-1">
                             <div class="flex items-center mb-4">
                                 <div class="flex-shrink-0 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -295,7 +446,7 @@ const closeProfileModal = () => {
                     </Link>
 
                     <!-- Contact Card -->
-                    <Link :href="route('dashboard.contact')" class="block group">
+                    <Link data-tour="contact" :href="route('dashboard.contact')" class="block group">
                         <div class="bg-gradient-to-br from-white to-rose-50 dark:from-gray-800 dark:to-rose-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer border border-rose-200/50 dark:border-rose-500/30 backdrop-blur-xl transform group-hover:scale-105 group-hover:-translate-y-1">
                             <div class="flex items-center mb-4">
                                 <div class="flex-shrink-0 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -314,7 +465,7 @@ const closeProfileModal = () => {
                     </Link>
 
                     <!-- Legal Card -->
-                    <Link :href="route('dashboard.legal')" class="block group">
+                    <Link data-tour="legal" :href="route('dashboard.legal')" class="block group">
                         <div class="bg-gradient-to-br from-white to-slate-50 dark:from-gray-800 dark:to-slate-900/20 overflow-hidden shadow-lg sm:rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer border border-slate-200/50 dark:border-slate-500/30 backdrop-blur-xl transform group-hover:scale-105 group-hover:-translate-y-1">
                             <div class="flex items-center mb-4">
                                 <div class="flex-shrink-0 bg-gradient-to-br from-slate-600 to-slate-700 rounded-xl p-3 shadow-lg group-hover:scale-110 transition-transform duration-300">

@@ -1,0 +1,308 @@
+<script setup>
+import { ref, computed, watch, onMounted, nextTick } from 'vue';
+
+const props = defineProps({
+    steps: {
+        type: Array,
+        required: true,
+    },
+    show: {
+        type: Boolean,
+        default: false,
+    },
+});
+
+const emit = defineEmits(['complete', 'skip', 'close']);
+
+const currentStepIndex = ref(0);
+const tooltipPosition = ref({ top: '0px', left: '0px' });
+const arrowPosition = ref('bottom');
+const isVisible = ref(props.show);
+
+const currentStep = computed(() => props.steps[currentStepIndex.value]);
+const isFirstStep = computed(() => currentStepIndex.value === 0);
+const isLastStep = computed(() => currentStepIndex.value === props.steps.length - 1);
+const progress = computed(() => ((currentStepIndex.value + 1) / props.steps.length) * 100);
+
+watch(() => props.show, (newValue) => {
+    isVisible.value = newValue;
+    if (newValue) {
+        currentStepIndex.value = 0;
+        nextTick(() => {
+            positionTooltip();
+        });
+    }
+});
+
+watch(currentStepIndex, () => {
+    nextTick(() => {
+        positionTooltip();
+        scrollToElement();
+    });
+});
+
+const positionTooltip = () => {
+    if (!currentStep.value?.target) return;
+
+    const targetElement = document.querySelector(currentStep.value.target);
+    if (!targetElement) {
+        console.warn(`Element not found: ${currentStep.value.target}`);
+        return;
+    }
+
+    const rect = targetElement.getBoundingClientRect();
+    const tooltipWidth = 400;
+    const tooltipHeight = 300;
+    const padding = 20;
+
+    // Highlight the target element
+    targetElement.style.position = 'relative';
+    targetElement.style.zIndex = '10001';
+    
+    // Calculate position based on available space
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const spaceRight = window.innerWidth - rect.right;
+    const spaceLeft = rect.left;
+
+    let top, left, arrow;
+
+    // Determine best position
+    if (spaceBelow > tooltipHeight + padding) {
+        // Position below
+        top = rect.bottom + padding;
+        left = Math.max(padding, Math.min(rect.left, window.innerWidth - tooltipWidth - padding));
+        arrow = 'top';
+    } else if (spaceAbove > tooltipHeight + padding) {
+        // Position above
+        top = rect.top - tooltipHeight - padding;
+        left = Math.max(padding, Math.min(rect.left, window.innerWidth - tooltipWidth - padding));
+        arrow = 'bottom';
+    } else if (spaceRight > tooltipWidth + padding) {
+        // Position right
+        top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
+        left = rect.right + padding;
+        arrow = 'left';
+    } else if (spaceLeft > tooltipWidth + padding) {
+        // Position left
+        top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
+        left = rect.left - tooltipWidth - padding;
+        arrow = 'right';
+    } else {
+        // Center if no space
+        top = (window.innerHeight - tooltipHeight) / 2;
+        left = (window.innerWidth - tooltipWidth) / 2;
+        arrow = 'none';
+    }
+
+    tooltipPosition.value = {
+        top: `${top}px`,
+        left: `${left}px`,
+    };
+    arrowPosition.value = arrow;
+};
+
+const scrollToElement = () => {
+    if (!currentStep.value?.target) return;
+
+    const targetElement = document.querySelector(currentStep.value.target);
+    if (targetElement) {
+        targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+        });
+    }
+};
+
+const nextStep = () => {
+    if (isLastStep.value) {
+        complete();
+    } else {
+        // Remove highlight from current element
+        if (currentStep.value?.target) {
+            const currentElement = document.querySelector(currentStep.value.target);
+            if (currentElement) {
+                currentElement.style.zIndex = '';
+            }
+        }
+        currentStepIndex.value++;
+    }
+};
+
+const previousStep = () => {
+    if (!isFirstStep.value) {
+        // Remove highlight from current element
+        if (currentStep.value?.target) {
+            const currentElement = document.querySelector(currentStep.value.target);
+            if (currentElement) {
+                currentElement.style.zIndex = '';
+            }
+        }
+        currentStepIndex.value--;
+    }
+};
+
+const skip = () => {
+    cleanupHighlights();
+    isVisible.value = false;
+    emit('skip');
+};
+
+const complete = () => {
+    cleanupHighlights();
+    isVisible.value = false;
+    emit('complete');
+};
+
+const close = () => {
+    cleanupHighlights();
+    isVisible.value = false;
+    emit('close');
+};
+
+const cleanupHighlights = () => {
+    props.steps.forEach(step => {
+        if (step.target) {
+            const element = document.querySelector(step.target);
+            if (element) {
+                element.style.zIndex = '';
+            }
+        }
+    });
+};
+
+onMounted(() => {
+    if (isVisible.value) {
+        nextTick(() => {
+            positionTooltip();
+        });
+    }
+});
+</script>
+
+<template>
+    <Transition
+        enter-active-class="transition ease-out duration-300"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition ease-in duration-200"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+    >
+        <div v-if="isVisible" class="fixed inset-0 z-[10000]">
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+            <!-- Spotlight effect on target element -->
+            <div
+                v-if="currentStep?.target"
+                class="absolute pointer-events-none"
+                :style="{
+                    top: tooltipPosition.top,
+                    left: tooltipPosition.left,
+                }"
+            ></div>
+
+            <!-- Tooltip -->
+            <Transition
+                enter-active-class="transition ease-out duration-300"
+                enter-from-class="opacity-0 scale-95"
+                enter-to-class="opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-200"
+                leave-from-class="opacity-100 scale-100"
+                leave-to-class="opacity-0 scale-95"
+                mode="out-in"
+            >
+                <div
+                    :key="currentStepIndex"
+                    class="absolute bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border-2 border-purple-500/30 w-[400px] max-w-[90vw] z-[10002]"
+                    :style="tooltipPosition"
+                >
+                    <!-- Arrow -->
+                    <div
+                        v-if="arrowPosition !== 'none'"
+                        class="absolute w-4 h-4 bg-white dark:bg-gray-800 border-purple-500/30 rotate-45"
+                        :class="{
+                            'top-[-9px] left-1/2 -translate-x-1/2 border-t-2 border-l-2': arrowPosition === 'top',
+                            'bottom-[-9px] left-1/2 -translate-x-1/2 border-b-2 border-r-2': arrowPosition === 'bottom',
+                            'left-[-9px] top-1/2 -translate-y-1/2 border-l-2 border-b-2': arrowPosition === 'left',
+                            'right-[-9px] top-1/2 -translate-y-1/2 border-r-2 border-t-2': arrowPosition === 'right',
+                        }"
+                    ></div>
+
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-purple-600 to-pink-600 p-6 rounded-t-2xl text-white">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-2xl">{{ currentStep.icon }}</span>
+                                    <h3 class="text-xl font-bold">{{ currentStep.title }}</h3>
+                                </div>
+                                <p class="text-sm text-purple-100">
+                                    Étape {{ currentStepIndex + 1 }} sur {{ steps.length }}
+                                </p>
+                            </div>
+                            <button
+                                @click="close"
+                                class="text-white/80 hover:text-white hover:bg-white/20 rounded-full p-2 transition-colors flex-shrink-0"
+                            >
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="mt-4 h-2 overflow-hidden rounded-full bg-purple-400/30 backdrop-blur-sm">
+                            <div
+                                class="h-full bg-white shadow-lg transition-all duration-500 ease-out"
+                                :style="{ width: progress + '%' }"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="p-6">
+                        <div class="text-gray-700 dark:text-gray-300 leading-relaxed" v-html="currentStep.content"></div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 rounded-b-2xl border-t border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between">
+                            <button
+                                v-if="!isFirstStep"
+                                @click="previousStep"
+                                class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                            >
+                                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                                Précédent
+                            </button>
+                            <button
+                                v-if="isFirstStep"
+                                @click="skip"
+                                class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 font-semibold transition-colors"
+                            >
+                                Passer le tutoriel
+                            </button>
+                            
+                            <button
+                                @click="nextStep"
+                                class="inline-flex items-center px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 shadow-lg transform hover:scale-105 transition-all duration-200"
+                            >
+                                {{ isLastStep ? 'Terminer' : 'Suivant' }}
+                                <svg v-if="!isLastStep" class="h-5 w-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                                <svg v-else class="h-5 w-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
+        </div>
+    </Transition>
+</template>

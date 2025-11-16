@@ -97,7 +97,20 @@ class DashboardController extends Controller
             ],
             'stats' => $stats,
             'recentTransformations' => $recentTransformations,
+            'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
         ]);
+    }
+
+    /**
+     * Mark the onboarding as completed for the current user.
+     */
+    public function completeOnboarding(Request $request)
+    {
+        $user = $request->user();
+        $user->has_completed_onboarding = true;
+        $user->save();
+
+        return redirect()->back();
     }
 
     /**

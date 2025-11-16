@@ -18,6 +18,7 @@ class DashboardController extends Controller
         if ($user->role === 'admin') {
             return Inertia::render('Dashboard', [
                 'isAdmin' => true,
+                'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
             ]);
         }
 
@@ -32,6 +33,7 @@ class DashboardController extends Controller
         if (!$coach) {
             return Inertia::render('Dashboard', [
                 'error' => 'Aucun profil coach associé à votre compte.',
+                'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
             ]);
         }
 

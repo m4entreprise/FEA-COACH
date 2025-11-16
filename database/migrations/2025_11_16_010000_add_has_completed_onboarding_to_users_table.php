@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('has_completed_onboarding')->default(false)->after('setup_completed_at');
+            $table->boolean('has_completed_onboarding')->default(false)->after('setup_step');
         });
     }
 

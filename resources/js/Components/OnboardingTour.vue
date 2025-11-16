@@ -70,13 +70,10 @@ const positionTooltip = () => {
     }
     targetElement.style.zIndex = '10001';
     
-    // Create spotlight effect
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-    
+    // Create spotlight effect using fixed positioning (viewport coordinates)
     spotlightStyle.value = {
-        top: `${rect.top + scrollTop}px`,
-        left: `${rect.left + scrollLeft}px`,
+        top: `${rect.top}px`,
+        left: `${rect.left}px`,
         width: `${rect.width}px`,
         height: `${rect.height}px`,
     };
@@ -89,8 +86,19 @@ const positionTooltip = () => {
 
     let top, left, arrow;
 
-    // Determine best position
-    if (spaceBelow > tooltipHeight + padding) {
+    // Determine best position - prioritize NOT covering the target element
+    // Try to position to the side first, then above/below
+    if (spaceRight > tooltipWidth + padding) {
+        // Position right (best option - doesn't cover element)
+        top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
+        left = rect.right + padding;
+        arrow = 'left';
+    } else if (spaceLeft > tooltipWidth + padding) {
+        // Position left (second best)
+        top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
+        left = rect.left - tooltipWidth - padding;
+        arrow = 'right';
+    } else if (spaceBelow > tooltipHeight + padding) {
         // Position below
         top = rect.bottom + padding;
         left = Math.max(padding, Math.min(rect.left, window.innerWidth - tooltipWidth - padding));
@@ -100,21 +108,17 @@ const positionTooltip = () => {
         top = rect.top - tooltipHeight - padding;
         left = Math.max(padding, Math.min(rect.left, window.innerWidth - tooltipWidth - padding));
         arrow = 'bottom';
-    } else if (spaceRight > tooltipWidth + padding) {
-        // Position right
-        top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
-        left = rect.right + padding;
-        arrow = 'left';
-    } else if (spaceLeft > tooltipWidth + padding) {
-        // Position left
-        top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
-        left = rect.left - tooltipWidth - padding;
-        arrow = 'right';
     } else {
-        // Center if no space
-        top = (window.innerHeight - tooltipHeight) / 2;
-        left = (window.innerWidth - tooltipWidth) / 2;
-        arrow = 'none';
+        // Not enough space anywhere - position to side of element even if cramped
+        if (spaceRight >= spaceLeft) {
+            top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
+            left = rect.right + 10;
+            arrow = 'left';
+        } else {
+            top = Math.max(padding, Math.min(rect.top, window.innerHeight - tooltipHeight - padding));
+            left = Math.max(10, rect.left - tooltipWidth - 10);
+            arrow = 'right';
+        }
     }
 
     tooltipPosition.value = {
@@ -144,7 +148,19 @@ const nextStep = () => {
         if (currentStep.value?.target) {
             const currentElement = document.querySelector(currentStep.value.target);
             if (currentElement) {
-                currentElement.style.zIndex = '';
+                // Restore original values
+                const originalPosition = currentElement.dataset.originalPosition;
+                const originalZIndex = currentElement.dataset.originalZIndex;
+                
+                if (originalPosition !== undefined) {
+                    currentElement.style.position = originalPosition;
+                    delete currentElement.dataset.originalPosition;
+                }
+                
+                if (originalZIndex !== undefined) {
+                    currentElement.style.zIndex = originalZIndex;
+                    delete currentElement.dataset.originalZIndex;
+                }
             }
         }
         currentStepIndex.value++;
@@ -157,7 +173,19 @@ const previousStep = () => {
         if (currentStep.value?.target) {
             const currentElement = document.querySelector(currentStep.value.target);
             if (currentElement) {
-                currentElement.style.zIndex = '';
+                // Restore original values
+                const originalPosition = currentElement.dataset.originalPosition;
+                const originalZIndex = currentElement.dataset.originalZIndex;
+                
+                if (originalPosition !== undefined) {
+                    currentElement.style.position = originalPosition;
+                    delete currentElement.dataset.originalPosition;
+                }
+                
+                if (originalZIndex !== undefined) {
+                    currentElement.style.zIndex = originalZIndex;
+                    delete currentElement.dataset.originalZIndex;
+                }
             }
         }
         currentStepIndex.value--;

@@ -128,10 +128,10 @@ const closeProfileModal = () => {
                                 </div>
                                 <div class="ml-4 flex-1">
                                     <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">
-                                        {{ stats.subscription.is_on_trial ? 'Période d\'essai' : 'Abonnement' }}
+                                        Abonnement
                                     </p>
                                     <p v-if="stats.subscription.is_on_trial" class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
-                                        {{ stats.subscription.trial_days_left }} jours restants
+                                        Essai - {{ stats.subscription.trial_days_left }} jours
                                     </p>
                                     <p v-else class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
                                         {{ stats.subscription.status === 'active' ? 'Actif' : 'Inactif' }}
@@ -141,11 +141,12 @@ const closeProfileModal = () => {
                             <div v-if="stats.subscription.trial_ends_at" class="text-xs text-gray-500 dark:text-gray-400 mb-3">
                                 Expire le {{ new Date(stats.subscription.trial_ends_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) }}
                             </div>
-                            <button 
-                                class="mt-auto w-full px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-sm font-semibold rounded-lg hover:from-emerald-600 hover:to-green-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
+                            <Link 
+                                :href="route('dashboard.subscription')"
+                                class="mt-auto w-full px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-sm font-semibold rounded-lg hover:from-emerald-600 hover:to-green-700 transform hover:scale-105 transition-all duration-200 shadow-lg text-center"
                             >
                                 {{ stats.subscription.is_on_trial ? 'S\'abonner maintenant' : 'Gérer l\'abonnement' }}
-                            </button>
+                            </Link>
                         </div>
                     </div>
 

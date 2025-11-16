@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\PlansController;
 use App\Http\Controllers\Dashboard\ContactController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\LegalController;
+use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
 use App\Http\Controllers\ProfileController;
@@ -159,6 +160,11 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     // Legal terms management
     Route::get('/dashboard/legal', [LegalController::class, 'edit'])->name('dashboard.legal');
     Route::post('/dashboard/legal', [LegalController::class, 'update'])->name('dashboard.legal.update');
+
+    // Subscription management
+    Route::get('/dashboard/subscription', [SubscriptionController::class, 'index'])->name('dashboard.subscription');
+    Route::post('/dashboard/subscription/checkout', [SubscriptionController::class, 'createCheckoutSession'])->name('dashboard.subscription.checkout');
+    Route::post('/dashboard/subscription/portal', [SubscriptionController::class, 'customerPortal'])->name('dashboard.subscription.portal');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

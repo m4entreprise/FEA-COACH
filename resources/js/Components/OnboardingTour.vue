@@ -18,6 +18,7 @@ const currentStepIndex = ref(0);
 const tooltipPosition = ref({ top: '0px', left: '0px' });
 const arrowPosition = ref('bottom');
 const isVisible = ref(props.show);
+const spotlightStyle = ref({});
 
 const currentStep = computed(() => props.steps[currentStepIndex.value]);
 const isFirstStep = computed(() => currentStepIndex.value === 0);
@@ -55,9 +56,30 @@ const positionTooltip = () => {
     const tooltipHeight = 300;
     const padding = 20;
 
-    // Highlight the target element
-    targetElement.style.position = 'relative';
+    // Highlight the target element with proper z-index
+    const originalPosition = targetElement.style.position;
+    const originalZIndex = targetElement.style.zIndex;
+    
+    // Store original values to restore later
+    targetElement.dataset.originalPosition = originalPosition || '';
+    targetElement.dataset.originalZIndex = originalZIndex || '';
+    
+    // Set high z-index to ensure visibility above overlay
+    if (!originalPosition || originalPosition === 'static') {
+        targetElement.style.position = 'relative';
+    }
     targetElement.style.zIndex = '10001';
+    
+    // Create spotlight effect
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    
+    spotlightStyle.value = {
+        top: `${rect.top + scrollTop}px`,
+        left: `${rect.left + scrollLeft}px`,
+        width: `${rect.width}px`,
+        height: `${rect.height}px`,
+    };
     
     // Calculate position based on available space
     const spaceBelow = window.innerHeight - rect.bottom;
@@ -165,7 +187,19 @@ const cleanupHighlights = () => {
         if (step.target) {
             const element = document.querySelector(step.target);
             if (element) {
-                element.style.zIndex = '';
+                // Restore original position and z-index
+                const originalPosition = element.dataset.originalPosition;
+                const originalZIndex = element.dataset.originalZIndex;
+                
+                if (originalPosition !== undefined) {
+                    element.style.position = originalPosition;
+                    delete element.dataset.originalPosition;
+                }
+                
+                if (originalZIndex !== undefined) {
+                    element.style.zIndex = originalZIndex;
+                    delete element.dataset.originalZIndex;
+                }
             }
         }
     });
@@ -190,16 +224,17 @@ onMounted(() => {
         leave-to-class="opacity-0"
     >
         <div v-if="isVisible" class="fixed inset-0 z-[10000]">
-            <!-- Overlay -->
-            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+            <!-- Overlay with cutout for target element -->
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" style="pointer-events: none;"></div>
 
-            <!-- Spotlight effect on target element -->
+            <!-- Spotlight effect - highlight the target element -->
             <div
                 v-if="currentStep?.target"
-                class="absolute pointer-events-none"
+                class="absolute rounded-xl shadow-2xl transition-all duration-300 pointer-events-none"
                 :style="{
-                    top: tooltipPosition.top,
-                    left: tooltipPosition.left,
+                    ...spotlightStyle,
+                    boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 30px 10px rgba(147, 51, 234, 0.5)',
+                    border: '3px solid rgba(147, 51, 234, 0.8)',
                 }"
             ></div>
 

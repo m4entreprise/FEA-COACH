@@ -253,6 +253,141 @@ defineProps({
             </div>
         </section>
 
+        <!-- Pricing Section -->
+        <section class="py-20 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <div class="inline-block mb-4 px-4 py-2 bg-purple-500/20 border border-purple-400/30 rounded-full">
+                        <span class="text-purple-300 font-medium">Tarification transparente</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                        Nos tarifs
+                    </h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        Un abonnement simple et sans engagement pour développer votre présence en ligne
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <!-- Standard Pricing Card -->
+                    <div class="relative p-8 bg-gradient-to-br from-slate-900/50 to-purple-900/30 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-purple-500/40 transition">
+                        <div class="text-center mb-6">
+                            <h3 class="text-2xl font-bold text-white mb-2">Tarif Standard</h3>
+                            <p class="text-gray-400">Pour tous les coachs professionnels</p>
+                        </div>
+                        
+                        <div class="text-center mb-8">
+                            <div class="flex items-baseline justify-center">
+                                <span class="text-5xl font-bold text-white">30€</span>
+                                <span class="text-gray-400 ml-2">HTVA/mois</span>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span class="text-gray-300">Site vitrine professionnel complet</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span class="text-gray-300">Sous-domaine personnalisé</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span class="text-gray-300">Personnalisation complète</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span class="text-gray-300">Support technique inclus</span>
+                            </li>
+                        </ul>
+
+                        <Link
+                            :href="route('register')"
+                            class="block w-full text-center px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/20 transition"
+                        >
+                            Commencer
+                        </Link>
+                    </div>
+
+                    <!-- FEA Graduate Pricing Card (Highlighted) -->
+                    <div class="relative p-8 bg-gradient-to-br from-purple-900/60 to-pink-900/60 rounded-2xl border-2 border-purple-500/50 backdrop-blur-sm shadow-xl shadow-purple-500/20">
+                        <!-- Badge -->
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                            <div class="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full border border-purple-400/50 shadow-lg">
+                                <span class="text-white font-bold text-sm">RECOMMANDÉ</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center mb-6 mt-4">
+                            <h3 class="text-2xl font-bold text-white mb-2">Diplômé FEA</h3>
+                            <p class="text-purple-200">Pour les diplômés de Fitness Education Academy</p>
+                        </div>
+                        
+                        <div class="text-center mb-8">
+                            <div class="flex items-baseline justify-center">
+                                <span class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-pink-300">20€</span>
+                                <span class="text-purple-200 ml-2">HTVA/mois</span>
+                            </div>
+                            <div class="mt-2">
+                                <span class="inline-block px-3 py-1 bg-green-500/20 border border-green-400/30 rounded-full text-green-300 text-sm font-medium">
+                                    Économisez 33%
+                                </span>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-purple-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span class="text-white font-medium">Toutes les fonctionnalités incluses</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-purple-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span class="text-white font-medium">Tarif préférentiel à vie</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-purple-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span class="text-white font-medium">Support prioritaire</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <svg class="w-6 h-6 text-purple-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span class="text-white font-medium">Badge "Diplômé FEA" sur votre site</span>
+                            </li>
+                        </ul>
+
+                        <Link
+                            :href="route('register')"
+                            class="block w-full text-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-lg shadow-lg transition transform hover:scale-105"
+                        >
+                            Créer mon site
+                        </Link>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <p class="text-gray-400 text-sm">
+                        TVA non comprise • Sans engagement • Résiliable à tout moment
+                    </p>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA Section -->
         <section class="py-20 px-4 bg-gradient-to-r from-purple-900/50 to-pink-900/50 backdrop-blur-sm border-y border-white/10">
             <div class="max-w-4xl mx-auto text-center">

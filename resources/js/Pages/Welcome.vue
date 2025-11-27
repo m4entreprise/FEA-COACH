@@ -270,20 +270,23 @@ defineProps({
 
                 <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                     <!-- Standard Pricing Card -->
-                    <div class="relative p-8 bg-gradient-to-br from-slate-900/50 to-purple-900/30 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-purple-500/40 transition">
-                        <div class="text-center mb-6">
+                    <div class="relative p-8 bg-gradient-to-br from-slate-900/50 to-purple-900/30 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-purple-500/40 transition flex flex-col">
+                        <!-- Spacer for badge alignment -->
+                        <div class="h-6 mb-4"></div>
+                        
+                        <div class="text-center mb-6 h-20 flex flex-col justify-center">
                             <h3 class="text-2xl font-bold text-white mb-2">Tarif Standard</h3>
                             <p class="text-gray-400">Pour tous les coachs professionnels</p>
                         </div>
                         
-                        <div class="text-center mb-8">
+                        <div class="text-center mb-8 h-24 flex flex-col justify-center">
                             <div class="flex items-baseline justify-center">
                                 <span class="text-5xl font-bold text-white">30€</span>
                                 <span class="text-gray-400 ml-2">HTVA/mois</span>
                             </div>
                         </div>
 
-                        <ul class="space-y-4 mb-8">
+                        <ul class="space-y-4 mb-8 flex-grow">
                             <li class="flex items-start space-x-3">
                                 <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -319,7 +322,7 @@ defineProps({
                     </div>
 
                     <!-- FEA Graduate Pricing Card (Highlighted) -->
-                    <div class="relative p-8 bg-gradient-to-br from-purple-900/60 to-pink-900/60 rounded-2xl border-2 border-purple-500/50 backdrop-blur-sm shadow-xl shadow-purple-500/20">
+                    <div class="relative p-8 bg-gradient-to-br from-purple-900/60 to-pink-900/60 rounded-2xl border-2 border-purple-500/50 backdrop-blur-sm shadow-xl shadow-purple-500/20 flex flex-col">
                         <!-- Badge -->
                         <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
                             <div class="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full border border-purple-400/50 shadow-lg">
@@ -327,12 +330,15 @@ defineProps({
                             </div>
                         </div>
 
-                        <div class="text-center mb-6 mt-4">
+                        <!-- Spacer for badge -->
+                        <div class="h-6 mb-4"></div>
+
+                        <div class="text-center mb-6 h-20 flex flex-col justify-center">
                             <h3 class="text-2xl font-bold text-white mb-2">Diplômé FEA</h3>
                             <p class="text-purple-200">Pour les diplômés de Fitness Education Academy</p>
                         </div>
                         
-                        <div class="text-center mb-8">
+                        <div class="text-center mb-8 h-24 flex flex-col justify-center">
                             <div class="flex items-baseline justify-center">
                                 <span class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-pink-300">20€</span>
                                 <span class="text-purple-200 ml-2">HTVA/mois</span>
@@ -344,7 +350,7 @@ defineProps({
                             </div>
                         </div>
 
-                        <ul class="space-y-4 mb-8">
+                        <ul class="space-y-4 mb-8 flex-grow">
                             <li class="flex items-start space-x-3">
                                 <svg class="w-6 h-6 text-purple-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -473,7 +479,7 @@ defineProps({
                                 </a>
                             </li>
                             <li>
-                                TVA : BE 0896.755.397
+                                TVA : BE 103.045.9209
                             </li>
                         </ul>
                     </div>

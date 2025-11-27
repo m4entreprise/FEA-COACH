@@ -48,6 +48,10 @@ Route::get('/', function () {
     ]);
 });
 
+// Legal pages
+Route::get('/cgvu', [App\Http\Controllers\LegalController::class, 'cgvu'])->name('legal.cgvu');
+Route::get('/politique-confidentialite', [App\Http\Controllers\LegalController::class, 'privacy'])->name('legal.privacy');
+
 /*
 |--------------------------------------------------------------------------
 | Admin Routes

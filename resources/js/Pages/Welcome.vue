@@ -469,14 +469,14 @@ defineProps({
                         <h3 class="text-white font-semibold mb-4">Informations légales</h3>
                         <ul class="space-y-2 text-gray-400">
                             <li>
-                                <a href="#" class="hover:text-purple-300 transition">
+                                <Link :href="route('legal.cgvu')" class="hover:text-purple-300 transition">
                                     Conditions générales de vente (CGV)
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" class="hover:text-purple-300 transition">
+                                <Link :href="route('legal.privacy')" class="hover:text-purple-300 transition">
                                     Politique de confidentialité
-                                </a>
+                                </Link>
                             </li>
                             <li>
                                 TVA : BE 103.045.9209

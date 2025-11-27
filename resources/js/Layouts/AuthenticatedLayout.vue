@@ -15,7 +15,7 @@ const page = usePage();
     <div>
         <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
             <nav
-                class="border-b border-purple-200/50 dark:border-purple-500/30 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl shadow-lg"
+                class="border-b border-purple-200/50 dark:border-purple-500/30 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl shadow-lg relative z-50"
             >
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -289,7 +289,7 @@ const page = usePage();
 
             <!-- Page Heading -->
             <header
-                class="bg-gradient-to-r from-white/90 to-purple-50/90 dark:from-gray-800/90 dark:to-purple-900/20 backdrop-blur-xl shadow-lg border-b border-purple-200/50 dark:border-purple-500/30"
+                class="bg-gradient-to-r from-white/90 to-purple-50/90 dark:from-gray-800/90 dark:to-purple-900/20 backdrop-blur-xl shadow-lg border-b border-purple-200/50 dark:border-purple-500/30 relative z-10"
                 v-if="$slots.header"
             >
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Coach;
 use App\Models\PromoCodeRequest;
 use App\Models\User;
+use App\Services\FungiesService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -169,49 +171,44 @@ class OnboardingController extends Controller
     }
 
     /**
-     * Traiter le paiement Stripe
+     * Créer une session de checkout Fungies pour le paiement
      */
     public function processPayment(Request $request)
     {
-        $request->validate([
-            'payment_method_id' => 'required|string',
-        ]);
-
         $user = Auth::user();
 
         try {
-            // Configuration Stripe (à adapter selon votre intégration)
-            // Stripe::setApiKey(config('services.stripe.secret'));
-            
-            // Créer ou récupérer le client Stripe
-            // $customer = \Stripe\Customer::create([
-            //     'email' => $user->email,
-            //     'name' => $user->first_name . ' ' . $user->last_name,
-            //     'payment_method' => $request->payment_method_id,
-            //     'invoice_settings' => [
-            //         'default_payment_method' => $request->payment_method_id,
-            //     ],
-            // ]);
+            $fungiesService = new FungiesService();
 
-            // Créer l'abonnement
-            // $subscription = \Stripe\Subscription::create([
-            //     'customer' => $customer->id,
-            //     'items' => [['price' => config('services.stripe.price_id')]],
-            //     'expand' => ['latest_invoice.payment_intent'],
-            // ]);
+            // Créer une session de checkout Fungies
+            $checkoutSession = $fungiesService->createCheckoutSession([
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'name' => $user->first_name . ' ' . $user->last_name,
+            ], [
+                'is_fea_graduate' => $user->is_fea_graduate,
+                'onboarding' => true,
+            ]);
 
-            // Mise à jour de l'utilisateur
-            // $user->stripe_customer_id = $customer->id;
-            $user->subscription_status = 'active';
-            $user->onboarding_completed = true;
-            $user->save();
+            // Rediriger vers la page de checkout Fungies
+            if (isset($checkoutSession['checkoutUrl'])) {
+                return redirect($checkoutSession['checkoutUrl']);
+            }
 
-            // Créer le profil Coach
-            $this->createCoachProfile($user);
+            if (isset($checkoutSession['url'])) {
+                return redirect($checkoutSession['url']);
+            }
 
-            return redirect()->route('setup.index')->with('success', 'Bienvenue ! Votre abonnement est actif. Configurons votre site !');
+            Log::error('Fungies checkout session missing URL', ['response' => $checkoutSession]);
+            return back()->withErrors(['payment' => 'Erreur lors de la création de la session de paiement.']);
+
         } catch (\Exception $e) {
-            return back()->withErrors(['payment' => 'Erreur lors du paiement : ' . $e->getMessage()]);
+            Log::error('Failed to create Fungies checkout session in onboarding', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->withErrors(['payment' => 'Une erreur est survenue. Veuillez réessayer.']);
         }
     }
 

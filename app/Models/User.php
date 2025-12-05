@@ -33,9 +33,13 @@ class User extends Authenticatable
         'onboarding_completed',
         'setup_completed',
         'setup_step',
-        'stripe_customer_id',
+        'fungies_customer_id',
+        'fungies_subscription_id',
         'subscription_status',
         'trial_ends_at',
+        'subscription_current_period_start',
+        'subscription_current_period_end',
+        'cancel_at_period_end',
     ];
 
     /**
@@ -62,6 +66,9 @@ class User extends Authenticatable
             'onboarding_completed' => 'boolean',
             'setup_completed' => 'boolean',
             'trial_ends_at' => 'datetime',
+            'subscription_current_period_start' => 'datetime',
+            'subscription_current_period_end' => 'datetime',
+            'cancel_at_period_end' => 'boolean',
         ];
     }
 

@@ -27,9 +27,7 @@ const requestForm = useForm({
     message: '',
 });
 
-const paymentForm = useForm({
-    payment_method_id: '',
-});
+const paymentForm = useForm({});
 
 const submitPromoCode = () => {
     promoForm.post(route('onboarding.validate-promo'));
@@ -45,9 +43,8 @@ const submitPromoRequest = () => {
 };
 
 const submitPayment = () => {
-    // TODO: Intégration Stripe ici
-    alert('Intégration Stripe à venir');
-    // paymentForm.post(route('onboarding.process-payment'));
+    // Rediriger vers le checkout Fungies
+    paymentForm.post(route('onboarding.process-payment'));
 };
 </script>
 
@@ -292,8 +289,8 @@ const submitPayment = () => {
                             <p class="text-gray-300 text-sm">Annulable à tout moment</p>
                         </div>
                         <div class="text-right">
-                            <div class="text-3xl font-bold text-white">29€</div>
-                            <div class="text-sm text-gray-300">par mois</div>
+                            <div class="text-3xl font-bold text-white">20€</div>
+                            <div class="text-sm text-gray-300">HTVA/mois</div>
                         </div>
                     </div>
                     
@@ -325,13 +322,9 @@ const submitPayment = () => {
                     </ul>
                 </div>
 
-                <!-- Stripe Payment Form Placeholder -->
-                <div class="mb-6 p-8 bg-white/5 border-2 border-dashed border-white/20 rounded-xl text-center">
-                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                    </svg>
-                    <p class="text-gray-300 mb-2">Formulaire de paiement Stripe</p>
-                    <p class="text-sm text-gray-400">L'intégration Stripe sera ajoutée ici</p>
+                <!-- Info Message -->
+                <div v-if="paymentForm.errors.payment" class="mb-6 p-4 bg-red-500/10 border border-red-400/30 rounded-lg">
+                    <p class="text-sm text-red-300">{{ paymentForm.errors.payment }}</p>
                 </div>
 
                 <!-- Info Box -->
@@ -342,7 +335,7 @@ const submitPayment = () => {
                         </svg>
                         <div class="text-sm text-green-300">
                             <p class="font-medium">Paiement 100% sécurisé</p>
-                            <p>Vos données bancaires sont protégées par Stripe, leader mondial du paiement en ligne</p>
+                            <p>Vos données bancaires sont protégées par Fungies.io, plateforme de paiement sécurisée</p>
                         </div>
                     </div>
                 </div>
@@ -361,7 +354,7 @@ const submitPayment = () => {
                         :disabled="paymentForm.processing"
                         class="flex-1 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg transition transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     >
-                        <span v-if="!paymentForm.processing">Payer 29€/mois</span>
+                        <span v-if="!paymentForm.processing">Continuer vers le paiement (20€ HTVA/mois)</span>
                         <span v-else class="flex items-center justify-center">
                             <svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

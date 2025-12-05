@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\LegalController;
 use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\Dashboard\SupportTicketController as DashboardSupportController;
+use App\Http\Controllers\FungiesWebhookController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
 use App\Http\Controllers\ProfileController;
@@ -183,6 +184,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::get('/dashboard/subscription', [SubscriptionController::class, 'index'])->name('dashboard.subscription');
     Route::post('/dashboard/subscription/checkout', [SubscriptionController::class, 'createCheckoutSession'])->name('dashboard.subscription.checkout');
     Route::post('/dashboard/subscription/portal', [SubscriptionController::class, 'customerPortal'])->name('dashboard.subscription.portal');
+    Route::post('/dashboard/subscription/cancel', [SubscriptionController::class, 'cancelSubscription'])->name('dashboard.subscription.cancel');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -191,3 +193,17 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
 });
 
 require __DIR__.'/auth.php';
+
+/*
+|--------------------------------------------------------------------------
+| Fungies.io Webhook Routes
+|--------------------------------------------------------------------------
+|
+| These routes handle webhooks from Fungies.io for payment events.
+| The webhook is public but protected by signature verification.
+|
+*/
+
+Route::post('/webhooks/fungies', [FungiesWebhookController::class, 'handle'])
+    ->name('webhooks.fungies')
+    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);

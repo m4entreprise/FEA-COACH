@@ -58,7 +58,7 @@ class FungiesService
             $response = Http::withHeaders([
                 'x-write-api-key' => $this->writeApiKey,
                 'Content-Type' => 'application/json',
-            ])->post("{$this->baseUrl}/orders", $orderData);
+            ])->post("{$this->baseUrl}/v0/elements/checkout/create", $orderData);
 
             if ($response->successful()) {
                 return $response->json();
@@ -90,7 +90,7 @@ class FungiesService
             $response = Http::withHeaders([
                 'x-api-key' => $this->apiKey,
                 'Content-Type' => 'application/json',
-            ])->get("{$this->baseUrl}/subscriptions/{$subscriptionId}");
+            ])->get("{$this->baseUrl}/v0/subscriptions/{$subscriptionId}");
 
             if ($response->successful()) {
                 return $response->json();
@@ -119,7 +119,7 @@ class FungiesService
             $response = Http::withHeaders([
                 'x-api-key' => $this->apiKey,
                 'Content-Type' => 'application/json',
-            ])->get("{$this->baseUrl}/subscriptions/list", [
+            ])->get("{$this->baseUrl}/v0/subscriptions/list", [
                 'status' => $status,
                 'take' => $take,
             ]);
@@ -155,7 +155,7 @@ class FungiesService
                 'x-api-key' => $this->apiKey,
                 'x-write-api-key' => $this->writeApiKey,
                 'Content-Type' => 'application/json',
-            ])->patch("{$this->baseUrl}/subscriptions/{$subscriptionId}/cancel", [
+            ])->patch("{$this->baseUrl}/v0/subscriptions/{$subscriptionId}/cancel", [
                 'Id' => $subscriptionId,
                 'cancelOption' => $cancelOption,
                 'refundOption' => $refundOption,

@@ -4,7 +4,8 @@
       "WebSearch",
       "WebFetch(domain:help.fungies.io)",
       "Bash(php -r:*)",
-      "Bash(php artisan:*)"
+      "Bash(php artisan:*)",
+      "WebFetch(domain:docs.fungies.io)"
     ],
     "deny": [],
     "ask": []

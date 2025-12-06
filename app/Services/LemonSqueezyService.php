@@ -39,7 +39,12 @@ class LemonSqueezyService
             // Lemon Squeezy requires all custom_data values to be strings
             $customDataStrings = [];
             foreach (array_merge(['user_id' => $userData['user_id'] ?? null], $customData) as $key => $value) {
-                $customDataStrings[$key] = (string) $value;
+                // Convert booleans explicitly to "true"/"false" strings
+                if (is_bool($value)) {
+                    $customDataStrings[$key] = $value ? 'true' : 'false';
+                } else {
+                    $customDataStrings[$key] = (string) $value;
+                }
             }
 
             $payload = [

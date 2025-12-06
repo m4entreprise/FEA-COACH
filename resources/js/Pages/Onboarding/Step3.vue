@@ -38,20 +38,24 @@ const submitPromoRequest = () => {
     });
 };
 
-const submitPayment = () => {
-    paymentForm.post(route('onboarding.process-payment'), {
-        onSuccess: (response) => {
-            // Redirect to Lemon Squeezy checkout URL
-            if (response.props?.checkout_url) {
-                window.location.href = response.props.checkout_url;
-            } else if (response?.checkout_url) {
-                window.location.href = response.checkout_url;
-            }
-        },
-        onError: (errors) => {
-            console.error('Payment error:', errors);
+const submitPayment = async () => {
+    paymentForm.processing = true;
+    paymentForm.errors = {};
+
+    try {
+        const response = await axios.post(route('onboarding.process-payment'), {});
+        
+        if (response.data.checkout_url) {
+            window.location.href = response.data.checkout_url;
         }
-    });
+    } catch (error) {
+        paymentForm.processing = false;
+        if (error.response?.data?.errors) {
+            paymentForm.errors = error.response.data.errors;
+        } else {
+            paymentForm.errors = { payment: 'Une erreur est survenue. Veuillez réessayer.' };
+        }
+    }
 };
 </script>
 

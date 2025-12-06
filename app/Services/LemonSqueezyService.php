@@ -63,24 +63,10 @@ class LemonSqueezyService
                     'type' => 'checkouts',
                     'attributes' => [
                         'checkout_data' => $checkoutData,
-                        'checkout_options' => [
-                            'embed' => true,
-                            'media' => false,
-                            'logo' => true,
-                            'desc' => true,
-                            'discount' => true,
-                            'dark' => false,
-                            'subscription_preview' => true,
-                            'button_color' => '#7C3AED',
-                        ],
+                        'checkout_options' => (object) [],
                         'product_options' => [
-                            'enabled_variants' => [(string) $variantId],
                             'redirect_url' => route('onboarding.step3'),
-                            'receipt_button_text' => 'Accéder à mon espace',
-                            'receipt_link_url' => route('dashboard'),
-                            'receipt_thank_you_note' => 'Merci pour votre confiance ! Votre compte est maintenant actif.',
                         ],
-                        'expires_at' => null,
                     ],
                     'relationships' => [
                         'store' => [
@@ -98,6 +84,11 @@ class LemonSqueezyService
                     ],
                 ],
             ];
+
+            // Log payload for debugging
+            Log::info('Lemon Squeezy checkout payload', [
+                'payload_json' => json_encode($payload, JSON_PRETTY_PRINT),
+            ]);
 
             $response = Http::withHeaders([
                 'Accept' => 'application/vnd.api+json',

@@ -63,7 +63,7 @@ class LemonSqueezyService
                     'type' => 'checkouts',
                     'attributes' => [
                         'checkout_data' => $checkoutData,
-                        'checkout_options' => (object) [],
+                        'checkout_options' => [],
                         'product_options' => [
                             'redirect_url' => route('onboarding.step3'),
                         ],

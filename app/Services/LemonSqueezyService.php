@@ -64,7 +64,7 @@ class LemonSqueezyService
                     'attributes' => [
                         'checkout_data' => $checkoutData,
                         'checkout_options' => [
-                            'embed' => false,
+                            'embed' => true,
                             'media' => true,
                             'logo' => true,
                             'desc' => true,

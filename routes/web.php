@@ -16,6 +16,7 @@ use App\Http\Controllers\Dashboard\LegalController;
 use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\Dashboard\SupportTicketController as DashboardSupportController;
 use App\Http\Controllers\FungiesWebhookController;
+use App\Http\Controllers\LemonSqueezyWebhookController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
 use App\Http\Controllers\ProfileController;
@@ -196,6 +197,20 @@ require __DIR__.'/auth.php';
 
 /*
 |--------------------------------------------------------------------------
+| Lemon Squeezy Webhook Routes
+|--------------------------------------------------------------------------
+|
+| These routes handle webhooks from Lemon Squeezy for subscription events.
+| The webhook is public but protected by signature verification.
+|
+*/
+
+Route::post('/webhooks/lemonsqueezy', [LemonSqueezyWebhookController::class, 'handle'])
+    ->name('webhooks.lemonsqueezy')
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+
+/*
+|--------------------------------------------------------------------------
 | Fungies.io Webhook Routes
 |--------------------------------------------------------------------------
 |
@@ -206,4 +221,4 @@ require __DIR__.'/auth.php';
 
 Route::post('/webhooks/fungies', [FungiesWebhookController::class, 'handle'])
     ->name('webhooks.fungies')
-    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);

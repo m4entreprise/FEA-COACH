@@ -10,11 +10,7 @@ const props = defineProps({
 
 // Rediriger automatiquement si le compte est déjà activé
 onMounted(() => {
-    if (props.promoRequest && props.promoRequest.status === 'approved') {
-        setTimeout(() => {
-            router.visit(route('dashboard'));
-        }, 2000);
-    }
+    // La redirection est désormais gérée après le paiement Lemon Squeezy via webhook
 });
 
 const showRequestForm = ref(false);
@@ -88,7 +84,7 @@ const submitPayment = () => {
                         Bienvenue diplômé FEA !
                     </h1>
                     <p class="text-gray-300">
-                        Entrez votre code promotionnel pour bénéficier de <span class="text-purple-400 font-semibold">1 mois offert</span>
+                        Entrez votre code promotionnel pour bénéficier de <span class="text-purple-400 font-semibold">votre tarif diplômé FEA avec 1 mois offert</span>
                     </p>
                 </div>
 
@@ -111,12 +107,12 @@ const submitPayment = () => {
                             </p>
                         </div>
                         <p class="text-sm text-purple-300 mt-4">
-                            💌 Vous recevrez un email dès que votre compte sera activé
+                            💌 Vous recevrez un email contenant votre lien de paiement au tarif diplômé FEA dès que votre demande sera approuvée
                         </p>
                     </div>
                 </div>
 
-                <!-- Demande approuvée - redirection auto -->
+                <!-- Demande approuvée -->
                 <div v-else-if="promoRequest && promoRequest.status === 'approved'" class="space-y-4">
                     <div class="p-6 bg-green-500/10 border-2 border-green-400/30 rounded-xl text-center">
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-full mb-4">
@@ -124,9 +120,12 @@ const submitPayment = () => {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-2">Compte activé !</h3>
+                        <h3 class="text-xl font-bold text-white mb-2">Demande approuvée</h3>
+                        <p class="text-gray-300 mb-2">
+                            Votre statut FEA a été validé.
+                        </p>
                         <p class="text-gray-300">
-                            Votre compte a été validé. Redirection vers votre dashboard...
+                            💌 Un email contenant votre lien de paiement au tarif diplômé FEA vient de vous être envoyé. Une fois le paiement effectué, votre compte sera automatiquement activé.
                         </p>
                     </div>
                 </div>
@@ -267,7 +266,7 @@ const submitPayment = () => {
                 </div>
             </div>
 
-            <!-- Non diplômé : Paiement Stripe -->
+            <!-- Non diplômé : Paiement par abonnement mensuel -->
             <div v-else class="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-8">
                 <div class="text-center mb-6">
                     <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-full mb-4">
@@ -289,7 +288,7 @@ const submitPayment = () => {
                             <p class="text-gray-300 text-sm">Annulable à tout moment</p>
                         </div>
                         <div class="text-right">
-                            <div class="text-3xl font-bold text-white">20€</div>
+                            <div class="text-3xl font-bold text-white">30€</div>
                             <div class="text-sm text-gray-300">HTVA/mois</div>
                         </div>
                     </div>
@@ -335,7 +334,7 @@ const submitPayment = () => {
                         </svg>
                         <div class="text-sm text-green-300">
                             <p class="font-medium">Paiement 100% sécurisé</p>
-                            <p>Vos données bancaires sont protégées par Fungies.io, plateforme de paiement sécurisée</p>
+                            <p>Vos données bancaires sont protégées par notre partenaire de paiement sécurisé Lemon Squeezy.</p>
                         </div>
                     </div>
                 </div>
@@ -354,7 +353,7 @@ const submitPayment = () => {
                         :disabled="paymentForm.processing"
                         class="flex-1 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg transition transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     >
-                        <span v-if="!paymentForm.processing">Continuer vers le paiement (20€ HTVA/mois)</span>
+                        <span v-if="!paymentForm.processing">Continuer vers le paiement (30€ HTVA/mois)</span>
                         <span v-else class="flex items-center justify-center">
                             <svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

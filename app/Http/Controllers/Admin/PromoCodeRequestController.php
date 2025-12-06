@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Coach;
 use App\Models\PromoCodeBatch;
 use App\Models\PromoCodeRequest;
+use App\Services\LemonSqueezyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -94,25 +97,60 @@ class PromoCodeRequestController extends Controller
         $promoCodeRequest->admin_notes = $request->admin_notes;
         $promoCodeRequest->save();
 
-        // Activer directement le compte de l'utilisateur
         $user = $promoCodeRequest->user;
-        if ($user && !$user->onboarding_completed) {
+
+        if ($user && ! $user->onboarding_completed) {
             $user->fea_promo_code = $promoCode;
-            $user->subscription_status = 'active_promo';
-            $user->onboarding_completed = true;
-            $user->trial_ends_at = now()->addMonth();
             $user->save();
 
-            // Créer le profil Coach si nécessaire
-            if (!$user->coach_id) {
-                $this->createCoachProfile($user);
+            try {
+                $service = new LemonSqueezyService();
+
+                $checkoutSession = $service->createCheckoutSession([
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                    'name' => trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: $user->name,
+                    'vat_number' => $user->vat_number,
+                ], [
+                    'is_fea_graduate' => true,
+                    'onboarding' => true,
+                    'source' => 'onboarding_promo_request_approved',
+                    'promo_request_id' => $promoCodeRequest->id,
+                ], (int) config('lemonsqueezy.variant_fea'));
+
+                $checkoutUrl = $checkoutSession['data']['attributes']['url'] ?? null;
+
+                if (! $checkoutUrl) {
+                    Log::error('Lemon Squeezy checkout session missing URL for approved promo request', [
+                        'user_id' => $user->id,
+                        'promo_request_id' => $promoCodeRequest->id,
+                        'response' => $checkoutSession,
+                    ]);
+                } else {
+                    // Envoyer un email avec le lien de paiement
+                    Mail::raw(
+                        "Bonjour {$user->first_name},\n\n" .
+                        "Votre demande de validation FEA vient d'être approuvée. Pour finaliser votre inscription à Ignite Coach au tarif diplômé (20€ HTVA / mois), veuillez effectuer votre paiement via le lien suivant :\n\n" .
+                        $checkoutUrl . "\n\n" .
+                        "Une fois le paiement effectué, votre compte sera automatiquement activé et vous pourrez configurer votre site de coach.\n\n" .
+                        "À très vite,\nL'équipe Ignite Coach",
+                        function ($message) use ($user) {
+                            $message->to($user->email, $user->first_name . ' ' . $user->last_name)
+                                ->subject('Votre lien de paiement Ignite Coach (validation FEA approuvée)');
+                        }
+                    );
+                }
+
+            } catch (\Exception $e) {
+                Log::error('Failed to create Lemon Squeezy checkout for approved promo request', [
+                    'user_id' => $user->id,
+                    'promo_request_id' => $promoCodeRequest->id,
+                    'error' => $e->getMessage(),
+                ]);
             }
         }
 
-        // L'utilisateur sera redirigé vers le setup wizard à sa prochaine connexion
-        // TODO: Envoyer un email à l'utilisateur pour lui dire que son compte est activé
-
-        return redirect()->back()->with('success', 'Demande approuvée et compte activé ! Code : ' . $promoCode);
+        return redirect()->back()->with('success', 'Demande approuvée. Un email avec le lien de paiement FEA a été envoyé au coach. Code : ' . $promoCode);
     }
 
     /**

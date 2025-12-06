@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Coach;
 use App\Models\PromoCodeRequest;
 use App\Models\User;
-use App\Services\FungiesService;
+use App\Services\LemonSqueezyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -151,59 +152,101 @@ class OnboardingController extends Controller
         ]);
 
         $user = Auth::user();
-        
-        // Ici, vous pourrez ajouter la logique de validation du code promo
+
+        // Ici, vous pourrez ajouter la logique de validation réelle du code promo
         // Pour l'instant, on accepte tous les codes commençant par "FEA-"
-        if (str_starts_with($request->promo_code, 'FEA-')) {
-            $user->fea_promo_code = $request->promo_code;
-            $user->subscription_status = 'active_promo';
-            $user->onboarding_completed = true;
-            $user->trial_ends_at = now()->addMonth();
-            $user->save();
-
-            // Créer le profil Coach
-            $this->createCoachProfile($user);
-
-            return redirect()->route('setup.index')->with('success', 'Bienvenue ! Vous bénéficiez de 1 mois offert. Configurons maintenant votre site !');
+        if (! str_starts_with($request->promo_code, 'FEA-')) {
+            return back()->withErrors(['promo_code' => 'Code promo invalide. Veuillez vérifier votre code ou contacter FEA.']);
         }
 
-        return back()->withErrors(['promo_code' => 'Code promo invalide. Veuillez vérifier votre code ou contacter FEA.']);
+        // Enregistrer le code saisi
+        $user->fea_promo_code = $request->promo_code;
+        $user->save();
+
+        // Créer une session de checkout Lemon Squeezy pour le tarif diplômé FEA (20€/mois)
+        try {
+            $service = new LemonSqueezyService();
+
+            $checkoutSession = $service->createCheckoutSession([
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'name' => trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: $user->name,
+                'vat_number' => $user->vat_number,
+            ], [
+                'is_fea_graduate' => true,
+                'onboarding' => true,
+                'source' => 'onboarding_promo_code',
+            ], (int) config('lemonsqueezy.variant_fea'));
+
+            $checkoutUrl = $checkoutSession['data']['attributes']['url'] ?? null;
+
+            if (! $checkoutUrl) {
+                Log::error('Lemon Squeezy checkout session missing URL for FEA promo code', [
+                    'user_id' => $user->id,
+                    'response' => $checkoutSession,
+                ]);
+
+                return back()->withErrors(['promo_code' => 'Une erreur est survenue lors de la création du lien de paiement. Veuillez réessayer plus tard.']);
+            }
+
+            // Envoyer un email avec le lien de paiement
+            Mail::raw(
+                "Bonjour {$user->first_name},\n\n" .
+                "Votre statut FEA a été reconnu. Pour finaliser votre inscription à Ignite Coach au tarif diplômé (20€ HTVA / mois), veuillez effectuer votre paiement via le lien suivant :\n\n" .
+                $checkoutUrl . "\n\n" .
+                "Une fois le paiement effectué, votre compte sera automatiquement activé et vous pourrez configurer votre site de coach.\n\n" .
+                "À très vite,\nL'équipe Ignite Coach",
+                function ($message) use ($user) {
+                    $message->to($user->email, $user->first_name . ' ' . $user->last_name)
+                        ->subject('Votre lien de paiement Ignite Coach (tarif diplômé FEA)');
+                }
+            );
+
+            return back()->with('success', 'Votre code a été accepté. Un email contenant votre lien de paiement au tarif diplômé FEA vient de vous être envoyé.');
+
+        } catch (\Exception $e) {
+            Log::error('Failed to create Lemon Squeezy checkout for FEA promo code', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->withErrors(['promo_code' => 'Une erreur est survenue lors de la création du lien de paiement. Veuillez réessayer plus tard.']);
+        }
     }
 
     /**
-     * Créer une session de checkout Fungies pour le paiement
+     * Créer une session de checkout Lemon Squeezy pour le paiement
      */
     public function processPayment(Request $request)
     {
         $user = Auth::user();
 
         try {
-            $fungiesService = new FungiesService();
+            $service = new LemonSqueezyService();
 
-            // Créer une session de checkout Fungies
-            $checkoutSession = $fungiesService->createCheckoutSession([
+            // Créer une session de checkout Lemon Squeezy pour les non diplômés FEA (30€/mois)
+            $checkoutSession = $service->createCheckoutSession([
                 'user_id' => $user->id,
                 'email' => $user->email,
-                'name' => $user->first_name . ' ' . $user->last_name,
+                'name' => trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: $user->name,
+                'vat_number' => $user->vat_number,
             ], [
                 'is_fea_graduate' => $user->is_fea_graduate,
                 'onboarding' => true,
-            ]);
+                'source' => 'onboarding_standard',
+            ], (int) config('lemonsqueezy.variant_non_fea'));
 
-            // Rediriger vers la page de checkout Fungies
-            if (isset($checkoutSession['checkoutUrl'])) {
-                return redirect($checkoutSession['checkoutUrl']);
+            $checkoutUrl = $checkoutSession['data']['attributes']['url'] ?? null;
+
+            if ($checkoutUrl) {
+                return redirect($checkoutUrl);
             }
 
-            if (isset($checkoutSession['url'])) {
-                return redirect($checkoutSession['url']);
-            }
-
-            Log::error('Fungies checkout session missing URL', ['response' => $checkoutSession]);
+            Log::error('Lemon Squeezy checkout session missing URL', ['response' => $checkoutSession]);
             return back()->withErrors(['payment' => 'Erreur lors de la création de la session de paiement.']);
 
         } catch (\Exception $e) {
-            Log::error('Failed to create Fungies checkout session in onboarding', [
+            Log::error('Failed to create Lemon Squeezy checkout session in onboarding', [
                 'user_id' => $user->id,
                 'error' => $e->getMessage(),
             ]);

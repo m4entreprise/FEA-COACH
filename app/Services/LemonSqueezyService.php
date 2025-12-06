@@ -40,8 +40,6 @@ class LemonSqueezyService
                 'data' => [
                     'type' => 'checkouts',
                     'attributes' => [
-                        'store_id' => (int) $this->storeId,
-                        'variant_id' => $variantId,
                         'checkout_data' => [
                             'email' => $userData['email'] ?? null,
                             'name' => $userData['name'] ?? null,
@@ -49,6 +47,20 @@ class LemonSqueezyService
                             'custom' => array_merge([
                                 'user_id' => $userData['user_id'] ?? null,
                             ], $customData),
+                        ],
+                    ],
+                    'relationships' => [
+                        'store' => [
+                            'data' => [
+                                'type' => 'stores',
+                                'id' => (string) $this->storeId,
+                            ],
+                        ],
+                        'variant' => [
+                            'data' => [
+                                'type' => 'variants',
+                                'id' => (string) $variantId,
+                            ],
                         ],
                     ],
                 ],

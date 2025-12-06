@@ -64,9 +64,14 @@ class LemonSqueezyService
                     'attributes' => [
                         'checkout_data' => $checkoutData,
                         'checkout_options' => [
-                            'disable_variant_selection' => true,
+                            'embed' => false,
+                            'media' => true,
+                            'logo' => true,
+                            'desc' => true,
+                            'discount' => true,
                         ],
                         'product_options' => [
+                            'enabled_variants' => [$variantId],
                             'redirect_url' => route('onboarding.step3'),
                         ],
                     ],

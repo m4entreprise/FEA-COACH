@@ -69,6 +69,7 @@ class LemonSqueezyService
                             'logo' => true,
                             'desc' => true,
                             'discount' => true,
+                            'locale' => 'fr',
                         ],
                         'product_options' => [
                             'enabled_variants' => [$variantId],

@@ -12,12 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('fungies_customer_id')->nullable()->after('subscription_status');
-            $table->string('fungies_subscription_id')->nullable()->after('fungies_customer_id');
-            $table->timestamp('trial_ends_at')->nullable()->after('fungies_subscription_id');
-            $table->timestamp('subscription_current_period_end')->nullable()->after('trial_ends_at');
-            $table->timestamp('subscription_current_period_start')->nullable()->after('subscription_current_period_end');
-            $table->boolean('cancel_at_period_end')->default(false)->after('subscription_current_period_start');
+            if (!Schema::hasColumn('users', 'fungies_customer_id')) {
+                $table->string('fungies_customer_id')->nullable()->after('subscription_status');
+            }
+            if (!Schema::hasColumn('users', 'fungies_subscription_id')) {
+                $table->string('fungies_subscription_id')->nullable()->after('fungies_customer_id');
+            }
+            if (!Schema::hasColumn('users', 'trial_ends_at')) {
+                $table->timestamp('trial_ends_at')->nullable()->after('fungies_subscription_id');
+            }
+            if (!Schema::hasColumn('users', 'subscription_current_period_end')) {
+                $table->timestamp('subscription_current_period_end')->nullable()->after('trial_ends_at');
+            }
+            if (!Schema::hasColumn('users', 'subscription_current_period_start')) {
+                $table->timestamp('subscription_current_period_start')->nullable()->after('subscription_current_period_end');
+            }
+            if (!Schema::hasColumn('users', 'cancel_at_period_end')) {
+                $table->boolean('cancel_at_period_end')->default(false)->after('subscription_current_period_start');
+            }
         });
     }
 

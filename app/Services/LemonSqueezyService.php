@@ -36,6 +36,12 @@ class LemonSqueezyService
                     : config('lemonsqueezy.variant_non_fea'));
             }
 
+            // Lemon Squeezy requires all custom_data values to be strings
+            $customDataStrings = [];
+            foreach (array_merge(['user_id' => $userData['user_id'] ?? null], $customData) as $key => $value) {
+                $customDataStrings[$key] = (string) $value;
+            }
+
             $payload = [
                 'data' => [
                     'type' => 'checkouts',
@@ -44,9 +50,7 @@ class LemonSqueezyService
                             'email' => $userData['email'] ?? null,
                             'name' => $userData['name'] ?? null,
                             'tax_number' => $userData['vat_number'] ?? null,
-                            'custom' => array_merge([
-                                'user_id' => $userData['user_id'] ?? null,
-                            ], $customData),
+                            'custom' => $customDataStrings,
                         ],
                     ],
                     'relationships' => [

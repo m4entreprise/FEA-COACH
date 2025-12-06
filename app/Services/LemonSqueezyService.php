@@ -47,16 +47,22 @@ class LemonSqueezyService
                 }
             }
 
+            $checkoutData = [
+                'email' => $userData['email'] ?? null,
+                'name' => $userData['name'] ?? null,
+                'custom' => $customDataStrings,
+            ];
+
+            // Only include tax_number if provided (Lemon Squeezy doesn't accept null)
+            if (!empty($userData['vat_number'])) {
+                $checkoutData['tax_number'] = $userData['vat_number'];
+            }
+
             $payload = [
                 'data' => [
                     'type' => 'checkouts',
                     'attributes' => [
-                        'checkout_data' => [
-                            'email' => $userData['email'] ?? null,
-                            'name' => $userData['name'] ?? null,
-                            'tax_number' => $userData['vat_number'] ?? null,
-                            'custom' => $customDataStrings,
-                        ],
+                        'checkout_data' => $checkoutData,
                     ],
                     'relationships' => [
                         'store' => [

@@ -39,8 +39,19 @@ const submitPromoRequest = () => {
 };
 
 const submitPayment = () => {
-    // Rediriger vers le checkout Fungies
-    paymentForm.post(route('onboarding.process-payment'));
+    paymentForm.post(route('onboarding.process-payment'), {
+        onSuccess: (response) => {
+            // Redirect to Lemon Squeezy checkout URL
+            if (response.props?.checkout_url) {
+                window.location.href = response.props.checkout_url;
+            } else if (response?.checkout_url) {
+                window.location.href = response.checkout_url;
+            }
+        },
+        onError: (errors) => {
+            console.error('Payment error:', errors);
+        }
+    });
 };
 </script>
 

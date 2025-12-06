@@ -239,7 +239,8 @@ class OnboardingController extends Controller
             $checkoutUrl = $checkoutSession['data']['attributes']['url'] ?? null;
 
             if ($checkoutUrl) {
-                return redirect($checkoutUrl);
+                // Return URL for frontend redirect instead of server redirect (Inertia compatibility)
+                return response()->json(['checkout_url' => $checkoutUrl]);
             }
 
             Log::error('Lemon Squeezy checkout session missing URL', ['response' => $checkoutSession]);

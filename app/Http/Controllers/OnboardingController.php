@@ -231,7 +231,6 @@ class OnboardingController extends Controller
                 'name' => trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: $user->name,
                 'vat_number' => $user->vat_number,
             ], [
-                'is_fea_graduate' => $user->is_fea_graduate,
                 'onboarding' => true,
                 'source' => 'onboarding_standard',
             ], (int) config('lemonsqueezy.variant_non_fea'));

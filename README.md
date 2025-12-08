@@ -1,10 +1,10 @@
-# Ignite Coach
+# UNICOACH
 
 Plateforme SaaS multi-tenant pour coachs sportifs permettant à chaque coach d'avoir son propre site personnalisable via sous-domaine.
 
 ## 🎯 Concept
 
-Ignite Coach est une solution (anciennement FEA-COACH) permettant aux coachs sportifs de créer rapidement leur site web personnalisé accessible via un sous-domaine unique (ex: `coach-name.kineseducation.academy`). Chaque coach peut gérer son contenu, ses couleurs, ses images et ses tarifs via un dashboard simple et intuitif.
+UNICOACH est une solution (anciennement FEA-COACH) permettant aux coachs sportifs de créer rapidement leur site web personnalisé accessible via un sous-domaine unique (ex: `coach-name.kineseducation.academy`). Chaque coach peut gérer son contenu, ses couleurs, ses images et ses tarifs via un dashboard simple et intuitif.
 
 ## 🏗️ Architecture
 

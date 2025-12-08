@@ -6,7 +6,10 @@
       "Bash(php -r:*)",
       "Bash(php artisan:*)",
       "WebFetch(domain:docs.fungies.io)",
-      "Bash(composer require lemonqueezy/laravel)"
+      "Bash(composer require lemonqueezy/laravel)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

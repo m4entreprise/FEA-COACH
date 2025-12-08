@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Ignite Coach - Votre site vitrine professionnel de coaching" />
+    <Head title="UNICOACH - Votre site vitrine professionnel de coaching" />
     
     <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <!-- Navigation -->
@@ -16,7 +16,7 @@ defineProps({
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-2">
                         <div class="text-2xl font-bold text-white">
-                            Ignite <span class="text-purple-400">Coach</span>
+                            UNI<span class="text-purple-400">COACH</span>
                         </div>
                     </div>
                     
@@ -184,7 +184,7 @@ defineProps({
                 <div class="grid lg:grid-cols-2 gap-12 items-center">
                     <div>
                         <div class="inline-block mb-4 px-4 py-2 bg-purple-500/20 border border-purple-400/30 rounded-full">
-                            <span class="text-purple-300 font-medium">Pourquoi Ignite Coach ?</span>
+                            <span class="text-purple-300 font-medium">Pourquoi UNICOACH ?</span>
                         </div>
                         <h2 class="text-4xl font-bold text-white mb-6">
                             Conçu spécifiquement pour les diplômés FEA
@@ -486,7 +486,7 @@ defineProps({
                 </div>
                 
                 <div class="pt-8 border-t border-white/10 text-center text-gray-400">
-                    <p>&copy; 2026 Ignite Coach - Développé par M4 Entreprise en partenariat avec Fitness Education Academy</p>
+                    <p>&copy; 2026 UNICOACH - Développé par M4 Entreprise en partenariat avec Fitness Education Academy</p>
                 </div>
             </div>
         </footer>

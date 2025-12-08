@@ -78,7 +78,7 @@
                     @if($coach->hasMedia('logo'))
                         <img src="{{ $coach->getFirstMediaUrl('logo') }}" alt="{{ $coach->name }}" class="h-10 w-auto">
                     @else
-                        <span class="text-xl font-bold text-primary">{{ $coach->name }}</span>
+                        <img src="{{ asset('images/unicoach-logo.svg') }}" alt="UNICOACH" class="h-10 w-auto">
                     @endif
                 </div>
 
@@ -149,7 +149,7 @@
                     @if($coach->hasMedia('logo'))
                         <img src="{{ $coach->getFirstMediaUrl('logo') }}" alt="{{ $coach->name }}" class="h-12 w-auto mb-4 brightness-0 invert">
                     @else
-                        <h3 class="text-2xl font-bold text-white mb-4">{{ $coach->name }}</h3>
+                        <img src="{{ asset('images/unicoach-logo.svg') }}" alt="UNICOACH" class="h-12 w-auto mb-4 brightness-0 invert">
                     @endif
                     <p class="text-gray-400 leading-relaxed">
                         {{ $coach->about_text ? Str::limit(strip_tags($coach->about_text), 200) : 'Coach sportif professionnel, spécialisé dans la transformation physique et le bien-être. Un accompagnement personnalisé pour vous aider à atteindre vos objectifs.' }}
@@ -285,7 +285,7 @@
                     
                     <!-- Branding -->
                     <p class="text-xs text-gray-500">
-                        Propulsé par <a href="https://ignitecoach.fr" target="_blank" class="text-primary hover:text-white transition-colors font-medium">Ignite Coach</a>
+                        Propulsé par <a href="https://unicoach.app" target="_blank" class="text-primary hover:text-white transition-colors font-medium">UNICOACH</a>
                     </p>
                 </div>
             </div>

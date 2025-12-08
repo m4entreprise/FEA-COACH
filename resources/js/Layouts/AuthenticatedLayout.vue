@@ -31,12 +31,12 @@ const page = usePage();
                                         alt="Logo" 
                                         class="h-10 w-auto object-contain"
                                     />
-                                    <!-- Ignite Coach text if no logo -->
-                                    <span 
+                                    <!-- UNICOACH text if no logo -->
+                                    <span
                                         v-else
                                         class="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
                                     >
-                                        Ignite Coach
+                                        UNICOACH
                                     </span>
                                 </Link>
                             </div>

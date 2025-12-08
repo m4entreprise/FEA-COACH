@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Conditions Générales de Vente et d'Utilisation - Ignite Coach" />
+    <Head title="Conditions Générales de Vente et d'Utilisation - UNICOACH" />
     
     <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <!-- Navigation -->
@@ -12,7 +12,7 @@ import { Head, Link } from '@inertiajs/vue3';
                 <div class="flex justify-between items-center h-16">
                     <Link href="/" class="flex items-center space-x-2">
                         <div class="text-2xl font-bold text-white">
-                            Ignite <span class="text-purple-400">Coach</span>
+                            UNI<span class="text-purple-400">COACH</span>
                         </div>
                     </Link>
                     
@@ -35,7 +35,7 @@ import { Head, Link } from '@inertiajs/vue3';
                         Conditions Générales de Vente et d'Utilisation
                     </h1>
                     <p class="text-purple-300 text-lg">
-                        Ignite Coach
+                        UNICOACH
                     </p>
                     <p class="text-gray-400 mt-2">
                         Dernière mise à jour : 27 novembre 2025
@@ -49,7 +49,7 @@ import { Head, Link } from '@inertiajs/vue3';
                         <section class="mb-8">
                             <h2 class="text-2xl font-bold text-purple-300 mb-4">PRÉAMBULE</h2>
                             <div class="text-gray-300 space-y-3">
-                                <p>Les CGVU régissent l'accès et l'utilisation du logiciel SaaS Ignite Coach (le « Service »), édité par M4 Entreprise en partenariat avec Fitness Education Academy.</p>
+                                <p>Les CGVU régissent l'accès et l'utilisation du logiciel SaaS UNICOACH (le « Service »), édité par M4 Entreprise en partenariat avec Fitness Education Academy.</p>
                                 <p>Le Service permet aux coachs sportifs de créer un site vitrine, gérer leur clientèle et centraliser leur activité.</p>
                                 <p>Les paiements et la facturation sont assurés par Paddle.com (Merchant of Record).</p>
                             </div>
@@ -64,7 +64,7 @@ import { Head, Link } from '@inertiajs/vue3';
                                 <p><strong>Éditeur :</strong> M4 Entreprise</p>
                                 <p><strong>Numéro de TVA / BCE :</strong> BE1030.459.209</p>
                                 <p><strong>Siège social :</strong> Rue de la Digue 92, 4683 Vivegnis, Belgique</p>
-                                <p><strong>Email de contact :</strong> <a href="mailto:support@ignitecoach.app" class="text-purple-400 hover:text-purple-300">support@ignitecoach.app</a></p>
+                                <p><strong>Email de contact :</strong> <a href="mailto:support@unicoach.app" class="text-purple-400 hover:text-purple-300">support@unicoach.app</a></p>
                                 <p class="mt-4">M4 Entreprise agit comme éditeur de logiciel et n'est ni une société de portage salarial, ni une coopérative d'emploi.</p>
                             </div>
                         </section>
@@ -81,7 +81,7 @@ import { Head, Link } from '@inertiajs/vue3';
                                 <p><strong>Client Final :</strong> client du Coach.</p>
                                 <p><strong>Paddle :</strong> prestataire gérant paiements et facturation.</p>
                                 <p><strong>Contenu :</strong> données importées par l'Utilisateur.</p>
-                                <p><strong>Service :</strong> l'ensemble des fonctionnalités Ignite Coach (hébergement, CMS, CRM, outils de gestion).</p>
+                                <p><strong>Service :</strong> l'ensemble des fonctionnalités UNICOACH (hébergement, CMS, CRM, outils de gestion).</p>
                             </div>
                         </section>
 
@@ -136,7 +136,7 @@ import { Head, Link } from '@inertiajs/vue3';
 
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">5.2. Tarifs</h3>
                             <div class="text-gray-300 space-y-2">
-                                <p>Les tarifs affichés sur le site Ignite Coach prévalent.</p>
+                                <p>Les tarifs affichés sur le site UNICOACH prévalent.</p>
                                 <p>Tarifs exprimés en euros, hors taxes sauf indication contraire.</p>
                             </div>
 
@@ -213,7 +213,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">7.1. Prestataire</h3>
                             <div class="text-gray-300 space-y-2">
-                                <p>M4 Entreprise détient tous les droits sur le logiciel, l'architecture, les interfaces et la marque Ignite Coach.</p>
+                                <p>M4 Entreprise détient tous les droits sur le logiciel, l'architecture, les interfaces et la marque UNICOACH.</p>
                                 <p>Licence d'usage non exclusive et non transférable.</p>
                             </div>
 
@@ -360,7 +360,7 @@ import { Head, Link } from '@inertiajs/vue3';
         <!-- Footer -->
         <footer class="py-8 px-4 border-t border-white/10">
             <div class="max-w-7xl mx-auto text-center text-gray-400">
-                <p>&copy; 2026 Ignite Coach - Développé par M4 Entreprise en partenariat avec Fitness Education Academy</p>
+                <p>&copy; 2026 UNICOACH - Développé par M4 Entreprise en partenariat avec Fitness Education Academy</p>
             </div>
         </footer>
     </div>

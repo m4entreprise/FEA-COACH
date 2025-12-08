@@ -192,13 +192,13 @@ class OnboardingController extends Controller
             // Envoyer un email avec le lien de paiement
             Mail::raw(
                 "Bonjour {$user->first_name},\n\n" .
-                "Votre statut FEA a été reconnu. Pour finaliser votre inscription à Ignite Coach au tarif diplômé (20€ HTVA / mois), veuillez effectuer votre paiement via le lien suivant :\n\n" .
+                "Votre statut FEA a été reconnu. Pour finaliser votre inscription à UNICOACH au tarif diplômé (20€ HTVA / mois), veuillez effectuer votre paiement via le lien suivant :\n\n" .
                 $checkoutUrl . "\n\n" .
                 "Une fois le paiement effectué, votre compte sera automatiquement activé et vous pourrez configurer votre site de coach.\n\n" .
-                "À très vite,\nL'équipe Ignite Coach",
+                "À très vite,\nL'équipe UNICOACH",
                 function ($message) use ($user) {
                     $message->to($user->email, $user->first_name . ' ' . $user->last_name)
-                        ->subject('Votre lien de paiement Ignite Coach (tarif diplômé FEA)');
+                        ->subject('Votre lien de paiement UNICOACH (tarif diplômé FEA)');
                 }
             );
 

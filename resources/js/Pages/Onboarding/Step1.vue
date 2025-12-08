@@ -133,7 +133,7 @@ const submit = () => {
                                         Non, je débute
                                     </h3>
                                     <p class="text-gray-300">
-                                        Accédez à Ignite Coach et créez votre site professionnel de coaching
+                                        Accédez à UNICOACH et créez votre site professionnel de coaching
                                     </p>
                                 </div>
                             </div>

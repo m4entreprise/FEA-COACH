@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Politique de Confidentialité - Ignite Coach" />
+    <Head title="Politique de Confidentialité - UNICOACH" />
     
     <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <!-- Navigation -->
@@ -12,7 +12,7 @@ import { Head, Link } from '@inertiajs/vue3';
                 <div class="flex justify-between items-center h-16">
                     <Link href="/" class="flex items-center space-x-2">
                         <div class="text-2xl font-bold text-white">
-                            Ignite <span class="text-purple-400">Coach</span>
+                            UNI<span class="text-purple-400">COACH</span>
                         </div>
                     </Link>
                     
@@ -35,7 +35,7 @@ import { Head, Link } from '@inertiajs/vue3';
                         Politique de Confidentialité
                     </h1>
                     <p class="text-purple-300 text-lg">
-                        Ignite Coach
+                        UNICOACH
                     </p>
                     <p class="text-gray-400 mt-2">
                         Dernière mise à jour : 27 novembre 2025
@@ -56,7 +56,7 @@ import { Head, Link } from '@inertiajs/vue3';
                                     <p><strong>M4 Entreprise</strong></p>
                                     <p>TVA / BCE : BE1030.459.209</p>
                                     <p>Siège social : Rue de la Digue 92, 4683 Vivegnis, Belgique</p>
-                                    <p>Email : <a href="mailto:support@ignitecoach.app" class="text-purple-400 hover:text-purple-300">support@ignitecoach.app</a></p>
+                                    <p>Email : <a href="mailto:support@unicoach.app" class="text-purple-400 hover:text-purple-300">support@unicoach.app</a></p>
                                 </div>
 
                                 <div>
@@ -102,7 +102,7 @@ import { Head, Link } from '@inertiajs/vue3';
 
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">2.3. Données collectées concernant les Clients Finaux</h3>
                             <div class="text-gray-300 space-y-2">
-                                <p>Données encodées par le Coach dans le CRM Ignite Coach :</p>
+                                <p>Données encodées par le Coach dans le CRM UNICOACH :</p>
                                 <ul class="list-disc list-inside space-y-2 ml-4">
                                     <li>identité, coordonnées, historique de contact, notes de suivi, informations sportives ou physiques, objectifs.</li>
                                 </ul>
@@ -119,7 +119,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">3.1. Pour l'Utilisateur</h3>
                             <div class="text-gray-300">
                                 <ul class="list-disc list-inside space-y-2 ml-4">
-                                    <li>Fournir le Service SaaS Ignite Coach.</li>
+                                    <li>Fournir le Service SaaS UNICOACH.</li>
                                     <li>Héberger et gérer le Site Coach.</li>
                                     <li>Gérer le compte, l'authentification et la sécurité.</li>
                                     <li>Assurer l'assistance technique et le support.</li>
@@ -202,7 +202,7 @@ import { Head, Link } from '@inertiajs/vue3';
                                     <li>opposition,</li>
                                     <li>portabilité.</li>
                                 </ul>
-                                <p class="mt-3">Exercice des droits : <a href="mailto:support@ignitecoach.app" class="text-purple-400 hover:text-purple-300">support@ignitecoach.app</a></p>
+                                <p class="mt-3">Exercice des droits : <a href="mailto:support@unicoach.app" class="text-purple-400 hover:text-purple-300">support@unicoach.app</a></p>
                                 <p>(M4 Entreprise peut demander une preuve d'identité).</p>
                                 <p>Pour les données de paiement : s'adresser à Paddle.</p>
                             </div>
@@ -239,7 +239,7 @@ import { Head, Link } from '@inertiajs/vue3';
                         <section class="mb-8">
                             <h2 class="text-2xl font-bold text-purple-300 mb-4">9. COOKIES ET TRACEURS</h2>
                             <div class="text-gray-300 space-y-3">
-                                <p>Ignite Coach utilise des cookies pour :</p>
+                                <p>UNICOACH utilise des cookies pour :</p>
                                 <ul class="list-disc list-inside space-y-2 ml-4">
                                     <li>l'authentification,</li>
                                     <li>la gestion de session,</li>
@@ -297,7 +297,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             <h2 class="text-2xl font-bold text-purple-300 mb-4">13. CONTACT RGPD</h2>
                             <div class="text-gray-300 space-y-2">
                                 <p>Pour toute question :</p>
-                                <p><a href="mailto:support@ignitecoach.app" class="text-purple-400 hover:text-purple-300">support@ignitecoach.app</a></p>
+                                <p><a href="mailto:support@unicoach.app" class="text-purple-400 hover:text-purple-300">support@unicoach.app</a></p>
                                 <p class="mt-4">Pour les plaintes :</p>
                                 <p>Autorité de protection des données (Belgique).</p>
                             </div>
@@ -310,7 +310,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             <div class="text-center mb-8">
                                 <h1 class="text-3xl md:text-4xl font-bold text-purple-200 mb-2">ANNEXE</h1>
                                 <h2 class="text-xl md:text-2xl font-semibold text-white mb-2">Accord de Sous-Traitance RGPD (DPA)</h2>
-                                <p class="text-purple-300">Ignite Coach – M4 Entreprise</p>
+                                <p class="text-purple-300">UNICOACH – M4 Entreprise</p>
                                 <p class="text-gray-400 mt-2">Dernière mise à jour : 27 novembre 2025</p>
                             </div>
 
@@ -318,7 +318,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             <section class="mb-8">
                                 <h3 class="text-xl font-bold text-purple-300 mb-4">1. OBJET DE L'ANNEXE</h3>
                                 <div class="text-gray-300 space-y-2">
-                                    <p>La présente Annexe (« DPA ») définit les conditions dans lesquelles M4 Entreprise traite, en tant que Sous-traitant, les données personnelles fournies par l'Utilisateur (« le Coach »), agissant en tant que Responsable du traitement, dans le cadre de l'utilisation du Service Ignite Coach.</p>
+                                    <p>La présente Annexe (« DPA ») définit les conditions dans lesquelles M4 Entreprise traite, en tant que Sous-traitant, les données personnelles fournies par l'Utilisateur (« le Coach »), agissant en tant que Responsable du traitement, dans le cadre de l'utilisation du Service UNICOACH.</p>
                                     <p>Elle complète les CGVU et en fait partie intégrante.</p>
                                 </div>
                             </section>
@@ -369,7 +369,7 @@ import { Head, Link } from '@inertiajs/vue3';
                                         <li>données contractuelles (séances, suivi relationnel),</li>
                                         <li>données techniques (logs, IP).</li>
                                     </ul>
-                                    <p class="mt-3">Aucune donnée médicale au sens strict ne doit être collectée via Ignite Coach (diagnostic, pathologie).</p>
+                                    <p class="mt-3">Aucune donnée médicale au sens strict ne doit être collectée via UNICOACH (diagnostic, pathologie).</p>
                                 </div>
 
                                 <h4 class="text-lg font-semibold text-purple-200 mb-3 mt-6">3.3. Personnes concernées</h4>
@@ -585,7 +585,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             <section class="mb-8">
                                 <h3 class="text-xl font-bold text-purple-300 mb-4">16. CONTACT RGPD</h3>
                                 <div class="text-gray-300 space-y-2">
-                                    <p>Email dédié : <strong><a href="mailto:support@ignitecoach.app" class="text-purple-400 hover:text-purple-300">support@ignitecoach.app</a></strong></p>
+                                    <p>Email dédié : <strong><a href="mailto:support@unicoach.app" class="text-purple-400 hover:text-purple-300">support@unicoach.app</a></strong></p>
                                     <p>Autorité de contrôle : Autorité de Protection des Données (Belgique).</p>
                                 </div>
                             </section>
@@ -608,7 +608,7 @@ import { Head, Link } from '@inertiajs/vue3';
         <!-- Footer -->
         <footer class="py-8 px-4 border-t border-white/10">
             <div class="max-w-7xl mx-auto text-center text-gray-400">
-                <p>&copy; 2026 Ignite Coach - Développé par M4 Entreprise en partenariat avec Fitness Education Academy</p>
+                <p>&copy; 2026 UNICOACH - Développé par M4 Entreprise en partenariat avec Fitness Education Academy</p>
             </div>
         </footer>
     </div>

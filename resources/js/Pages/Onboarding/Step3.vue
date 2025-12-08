@@ -73,7 +73,7 @@ const submitPayment = async () => {
             <!-- Logo -->
             <div class="text-center mb-8">
                 <div class="text-4xl font-bold text-white mb-2">
-                    Ignite <span class="text-purple-400">Coach</span>
+                    UNI<span class="text-purple-400">COACH</span>
                 </div>
                 <p class="text-gray-400">Créons ensemble votre site professionnel</p>
             </div>

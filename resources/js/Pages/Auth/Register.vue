@@ -29,7 +29,7 @@ const submit = () => {
             <div class="text-center mb-8">
                 <Link href="/">
                     <div class="text-4xl font-bold text-white mb-2">
-                        Ignite <span class="text-purple-400">Coach</span>
+                        UNI<span class="text-purple-400">COACH</span>
                     </div>
                 </Link>
                 <p class="text-gray-400">Créez votre compte pour commencer</p>

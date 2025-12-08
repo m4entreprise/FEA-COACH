@@ -32,7 +32,7 @@ const steps = [
             <div class="max-w-5xl mx-auto mb-8 text-center">
                 <div class="inline-flex items-center space-x-2 mb-6">
                     <div class="text-4xl font-bold text-white">
-                        Ignite <span class="text-purple-400">Coach</span>
+                        UNI<span class="text-purple-400">COACH</span>
                     </div>
                     <span class="px-3 py-1 bg-purple-500/20 border border-purple-400/30 rounded-full text-purple-300 text-sm font-medium">
                         Configuration

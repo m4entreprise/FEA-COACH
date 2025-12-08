@@ -38,7 +38,7 @@ const submit = () => {
             <div class="text-center mb-8">
                 <Link :href="route('dashboard')" class="inline-block">
                     <div class="text-4xl font-bold text-white mb-2">
-                        Ignite <span class="text-purple-400">Coach</span>
+                        UNI<span class="text-purple-400">COACH</span>
                     </div>
                 </Link>
                 <p class="text-gray-400">Connectez-vous à votre espace</p>

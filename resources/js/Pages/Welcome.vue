@@ -426,7 +426,7 @@ defineProps({
                 <div class="grid md:grid-cols-4 gap-8 mb-8">
                     <div>
                         <div class="text-2xl font-bold text-white mb-4">
-                            Ignite <span class="text-purple-400">Coach</span>
+                            UNI<span class="text-purple-400">COACH</span>
                         </div>
                         <p class="text-gray-400">
                             Solution professionnelle de sites vitrine pour coachs sportifs diplômés de Fitness Education Academy.

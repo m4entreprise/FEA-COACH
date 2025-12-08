@@ -61,7 +61,7 @@ import { Head, Link } from '@inertiajs/vue3';
 
                                 <div>
                                     <p class="font-semibold text-purple-200 mb-2">Pour les données de paiement :</p>
-                                    <p><strong>Paddle.com Market Ltd</strong> agit comme Merchant of Record et responsable de traitement pour toutes les transactions.</p>
+                                    <p><strong>Lemon Squeezy LLC</strong> agit comme Merchant of Record et responsable de traitement pour toutes les transactions.</p>
                                 </div>
 
                                 <div>
@@ -91,13 +91,13 @@ import { Head, Link } from '@inertiajs/vue3';
                                 </ul>
                             </div>
 
-                            <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">2.2. Données collectées par Paddle</h3>
+                            <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">2.2. Données collectées par Lemon Squeezy</h3>
                             <div class="text-gray-300 space-y-2">
                                 <ul class="list-disc list-inside space-y-2 ml-4">
                                     <li>Données de paiement et facturation.</li>
                                     <li>TVA, adresse de facturation, moyen de paiement.</li>
                                 </ul>
-                                <p>Ces données sont traitées selon la politique de Paddle.</p>
+                                <p>Ces données sont traitées selon la politique de Lemon Squeezy.</p>
                             </div>
 
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">2.3. Données collectées concernant les Clients Finaux</h3>
@@ -146,7 +146,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             <div class="text-gray-300">
                                 <ul class="list-disc list-inside space-y-2 ml-4">
                                     <li><strong>Exécution du contrat</strong> : création du compte, utilisation du Service, hébergement du Site Coach.</li>
-                                    <li><strong>Obligations légales</strong> : facturation via Paddle, sécurité, conservation minimale.</li>
+                                    <li><strong>Obligations légales</strong> : facturation via Lemon Squeezy, sécurité, conservation minimale.</li>
                                     <li><strong>Intérêt légitime</strong> : amélioration du Service, prévention des fraudes, analyses techniques.</li>
                                     <li><strong>Consentement</strong> (si l'Utilisateur est consommateur ou pour certaines fonctionnalités facultatives).</li>
                                 </ul>
@@ -161,7 +161,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             <div class="text-gray-300 space-y-3">
                                 <p>Les données peuvent être transmises uniquement à :</p>
                                 <ul class="list-disc list-inside space-y-2 ml-4">
-                                    <li><strong>Paddle</strong> : paiements et factures.</li>
+                                    <li><strong>Lemon Squeezy</strong> : paiements et factures.</li>
                                     <li><strong>Hébergeur cloud</strong> localisé dans l'UE.</li>
                                     <li>Outils techniques (email transactionnel, CDN, monitoring), tous situés dans l'UE ou en pays reconnus adéquats.</li>
                                 </ul>
@@ -180,7 +180,7 @@ import { Head, Link } from '@inertiajs/vue3';
                                     <li>Données du Coach : conservées tant que le compte est actif, puis 90 jours maximum après résiliation (sauf obligation légale).</li>
                                     <li>Données des Clients Finaux : conservées tant que le Coach maintient son compte ou selon ses propres règles.</li>
                                     <li>Logs techniques : 12 mois maximum.</li>
-                                    <li>Données de facturation (Paddle) : durée légale comptable.</li>
+                                    <li>Données de facturation (Lemon Squeezy) : durée légale comptable.</li>
                                 </ul>
                             </div>
                         </section>
@@ -204,7 +204,7 @@ import { Head, Link } from '@inertiajs/vue3';
                                 </ul>
                                 <p class="mt-3">Exercice des droits : <a href="mailto:support@unicoach.app" class="text-purple-400 hover:text-purple-300">support@unicoach.app</a></p>
                                 <p>(M4 Entreprise peut demander une preuve d'identité).</p>
-                                <p>Pour les données de paiement : s'adresser à Paddle.</p>
+                                <p>Pour les données de paiement : s'adresser à Lemon Squeezy.</p>
                             </div>
 
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">7.2. Pour les Clients Finaux</h3>

@@ -51,7 +51,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             <div class="text-gray-300 space-y-3">
                                 <p>Les CGVU régissent l'accès et l'utilisation du logiciel SaaS UNICOACH (le « Service »), édité par M4 Entreprise en partenariat avec Fitness Education Academy.</p>
                                 <p>Le Service permet aux coachs sportifs de créer un site vitrine, gérer leur clientèle et centraliser leur activité.</p>
-                                <p>Les paiements et la facturation sont assurés par Paddle.com (Merchant of Record).</p>
+                                <p>Les paiements et la facturation sont assurés par Lemon Squeezy (Merchant of Record).</p>
                             </div>
                         </section>
 
@@ -79,7 +79,7 @@ import { Head, Link } from '@inertiajs/vue3';
                                 <p><strong>Utilisateur consommateur :</strong> personne n'agissant pas encore à des fins professionnelles (statut non déclaré ou en cours).</p>
                                 <p><strong>Site Coach :</strong> site web généré via le Service.</p>
                                 <p><strong>Client Final :</strong> client du Coach.</p>
-                                <p><strong>Paddle :</strong> prestataire gérant paiements et facturation.</p>
+                                <p><strong>Lemon Squeezy :</strong> prestataire gérant paiements et facturation.</p>
                                 <p><strong>Contenu :</strong> données importées par l'Utilisateur.</p>
                                 <p><strong>Service :</strong> l'ensemble des fonctionnalités UNICOACH (hébergement, CMS, CRM, outils de gestion).</p>
                             </div>
@@ -128,10 +128,10 @@ import { Head, Link } from '@inertiajs/vue3';
                         <section class="mb-8">
                             <h2 class="text-2xl font-bold text-purple-300 mb-4">ARTICLE 5 : CONDITIONS FINANCIÈRES (PADDLE)</h2>
                             
-                            <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">5.1. Rôle de Paddle</h3>
+                            <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">5.1. Rôle de Lemon Squeezy</h3>
                             <div class="text-gray-300 space-y-2">
-                                <p>Paddle gère le paiement, la facturation, les taxes et le support lié aux transactions.</p>
-                                <p>Le Coach contracte financièrement avec Paddle.</p>
+                                <p>Lemon Squeezy gère le paiement, la facturation, les taxes et le support lié aux transactions.</p>
+                                <p>Le Coach contracte financièrement avec Lemon Squeezy.</p>
                             </div>
 
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">5.2. Tarifs</h3>
@@ -143,7 +143,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">5.3. Renouvellement et résiliation</h3>
                             <div class="text-gray-300 space-y-2">
                                 <p>Abonnement mensuel ou annuel renouvelé tacitement.</p>
-                                <p>Résiliation possible à tout moment via Paddle, avec effet à la fin de la période en cours.</p>
+                                <p>Résiliation possible à tout moment via Lemon Squeezy, avec effet à la fin de la période en cours.</p>
                                 <p>Pas de remboursement prorata temporis.</p>
                             </div>
 
@@ -159,9 +159,9 @@ import { Head, Link } from '@inertiajs/vue3';
                                 <p>Le droit de rétractation expire si l'Utilisateur :</p>
                                 <ul class="list-disc list-inside space-y-2 ml-4">
                                     <li>demande l'accès immédiat au Service,</li>
-                                    <li>reconnaît renoncer à son droit lors de la commande Paddle.</li>
+                                    <li>reconnaît renoncer à son droit lors de la commande Lemon Squeezy.</li>
                                 </ul>
-                                <p class="mt-3">Les remboursements sont gérés exclusivement par Paddle.</p>
+                                <p class="mt-3">Les remboursements sont gérés exclusivement par Lemon Squeezy.</p>
                             </div>
                         </section>
 
@@ -236,7 +236,7 @@ import { Head, Link } from '@inertiajs/vue3';
                                     <li>pertes de chiffre d'affaires,</li>
                                     <li>pertes de clientèle,</li>
                                     <li>pertes de données,</li>
-                                    <li>pannes liées à des services tiers (Paddle, hébergeur, passerelles de paiement).</li>
+                                    <li>pannes liées à des services tiers (Lemon Squeezy, hébergeur, passerelles de paiement).</li>
                                 </ul>
                                 <p class="mt-3">Responsabilité maximale : montant payé au cours des trois derniers mois.</p>
                                 <p>Exceptions : faute lourde, dol, dommages corporels, dispositions protectrices applicables aux consommateurs.</p>
@@ -251,7 +251,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">9.1. Données de l'Utilisateur</h3>
                             <div class="text-gray-300 space-y-2">
-                                <p>Traitement par M4 Entreprise et Paddle pour l'exécution du contrat.</p>
+                                <p>Traitement par M4 Entreprise et Lemon Squeezy pour l'exécution du contrat.</p>
                                 <p>Conservation conforme à la Politique de Confidentialité.</p>
                             </div>
 
@@ -290,7 +290,7 @@ import { Head, Link } from '@inertiajs/vue3';
                             
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">11.1. Résiliation par le Coach</h3>
                             <div class="text-gray-300 space-y-2">
-                                <p>Via Paddle, avec effet à la fin de la période en cours.</p>
+                                <p>Via Lemon Squeezy, avec effet à la fin de la période en cours.</p>
                                 <p>Conditions de remboursement limitées au droit de rétractation (consommateurs).</p>
                             </div>
 

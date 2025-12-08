@@ -126,7 +126,7 @@ import { Head, Link } from '@inertiajs/vue3';
 
                         <!-- Article 5 -->
                         <section class="mb-8">
-                            <h2 class="text-2xl font-bold text-purple-300 mb-4">ARTICLE 5 : CONDITIONS FINANCIÈRES (PADDLE)</h2>
+                            <h2 class="text-2xl font-bold text-purple-300 mb-4">ARTICLE 5 : CONDITIONS FINANCIÈRES (LEMON SQUEEZY)</h2>
                             
                             <h3 class="text-xl font-semibold text-purple-200 mb-3 mt-6">5.1. Rôle de Lemon Squeezy</h3>
                             <div class="text-gray-300 space-y-2">

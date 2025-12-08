@@ -15,9 +15,7 @@ defineProps({
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-2">
-                        <div class="text-2xl font-bold text-white">
-                            UNI<span class="text-purple-400">COACH</span>
-                        </div>
+                        <img src="/images/unicoach-logo.svg" alt="UNICOACH" class="h-10 w-auto">
                     </div>
                     
                     <div v-if="canLogin" class="flex items-center space-x-4">
@@ -425,9 +423,7 @@ defineProps({
             <div class="max-w-7xl mx-auto">
                 <div class="grid md:grid-cols-4 gap-8 mb-8">
                     <div>
-                        <div class="text-2xl font-bold text-white mb-4">
-                            UNI<span class="text-purple-400">COACH</span>
-                        </div>
+                        <img src="/images/unicoach-logo.svg" alt="UNICOACH" class="h-12 w-auto mb-4 brightness-0 invert">
                         <p class="text-gray-400">
                             Solution professionnelle de sites vitrine pour coachs sportifs diplômés de Fitness Education Academy.
                         </p>

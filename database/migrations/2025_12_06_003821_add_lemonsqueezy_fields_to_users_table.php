@@ -11,21 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasColumn('users', 'fungies_customer_id')) {
+        if (!Schema::hasColumn('users', 'lemonsqueezy_customer_id')) {
             Schema::table('users', function (Blueprint $table) {
-                $table->string('fungies_customer_id')->nullable()->after('subscription_status');
+                $table->string('lemonsqueezy_customer_id')->nullable()->after('subscription_status');
             });
         }
 
-        if (!Schema::hasColumn('users', 'fungies_subscription_id')) {
+        if (!Schema::hasColumn('users', 'lemonsqueezy_subscription_id')) {
             Schema::table('users', function (Blueprint $table) {
-                $table->string('fungies_subscription_id')->nullable()->after('fungies_customer_id');
+                $table->string('lemonsqueezy_subscription_id')->nullable()->after('lemonsqueezy_customer_id');
             });
         }
 
         if (!Schema::hasColumn('users', 'trial_ends_at')) {
             Schema::table('users', function (Blueprint $table) {
-                $table->timestamp('trial_ends_at')->nullable()->after('fungies_subscription_id');
+                $table->timestamp('trial_ends_at')->nullable()->after('lemonsqueezy_subscription_id');
             });
         }
 
@@ -55,9 +55,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
-                'fungies_customer_id',
-                'fungies_subscription_id',
-                'trial_ends_at',
+                'lemonsqueezy_customer_id',
+                'lemonsqueezy_subscription_id',
                 'subscription_current_period_end',
                 'subscription_current_period_start',
                 'cancel_at_period_end',

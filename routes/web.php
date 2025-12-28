@@ -15,7 +15,6 @@ use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\LegalController;
 use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\Dashboard\SupportTicketController as DashboardSupportController;
-use App\Http\Controllers\FungiesWebhookController;
 use App\Http\Controllers\LemonSqueezyWebhookController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
@@ -214,11 +213,6 @@ Route::post('/webhooks/lemonsqueezy', [LemonSqueezyWebhookController::class, 'ha
 | Fungies.io Webhook Routes
 |--------------------------------------------------------------------------
 |
-| These routes handle webhooks from Fungies.io for payment events.
-| The webhook is public but protected by signature verification.
+| Disabled for MVP (Lemon Squeezy only)
 |
 */
-
-Route::post('/webhooks/fungies', [FungiesWebhookController::class, 'handle'])
-    ->name('webhooks.fungies')
-    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);

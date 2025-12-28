@@ -128,7 +128,8 @@ class LemonSqueezyService
      */
     public function verifyWebhookSignature(string $payload, ?string $signature): bool
     {
-        if (!$signature) {
+        $signature = trim((string) $signature);
+        if ($signature === '') {
             return false;
         }
 

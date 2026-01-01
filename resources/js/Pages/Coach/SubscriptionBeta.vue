@@ -168,6 +168,10 @@ const handleManageSubscription = () => {
                     <Calendar class="h-3 w-3" />
                     <span>Expire le {{ subscriptionEndDate }}</span>
                   </div>
+                  <div v-if="subscription.cancel_at_period_end" class="flex items-center gap-2 text-xs text-amber-300 mt-2 pt-2 border-t border-blue-500/30">
+                    <AlertCircle class="h-3 w-3" />
+                    <span>Abonnement annulé - l'accès restera actif jusqu'à la fin de la période d'essai</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -235,7 +239,7 @@ const handleManageSubscription = () => {
             <!-- Actions -->
             <div class="flex flex-wrap gap-2 text-xs">
               <button
-                v-if="subscription.is_on_trial"
+                v-if="subscription.is_on_trial && !subscription.cancel_at_period_end"
                 type="button"
                 class="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
                 @click="handleSubscribe"
@@ -244,13 +248,31 @@ const handleManageSubscription = () => {
                 S'abonner maintenant
               </button>
               <button
-                v-else-if="subscription.status === 'active'"
+                v-else-if="subscription.is_on_trial && subscription.cancel_at_period_end"
+                type="button"
+                class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-amber-500/50 bg-amber-500/10 px-4 py-2 text-amber-200 hover:bg-amber-500/20"
+                @click="handleManageSubscription"
+              >
+                <ExternalLink class="h-3.5 w-3.5" />
+                Gérer l'annulation sur Lemon Squeezy
+              </button>
+              <button
+                v-else-if="subscription.status === 'active' && !subscription.cancel_at_period_end"
                 type="button"
                 class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-800 px-4 py-2 text-slate-200 hover:bg-slate-700"
                 @click="handleManageSubscription"
               >
                 <ExternalLink class="h-3.5 w-3.5" />
                 Portail client Lemon Squeezy
+              </button>
+              <button
+                v-else-if="subscription.status === 'active' && subscription.cancel_at_period_end"
+                type="button"
+                class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-amber-500/50 bg-amber-500/10 px-4 py-2 text-amber-200 hover:bg-amber-500/20"
+                @click="handleManageSubscription"
+              >
+                <ExternalLink class="h-3.5 w-3.5" />
+                Réactiver mon abonnement
               </button>
               <button
                 v-else

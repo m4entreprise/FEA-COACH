@@ -970,7 +970,7 @@ onBeforeUnmount(() => {
           </section>
 
           <!-- Live preview -->
-          <aside class="space-y-4 sticky top-20 self-start">
+          <aside class="space-y-4 lg:sticky lg:top-20 lg:self-start">
             <div
               class="rounded-2xl border border-slate-800 bg-slate-950/70 p-5 shadow-xl flex flex-col h-full"
             >
@@ -1080,7 +1080,8 @@ onBeforeUnmount(() => {
                   <iframe
                     v-show="hasPreviewRequirements && previewHtml"
                     :key="form.site_layout + previewHtml"
-                    class="w-full h-[34rem] bg-white"
+                    class="w-full h-[34rem] bg-white origin-top-left"
+                    style="transform: scale(0.85); width: 117.65%; height: calc(34rem / 0.85);"
                     sandbox="allow-same-origin allow-forms"
                     :srcdoc="previewHtml"
                   ></iframe>

@@ -169,6 +169,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::patch('/dashboard/faq/{faq}', [FaqController::class, 'update'])->name('dashboard.faq.update');
     Route::delete('/dashboard/faq/{faq}', [FaqController::class, 'destroy'])->name('dashboard.faq.destroy');
     Route::post('/dashboard/faq/reorder', [FaqController::class, 'reorder'])->name('dashboard.faq.reorder');
+    Route::post('/dashboard/faq/preview', [FaqController::class, 'preview'])->name('dashboard.faq.preview');
 
     // Clients management
     Route::get('/dashboard/clients', [ClientController::class, 'index'])->name('dashboard.clients.index');

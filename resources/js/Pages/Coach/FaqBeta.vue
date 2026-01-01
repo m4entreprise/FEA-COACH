@@ -4,7 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
-import { GripVertical, Plus, HelpCircle } from 'lucide-vue-next';
+import { GripVertical, Plus, HelpCircle, Search } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
 
 const props = defineProps({
@@ -16,6 +16,10 @@ const editingFaq = ref(null);
 const draggingId = ref(null);
 const reorderSaving = ref(false);
 const reorderError = ref(null);
+const previewHtml = ref('');
+const previewLoading = ref(false);
+const previewError = ref(null);
+const isPreviewFullscreen = ref(false);
 
 const faqsList = ref([]);
 
@@ -161,6 +165,42 @@ const saveOrder = async () => {
     reorderSaving.value = false;
   }
 };
+
+const fetchPreview = async () => {
+  previewLoading.value = true;
+  previewError.value = null;
+
+  try {
+    const { data } = await axios.post(
+      route('dashboard.faq.preview', { beta: 1 }),
+      {},
+      {
+        headers: { Accept: 'application/json' },
+        withCredentials: true,
+      },
+    );
+
+    previewHtml.value = data.html;
+  } catch (error) {
+    previewError.value =
+      error.response?.data?.message || "Impossible de générer l’aperçu pour le moment.";
+  } finally {
+    previewLoading.value = false;
+  }
+};
+
+const openPreview = () => {
+  isPreviewFullscreen.value = true;
+  fetchPreview();
+};
+
+const closePreview = () => {
+  isPreviewFullscreen.value = false;
+};
+
+watch(isPreviewFullscreen, (active) => {
+  document.body.classList.toggle('overflow-hidden', active);
+});
 </script>
 
 <template>
@@ -208,14 +248,24 @@ const saveOrder = async () => {
               Gérez les questions/réponses affichées sur votre site public.
             </p>
           </div>
-          <button
-            type="button"
-            class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
-            @click="openCreateModal"
-          >
-            <Plus class="h-3.5 w-3.5" />
-            <span>Nouvelle question</span>
-          </button>
+          <div class="flex flex-wrap gap-2">
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-50 hover:border-indigo-400 hover:bg-slate-800"
+              @click="openPreview"
+            >
+              <Search class="h-3.5 w-3.5" />
+              <span>Aperçu plein écran</span>
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
+              @click="openCreateModal"
+            >
+              <Plus class="h-3.5 w-3.5" />
+              <span>Nouvelle question</span>
+            </button>
+          </div>
         </section>
 
         <section
@@ -452,6 +502,76 @@ const saveOrder = async () => {
       </div>
     </main>
   </div>
+
+  <teleport to="body">
+    <div
+      v-if="isPreviewFullscreen"
+      class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col"
+    >
+      <div class="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-800 text-slate-200">
+        <div>
+          <p class="text-xs uppercase tracking-wide text-indigo-300">
+            Aperçu FAQ
+          </p>
+          <h3 class="text-lg font-semibold">Site public (mise à jour en direct)</h3>
+        </div>
+        <div class="flex items-center gap-3 text-xs">
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1.5 hover:border-slate-400 hover:text-white"
+            @click="fetchPreview"
+            :disabled="previewLoading"
+          >
+            <span v-if="previewLoading" class="animate-pulse text-yellow-300">Actualisation…</span>
+            <span v-else>Rafraîchir</span>
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1.5 hover:border-slate-400 hover:text-white"
+            @click="closePreview"
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+
+      <div class="flex-1 p-4">
+        <div
+          class="relative h-full rounded-2xl border border-slate-800 bg-slate-950/80 shadow-2xl overflow-hidden"
+        >
+          <div
+            v-if="previewLoading && !previewHtml"
+            class="absolute inset-0 flex flex-col items-center justify-center text-slate-200 text-sm gap-3"
+          >
+            <svg class="h-8 w-8 animate-spin text-indigo-300" viewBox="0 0 24 24" fill="none">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            <p>Chargement de l’aperçu...</p>
+          </div>
+          <div
+            v-else-if="previewError"
+            class="absolute inset-0 flex flex-col items-center justify-center text-center text-red-300 text-sm px-8 gap-3"
+          >
+            <p>{{ previewError }}</p>
+            <button
+              type="button"
+              class="text-xs underline decoration-dotted"
+              @click="fetchPreview"
+            >
+              Réessayer
+            </button>
+          </div>
+          <iframe
+            v-show="previewHtml"
+            class="w-full h-full bg-white"
+            sandbox="allow-same-origin allow-forms"
+            :srcdoc="previewHtml"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </teleport>
 </template>
 
 <style scoped>

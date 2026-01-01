@@ -149,6 +149,15 @@ const previewHtml = ref('');
 const previewLoading = ref(false);
 const previewError = ref(null);
 let previewTimeoutId = null;
+const isPreviewFullscreen = ref(false);
+
+const togglePreviewFullscreen = () => {
+  isPreviewFullscreen.value = !isPreviewFullscreen.value;
+};
+
+watch(isPreviewFullscreen, (active) => {
+  document.body.classList.toggle('overflow-hidden', active);
+});
 const hasPreviewRequirements = computed(() => {
   return Boolean(form.hero_title?.trim() && form.cta_text?.trim());
 });
@@ -961,7 +970,7 @@ onBeforeUnmount(() => {
           </section>
 
           <!-- Live preview -->
-          <aside class="space-y-4">
+          <aside class="space-y-4 xl:sticky xl:top-6">
             <div
               class="rounded-2xl border border-slate-800 bg-slate-950/70 p-5 shadow-xl flex flex-col h-full"
             >
@@ -978,6 +987,13 @@ onBeforeUnmount(() => {
                     Les modifications se reflètent automatiquement après quelques secondes.
                   </p>
                 </div>
+                <button
+                  type="button"
+                  class="text-xs uppercase tracking-wide text-slate-400 hover:text-white transition"
+                  @click="togglePreviewFullscreen"
+                >
+                  {{ isPreviewFullscreen ? 'Fermer' : 'Plein écran' }}
+                </button>
               </div>
 
               <div class="mt-4">
@@ -1073,6 +1089,53 @@ onBeforeUnmount(() => {
             </div>
           </aside>
         </div>
+
+        <teleport to="body">
+          <div
+            v-if="isPreviewFullscreen"
+            class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-xl flex flex-col"
+          >
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800 text-slate-200">
+              <div class="flex items-center gap-3">
+                <MonitorPlay class="h-5 w-5 text-indigo-300" />
+                <div>
+                  <p class="text-sm font-semibold">Aperçu plein écran</p>
+                  <p class="text-xs text-slate-400">Affichage {{ form.site_layout }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-slate-400">
+                <span v-if="previewLoading" class="animate-pulse text-yellow-300">Mise à jour…</span>
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1 hover:text-white hover:border-slate-400"
+                  @click="togglePreviewFullscreen"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+            <div class="flex-1 overflow-hidden p-4">
+              <iframe
+                v-show="hasPreviewRequirements && previewHtml"
+                class="w-full h-full rounded-2xl bg-white shadow-2xl"
+                sandbox="allow-same-origin allow-forms"
+                :srcdoc="previewHtml"
+              ></iframe>
+              <div
+                v-if="!hasPreviewRequirements"
+                class="flex h-full items-center justify-center text-center text-slate-300 text-sm px-10"
+              >
+                Complétez le titre hero et le CTA pour générer un aperçu.
+              </div>
+              <div
+                v-else-if="previewError"
+                class="flex h-full items-center justify-center text-center text-red-300 text-sm px-10"
+              >
+                {{ previewError }}
+              </div>
+            </div>
+          </div>
+        </teleport>
 
       </div>
     </main>

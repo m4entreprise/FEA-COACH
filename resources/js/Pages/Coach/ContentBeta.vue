@@ -5,7 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
-import { FileText, User, HelpCircle } from 'lucide-vue-next';
+import { FileText, User, HelpCircle, Share2 } from 'lucide-vue-next';
 
 const props = defineProps({
   coach: Object,
@@ -273,9 +273,7 @@ const deletePhoto = () => {
           </div>
         </section>
 
-        <div
-          class="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.1fr)] gap-6 items-start"
-        >
+        <div class="space-y-6">
           <!-- Main content form -->
           <section
             class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl space-y-8"
@@ -741,7 +739,10 @@ const deletePhoto = () => {
 
               <!-- Social links -->
               <div id="content-social" class="space-y-3">
-                <h3 class="text-sm font-semibold">Réseaux sociaux</h3>
+                <h3 class="text-sm font-semibold flex items-center gap-2">
+                  <Share2 class="h-4 w-4 text-sky-300" />
+                  <span>Réseaux sociaux</span>
+                </h3>
                 <p class="text-[11px] text-slate-400">
                   Liens optionnels affichés dans les sections sociales de votre
                   site.

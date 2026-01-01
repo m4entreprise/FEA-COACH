@@ -21,6 +21,31 @@ class Client extends Model
         'vat_number',
         'share_code',
         'share_token',
+        'allergies',
+        'dislikes',
+        'general_comments',
+        'injuries',
+        'stress_level',
+        'sleep_quality',
+        'menstrual_tracking',
+        'last_period',
+        'grocery_budget',
+        'kitchen_equipment',
+        'supplements',
+        'available_equipment',
+        'training_frequency',
+        'session_duration',
+        'daily_activity',
+        'main_goal',
+        'deep_motivation',
+        'coaching_style',
+    ];
+
+    protected $casts = [
+        'menstrual_tracking' => 'boolean',
+        'last_period' => 'date',
+        'kitchen_equipment' => 'array',
+        'available_equipment' => 'array',
     ];
 
     /**
@@ -42,6 +67,16 @@ class Client extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(ClientDocument::class);
+    }
+
+    public function measurements(): HasMany
+    {
+        return $this->hasMany(ClientMeasurement::class);
+    }
+
+    public function latestMeasurement()
+    {
+        return $this->hasOne(ClientMeasurement::class)->latestOfMany();
     }
 
     /**

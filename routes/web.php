@@ -52,6 +52,8 @@ Route::middleware('web')
         Route::get('/{token}/programme-alimentaire', [ClientShareController::class, 'nutrition'])->name('clients.dashboard.nutrition');
         Route::get('/{token}/bilans', [ClientShareController::class, 'assessment'])->name('clients.dashboard.assessment');
         Route::get('/{token}/notes', [ClientShareController::class, 'notes'])->name('clients.dashboard.notes');
+        Route::get('/{token}/profil', [ClientShareController::class, 'profile'])->name('clients.dashboard.profile');
+        Route::patch('/{token}/profil', [ClientShareController::class, 'updateProfile'])->name('clients.dashboard.profile.update');
     });
 
 /*

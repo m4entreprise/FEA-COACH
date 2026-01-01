@@ -46,6 +46,12 @@ Route::middleware('web')
         Route::get('/{token}', [ClientShareController::class, 'show'])->name('clients.share.show');
         Route::post('/{token}', [ClientShareController::class, 'unlock'])->name('clients.share.unlock');
         Route::get('/{token}/documents/{document}', [ClientShareController::class, 'download'])->name('clients.share.download');
+        
+        // Client Dashboard Routes
+        Route::get('/{token}/programme-sportif', [ClientShareController::class, 'program'])->name('clients.dashboard.program');
+        Route::get('/{token}/programme-alimentaire', [ClientShareController::class, 'nutrition'])->name('clients.dashboard.nutrition');
+        Route::get('/{token}/bilans', [ClientShareController::class, 'assessment'])->name('clients.dashboard.assessment');
+        Route::get('/{token}/notes', [ClientShareController::class, 'notes'])->name('clients.dashboard.notes');
     });
 
 /*

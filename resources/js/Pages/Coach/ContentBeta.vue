@@ -249,7 +249,7 @@ onBeforeUnmount(() => {
 
     <!-- Main content -->
     <main
-      class="flex-1 overflow-y-auto bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 md:px-6 py-6 md:py-8"
+      class="flex-1 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 md:px-6 py-6 md:py-8"
     >
       <div class="max-w-6xl mx-auto space-y-6">
         <!-- Completion / summary card -->

@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\ClientNote;
+use App\Models\ClientDocument;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class ClientController extends Controller
@@ -23,7 +26,10 @@ class ClientController extends Controller
         }
 
         $clients = $coach->clients()
-            ->with('notes')
+            ->with([
+                'notes',
+                'documents' => fn ($query) => $query->orderBy('type')->orderByDesc('version'),
+            ])
             ->orderBy('last_name')
             ->orderBy('first_name')
             ->get();
@@ -34,6 +40,8 @@ class ClientController extends Controller
 
         return Inertia::render($view, [
             'clients' => $clients,
+            'documentTypes' => config('client_documents.types'),
+            'shareBaseUrl' => url('/p'),
         ]);
     }
 
@@ -57,7 +65,10 @@ class ClientController extends Controller
             'vat_number' => 'nullable|string|max:255',
         ]);
 
-        $client = $coach->clients()->create($validated);
+        $client = $coach->clients()->create(array_merge($validated, [
+            'share_code' => $this->generateShareCode(),
+            'share_token' => (string) Str::uuid(),
+        ]));
 
         $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
 
@@ -168,42 +179,12 @@ class ClientController extends Controller
         return back()->with('success', 'Note supprimée avec succès !');
     }
 
-    /**
-     * Render a fullscreen preview showing clients applied to the public site.
-     */
-    public function preview(Request $request)
+    private function generateShareCode(): string
     {
-        $coach = $request->user()->coach;
+        do {
+            $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        } while (Client::where('share_code', $code)->exists());
 
-        if (!$coach) {
-            abort(404, 'Coach introuvable.');
-        }
-
-        $coach->loadMissing([
-            'user',
-            'media',
-            'clients.notes' => fn ($query) => $query->orderByDesc('created_at'),
-            'plans' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('price'),
-            'transformations' => fn ($query) => $query->with('media')->orderBy('order'),
-            'faqs' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('created_at'),
-        ]);
-
-        $layouts = config('coach_site.layouts', []);
-        $defaultLayout = config('coach_site.default_layout', 'classic');
-        $layoutKey = $coach->site_layout ?: $defaultLayout;
-        $layoutKey = array_key_exists($layoutKey, $layouts) ? $layoutKey : $defaultLayout;
-        $viewName = $layouts[$layoutKey]['view'] ?? 'coach-site.layouts.classic';
-
-        $html = view($viewName, [
-            'coach' => $coach,
-            'clients' => $coach->clients,
-            'plans' => $coach->plans,
-            'transformations' => $coach->transformations,
-            'faqs' => $coach->faqs,
-        ])->render();
-
-        return response()->json([
-            'html' => $html,
-        ]);
+        return $code;
     }
 }

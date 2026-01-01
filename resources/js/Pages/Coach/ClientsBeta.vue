@@ -3,11 +3,13 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
-import { Search, UserPlus, Users, FileText, Mail, Phone } from 'lucide-vue-next';
-import { ref, computed } from 'vue';
+import { Search, UserPlus, Users, FileText, Mail, Phone, Upload, Link } from 'lucide-vue-next';
+import { ref, computed, watch } from 'vue';
 
 const props = defineProps({
   clients: Array,
+  documentTypes: Object,
+  shareBaseUrl: String,
 });
 
 const searchQuery = ref('');
@@ -44,6 +46,17 @@ const showNotesModal = ref(false);
 const editingClient = ref(null);
 const selectedClient = ref(null);
 const editingNote = ref(null);
+const showDocumentsModal = ref(false);
+const documentsClient = ref(null);
+const documentForm = useForm({
+  type: 'program',
+  title: '',
+  description: '',
+  document: null,
+});
+const documentTypesEntries = computed(() =>
+  Object.entries(props.documentTypes || {}),
+);
 
 const clientForm = useForm({
   first_name: '',
@@ -200,6 +213,66 @@ const formatDate = (d) =>
     minute: '2-digit',
   });
 
+const openDocumentsModal = (client) => {
+  documentsClient.value = client;
+  documentForm.reset();
+  documentForm.type = 'program';
+  showDocumentsModal.value = true;
+};
+
+const closeDocumentsModal = () => {
+  showDocumentsModal.value = false;
+  documentsClient.value = null;
+  documentForm.reset();
+  documentForm.type = 'program';
+};
+
+const handleDocumentFile = (event) => {
+  documentForm.document = event.target.files[0];
+};
+
+const submitDocument = () => {
+  if (!documentsClient.value) return;
+  documentForm.post(
+    route('dashboard.clients.documents.store', { client: documentsClient.value.id, beta: 1 }),
+    {
+      preserveScroll: true,
+      forceFormData: true,
+      onSuccess: () => {
+        documentForm.reset();
+        documentForm.type = 'program';
+        router.reload({ only: ['clients'] });
+      },
+    },
+  );
+};
+
+const downloadDocument = (documentId) => {
+  window.open(route('dashboard.clients.documents.download', documentId), '_blank');
+};
+
+const copyShareLink = async (client) => {
+  if (!client?.share_token) return;
+  const link = `${props.shareBaseUrl}/${client.share_token}`;
+  try {
+    await navigator.clipboard.writeText(link);
+    alert('Lien copié dans le presse-papiers.');
+  } catch (e) {
+    alert('Impossible de copier le lien automatiquement.');
+  }
+};
+
+const documentsByType = (client, type) => {
+  return (client.documents || [])
+    .filter((doc) => doc.type === type)
+    .sort((a, b) => b.version - a.version);
+};
+
+const latestDocumentLabel = (doc) => {
+  if (!doc) return 'Aucun document';
+  return `v${doc.version} · ${doc.title || doc.filename}`;
+};
+
 </script>
 
 <template>
@@ -248,24 +321,14 @@ const formatDate = (d) =>
                 Centralisez prospects, clients et notes pour suivre vos séances.
               </p>
             </div>
-            <div class="flex flex-wrap gap-2">
-              <button
-                type="button"
-                class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-50 hover:border-indigo-400 hover:bg-slate-800"
-                @click="openPreview"
-              >
-                <Search class="h-3.5 w-3.5" />
-                <span>Aperçu plein écran</span>
-              </button>
-              <button
-                type="button"
-                class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
-                @click="openCreateModal"
-              >
-                <UserPlus class="h-3.5 w-3.5" />
-                <span>Nouveau client</span>
-              </button>
-            </div>
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
+              @click="openCreateModal"
+            >
+              <UserPlus class="h-3.5 w-3.5" />
+              <span>Nouveau client</span>
+            </button>
           </div>
 
           <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -390,6 +453,83 @@ const formatDate = (d) =>
                   <br />
                   {{ client.notes[0].content }}
                 </p>
+                <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-3 space-y-3">
+                  <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <p class="text-[11px] uppercase tracking-wide text-slate-400">
+                        Documents partagés
+                      </p>
+                      <p class="text-xs text-slate-500">
+                        Code élève&nbsp;: <span class="font-semibold tracking-widest">{{ client.share_code }}</span>
+                      </p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        class="inline-flex items-center gap-1 rounded-full border border-slate-700 px-3 py-1 text-[11px] text-slate-200 hover:bg-slate-800"
+                        @click="openDocumentsModal(client)"
+                      >
+                        <Upload class="h-3.5 w-3.5" />
+                        <span>Uploader</span>
+                      </button>
+                      <button
+                        type="button"
+                        class="inline-flex items-center gap-1 rounded-full border border-slate-700 px-3 py-1 text-[11px] text-slate-200 hover:bg-slate-800"
+                        @click="copyShareLink(client)"
+                      >
+                        <Link class="h-3.5 w-3.5" />
+                        <span>Lien élève</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="space-y-3">
+                    <div
+                      v-for="[typeKey, typeLabel] in documentTypesEntries"
+                      :key="`client-${client.id}-document-${typeKey}`"
+                      class="rounded-xl border border-slate-800/60 bg-slate-900/60 p-3 space-y-1"
+                    >
+                      <div class="flex items-center justify-between gap-3">
+                        <p class="text-xs font-semibold text-slate-200">{{ typeLabel }}</p>
+                        <p class="text-[11px] text-slate-500">
+                          {{
+                            documentsByType(client, typeKey).length
+                              ? `v${documentsByType(client, typeKey)[0].version}`
+                              : '—'
+                          }}
+                        </p>
+                      </div>
+                      <p class="text-[11px] text-slate-400">
+                        {{
+                          documentsByType(client, typeKey).length
+                            ? latestDocumentLabel(documentsByType(client, typeKey)[0])
+                            : 'Aucun document partagé'
+                        }}
+                      </p>
+                      <div
+                        v-if="documentsByType(client, typeKey).length"
+                        class="mt-2 space-y-1 max-h-36 overflow-y-auto pr-1 border-t border-slate-800 pt-2"
+                      >
+                        <div
+                          v-for="doc in documentsByType(client, typeKey)"
+                          :key="doc.id"
+                          class="flex items-center justify-between gap-2 text-[11px]"
+                        >
+                          <div class="text-slate-400">
+                            <span class="font-medium text-slate-200">v{{ doc.version }}</span>
+                            · {{ doc.created_at ? formatDate(doc.created_at) : '' }}
+                          </div>
+                          <button
+                            type="button"
+                            class="rounded-full border border-slate-700 px-2 py-0.5 text-[11px] text-slate-200 hover:bg-slate-800"
+                            @click="downloadDocument(doc.id)"
+                          >
+                            Télécharger
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div
@@ -712,6 +852,132 @@ const formatDate = (d) =>
               </div>
             </form>
           </div>
+        </div>
+      </div>
+
+      <!-- Modal documents -->
+      <div
+        v-if="showDocumentsModal && documentsClient"
+        class="fixed inset-0 z-40 flex items-center justify-center bg-black/60 px-4"
+      >
+        <div
+          class="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <p class="text-xs uppercase tracking-wide text-slate-400">Documents</p>
+              <h2 class="text-sm font-semibold">
+                {{ documentsClient.first_name }} {{ documentsClient.last_name }}
+              </h2>
+            </div>
+            <button
+              type="button"
+              class="text-slate-400 hover:text-slate-200 text-sm"
+              @click="closeDocumentsModal"
+            >
+              ✕
+            </button>
+          </div>
+
+          <form @submit.prevent="submitDocument" class="space-y-4 text-xs">
+            <div>
+              <InputLabel
+                for="document_type"
+                value="Type de document"
+                class="text-xs text-slate-200"
+              />
+              <select
+                id="document_type"
+                v-model="documentForm.type"
+                class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 px-3 py-2 text-slate-50 focus:border-purple-500 focus:ring-purple-500"
+              >
+                <option
+                  v-for="[typeKey, typeLabel] in documentTypesEntries"
+                  :key="`document-type-${typeKey}`"
+                  :value="typeKey"
+                >
+                  {{ typeLabel }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <InputLabel
+                for="document_title"
+                value="Titre (optionnel)"
+                class="text-xs text-slate-200"
+              />
+              <TextInput
+                id="document_title"
+                v-model="documentForm.title"
+                type="text"
+                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
+                placeholder="Ex : Programme Janvier"
+              />
+              <InputError
+                class="mt-1 text-[11px]"
+                :message="documentForm.errors.title"
+              />
+            </div>
+
+            <div>
+              <InputLabel
+                for="document_description"
+                value="Description"
+                class="text-xs text-slate-200"
+              />
+              <textarea
+                id="document_description"
+                v-model="documentForm.description"
+                rows="3"
+                class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-purple-500 focus:ring-purple-500"
+                placeholder="Notes pour l'élève..."
+              ></textarea>
+              <InputError
+                class="mt-1 text-[11px]"
+                :message="documentForm.errors.description"
+              />
+            </div>
+
+            <div>
+              <InputLabel
+                for="document_file"
+                value="Fichier à partager"
+                class="text-xs text-slate-200"
+              />
+              <input
+                id="document_file"
+                type="file"
+                class="mt-1 block w-full text-[11px] text-slate-200 file:mr-4 file:rounded-full file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-white"
+                @change="handleDocumentFile"
+                required
+              />
+              <InputError
+                class="mt-1 text-[11px]"
+                :message="documentForm.errors.document"
+              />
+              <p class="mt-1 text-[11px] text-slate-500">
+                Formats courants (PDF, DOCX, ZIP) · 10Mo max
+              </p>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2 text-xs">
+              <button
+                type="button"
+                class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-200 hover:bg-slate-800"
+                @click="closeDocumentsModal"
+              >
+                Annuler
+              </button>
+              <button
+                type="submit"
+                class="rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-1.5 font-medium text-slate-50 hover:from-purple-600 hover:to-pink-600 disabled:opacity-60"
+                :disabled="documentForm.processing"
+              >
+                {{ documentForm.processing ? 'Upload...' : 'Publier' }}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </main>

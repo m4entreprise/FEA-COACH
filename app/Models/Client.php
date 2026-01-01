@@ -19,6 +19,8 @@ class Client extends Model
         'phone',
         'address',
         'vat_number',
+        'share_code',
+        'share_token',
     ];
 
     /**
@@ -35,6 +37,11 @@ class Client extends Model
     public function notes(): HasMany
     {
         return $this->hasMany(ClientNote::class);
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(ClientDocument::class);
     }
 
     /**

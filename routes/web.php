@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\PlansController;
 use App\Http\Controllers\Dashboard\ContactController;
 use App\Http\Controllers\Dashboard\ClientController;
+use App\Http\Controllers\Dashboard\ClientDocumentController;
 use App\Http\Controllers\Dashboard\LegalController;
 use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\Dashboard\SupportTicketController as DashboardSupportController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\LemonSqueezyWebhookController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ClientShareController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,6 +37,15 @@ Route::domain('{coach_slug}.' . config('app.domain', 'localhost'))
         Route::get('/', [CoachSiteController::class, 'show'])->name('coach.site');
         Route::post('/contact', [CoachSiteController::class, 'contact'])->name('coach.contact');
         Route::get('/mentions-legales', [CoachSiteController::class, 'legal'])->name('coach.legal');
+    });
+
+// Public share links for client documents
+Route::middleware('web')
+    ->prefix('p')
+    ->group(function () {
+        Route::get('/{token}', [ClientShareController::class, 'show'])->name('clients.share.show');
+        Route::post('/{token}', [ClientShareController::class, 'unlock'])->name('clients.share.unlock');
+        Route::get('/{token}/documents/{document}', [ClientShareController::class, 'download'])->name('clients.share.download');
     });
 
 /*
@@ -178,7 +189,8 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('dashboard.clients.store');
     Route::patch('/dashboard/clients/{client}', [ClientController::class, 'update'])->name('dashboard.clients.update');
     Route::delete('/dashboard/clients/{client}', [ClientController::class, 'destroy'])->name('dashboard.clients.destroy');
-    Route::post('/dashboard/clients/preview', [ClientController::class, 'preview'])->name('dashboard.clients.preview');
+    Route::post('/dashboard/clients/{client}/documents', [ClientDocumentController::class, 'store'])->name('dashboard.clients.documents.store');
+    Route::get('/dashboard/clients/documents/{document}', [ClientDocumentController::class, 'download'])->name('dashboard.clients.documents.download');
     
     // Client notes management
     Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'storeNote'])->name('dashboard.clients.notes.store');

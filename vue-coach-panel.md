@@ -293,9 +293,112 @@ Inventaire fonctionnel des vues liées au panel coach (classiques et beta), pour
   - Réutilise les partials : `UpdateProfileInformationForm`, `UpdatePasswordForm`, `DeleteUserForm`.
   - Redirection après mise à jour conserve `?beta=1` si on vient de la vue beta.
 
+## 5. Pistes UI/UX "wow effect" pour les vues enfants (beta)
+
+Cette section sert de check-list pour harmoniser toutes les vues **Coach/*Beta.vue** avec le niveau d'exigence visuelle de `Coach/DashboardCoachBeta.vue`.
+
+### 5.1 Principes transverses
+
+- **Cohérence visuelle**
+  - Réutiliser les mêmes familles de couleurs (slate + accents violet/rose/émeraude) et les mêmes rayons / ombres que dans le dashboard beta.
+  - Introduire des **icônes Lucide** pertinentes sur chaque carte / section, comme dans le dashboard.
+- **Hiérarchie et respirations**
+  - Toujours avoir : titre de page clair → sous-titre contextuel → sections en cartes bien séparées.
+  - Limiter la densité d'informations par carte, préférer plusieurs blocs logiques.
+- **Micro-copy & feedback**
+  - Ajouter des petites phrases explicatives (1–2 lignes) sous les titres pour guider l'utilisateur.
+  - Soigner les états vides, success / error, loaders (textes utiles + ton cohérent).
+- **Motion & interactions**
+  - Prévoir des hover states subtils sur les cartes / boutons (légère translation, intensité de gradient).
+  - Utiliser des transitions pour les modales (fade/scale) si la future stack le permet.
+
+### 5.2 Site vitrine
+
+#### Branding (`Coach/BrandingBeta.vue`)
+- **Rôle** : identité visuelle (couleurs, logo, hero, layout).
+- **Idées wow** :
+  - Prévisualisation live du site (ou d'un mini mockup) avec les couleurs/logo sélectionnés.
+  - Palette de couleurs avec pastilles animées, suggestions de palettes.
+  - Indicateurs d'accessibilité (contraste) simplifiés.
+
+#### Contenu (`Coach/ContentBeta.vue`)
+- **Rôle** : textes de la page vitrine (hero, à propos, méthode, stats, CTA, réseaux).
+- **Idées wow** :
+  - Garder / renforcer la carte de **complétion du contenu** (progress bar + tips contextuels).
+  - Ajouter des exemples/placeholder plus inspirants (copywriting) pour les sections clés.
+  - Indiquer sur chaque champ où il sera utilisé sur le site (petit label "Apparaît dans : Hero / À propos / etc.").
+
+#### Galerie (`Coach/GalleryBeta.vue`)
+- **Rôle** : transformations avant / après.
+- **Idées wow** :
+  - Ajouter un **mode comparaison slider** (avant/après sur un même visuel) si la stack future le permet.
+  - Mettre en avant les meilleurs cas (badge "Top transformation").
+  - Ajouter une ligne de copy en haut qui explique comment ces visuels impactent la conversion.
+
+#### FAQ (`Coach/FaqBeta.vue`)
+- **Rôle** : gestion des questions/réponses pour le site.
+- **Idées wow** :
+  - Afficher un compteur clair : nombre de FAQ actives vs totales.
+  - Ajouter des suggestions de questions types (templates) dans la modale.
+  - Permettre un drag & drop de l'ordre d'affichage (dans la future UI si possible).
+
+### 5.3 Business
+
+#### Plans (`Coach/PlansBeta.vue`)
+- **Rôle** : offres / pricing affichés sur le site.
+- **Idées wow** :
+  - Représenter chaque plan comme une **pricing card** premium (prix mis en avant, bénéfices en bullets).
+  - Ajouter un badge "Recommandé" / "Populaire".
+  - Visualiser l'URL CTA (icône externe, prévisualisation possible).
+
+#### Clients (`Coach/ClientsBeta.vue`)
+- **Rôle** : base clients + notes.
+- **Idées wow** :
+  - Remonter quelques **KPI** en haut : % clients avec email, last activity, etc.
+  - Rendre les cartes clients plus narratives (avatar, badge "N notes", dernière interaction).
+  - Dans la modale de notes, prévoir un layout type "journal" avec timeline.
+
+#### Messages de contact (`Coach/ContactBeta.vue`)
+- **Rôle** : messages entrants du site.
+- **Idées wow** :
+  - Indicateur "Nouveaux" vs "Traités" en haut.
+  - Actions rapides : bouton "Répondre par email" bien mis en valeur.
+  - États vides illustrés (icône, phrase motivante).
+
+#### Mentions légales (`Coach/LegalBeta.vue`)
+- **Rôle** : TVA + texte CGV/mentions.
+- **Idées wow** :
+  - Afficher un mini bandeau "Statut conformité" (texte à personnaliser).
+  - Séparer visuellement TVA / CGV / sections clés avec ancres ou onglets.
+  - Prévoir une zone "Aperçu côté site" mieux intégrée (preview pane à droite).
+
+### 5.4 Compte & abonnement
+
+#### Abonnement (`Coach/SubscriptionBeta.vue`)
+- **Rôle** : état d'essai, abonnement, CTA vers checkout/portal.
+- **Idées wow** :
+  - Renforcer la narration de la période d'essai (compte à rebours, jalons).
+  - Clarifier les bénéfices de la formule dans un comparatif (Essai vs Pro).
+  - Ajouter un bandeau d'alerte doux quand l'essai approche de la fin.
+
+#### Support (`Coach/SupportBeta.vue`)
+- **Rôle** : tickets support + conversation.
+- **Idées wow** :
+  - Transformer la liste de tickets en **timeline de conversations**.
+  - Ajouter des chips de statut/catégorie plus visibles.
+  - Mettre en avant le temps de réponse moyen (simple texte statique ou futur KPI).
+
+#### Profil (`Coach/ProfileBeta.vue`)
+- **Rôle** : infos compte, mot de passe, suppression.
+- **Idées wow** :
+  - Ajouter un encart "Profil coach" vs "Compte utilisateur" pour clarifier ce qui est modifié ici.
+  - Mieux raconter les conséquences de la suppression de compte (micro-copy empathique).
+  - Icônes et couleurs différenciées pour chaque bloc (infos, sécurité, danger zone).
+
 ---
 
 Ce document peut servir de référence complète pour :
 - cartographier toutes les vues/flux du panel coach,
 - vérifier les dépendances backend (contrôleurs, routes),
-- préparer un redesign UI/UX en gardant le même périmètre fonctionnel.
+- préparer un redesign UI/UX en gardant le même périmètre fonctionnel,
+- guider le travail de mise au niveau "wow effect" de l'ensemble des vues enfants beta.

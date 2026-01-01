@@ -2,8 +2,8 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Widgets\CoachQuickActions;
-use App\Filament\Widgets\CoachStatsOverview;
+use App\Filament\Widgets\CoachDashboardQuickActions;
+use App\Filament\Widgets\CoachDashboardStats;
 use App\Http\Middleware\EnsureOnboardingCompleted;
 use App\Http\Middleware\EnsureSetupCompleted;
 use Filament\Http\Middleware\Authenticate;

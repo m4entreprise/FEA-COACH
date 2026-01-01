@@ -4,17 +4,10 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps({
-  faqs: {
-    type: Array,
-    default: () => [],
-  },
-  coach: {
-    type: Object,
-    default: null,
-  },
+  faqs: Array,
 });
 
 const showModal = ref(false);
@@ -26,21 +19,6 @@ const form = useForm({
   order: 0,
   is_active: true,
 });
-
-const totalFaqs = computed(() => props.faqs?.length || 0);
-const activeFaqs = computed(() => props.faqs?.filter((faq) => faq.is_active).length || 0);
-const coachSiteUrl = computed(() => {
-  if (!props.coach) return null;
-  const slug = props.coach.slug || props.coach.subdomain;
-  if (!slug) return null;
-  return route('coach.site', { coach_slug: slug });
-});
-
-const openLivePreview = () => {
-  if (coachSiteUrl.value) {
-    window.open(coachSiteUrl.value, '_blank', 'noopener');
-  }
-};
 
 const openCreateModal = () => {
   editingFaq.value = null;
@@ -134,92 +112,74 @@ const deleteFaq = (faq) => {
     <main
       class="flex-1 overflow-y-auto bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 md:px-6 py-6 md:py-8"
     >
-      <div class="max-w-6xl mx-auto space-y-6">
-        <!-- Summary card -->
+      <div class="max-w-5xl mx-auto space-y-6">
+        <!-- Header & button -->
         <section
-          class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+          class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4"
         >
           <div>
-            <p class="text-xs uppercase tracking-wide text-slate-400 mb-1">
-              FAQ du site public
-            </p>
             <h2 class="text-lg font-semibold">Questions fréquentes</h2>
             <p class="text-sm text-slate-400">
-              Répondez aux objections les plus courantes directement sur votre site vitrine.
+              Gérez les questions/réponses affichées sur votre site public.
             </p>
           </div>
-          <div class="flex flex-wrap items-center gap-4">
-            <div class="text-right">
-              <p class="text-xs uppercase tracking-wide text-slate-500">
-                Questions actives
-              </p>
-              <p class="text-2xl font-semibold text-emerald-300">
-                {{ activeFaqs }}/{{ totalFaqs }}
-              </p>
-            </div>
-            <div class="flex items-center gap-2">
-              <button
-                type="button"
-                class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-100 hover:border-slate-500 hover:bg-slate-800 disabled:opacity-50"
-                :disabled="!coachSiteUrl"
-                @click="openLivePreview"
-              >
-                <span class="text-lg">👁️</span>
-                Live preview
-              </button>
-              <PrimaryButton type="button" class="text-xs" @click="openCreateModal">
-                <span class="mr-1">+</span>
-                Nouvelle question
-              </PrimaryButton>
-            </div>
-          </div>
+          <PrimaryButton
+            type="button"
+            class="text-xs"
+            @click="openCreateModal"
+          >
+            <span class="mr-1">+</span>
+            Nouvelle question
+          </PrimaryButton>
         </section>
 
         <!-- FAQ list -->
-        <section class="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+        <section class="space-y-4">
           <div v-if="faqs && faqs.length" class="space-y-3">
             <article
               v-for="faq in faqs"
               :key="faq.id"
-              class="rounded-xl border border-slate-800 bg-slate-950/80 p-4 shadow-md hover:border-slate-700 transition"
+              class="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-md"
             >
               <div class="flex items-start justify-between gap-3 mb-2">
                 <div class="flex-1">
-                  <h3 class="text-base font-semibold text-slate-50">
+                  <h3 class="text-sm font-semibold text-slate-50">
                     {{ faq.question }}
                   </h3>
-                  <p class="text-[11px] text-slate-500">
-                    Ordre d'affichage : {{ faq.order }}
-                  </p>
                 </div>
-                <span
-                  class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold border"
-                  :class="
-                    faq.is_active
-                      ? 'bg-emerald-500/10 text-emerald-300 border-emerald-400/40'
-                      : 'bg-slate-800 text-slate-300 border-slate-700'
-                  "
-                >
-                  {{ faq.is_active ? 'Active' : 'Masquée' }}
-                </span>
+                <div class="flex items-center gap-2">
+                  <span
+                    class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                    :class="
+                      faq.is_active
+                        ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40'
+                        : 'bg-slate-800 text-slate-300 border border-slate-700'
+                    "
+                  >
+                    {{ faq.is_active ? 'Active' : 'Masquée' }}
+                  </span>
+                  <span class="text-[10px] text-slate-500">
+                    Ordre: {{ faq.order }}
+                  </span>
+                </div>
               </div>
-              <p class="text-sm text-slate-300 whitespace-pre-line mb-4">
+              <p class="text-xs text-slate-300 whitespace-pre-line mb-3">
                 {{ faq.answer }}
               </p>
               <div class="flex justify-end gap-2 text-[11px]">
                 <button
                   type="button"
-                  class="inline-flex items-center gap-1 rounded-full border border-slate-700 px-3 py-1 text-slate-200 hover:bg-slate-800"
+                  class="rounded-full border border-slate-700 px-3 py-1 text-slate-200 hover:bg-slate-800"
                   @click="openEditModal(faq)"
                 >
-                  ✏️ Modifier
+                  Modifier
                 </button>
                 <button
                   type="button"
-                  class="inline-flex items-center gap-1 rounded-full border border-rose-600/60 bg-rose-600/10 px-3 py-1 text-rose-200 hover:bg-rose-600/20"
+                  class="rounded-full border border-rose-600/60 bg-rose-600/10 px-3 py-1 text-rose-200 hover:bg-rose-600/20"
                   @click="deleteFaq(faq)"
                 >
-                  🗑️ Supprimer
+                  Supprimer
                 </button>
               </div>
             </article>
@@ -238,7 +198,8 @@ const deleteFaq = (faq) => {
             </div>
             <h3 class="text-lg font-semibold mb-2">Aucune question</h3>
             <p class="text-xs text-slate-400 mb-4">
-              Créez vos premières FAQ pour répondre aux objections de vos prospects.
+              Créez vos premières FAQ pour répondre aux objections de vos
+              prospects.
             </p>
             <PrimaryButton type="button" class="text-xs" @click="openCreateModal">
               <span class="mr-1">+</span>

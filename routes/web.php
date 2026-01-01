@@ -144,6 +144,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::get('/dashboard/gallery', [GalleryController::class, 'index'])->name('dashboard.gallery');
     Route::post('/dashboard/gallery', [GalleryController::class, 'store'])->name('dashboard.gallery.store');
     Route::delete('/dashboard/gallery/{transformation}', [GalleryController::class, 'destroy'])->name('dashboard.gallery.destroy');
+    Route::post('/dashboard/gallery/preview', [GalleryController::class, 'preview'])->name('dashboard.gallery.preview');
 
     // Plans management
     Route::get('/dashboard/plans', [PlansController::class, 'index'])->name('dashboard.plans');

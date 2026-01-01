@@ -1,6 +1,7 @@
 <script setup>
 import { Head, useForm, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import axios from 'axios';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   transformations: Array,
@@ -60,6 +61,48 @@ const deleteTransformation = (id) => {
     },
   );
 };
+
+// Live preview (fullscreen only)
+const previewHtml = ref('');
+const previewLoading = ref(false);
+const previewError = ref(null);
+const isPreviewFullscreen = ref(false);
+
+const fetchPreview = async () => {
+  previewLoading.value = true;
+  previewError.value = null;
+
+  try {
+    const { data } = await axios.post(
+      route('dashboard.gallery.preview', { beta: 1 }),
+      {},
+      {
+        headers: { Accept: 'application/json' },
+        withCredentials: true,
+      },
+    );
+
+    previewHtml.value = data.html;
+  } catch (error) {
+    previewError.value =
+      error.response?.data?.message || "Impossible de générer l’aperçu pour le moment.";
+  } finally {
+    previewLoading.value = false;
+  }
+};
+
+const openPreview = () => {
+  isPreviewFullscreen.value = true;
+  fetchPreview();
+};
+
+const closePreview = () => {
+  isPreviewFullscreen.value = false;
+};
+
+watch(isPreviewFullscreen, (active) => {
+  document.body.classList.toggle('overflow-hidden', active);
+});
 </script>
 
 <template>
@@ -108,14 +151,23 @@ const deleteTransformation = (id) => {
               prospects.
             </p>
           </div>
-          <button
-            type="button"
-            class="inline-flex items-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
-            @click="showAddModal = true"
-          >
-            <span class="mr-1">+</span>
-            Ajouter une transformation
-          </button>
+          <div class="flex flex-wrap gap-2">
+            <button
+              type="button"
+              class="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-50 hover:border-indigo-400 hover:bg-slate-800"
+              @click="openPreview"
+            >
+              🔍 Aperçu plein écran
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
+              @click="showAddModal = true"
+            >
+              <span class="mr-1">+</span>
+              Ajouter une transformation
+            </button>
+          </div>
         </section>
 
         <!-- Transformations grid -->
@@ -358,4 +410,92 @@ const deleteTransformation = (id) => {
       </div>
     </main>
   </div>
+
+  <teleport to="body">
+    <div
+      v-if="isPreviewFullscreen"
+      class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col"
+    >
+      <div class="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-800 text-slate-200">
+        <div>
+          <p class="text-xs uppercase tracking-wide text-indigo-300">
+            Aperçu transformations
+          </p>
+          <h3 class="text-lg font-semibold">Site public (mise à jour en direct)</h3>
+        </div>
+        <div class="flex items-center gap-3 text-xs">
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1.5 hover:border-slate-400 hover:text-white"
+            @click="fetchPreview"
+            :disabled="previewLoading"
+          >
+            <span v-if="previewLoading" class="animate-pulse text-yellow-300">Actualisation…</span>
+            <span v-else>Rafraîchir</span>
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1.5 hover:border-slate-400 hover:text-white"
+            @click="closePreview"
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+
+      <div class="flex-1 p-4">
+        <div
+          class="relative h-full rounded-2xl border border-slate-800 bg-slate-950/80 shadow-2xl overflow-hidden"
+        >
+          <div
+            v-if="previewLoading && !previewHtml"
+            class="absolute inset-0 flex flex-col items-center justify-center text-slate-200 text-sm gap-3"
+          >
+            <svg class="h-8 w-8 animate-spin text-indigo-300" viewBox="0 0 24 24" fill="none">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            <p>Chargement de l’aperçu...</p>
+          </div>
+          <div
+            v-else-if="previewError"
+            class="absolute inset-0 flex flex-col items-center justify-center text-center text-red-300 text-sm px-8 gap-3"
+          >
+            <p>{{ previewError }}</p>
+            <button
+              type="button"
+              class="text-xs underline decoration-dotted"
+              @click="fetchPreview"
+            >
+              Réessayer
+            </button>
+          </div>
+          <iframe
+            v-show="previewHtml"
+            class="w-full h-full bg-white"
+            sandbox="allow-same-origin allow-forms"
+            :srcdoc="previewHtml"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </teleport>
 </template>
+
+<style scoped>
+@keyframes pulseGlow {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.animate-pulse {
+  animation: pulseGlow 1.5s ease-in-out infinite;
+}
+</style>

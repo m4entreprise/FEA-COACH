@@ -370,7 +370,7 @@ onMounted(() => {
                                         </p>
                                         <div class="flex flex-wrap gap-2 mt-1">
                                             <Link
-                                                :href="route('dashboard.branding')"
+                                                :href="route('dashboard.branding', { beta: 1 })"
                                                 class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-1 text-[11px] border border-slate-700 hover:bg-slate-700"
                                             >
                                                 <Palette class="h-3 w-3" />
@@ -505,7 +505,7 @@ onMounted(() => {
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <Link
-                                :href="route('dashboard.branding')"
+                                :href="route('dashboard.branding', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-purple-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">

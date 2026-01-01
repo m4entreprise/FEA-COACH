@@ -1080,7 +1080,7 @@ onBeforeUnmount(() => {
                   <iframe
                     v-show="hasPreviewRequirements && previewHtml"
                     :key="form.site_layout + previewHtml"
-                    class="w-full h-[34rem] bg-white"
+                    class="w-full h-[34rem] bg-white overflow-x-hidden"
                     sandbox="allow-same-origin allow-forms"
                     :srcdoc="previewHtml"
                   ></iframe>
@@ -1133,7 +1133,7 @@ onBeforeUnmount(() => {
             <div class="flex-1 overflow-hidden p-4">
               <iframe
                 v-show="hasPreviewRequirements && previewHtml"
-                class="w-full h-full rounded-2xl bg-white shadow-2xl"
+                class="w-full h-full rounded-2xl bg-white shadow-2xl overflow-x-hidden"
                 sandbox="allow-same-origin allow-forms"
                 :srcdoc="previewHtml"
               ></iframe>

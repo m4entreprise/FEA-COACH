@@ -39,6 +39,7 @@ class FaqController extends Controller
 
         return Inertia::render($view, [
             'faqs' => $faqs,
+            'coach' => $coach ? $coach->only(['slug', 'subdomain']) : null,
         ]);
     }
 

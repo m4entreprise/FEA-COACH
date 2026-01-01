@@ -24,6 +24,7 @@ class GalleryController extends Controller
 
         return Inertia::render($view, [
             'transformations' => $transformations,
+            'coach' => $coach ? $coach->only(['slug', 'subdomain']) : null,
         ]);
     }
 

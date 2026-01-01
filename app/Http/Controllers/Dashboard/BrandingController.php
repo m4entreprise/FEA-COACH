@@ -101,4 +101,53 @@ class BrandingController extends Controller
         return redirect()->route('dashboard.branding', $redirectParams)
             ->with('success', 'Branding mis à jour avec succès.');
     }
+
+    /**
+     * Render a live preview of the coach public site using branding updates.
+     */
+    public function preview(Request $request)
+    {
+        $coach = $request->user()->coach;
+
+        if (!$coach) {
+            abort(404, 'Coach introuvable.');
+        }
+
+        $data = $request->validate([
+            'color_primary' => ['required', 'string', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'color_secondary' => ['required', 'string', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'site_layout' => [
+                'nullable',
+                'string',
+                Rule::in(array_keys(config('coach_site.layouts', []))),
+            ],
+        ]);
+
+        $coach->fill($data);
+
+        $coach->loadMissing([
+            'user',
+            'media',
+            'transformations' => fn ($query) => $query->orderBy('order'),
+            'plans' => fn ($query) => $query->where('is_active', true)->orderBy('price'),
+            'faqs' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('created_at'),
+        ]);
+
+        $layouts = config('coach_site.layouts', []);
+        $defaultLayout = config('coach_site.default_layout', 'classic');
+        $layoutKey = $data['site_layout'] ?? ($coach->site_layout ?: $defaultLayout);
+        $layoutKey = array_key_exists($layoutKey, $layouts) ? $layoutKey : $defaultLayout;
+        $viewName = $layouts[$layoutKey]['view'] ?? 'coach-site.layouts.classic';
+
+        $html = view($viewName, [
+            'coach' => $coach,
+            'plans' => $coach->plans,
+            'transformations' => $coach->transformations,
+            'faqs' => $coach->faqs,
+        ])->render();
+
+        return response()->json([
+            'html' => $html,
+        ]);
+    }
 }

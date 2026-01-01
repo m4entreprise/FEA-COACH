@@ -131,6 +131,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     // Branding management
     Route::get('/dashboard/branding', [BrandingController::class, 'edit'])->name('dashboard.branding');
     Route::post('/dashboard/branding', [BrandingController::class, 'update'])->name('dashboard.branding.update');
+    Route::post('/dashboard/branding/preview', [BrandingController::class, 'preview'])->name('dashboard.branding.preview');
 
     // Content management
     Route::get('/dashboard/content', [ContentController::class, 'edit'])->name('dashboard.content');

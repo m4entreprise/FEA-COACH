@@ -362,7 +362,7 @@ const goCategory = (id) => {
                                         <p class="text-sm font-semibold flex items-center gap-1">
                                             <span
                                                 class="inline-block h-2.5 w-2.5 rounded-full"
-                                                :class="safeStats.is_active ? 'bg-emerald-400' : 'bg-rose-400'"
+                                                :class="safeStats.is_active ? 'bg-emerald-400 animate-breathe' : 'bg-rose-400'"
                                             ></span>
                                             {{ safeStats.is_active ? 'En ligne' : 'Hors ligne' }}
                                         </p>

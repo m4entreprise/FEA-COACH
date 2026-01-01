@@ -54,6 +54,8 @@ Route::middleware('web')
         Route::get('/{token}/notes', [ClientShareController::class, 'notes'])->name('clients.dashboard.notes');
         Route::get('/{token}/profil', [ClientShareController::class, 'profile'])->name('clients.dashboard.profile');
         Route::patch('/{token}/profil', [ClientShareController::class, 'updateProfile'])->name('clients.dashboard.profile.update');
+        Route::get('/{token}/evolution', [ClientShareController::class, 'analytics'])->name('clients.dashboard.analytics');
+        Route::get('/{token}/photo/{measurement}/{type}', [ClientShareController::class, 'servePhoto'])->name('clients.dashboard.photo');
     });
 
 /*

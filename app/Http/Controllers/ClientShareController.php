@@ -159,6 +159,67 @@ class ClientShareController extends Controller
         ]);
     }
 
+    public function analytics(Request $request, string $token)
+    {
+        $client = Client::with(['coach.user', 'measurements' => fn($q) => $q->orderBy('created_at')])
+            ->where('share_token', $token)
+            ->firstOrFail();
+
+        if (!$request->session()->get($this->sessionKey($client->id), false)) {
+            return redirect()->route('clients.share.show', $token);
+        }
+
+        $measurements = $client->measurements;
+        $latestMeasurement = $measurements->last();
+        $firstMeasurement = $measurements->first();
+        
+        // Compter les photos
+        $photosCount = $measurements->reduce(function($carry, $m) {
+            return $carry + ($m->photo_front ? 1 : 0) + ($m->photo_side ? 1 : 0) + ($m->photo_back ? 1 : 0);
+        }, 0);
+        
+        $measurementsWithPhotos = $measurements->filter(fn($m) => $m->photo_front || $m->photo_side || $m->photo_back)->count();
+
+        return view('client-dashboard.analytics', [
+            'client' => $client,
+            'measurements' => $measurements,
+            'latestMeasurement' => $latestMeasurement,
+            'firstMeasurement' => $firstMeasurement,
+            'photosCount' => $photosCount,
+            'measurementsWithPhotos' => $measurementsWithPhotos,
+            'programCount' => $client->documents()->where('type', 'program')->count(),
+            'nutritionCount' => $client->documents()->where('type', 'nutrition')->count(),
+            'assessmentCount' => $client->documents()->where('type', 'assessment')->count(),
+            'notesCount' => $client->notes()->count(),
+        ]);
+    }
+
+    public function servePhoto(Request $request, string $token, int $measurementId, string $type)
+    {
+        $client = Client::where('share_token', $token)->firstOrFail();
+
+        if (!$request->session()->get($this->sessionKey($client->id), false)) {
+            abort(403);
+        }
+
+        $measurement = \App\Models\ClientMeasurement::where('id', $measurementId)
+            ->where('client_id', $client->id)
+            ->firstOrFail();
+
+        $photoField = 'photo_' . $type;
+        if (!in_array($type, ['front', 'side', 'back']) || !$measurement->$photoField) {
+            abort(404);
+        }
+
+        $path = $measurement->$photoField;
+        
+        if (!Storage::disk('local')->exists($path)) {
+            abort(404);
+        }
+
+        return response()->file(Storage::disk('local')->path($path));
+    }
+
     public function updateProfile(Request $request, string $token)
     {
         $client = Client::where('share_token', $token)->firstOrFail();

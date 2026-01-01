@@ -34,11 +34,7 @@ class FaqController extends Controller
                 'is_active' => $faq->is_active,
             ]);
 
-        $view = $request->boolean('beta')
-            ? 'Coach/FaqBeta'
-            : 'Dashboard/Faq';
-
-        return Inertia::render($view, [
+        return Inertia::render('Coach/FaqBeta', [
             'faqs' => $faqs,
         ]);
     }
@@ -74,9 +70,7 @@ class FaqController extends Controller
             'is_active' => $validated['is_active'] ?? true,
         ]);
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.faq', $redirectParams)
+        return redirect()->route('dashboard.faq')
             ->with('success', 'Question ajoutée avec succès.');
     }
 
@@ -106,9 +100,7 @@ class FaqController extends Controller
             'is_active' => $validated['is_active'] ?? $faq->is_active,
         ]);
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.faq', $redirectParams)
+        return redirect()->route('dashboard.faq')
             ->with('success', 'Question mise à jour avec succès.');
     }
 
@@ -126,9 +118,7 @@ class FaqController extends Controller
 
         $faq->delete();
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.faq', $redirectParams)
+        return redirect()->route('dashboard.faq')
             ->with('success', 'Question supprimée avec succès.');
     }
 

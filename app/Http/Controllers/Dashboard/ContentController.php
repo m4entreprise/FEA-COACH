@@ -36,11 +36,7 @@ class ContentController extends Controller
         // Get media URLs
         $profilePhotoUrl = $coach ? $coach->getFirstMediaUrl('profile') : null;
 
-        $view = $request->boolean('beta')
-            ? 'Coach/ContentBeta'
-            : 'Dashboard/Content';
-
-        return Inertia::render($view, [
+        return Inertia::render('Coach/ContentBeta', [
             'coach' => $coach,
             'faqs' => $faqs,
             'faqsCount' => $faqsCount,
@@ -99,9 +95,7 @@ class ContentController extends Controller
 
         $coach->update($validated);
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.content', $redirectParams)
+        return redirect()->route('dashboard.content')
             ->with('success', 'Contenu mis à jour avec succès.');
     }
 
@@ -113,9 +107,7 @@ class ContentController extends Controller
         $coach = $request->user()->coach;
 
         if (!$coach) {
-            $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-            return redirect()->route('dashboard.content', $redirectParams)
+            return redirect()->route('dashboard.content')
                 ->with('error', 'Aucun profil coach associé.');
         }
 
@@ -127,9 +119,7 @@ class ContentController extends Controller
         $coach->addMediaFromRequest('profile_photo')
             ->toMediaCollection('profile');
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.content', $redirectParams)
+        return redirect()->route('dashboard.content')
             ->with('success', 'Photo de profil mise à jour avec succès.');
     }
 
@@ -147,9 +137,7 @@ class ContentController extends Controller
 
         $coach->clearMediaCollection('profile');
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.content', $redirectParams)
+        return redirect()->route('dashboard.content')
             ->with('success', 'Photo de profil supprimée avec succès.');
     }
 

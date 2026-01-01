@@ -23,11 +23,7 @@ class LegalController extends Controller
         // Texte par défaut des CGV
         $defaultLegalTerms = $this->getDefaultLegalTerms($coach);
 
-        $view = $request->boolean('beta')
-            ? 'Coach/LegalBeta'
-            : 'Dashboard/Legal';
-
-        return Inertia::render($view, [
+        return Inertia::render('Coach/LegalBeta', [
             'coach' => $coach,
             'user' => auth()->user(),
             'defaultLegalTerms' => $defaultLegalTerms,

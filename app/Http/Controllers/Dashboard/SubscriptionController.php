@@ -51,11 +51,7 @@ class SubscriptionController extends Controller
             'cancel_at_period_end' => $user->cancel_at_period_end,
         ];
 
-        $view = $request->boolean('beta')
-            ? 'Coach/SubscriptionBeta'
-            : 'Dashboard/Subscription';
-
-        return Inertia::render($view, [
+        return Inertia::render('Coach/SubscriptionBeta', [
             'subscription' => $subscriptionInfo,
             'user' => [
                 'name' => $user->name,

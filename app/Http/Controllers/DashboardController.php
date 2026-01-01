@@ -16,7 +16,7 @@ class DashboardController extends Controller
         
         // Admins see a different view or basic stats
         if ($user->role === 'admin') {
-            return Inertia::render('Dashboard', [
+            return Inertia::render('Coach/DashboardCoachBeta', [
                 'isAdmin' => true,
                 'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
             ]);
@@ -31,7 +31,7 @@ class DashboardController extends Controller
         ])->first();
 
         if (!$coach) {
-            return Inertia::render('Dashboard', [
+            return Inertia::render('Coach/DashboardCoachBeta', [
                 'error' => 'Aucun profil coach associé à votre compte.',
                 'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
             ]);
@@ -42,101 +42,6 @@ class DashboardController extends Controller
         
         // Calculate subscription info
         // Détecte la période d'essai : statut trial, null, ou active_promo (pour les comptes FEA)
-        $isOnTrial = ($user->subscription_status === 'trial'
-                      || $user->subscription_status === null
-                      || $user->subscription_status === 'active_promo')
-                     && $user->trial_ends_at
-                     && now()->isBefore($user->trial_ends_at);
-
-        $trialDaysLeft = null;
-        if ($user->trial_ends_at) {
-            $secondsLeft = now()->diffInSeconds($user->trial_ends_at, false);
-            $trialDaysLeft = $secondsLeft > 0
-                ? (int) ceil($secondsLeft / 86400)
-                : 0;
-        }
-
-        $subscriptionInfo = [
-            'status' => $user->subscription_status ?? 'trial',
-            'trial_ends_at' => $user->trial_ends_at,
-            'is_on_trial' => $isOnTrial,
-            'trial_days_left' => $trialDaysLeft,
-        ];
-        
-        $stats = [
-            'total_plans' => $coach->plans()->count(),
-            'active_plans' => $coach->plans()->where('is_active', true)->count(),
-            'total_transformations' => $coach->transformations()->count(),
-            'is_active' => $coach->is_active,
-            'profile_completion' => $profileData['percentage'],
-            'profile_missing_fields' => $profileData['missing_fields'],
-            'subscription' => $subscriptionInfo,
-        ];
-
-        // Get recent transformations (for quick view)
-        $recentTransformations = $coach->transformations()
-            ->orderBy('created_at', 'desc')
-            ->limit(3)
-            ->get()
-            ->map(fn($t) => [
-                'id' => $t->id,
-                'description' => $t->description,
-                'before_url' => $t->hasMedia('before') ? $t->getFirstMediaUrl('before') : null,
-                'after_url' => $t->hasMedia('after') ? $t->getFirstMediaUrl('after') : null,
-            ]);
-
-        return Inertia::render('Dashboard', [
-            'coach' => [
-                'id' => $coach->id,
-                'name' => $coach->name,
-                'slug' => $coach->slug,
-                'subdomain' => $coach->subdomain,
-                'is_active' => $coach->is_active,
-                'color_primary' => $coach->color_primary,
-                'color_secondary' => $coach->color_secondary,
-                'has_logo' => $coach->hasMedia('logo'),
-                'has_hero' => $coach->hasMedia('hero'),
-            ],
-            'stats' => $stats,
-            'recentTransformations' => $recentTransformations,
-            'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
-        ]);
-    }
-
-    /**
-     * Display the coach dashboard beta (new layout with sidebar) for A/B testing.
-     */
-    public function beta(Request $request)
-    {
-        $user = $request->user();
-
-        // Admins see a simplified beta view or basic stats
-        if ($user->role === 'admin') {
-            return Inertia::render('Coach/DashboardCoachBeta', [
-                'isAdmin' => true,
-                'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
-            ]);
-        }
-
-        // Load coach data with relationships
-        $coach = $user->coach()->with([
-            'plans',
-            'transformations',
-            'faqs',
-            'user',
-        ])->first();
-
-        if (!$coach) {
-            return Inertia::render('Coach/DashboardCoachBeta', [
-                'error' => 'Aucun profil coach associé à votre compte.',
-                'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
-            ]);
-        }
-
-        // Calculate stats
-        $profileData = $this->calculateProfileCompletion($coach);
-        
-        // Calculate subscription info (same logic as index)
         $isOnTrial = ($user->subscription_status === 'trial'
                       || $user->subscription_status === null
                       || $user->subscription_status === 'active_promo')

@@ -35,11 +35,7 @@ class BrandingController extends Controller
         
         $coach = $user->coach;
 
-        $view = $request->boolean('beta')
-            ? 'Coach/BrandingBeta'
-            : 'Dashboard/Branding';
-
-        return Inertia::render($view, [
+        return Inertia::render('Coach/BrandingBeta', [
             'coach' => $coach->load('media'),
             'availableLayouts' => config('coach_site.layouts'),
             'defaultLayout' => config('coach_site.default_layout'),
@@ -96,9 +92,7 @@ class BrandingController extends Controller
                 ->toMediaCollection('hero');
         }
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.branding', $redirectParams)
+        return redirect()->route('dashboard.branding')
             ->with('success', 'Branding mis à jour avec succès.');
     }
 

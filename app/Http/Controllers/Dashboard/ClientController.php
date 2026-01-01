@@ -38,11 +38,7 @@ class ClientController extends Controller
             ->orderBy('first_name')
             ->get();
 
-        $view = $request->boolean('beta')
-            ? 'Coach/ClientsBeta'
-            : 'Dashboard/Clients';
-
-        return Inertia::render($view, [
+        return Inertia::render('Coach/ClientsBeta', [
             'clients' => $clients,
             'documentTypes' => config('client_documents.types'),
             'shareBaseUrl' => url('/p'),
@@ -117,9 +113,7 @@ class ClientController extends Controller
             'share_token' => (string) Str::uuid(),
         ]));
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.clients.index', $redirectParams)
+        return redirect()->route('dashboard.clients.index')
             ->with('success', 'Client ajouté avec succès !');
     }
 
@@ -145,9 +139,7 @@ class ClientController extends Controller
 
         $client->update($validated);
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.clients.index', $redirectParams)
+        return redirect()->route('dashboard.clients.index')
             ->with('success', 'Client modifié avec succès !');
     }
 
@@ -164,9 +156,7 @@ class ClientController extends Controller
 
         $client->delete();
 
-        $redirectParams = request()->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.clients.index', $redirectParams)
+        return redirect()->route('dashboard.clients.index')
             ->with('success', 'Client supprimé avec succès !');
     }
 

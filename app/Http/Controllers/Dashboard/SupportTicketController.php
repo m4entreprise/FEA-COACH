@@ -43,11 +43,7 @@ class SupportTicketController extends Controller
                 ];
             });
 
-        $view = $request->boolean('beta')
-            ? 'Coach/SupportBeta'
-            : 'Dashboard/Support';
-
-        return Inertia::render($view, [
+        return Inertia::render('Coach/SupportBeta', [
             'tickets' => $tickets,
         ]);
     }
@@ -80,10 +76,8 @@ class SupportTicketController extends Controller
             'message' => $validated['message'],
         ]);
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
         return redirect()
-            ->route('dashboard.support', $redirectParams)
+            ->route('dashboard.support')
             ->with('success', 'Votre demande de support a été envoyée. Nous reviendrons vers vous rapidement.');
     }
 
@@ -114,10 +108,8 @@ class SupportTicketController extends Controller
             'last_message_at' => now(),
         ]);
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
         return redirect()
-            ->route('dashboard.support', $redirectParams)
+            ->route('dashboard.support')
             ->with('success', 'Votre message a été envoyé.');
     }
 
@@ -137,10 +129,8 @@ class SupportTicketController extends Controller
             'closed_at' => now(),
         ]);
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
         return redirect()
-            ->route('dashboard.support', $redirectParams)
+            ->route('dashboard.support')
             ->with('success', 'La conversation de support a été clôturée.');
     }
 }

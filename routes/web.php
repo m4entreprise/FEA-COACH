@@ -149,7 +149,6 @@ Route::middleware(['auth', 'onboarding.completed'])->prefix('setup')->group(func
 Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'])->group(function () {
     // Main dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard-coach-beta', [DashboardController::class, 'beta'])->name('dashboard.coach.beta');
     Route::post('/dashboard/onboarding/complete', [DashboardController::class, 'completeOnboarding'])->name('dashboard.onboarding.complete');
 
     // Branding management

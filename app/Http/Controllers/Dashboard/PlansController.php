@@ -35,11 +35,7 @@ class PlansController extends Controller
                 'is_active' => $plan->is_active,
             ]);
 
-        $view = $request->boolean('beta')
-            ? 'Coach/PlansBeta'
-            : 'Dashboard/Plans';
-
-        return Inertia::render($view, [
+        return Inertia::render('Coach/PlansBeta', [
             'plans' => $plans,
         ]);
     }
@@ -76,9 +72,7 @@ class PlansController extends Controller
             'is_active' => $validated['is_active'] ?? true,
         ]);
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.plans', $redirectParams)
+        return redirect()->route('dashboard.plans')
             ->with('success', 'Plan créé avec succès.');
     }
 
@@ -112,9 +106,7 @@ class PlansController extends Controller
             'is_active' => $validated['is_active'] ?? $plan->is_active,
         ]);
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.plans', $redirectParams)
+        return redirect()->route('dashboard.plans')
             ->with('success', 'Plan mis à jour avec succès.');
     }
 
@@ -132,9 +124,7 @@ class PlansController extends Controller
 
         $plan->delete();
 
-        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
-
-        return redirect()->route('dashboard.plans', $redirectParams)
+        return redirect()->route('dashboard.plans')
             ->with('success', 'Plan supprimé avec succès.');
     }
 

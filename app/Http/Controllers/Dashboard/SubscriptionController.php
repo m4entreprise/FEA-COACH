@@ -48,7 +48,20 @@ class SubscriptionController extends Controller
             'lemonsqueezy_customer_id' => $user->lemonsqueezy_customer_id,
             'lemonsqueezy_subscription_id' => $user->lemonsqueezy_subscription_id,
             'current_period_end' => $user->subscription_current_period_end,
-            'cancel_at_period_end' => $user->cancel_at_period_end,
+            'cancel_at_period_end' => $user->cancel_at_period_end ?? false,
+        ];
+
+        // Determine plan info based on FEA graduate status
+        $isFea = (bool) $user->is_fea_graduate;
+        $planInfo = [
+            'name' => 'UNICOACH Pro',
+            'price' => $isFea ? '20' : '30',
+            'original_price' => $isFea ? '30' : null,
+            'interval' => 'HTVA / mois',
+            'is_fea_price' => $isFea,
+            'description' => $isFea 
+                ? 'Bénéficiez d\'une réduction permanente grâce au partenariat avec Fitness Education Academy.'
+                : 'Accédez à toutes les fonctionnalités pour développer votre activité de coaching.',
         ];
 
         return Inertia::render('Coach/SubscriptionBeta', [
@@ -57,6 +70,7 @@ class SubscriptionController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
             ],
+            'planInfo' => $planInfo,
         ]);
     }
 

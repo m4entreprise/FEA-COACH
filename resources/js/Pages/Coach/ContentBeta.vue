@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { FileText, User, HelpCircle } from 'lucide-vue-next';
 
 const props = defineProps({
   coach: Object,
@@ -64,6 +65,13 @@ const completionPercentage = computed(() => {
 
   return Math.round((filled / total) * 100);
 });
+
+const scrollToSection = (id) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
 
 const submit = () => {
   form.post(route('dashboard.content.update', { beta: 1 }), {
@@ -280,11 +288,65 @@ const deletePhoto = () => {
               </p>
             </header>
 
+            <nav class="flex flex-wrap gap-2 text-[11px] text-slate-300 pt-1">
+              <button
+                type="button"
+                class="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900 px-3 py-1 hover:border-purple-500 hover:text-purple-200"
+                @click="scrollToSection('content-hero')"
+              >
+                <FileText class="h-3 w-3" />
+                <span>Bannière</span>
+              </button>
+              <button
+                type="button"
+                class="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900 px-3 py-1 hover:border-purple-500 hover:text-purple-200"
+                @click="scrollToSection('content-about')"
+              >
+                <User class="h-3 w-3" />
+                <span>À propos</span>
+              </button>
+              <button
+                type="button"
+                class="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900 px-3 py-1 hover:border-purple-500 hover:text-purple-200"
+                @click="scrollToSection('content-method')"
+              >
+                <HelpCircle class="h-3 w-3" />
+                <span>Méthode</span>
+              </button>
+              <button
+                type="button"
+                class="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900 px-3 py-1 hover:border-purple-500 hover:text-purple-200"
+                @click="scrollToSection('content-stats-cta')"
+              >
+                <FileText class="h-3 w-3" />
+                <span>Stats & CTA</span>
+              </button>
+              <button
+                type="button"
+                class="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900 px-3 py-1 hover:border-purple-500 hover:text-purple-200"
+                @click="scrollToSection('content-sections')"
+              >
+                <FileText class="h-3 w-3" />
+                <span>Sections</span>
+              </button>
+              <button
+                type="button"
+                class="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900 px-3 py-1 hover:border-purple-500 hover:text-purple-200"
+                @click="scrollToSection('content-social')"
+              >
+                <User class="h-3 w-3" />
+                <span>Réseaux</span>
+              </button>
+            </nav>
+
             <form @submit.prevent="submit" class="space-y-6">
               <!-- Hero section -->
-              <div class="space-y-4">
+              <div id="content-hero" class="space-y-4">
                 <div class="flex items-center justify-between gap-3">
-                  <h3 class="text-sm font-semibold">Section hero</h3>
+                  <h3 class="text-sm font-semibold flex items-center gap-2">
+                    <FileText class="h-4 w-4 text-purple-300" />
+                    <span>Bannière d'accueil</span>
+                  </h3>
                   <span class="text-[11px] text-slate-400">
                     {{ heroTitleCount }}/255 · {{ heroSubtitleCount }}/500
                   </span>
@@ -294,7 +356,7 @@ const deletePhoto = () => {
                   <div>
                     <InputLabel
                       for="hero_title"
-                      value="Titre principal *"
+                      value="Titre principal de la bannière *"
                       class="text-xs text-slate-200"
                     />
                     <TextInput
@@ -305,6 +367,9 @@ const deletePhoto = () => {
                       maxlength="255"
                       required
                     />
+                    <p class="mt-1 text-[11px] text-slate-500">
+                      S'affiche en gros tout en haut de votre site vitrine.
+                    </p>
                     <InputError
                       class="mt-1 text-xs"
                       :message="form.errors.hero_title"
@@ -314,7 +379,7 @@ const deletePhoto = () => {
                   <div>
                     <InputLabel
                       for="hero_subtitle"
-                      value="Sous-titre"
+                      value="Texte sous le titre principal"
                       class="text-xs text-slate-200"
                     />
                     <textarea
@@ -324,6 +389,9 @@ const deletePhoto = () => {
                       class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
                       maxlength="500"
                     />
+                    <p class="mt-1 text-[11px] text-slate-500">
+                      S'affiche sous le titre principal sur la bannière d'accueil.
+                    </p>
                     <InputError
                       class="mt-1 text-xs"
                       :message="form.errors.hero_subtitle"
@@ -333,9 +401,12 @@ const deletePhoto = () => {
               </div>
 
               <!-- About section -->
-              <div class="space-y-3">
+              <div id="content-about" class="space-y-3">
                 <div class="flex items-center justify-between gap-3">
-                  <h3 class="text-sm font-semibold">Section "À propos"</h3>
+                  <h3 class="text-sm font-semibold flex items-center gap-2">
+                    <User class="h-4 w-4 text-emerald-300" />
+                    <span>Section "À propos"</span>
+                  </h3>
                   <span class="text-[11px] text-slate-400">
                     {{ aboutTextCount }}/5000
                   </span>
@@ -347,6 +418,9 @@ const deletePhoto = () => {
                   class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
                   maxlength="5000"
                 />
+                <p class="mt-1 text-[11px] text-slate-500">
+                  S'affiche dans la section "À propos" de votre site vitrine.
+                </p>
                 <InputError
                   class="mt-1 text-xs"
                   :message="form.errors.about_text"
@@ -354,8 +428,11 @@ const deletePhoto = () => {
               </div>
 
               <!-- Method section -->
-              <div class="space-y-4">
-                <h3 class="text-sm font-semibold">Section "Ma méthode"</h3>
+              <div id="content-method" class="space-y-4">
+                <h3 class="text-sm font-semibold flex items-center gap-2">
+                  <HelpCircle class="h-4 w-4 text-sky-300" />
+                  <span>Section "Ma méthode"</span>
+                </h3>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
@@ -406,6 +483,9 @@ const deletePhoto = () => {
                     rows="4"
                     class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
                   />
+                  <p class="mt-1 text-[11px] text-slate-500">
+                    Texte d'introduction de votre approche, affiché avant les 3 étapes.
+                  </p>
                   <InputError
                     class="mt-1 text-xs"
                     :message="form.errors.method_text"
@@ -431,6 +511,9 @@ const deletePhoto = () => {
                       rows="3"
                       class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
                     />
+                    <p class="mt-1 text-[11px] text-slate-500">
+                      S'affiche dans la première colonne de la section "Ma méthode".
+                    </p>
                   </div>
 
                   <div class="space-y-2">
@@ -471,12 +554,15 @@ const deletePhoto = () => {
                       rows="3"
                       class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
                     />
+                    <p class="mt-1 text-[11px] text-slate-500">
+                      S'affiche dans la troisième colonne de la section "Ma méthode".
+                    </p>
                   </div>
                 </div>
               </div>
 
               <!-- Stats and CTA -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div id="content-stats-cta" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="space-y-3">
                   <h3 class="text-sm font-semibold">Statistiques</h3>
                   <div>
@@ -591,7 +677,7 @@ const deletePhoto = () => {
               </div>
 
               <!-- Sections titres supplémentaires -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div id="content-sections" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="space-y-3">
                   <InputLabel
                     for="pricing_title"
@@ -654,7 +740,7 @@ const deletePhoto = () => {
               </div>
 
               <!-- Social links -->
-              <div class="space-y-3">
+              <div id="content-social" class="space-y-3">
                 <h3 class="text-sm font-semibold">Réseaux sociaux</h3>
                 <p class="text-[11px] text-slate-400">
                   Liens optionnels affichés dans les sections sociales de votre

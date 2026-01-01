@@ -578,53 +578,6 @@ const deletePhoto = () => {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="space-y-3">
                     <h3 class="text-sm font-semibold">Statistiques</h3>
-                  <div>
-                    <InputLabel
-                      for="satisfaction_rate"
-                      value="Taux de satisfaction (%) *"
-                      class="text-xs text-slate-200"
-                    />
-                    <div class="mt-1 flex items-center gap-3">
-                      <input
-                        id="satisfaction_rate"
-                        v-model.number="form.satisfaction_rate"
-                        type="number"
-                        min="0"
-                        max="100"
-                        class="block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
-                        required
-                      />
-                      <span class="text-lg font-semibold text-emerald-400">
-                        {{ form.satisfaction_rate }}%
-                      </span>
-                    </div>
-                    <InputError
-                      class="mt-1 text-xs"
-                      :message="form.errors.satisfaction_rate"
-                    />
-                  </div>
-
-                  <div>
-                    <InputLabel
-                      for="average_rating"
-                      value="Note moyenne (étoiles) *"
-                      class="text-xs text-slate-200"
-                    />
-                    <div class="mt-1 flex items-center gap-3">
-                      <input
-                        id="average_rating"
-                        v-model.number="form.average_rating"
-                        type="number"
-                        min="0"
-                        max="5"
-                        step="0.1"
-                        class="block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
-                        required
-                      />
-                      <span class="text-lg font-semibold text-amber-400">
-                        {{ form.average_rating }}★
-                      </span>
-                    </div>
                     <div>
                       <InputLabel
                         for="satisfaction_rate"

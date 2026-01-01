@@ -6,6 +6,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { FileText, User, HelpCircle, Share2, MonitorPlay } from 'lucide-vue-next';
+import axios from 'axios';
 
 const props = defineProps({
   coach: Object,
@@ -148,9 +149,6 @@ const previewHtml = ref('');
 const previewLoading = ref(false);
 const previewError = ref(null);
 let previewTimeoutId = null;
-const csrfToken =
-  document.head.querySelector('meta[name="csrf-token"]')?.content ?? '';
-
 const hasPreviewRequirements = computed(() => {
   return Boolean(form.hero_title?.trim() && form.cta_text?.trim());
 });
@@ -167,26 +165,19 @@ const fetchPreview = async () => {
   previewError.value = null;
 
   try {
-    const response = await fetch(route('dashboard.content.preview', { beta: 1 }), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken,
-        'X-Requested-With': 'XMLHttpRequest',
-        Accept: 'application/json',
+    const { data } = await axios.post(
+      route('dashboard.content.preview', { beta: 1 }),
+      form.data(),
+      {
+        headers: { Accept: 'application/json' },
+        withCredentials: true,
       },
-      credentials: 'same-origin',
-      body: JSON.stringify(form.data()),
-    });
+    );
 
-    if (!response.ok) {
-      throw new Error('Impossible de générer l’aperçu pour le moment.');
-    }
-
-    const data = await response.json();
     previewHtml.value = data.html;
   } catch (error) {
-    previewError.value = error.message;
+    previewError.value =
+      error.response?.data?.message || 'Impossible de générer l’aperçu pour le moment.';
   } finally {
     previewLoading.value = false;
   }

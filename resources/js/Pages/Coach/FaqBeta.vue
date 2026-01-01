@@ -1,10 +1,11 @@
 <script setup>
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import axios from 'axios';
+import { GripVertical, Plus, HelpCircle } from 'lucide-vue-next';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   faqs: Array,
@@ -12,6 +13,21 @@ const props = defineProps({
 
 const showModal = ref(false);
 const editingFaq = ref(null);
+const draggingId = ref(null);
+const reorderSaving = ref(false);
+const reorderError = ref(null);
+
+const faqsList = ref([]);
+
+watch(
+  () => props.faqs,
+  (value) => {
+    faqsList.value = [...(value || [])].sort(
+      (a, b) => (a.order ?? 0) - (b.order ?? 0),
+    );
+  },
+  { immediate: true },
+);
 
 const form = useForm({
   question: '',
@@ -25,7 +41,7 @@ const openCreateModal = () => {
   form.reset();
   form.clearErrors();
   form.is_active = true;
-  form.order = 0;
+  form.order = faqsList.value.length;
   showModal.value = true;
 };
 
@@ -56,6 +72,7 @@ const submit = () => {
       },
     );
   } else {
+    form.order = faqsList.value.length;
     form.post(route('dashboard.faq.store', { beta: 1 }), {
       preserveScroll: true,
       onSuccess: () => closeModal(),
@@ -75,6 +92,74 @@ const deleteFaq = (faq) => {
   router.delete(route('dashboard.faq.destroy', { faq: faq.id, beta: 1 }), {
     preserveScroll: true,
   });
+};
+
+const onDragStart = (event, faq) => {
+  draggingId.value = faq.id;
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', String(faq.id));
+  }
+};
+
+const onDragEnd = () => {
+  draggingId.value = null;
+};
+
+const onDropCard = (event, targetFaq) => {
+  event.preventDefault();
+  reorderList(draggingId.value, targetFaq?.id ?? null);
+};
+
+const onDropAfterList = (event) => {
+  event.preventDefault();
+  reorderList(draggingId.value, null);
+};
+
+const reorderList = (draggedId, targetId) => {
+  if (!draggedId || draggedId === targetId) return;
+  const updated = [...faqsList.value];
+  const fromIndex = updated.findIndex((faq) => faq.id === draggedId);
+  if (fromIndex === -1) return;
+  const [moved] = updated.splice(fromIndex, 1);
+  let toIndex =
+    targetId === null ? updated.length : updated.findIndex((faq) => faq.id === targetId);
+  if (toIndex === -1) {
+    updated.splice(fromIndex, 0, moved);
+    return;
+  }
+  updated.splice(toIndex, 0, moved);
+  faqsList.value = updated.map((faq, index) => ({
+    ...faq,
+    order: index,
+  }));
+  draggingId.value = null;
+  saveOrder();
+};
+
+const saveOrder = async () => {
+  reorderSaving.value = true;
+  reorderError.value = null;
+
+  try {
+    await axios.post(
+      route('dashboard.faq.reorder', { beta: 1 }),
+      {
+        order: faqsList.value.map((faq, index) => ({
+          id: faq.id,
+          order: index,
+        })),
+      },
+      {
+        headers: { Accept: 'application/json' },
+      },
+    );
+  } catch (error) {
+    reorderError.value =
+      error.response?.data?.message || 'Impossible d’enregistrer le nouvel ordre.';
+  } finally {
+    reorderSaving.value = false;
+  }
 };
 </script>
 
@@ -112,7 +197,7 @@ const deleteFaq = (faq) => {
     <main
       class="flex-1 overflow-y-auto bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 md:px-6 py-6 md:py-8"
     >
-      <div class="max-w-5xl mx-auto space-y-6">
+      <div class="max-w-6xl mx-auto space-y-6">
         <!-- Header & button -->
         <section
           class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4"
@@ -123,66 +208,125 @@ const deleteFaq = (faq) => {
               Gérez les questions/réponses affichées sur votre site public.
             </p>
           </div>
-          <PrimaryButton
+          <button
             type="button"
-            class="text-xs"
+            class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
             @click="openCreateModal"
           >
-            <span class="mr-1">+</span>
-            Nouvelle question
-          </PrimaryButton>
+            <Plus class="h-3.5 w-3.5" />
+            <span>Nouvelle question</span>
+          </button>
+        </section>
+
+        <section
+          class="rounded-2xl border border-slate-800 bg-slate-950/70 p-5 shadow-xl space-y-2"
+        >
+          <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-breathe"></span>
+              <span>{{ faqsList.length }} question(s) affichées</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-slate-400">Glissez-déposez pour réordonner les entrées.</span>
+              <span
+                class="inline-flex items-center rounded-full px-3 py-1 text-[11px]"
+                :class="[
+                  reorderSaving
+                    ? 'border-yellow-400/40 text-yellow-200 bg-yellow-400/10'
+                    : reorderError
+                      ? 'border-rose-500/40 text-rose-200 bg-rose-500/10'
+                      : 'border-slate-700 text-slate-300 bg-slate-800/60',
+                ]"
+              >
+                <span v-if="reorderSaving">Enregistrement…</span>
+                <span v-else-if="reorderError">{{ reorderError }}</span>
+                <span v-else>Ordre synchronisé</span>
+              </span>
+            </div>
+          </div>
         </section>
 
         <!-- FAQ list -->
         <section class="space-y-4">
-          <div v-if="faqs && faqs.length" class="space-y-3">
+          <div v-if="faqsList.length" class="space-y-3">
             <article
-              v-for="faq in faqs"
+              v-for="faq in faqsList"
               :key="faq.id"
-              class="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-md"
+              class="rounded-2xl border bg-slate-900/80 p-5 shadow-md transition"
+              :class="[
+                draggingId === faq.id
+                  ? 'border-indigo-500/70 bg-slate-900'
+                  : 'border-slate-800 hover:border-slate-700',
+              ]"
+              draggable="true"
+              @dragstart="onDragStart($event, faq)"
+              @dragend="onDragEnd"
+              @dragover.prevent
+              @drop="onDropCard($event, faq)"
             >
-              <div class="flex items-start justify-between gap-3 mb-2">
-                <div class="flex-1">
-                  <h3 class="text-sm font-semibold text-slate-50">
-                    {{ faq.question }}
-                  </h3>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span
-                    class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                    :class="
-                      faq.is_active
-                        ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40'
-                        : 'bg-slate-800 text-slate-300 border border-slate-700'
-                    "
-                  >
-                    {{ faq.is_active ? 'Active' : 'Masquée' }}
-                  </span>
-                  <span class="text-[10px] text-slate-500">
-                    Ordre: {{ faq.order }}
-                  </span>
-                </div>
-              </div>
-              <p class="text-xs text-slate-300 whitespace-pre-line mb-3">
-                {{ faq.answer }}
-              </p>
-              <div class="flex justify-end gap-2 text-[11px]">
+              <div class="flex items-start gap-4">
                 <button
                   type="button"
-                  class="rounded-full border border-slate-700 px-3 py-1 text-slate-200 hover:bg-slate-800"
-                  @click="openEditModal(faq)"
+                  class="h-10 w-10 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-400 hover:text-slate-100"
                 >
-                  Modifier
+                  <GripVertical class="h-4 w-4" />
                 </button>
-                <button
-                  type="button"
-                  class="rounded-full border border-rose-600/60 bg-rose-600/10 px-3 py-1 text-rose-200 hover:bg-rose-600/20"
-                  @click="deleteFaq(faq)"
-                >
-                  Supprimer
-                </button>
+                <div class="flex-1 space-y-3">
+                  <div class="flex flex-wrap items-start justify-between gap-4">
+                    <div class="space-y-1">
+                      <p class="text-xs uppercase tracking-wide text-slate-500">
+                        Question
+                      </p>
+                      <h3 class="text-sm md:text-base font-semibold text-slate-50">
+                        {{ faq.question }}
+                      </h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span
+                        class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold"
+                        :class="
+                          faq.is_active
+                            ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
+                            : 'border-slate-700 bg-slate-800 text-slate-300'
+                        "
+                      >
+                        {{ faq.is_active ? 'Active' : 'Masquée' }}
+                      </span>
+                      <span class="text-[11px] text-slate-500">
+                        Position : {{ faq.order + 1 }}
+                      </span>
+                    </div>
+                  </div>
+                  <p class="text-xs md:text-sm text-slate-300 whitespace-pre-line">
+                    {{ faq.answer }}
+                  </p>
+                  <div class="flex flex-wrap justify-end gap-2 text-[11px]">
+                    <button
+                      type="button"
+                      class="rounded-full border border-slate-700 px-4 py-1.5 text-slate-200 hover:bg-slate-800"
+                      @click="openEditModal(faq)"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      type="button"
+                      class="rounded-full border border-rose-500/50 bg-rose-500/10 px-4 py-1.5 text-rose-200 hover:bg-rose-500/20"
+                      @click="deleteFaq(faq)"
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
               </div>
             </article>
+
+            <div
+              class="h-10 rounded-2xl border border-dashed border-slate-700 text-center text-xs text-slate-500 flex items-center justify-center"
+              @dragover.prevent
+              @drop="onDropAfterList"
+            >
+              Déposez ici pour placer la question à la fin
+            </div>
           </div>
 
           <div
@@ -191,9 +335,9 @@ const deleteFaq = (faq) => {
           >
             <div class="flex justify-center mb-4">
               <div
-                class="h-12 w-12 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-400 flex items-center justify-center shadow-lg"
+                class="h-14 w-14 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-400 flex items-center justify-center shadow-lg"
               >
-                <span class="text-xl">❓</span>
+                <HelpCircle class="h-7 w-7 text-white" />
               </div>
             </div>
             <h3 class="text-lg font-semibold mb-2">Aucune question</h3>
@@ -201,10 +345,14 @@ const deleteFaq = (faq) => {
               Créez vos premières FAQ pour répondre aux objections de vos
               prospects.
             </p>
-            <PrimaryButton type="button" class="text-xs" @click="openCreateModal">
-              <span class="mr-1">+</span>
-              Créer une question
-            </PrimaryButton>
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
+              @click="openCreateModal"
+            >
+              <Plus class="h-3.5 w-3.5" />
+              <span>Créer une question</span>
+            </button>
           </div>
         </section>
       </div>
@@ -218,9 +366,14 @@ const deleteFaq = (faq) => {
           class="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
         >
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-sm font-semibold">
-              {{ editingFaq ? 'Modifier la question' : 'Nouvelle question' }}
-            </h2>
+            <div>
+              <p class="text-xs uppercase tracking-wide text-slate-500">
+                {{ editingFaq ? 'Modifier' : 'Nouvelle entrée' }}
+              </p>
+              <h2 class="text-sm font-semibold">
+                {{ editingFaq ? 'Modifier la question' : 'Nouvelle question' }}
+              </h2>
+            </div>
             <button
               type="button"
               class="text-slate-400 hover:text-slate-200 text-sm"
@@ -269,35 +422,14 @@ const deleteFaq = (faq) => {
               />
             </div>
 
-            <div class="grid grid-cols-[1fr_auto] gap-3 items-center">
-              <div>
-                <InputLabel
-                  for="faq_order"
-                  value="Ordre d'affichage"
-                  class="text-xs text-slate-200"
-                />
-                <TextInput
-                  id="faq_order"
-                  v-model.number="form.order"
-                  type="number"
-                  min="0"
-                  class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                />
-                <InputError
-                  class="mt-1 text-[11px]"
-                  :message="form.errors.order"
-                />
-              </div>
-
-              <label class="flex items-center gap-2 text-xs text-slate-200">
-                <input
-                  v-model="form.is_active"
-                  type="checkbox"
-                  class="rounded border-slate-600 bg-slate-900 text-indigo-500 focus:ring-indigo-500"
-                />
-                Active
-              </label>
-            </div>
+            <label class="flex items-center gap-2 text-xs text-slate-200">
+              <input
+                v-model="form.is_active"
+                type="checkbox"
+                class="rounded border-slate-600 bg-slate-900 text-indigo-500 focus:ring-indigo-500"
+              />
+              Question active (visible sur le site)
+            </label>
 
             <div class="flex justify-end gap-2 pt-2 text-xs">
               <button
@@ -321,3 +453,27 @@ const deleteFaq = (faq) => {
     </main>
   </div>
 </template>
+
+<style scoped>
+@keyframes breathe {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45);
+  }
+  70% {
+    transform: scale(1.4);
+    opacity: 0.2;
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 2.2s ease-in-out infinite;
+}
+</style>

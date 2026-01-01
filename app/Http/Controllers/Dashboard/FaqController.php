@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class FaqController extends Controller
@@ -61,10 +62,15 @@ class FaqController extends Controller
             'is_active' => ['boolean'],
         ]);
 
+        $nextOrder = ($coach->faqs()->max('order') ?? -1) + 1;
+        $order = array_key_exists('order', $validated)
+            ? $validated['order']
+            : $nextOrder;
+
         $coach->faqs()->create([
             'question' => $validated['question'],
             'answer' => $validated['answer'],
-            'order' => $validated['order'] ?? 0,
+            'order' => $order,
             'is_active' => $validated['is_active'] ?? true,
         ]);
 
@@ -96,7 +102,7 @@ class FaqController extends Controller
         $faq->update([
             'question' => $validated['question'],
             'answer' => $validated['answer'],
-            'order' => $validated['order'] ?? $faq->order,
+            'order' => array_key_exists('order', $validated) ? $validated['order'] : $faq->order,
             'is_active' => $validated['is_active'] ?? $faq->is_active,
         ]);
 
@@ -124,5 +130,41 @@ class FaqController extends Controller
 
         return redirect()->route('dashboard.faq', $redirectParams)
             ->with('success', 'Question supprimée avec succès.');
+    }
+
+    /**
+     * Reorder FAQs using drag & drop payload.
+     */
+    public function reorder(Request $request)
+    {
+        $coach = $request->user()->coach;
+
+        if (!$coach) {
+            throw ValidationException::withMessages([
+                'order' => 'Aucun profil coach associé.',
+            ]);
+        }
+
+        $validated = $request->validate([
+            'order' => ['required', 'array'],
+            'order.*.id' => ['required', 'integer'],
+            'order.*.order' => ['required', 'integer', 'min:0'],
+        ]);
+
+        $coachFaqIds = $coach->faqs()->pluck('id')->toArray();
+        $orderPayload = collect($validated['order'])
+            ->filter(fn ($item) => in_array($item['id'], $coachFaqIds))
+            ->sortBy('order')
+            ->values();
+
+        foreach ($orderPayload as $index => $item) {
+            Faq::where('id', $item['id'])
+                ->where('coach_id', $coach->id)
+                ->update(['order' => $index]);
+        }
+
+        return response()->json([
+            'status' => 'ok',
+        ]);
     }
 }

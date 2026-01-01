@@ -13,9 +13,9 @@ class ClientController extends Controller
     /**
      * Display a listing of the clients.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $coach = auth()->user()->coach;
+        $coach = $request->user()->coach;
 
         if (!$coach) {
             return redirect()->route('dashboard')
@@ -28,7 +28,11 @@ class ClientController extends Controller
             ->orderBy('first_name')
             ->get();
 
-        return Inertia::render('Dashboard/Clients', [
+        $view = $request->boolean('beta')
+            ? 'Coach/ClientsBeta'
+            : 'Dashboard/Clients';
+
+        return Inertia::render($view, [
             'clients' => $clients,
         ]);
     }
@@ -55,7 +59,9 @@ class ClientController extends Controller
 
         $client = $coach->clients()->create($validated);
 
-        return redirect()->route('dashboard.clients.index')
+        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
+
+        return redirect()->route('dashboard.clients.index', $redirectParams)
             ->with('success', 'Client ajouté avec succès !');
     }
 
@@ -81,7 +87,9 @@ class ClientController extends Controller
 
         $client->update($validated);
 
-        return redirect()->route('dashboard.clients.index')
+        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
+
+        return redirect()->route('dashboard.clients.index', $redirectParams)
             ->with('success', 'Client modifié avec succès !');
     }
 
@@ -98,7 +106,9 @@ class ClientController extends Controller
 
         $client->delete();
 
-        return redirect()->route('dashboard.clients.index')
+        $redirectParams = request()->boolean('beta') ? ['beta' => 1] : [];
+
+        return redirect()->route('dashboard.clients.index', $redirectParams)
             ->with('success', 'Client supprimé avec succès !');
     }
 

@@ -258,7 +258,7 @@ onMounted(() => {
                     </a>
 
                     <Link
-                        :href="route('dashboard.subscription')"
+                        :href="route('dashboard.subscription', { beta: 1 })"
                         class="inline-flex items-center gap-2 rounded-full bg-slate-800/90 px-3 py-1.5 text-xs font-medium text-slate-100 border border-slate-600 hover:bg-slate-700"
                     >
                         <CreditCard class="h-3.5 w-3.5" />
@@ -348,7 +348,7 @@ onMounted(() => {
                                             Un profil complet inspire confiance a vos prospects.
                                         </p>
                                         <Link
-                                            :href="route('dashboard.content')"
+                                            :href="route('dashboard.content', { beta: 1 })"
                                             class="inline-flex items-center gap-1 mt-1 text-[11px] text-purple-300 hover:text-purple-200"
                                         >
                                             Completer mon contenu
@@ -377,7 +377,7 @@ onMounted(() => {
                                                 Branding
                                             </Link>
                                             <Link
-                                                :href="route('dashboard.gallery')"
+                                                :href="route('dashboard.gallery', { beta: 1 })"
                                                 class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-1 text-[11px] border border-slate-700 hover:bg-slate-700"
                                             >
                                                 <ImageIcon class="h-3 w-3" />
@@ -396,14 +396,14 @@ onMounted(() => {
                                         </p>
                                         <div class="flex flex-wrap gap-2 mt-1">
                                             <Link
-                                                :href="route('dashboard.plans')"
+                                                :href="route('dashboard.plans', { beta: 1 })"
                                                 class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-1 text-[11px] border border-slate-700 hover:bg-slate-700"
                                             >
                                                 <CreditCard class="h-3 w-3" />
                                                 Plans
                                             </Link>
                                             <Link
-                                                :href="route('dashboard.clients.index')"
+                                                :href="route('dashboard.clients.index', { beta: 1 })"
                                                 class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-1 text-[11px] border border-slate-700 hover:bg-slate-700"
                                             >
                                                 <Users class="h-3 w-3" />
@@ -436,7 +436,7 @@ onMounted(() => {
                                     Ge rez votre facturation et conservez votre tarif prefere.
                                 </p>
                                 <Link
-                                    :href="route('dashboard.subscription')"
+                                    :href="route('dashboard.subscription', { beta: 1 })"
                                     class="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-3 py-2 text-xs font-semibold text-emerald-950 shadow-md hover:bg-emerald-400"
                                 >
                                     Gerer mon abonnement
@@ -455,7 +455,7 @@ onMounted(() => {
                                     <h3 class="text-sm font-semibold">Transformations recentes</h3>
                                 </div>
                                 <Link
-                                    :href="route('dashboard.gallery')"
+                                    :href="route('dashboard.gallery', { beta: 1 })"
                                     class="text-[11px] text-purple-300 hover:text-purple-200 flex items-center gap-1"
                                 >
                                     Ouvrir la galerie
@@ -522,7 +522,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.content')"
+                                :href="route('dashboard.content', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -539,7 +539,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.gallery')"
+                                :href="route('dashboard.gallery', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-indigo-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -556,7 +556,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.faq')"
+                                :href="route('dashboard.faq', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-amber-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -590,7 +590,7 @@ onMounted(() => {
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <Link
-                                :href="route('dashboard.plans')"
+                                :href="route('dashboard.plans', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -607,7 +607,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.legal')"
+                                :href="route('dashboard.legal', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-slate-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -624,7 +624,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.clients.index')"
+                                :href="route('dashboard.clients.index', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-indigo-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -641,7 +641,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.contact')"
+                                :href="route('dashboard.contact', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-rose-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -675,7 +675,7 @@ onMounted(() => {
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                             <Link
-                                :href="route('dashboard.subscription')"
+                                :href="route('dashboard.subscription', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -692,7 +692,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.support')"
+                                :href="route('dashboard.support', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-sky-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">

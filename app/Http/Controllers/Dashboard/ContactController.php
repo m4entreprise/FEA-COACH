@@ -34,7 +34,11 @@ class ContactController extends Controller
                 'created_at' => $message->created_at->toDateTimeString(),
             ]);
 
-        return Inertia::render('Dashboard/Contact', [
+        $view = $request->boolean('beta')
+            ? 'Coach/ContactBeta'
+            : 'Dashboard/Contact';
+
+        return Inertia::render($view, [
             'messages' => $messages,
         ]);
     }
@@ -54,7 +58,9 @@ class ContactController extends Controller
             'is_read' => true,
         ]);
 
-        return redirect()->route('dashboard.contact')
+        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
+
+        return redirect()->route('dashboard.contact', $redirectParams)
             ->with('success', 'Message marqué comme lu.');
     }
 
@@ -71,7 +77,9 @@ class ContactController extends Controller
 
         $contactMessage->delete();
 
-        return redirect()->route('dashboard.contact')
+        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
+
+        return redirect()->route('dashboard.contact', $redirectParams)
             ->with('success', 'Message supprimé avec succès.');
     }
 }

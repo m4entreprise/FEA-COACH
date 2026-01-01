@@ -18,7 +18,11 @@ class GalleryController extends Controller
         $coach = $request->user()->coach;
         $transformations = $coach->transformations()->with('media')->get();
 
-        return Inertia::render('Dashboard/Gallery', [
+        $view = $request->boolean('beta')
+            ? 'Coach/GalleryBeta'
+            : 'Dashboard/Gallery';
+
+        return Inertia::render($view, [
             'transformations' => $transformations,
         ]);
     }
@@ -57,7 +61,9 @@ class GalleryController extends Controller
                 ->toMediaCollection('after');
         }
 
-        return redirect()->route('dashboard.gallery')
+        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
+
+        return redirect()->route('dashboard.gallery', $redirectParams)
             ->with('success', 'Transformation ajoutée avec succès.');
     }
 
@@ -73,7 +79,9 @@ class GalleryController extends Controller
 
         $transformation->delete();
 
-        return redirect()->route('dashboard.gallery')
+        $redirectParams = $request->boolean('beta') ? ['beta' => 1] : [];
+
+        return redirect()->route('dashboard.gallery', $redirectParams)
             ->with('success', 'Transformation supprimée avec succès.');
     }
 }

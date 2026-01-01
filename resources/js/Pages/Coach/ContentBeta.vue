@@ -970,7 +970,7 @@ onBeforeUnmount(() => {
           </section>
 
           <!-- Live preview -->
-          <aside class="space-y-4 lg:sticky lg:top-6 lg:self-start">
+          <aside class="space-y-4 sticky top-4 sm:top-6 self-start">
             <div
               class="rounded-2xl border border-slate-800 bg-slate-950/70 p-5 shadow-xl flex flex-col h-full"
             >

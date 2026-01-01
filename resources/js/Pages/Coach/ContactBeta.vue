@@ -36,7 +36,7 @@ const deleteMessage = (message) => {
 </script>
 
 <template>
-  <Head title="Messages de contact (beta)" />
+  <Head title="Messages de contact " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
     <!-- Top bar -->
@@ -46,7 +46,7 @@ const deleteMessage = (message) => {
       <div class="flex items-center gap-3">
         <div class="flex flex-col">
           <p class="text-xs uppercase tracking-wide text-slate-400">
-            Panel coach beta
+            Panel coach
           </p>
           <h1 class="text-base md:text-lg font-semibold flex items-center gap-2">
             <span>Messages reçus</span>
@@ -56,7 +56,7 @@ const deleteMessage = (message) => {
 
       <div class="flex items-center gap-3">
         <a
-          :href="route('dashboard.coach.beta')"
+          :href="route('dashboard')"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>

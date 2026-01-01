@@ -75,7 +75,7 @@ const closeClientModal = () => {
 };
 
 const submitClient = () => {
-  clientForm.post(route('dashboard.clients.store', { beta: 1 }), {
+  clientForm.post(route('dashboard.clients.store'), {
     preserveScroll: true,
     onSuccess: () => {
       closeClientModal();

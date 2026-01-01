@@ -99,7 +99,7 @@ const unreadClientMessages = computed(() => {
 });
 
 const goBack = () => {
-  router.visit(route('dashboard.clients.index', { beta: 1 }));
+  router.visit(route('dashboard.clients.index'));
 };
 
 // Messaging

@@ -58,15 +58,15 @@ const goCategory = (id) => {
     sidebarOpen.value = false;
 };
 
-onMounted(() => {
-    toast('Panel coach beta', {
-        description: 'Vous testez la nouvelle version du dashboard coach.',
-    });
-});
+// onMounted(() => {
+//     toast('Panel coach', {
+//         description: 'Bienvenue sur votre dashboard coach.',
+//     });
+// });
 </script>
 
 <template>
-    <Head title="Dashboard coach (beta)" />
+    <Head title="Dashboard coach" />
 
     <div class="min-h-screen flex bg-slate-950 text-slate-50">
         <!-- Desktop sidebar -->
@@ -81,9 +81,9 @@ onMounted(() => {
                         <p class="text-sm font-semibold">UNICOACH</p>
                     </div>
                 </div>
-                <span class="inline-flex items-center gap-1 rounded-full bg-purple-500/20 px-3 py-1 text-xs font-medium text-purple-100 border border-purple-500/40">
-                    <span class="inline-block h-2 w-2 rounded-full bg-emerald-400"></span>
-                    Beta
+                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-medium text-emerald-100 border border-emerald-500/40">
+                    <span class="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-breathe"></span>
+                    En ligne
                 </span>
             </div>
 
@@ -142,17 +142,18 @@ onMounted(() => {
             </nav>
 
             <div class="p-4 border-t border-slate-800 text-xs text-slate-400 space-y-2">
-                <p class="font-medium text-slate-200">Tester la nouvelle experience</p>
+                <p class="font-medium text-slate-200">UNICOACH</p>
                 <p>
-                    Vous pouvez revenir au dashboard classique a tout moment.
+                    Dashboard coach moderne et intuitif.
                 </p>
-                <Link
-                    :href="route('dashboard')"
+                <a
+                    href="https://unicoach.fr"
+                    target="_blank"
                     class="mt-2 inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-100 hover:border-slate-500 hover:bg-slate-800 transition-colors"
                 >
                     <ArrowLeftRight class="h-3 w-3" />
-                    Dashboard classique
-                </Link>
+                    En savoir plus
+                </a>
             </div>
         </aside>
 
@@ -239,7 +240,7 @@ onMounted(() => {
                         <Menu class="h-4 w-4" />
                     </button>
                     <div class="flex flex-col">
-                        <p class="text-xs uppercase tracking-wide text-slate-400">Panel coach beta</p>
+                        <p class="text-xs uppercase tracking-wide text-slate-400">Panel coach</p>
                         <h1 class="text-base md:text-lg font-semibold">
                             Bonjour, {{ authUser?.name }}
                         </h1>
@@ -258,7 +259,7 @@ onMounted(() => {
                     </a>
 
                     <Link
-                        :href="route('dashboard.subscription', { beta: 1 })"
+                        :href="route('dashboard.subscription')"
                         class="inline-flex items-center gap-2 rounded-full bg-slate-800/90 px-3 py-1.5 text-xs font-medium text-slate-100 border border-slate-600 hover:bg-slate-700"
                     >
                         <CreditCard class="h-3.5 w-3.5" />
@@ -274,10 +275,10 @@ onMounted(() => {
                     <div class="rounded-2xl border border-blue-500/40 bg-blue-950/40 p-6 shadow-xl">
                         <h2 class="text-lg font-semibold mb-2 flex items-center gap-2">
                             <LayoutDashboard class="h-5 w-5 text-blue-300" />
-                            Vue beta pour les coachs uniquement
+                            Dashboard coach uniquement
                         </h2>
                         <p class="text-sm text-blue-100">
-                            Cette vue est destinee aux coachs. Pour l'administration, utilisez le dashboard classique.
+                            Cette vue est destinee aux coachs. Pour l'administration, utilisez le dashboard admin.
                         </p>
                         <div class="mt-4 flex gap-3">
                             <Link
@@ -348,7 +349,7 @@ onMounted(() => {
                                             Un profil complet inspire confiance a vos prospects.
                                         </p>
                                         <Link
-                                            :href="route('dashboard.content', { beta: 1 })"
+                                            :href="route('dashboard.content')"
                                             class="inline-flex items-center gap-1 mt-1 text-[11px] text-purple-300 hover:text-purple-200"
                                         >
                                             Completer mon contenu
@@ -370,14 +371,14 @@ onMounted(() => {
                                         </p>
                                         <div class="flex flex-wrap gap-2 mt-1">
                                             <Link
-                                                :href="route('dashboard.branding', { beta: 1 })"
+                                                :href="route('dashboard.branding')"
                                                 class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-1 text-[11px] border border-slate-700 hover:bg-slate-700"
                                             >
                                                 <Palette class="h-3 w-3" />
                                                 Branding
                                             </Link>
                                             <Link
-                                                :href="route('dashboard.gallery', { beta: 1 })"
+                                                :href="route('dashboard.gallery')"
                                                 class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-1 text-[11px] border border-slate-700 hover:bg-slate-700"
                                             >
                                                 <ImageIcon class="h-3 w-3" />
@@ -396,14 +397,14 @@ onMounted(() => {
                                         </p>
                                         <div class="flex flex-wrap gap-2 mt-1">
                                             <Link
-                                                :href="route('dashboard.plans', { beta: 1 })"
+                                                :href="route('dashboard.plans')"
                                                 class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-1 text-[11px] border border-slate-700 hover:bg-slate-700"
                                             >
                                                 <CreditCard class="h-3 w-3" />
                                                 Plans
                                             </Link>
                                             <Link
-                                                :href="route('dashboard.clients.index', { beta: 1 })"
+                                                :href="route('dashboard.clients.index')"
                                                 class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-1 text-[11px] border border-slate-700 hover:bg-slate-700"
                                             >
                                                 <Users class="h-3 w-3" />
@@ -436,7 +437,7 @@ onMounted(() => {
                                     Ge rez votre facturation et conservez votre tarif prefere.
                                 </p>
                                 <Link
-                                    :href="route('dashboard.subscription', { beta: 1 })"
+                                    :href="route('dashboard.subscription')"
                                     class="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-3 py-2 text-xs font-semibold text-emerald-950 shadow-md hover:bg-emerald-400"
                                 >
                                     Gerer mon abonnement
@@ -455,7 +456,7 @@ onMounted(() => {
                                     <h3 class="text-sm font-semibold">Transformations recentes</h3>
                                 </div>
                                 <Link
-                                    :href="route('dashboard.gallery', { beta: 1 })"
+                                    :href="route('dashboard.gallery')"
                                     class="text-[11px] text-purple-300 hover:text-purple-200 flex items-center gap-1"
                                 >
                                     Ouvrir la galerie
@@ -505,7 +506,7 @@ onMounted(() => {
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <Link
-                                :href="route('dashboard.branding', { beta: 1 })"
+                                :href="route('dashboard.branding')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-purple-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -513,16 +514,16 @@ onMounted(() => {
                                         <Palette class="h-4 w-4" />
                                     </div>
                                     <div>
-                                        <h3 class="text-sm font-semibold">Apparence et logo</h3>
+                                        <h3 class="text-sm font-semibold">Branding</h3>
                                         <p class="text-xs text-slate-400">
-                                            Couleurs, logo, image hero et layout de votre site.
+                                            Couleurs, logo, image hero, layout du site
                                         </p>
                                     </div>
                                 </div>
                             </Link>
 
                             <Link
-                                :href="route('dashboard.content', { beta: 1 })"
+                                :href="route('dashboard.content')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -530,16 +531,16 @@ onMounted(() => {
                                         <FileText class="h-4 w-4" />
                                     </div>
                                     <div>
-                                        <h3 class="text-sm font-semibold">Contenu et textes</h3>
+                                        <h3 class="text-sm font-semibold">Contenu</h3>
                                         <p class="text-xs text-slate-400">
-                                            Titres, descriptions, page a propos, methode, preuves sociales.
+                                            Textes, CTA, reseaux sociaux, statistiques
                                         </p>
                                     </div>
                                 </div>
                             </Link>
 
                             <Link
-                                :href="route('dashboard.gallery', { beta: 1 })"
+                                :href="route('dashboard.gallery')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-indigo-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -547,16 +548,16 @@ onMounted(() => {
                                         <ImageIcon class="h-4 w-4" />
                                     </div>
                                     <div>
-                                        <h3 class="text-sm font-semibold">Galerie photo</h3>
+                                        <h3 class="text-sm font-semibold">Galerie</h3>
                                         <p class="text-xs text-slate-400">
-                                            Transformations avant / apres et visuels de reference.
+                                            Transformations avant / apres
                                         </p>
                                     </div>
                                 </div>
                             </Link>
 
                             <Link
-                                :href="route('dashboard.faq', { beta: 1 })"
+                                :href="route('dashboard.faq')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-amber-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -566,7 +567,7 @@ onMounted(() => {
                                     <div>
                                         <h3 class="text-sm font-semibold">FAQ</h3>
                                         <p class="text-xs text-slate-400">
-                                            Questions frequentes et objections traitees a l'avance.
+                                            Questions / reponses frequentes
                                         </p>
                                     </div>
                                 </div>
@@ -590,7 +591,7 @@ onMounted(() => {
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <Link
-                                :href="route('dashboard.plans', { beta: 1 })"
+                                :href="route('dashboard.plans')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -607,7 +608,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.legal', { beta: 1 })"
+                                :href="route('dashboard.legal')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-slate-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -624,7 +625,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.clients.index', { beta: 1 })"
+                                :href="route('dashboard.clients.index')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-indigo-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -641,7 +642,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.contact', { beta: 1 })"
+                                :href="route('dashboard.contact')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-rose-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -675,7 +676,7 @@ onMounted(() => {
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                             <Link
-                                :href="route('dashboard.subscription', { beta: 1 })"
+                                :href="route('dashboard.subscription')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -692,7 +693,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('dashboard.support', { beta: 1 })"
+                                :href="route('dashboard.support')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-sky-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -709,7 +710,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('profile.edit', { beta: 1 })"
+                                :href="route('profile.edit')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-purple-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
@@ -733,3 +734,27 @@ onMounted(() => {
         <Toaster position="top-right" rich-colors />
     </div>
 </template>
+
+<style scoped>
+@keyframes breathe {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45);
+  }
+  70% {
+    transform: scale(1.4);
+    opacity: 0.2;
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 2.2s ease-in-out infinite;
+}
+</style>

@@ -275,9 +275,7 @@ const deletePhoto = () => {
 
         <div class="space-y-6">
           <!-- Main content form -->
-          <section
-            class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl space-y-8"
-          >
+          <section class="space-y-8">
             <header class="space-y-1">
               <h2 class="text-lg font-semibold">Texte et structure du site</h2>
               <p class="text-sm text-slate-400">
@@ -339,7 +337,10 @@ const deletePhoto = () => {
 
             <form @submit.prevent="submit" class="space-y-6">
               <!-- Hero section -->
-              <div id="content-hero" class="space-y-4">
+              <div
+                id="content-hero"
+                class="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-5"
+              >
                 <div class="flex items-center justify-between gap-3">
                   <h3 class="text-sm font-semibold flex items-center gap-2">
                     <FileText class="h-4 w-4 text-purple-300" />
@@ -399,7 +400,10 @@ const deletePhoto = () => {
               </div>
 
               <!-- About section -->
-              <div id="content-about" class="space-y-3">
+              <div
+                id="content-about"
+                class="space-y-3 rounded-2xl border border-slate-800 bg-slate-950/60 p-5"
+              >
                 <div class="flex items-center justify-between gap-3">
                   <h3 class="text-sm font-semibold flex items-center gap-2">
                     <User class="h-4 w-4 text-emerald-300" />
@@ -426,7 +430,10 @@ const deletePhoto = () => {
               </div>
 
               <!-- Method section -->
-              <div id="content-method" class="space-y-4">
+              <div
+                id="content-method"
+                class="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-5"
+              >
                 <h3 class="text-sm font-semibold flex items-center gap-2">
                   <HelpCircle class="h-4 w-4 text-sky-300" />
                   <span>Section "Ma méthode"</span>
@@ -560,9 +567,17 @@ const deletePhoto = () => {
               </div>
 
               <!-- Stats and CTA -->
-              <div id="content-stats-cta" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="space-y-3">
-                  <h3 class="text-sm font-semibold">Statistiques</h3>
+              <div
+                id="content-stats-cta"
+                class="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-5"
+              >
+                <h3 class="text-sm font-semibold flex items-center gap-2">
+                  <FileText class="h-4 w-4 text-emerald-300" />
+                  <span>Statistiques & appels à l'action</span>
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-3">
+                    <h3 class="text-sm font-semibold">Statistiques</h3>
                   <div>
                     <InputLabel
                       for="satisfaction_rate"
@@ -610,135 +625,192 @@ const deletePhoto = () => {
                         {{ form.average_rating }}★
                       </span>
                     </div>
-                    <InputError
-                      class="mt-1 text-xs"
-                      :message="form.errors.average_rating"
-                    />
-                  </div>
-                </div>
-
-                <div class="space-y-3">
-                  <h3 class="text-sm font-semibold">Appels à l'action</h3>
-
-                  <div>
-                    <InputLabel
-                      for="cta_text"
-                      value="Texte du bouton principal *"
-                      class="text-xs text-slate-200"
-                    />
-                    <TextInput
-                      id="cta_text"
-                      v-model="form.cta_text"
-                      type="text"
-                      class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                      maxlength="100"
-                      required
-                    />
-                    <p class="mt-1 text-[11px] text-slate-400">
-                      {{ ctaTextCount }}/100 caractères
-                    </p>
-                    <InputError
-                      class="mt-1 text-xs"
-                      :message="form.errors.cta_text"
-                    />
-                  </div>
-
-                  <div class="grid grid-cols-1 gap-3">
                     <div>
                       <InputLabel
-                        for="intermediate_cta_title"
-                        value="Titre CTA intermédiaire"
+                        for="satisfaction_rate"
+                        value="Taux de satisfaction (%) *"
+                        class="text-xs text-slate-200"
+                      />
+                      <div class="mt-1 flex items-center gap-3">
+                        <input
+                          id="satisfaction_rate"
+                          v-model.number="form.satisfaction_rate"
+                          type="number"
+                          min="0"
+                          max="100"
+                          class="block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
+                          required
+                        />
+                        <span class="text-lg font-semibold text-emerald-400">
+                          {{ form.satisfaction_rate }}%
+                        </span>
+                      </div>
+                      <InputError
+                        class="mt-1 text-xs"
+                        :message="form.errors.satisfaction_rate"
+                      />
+                    </div>
+
+                    <div>
+                      <InputLabel
+                        for="average_rating"
+                        value="Note moyenne (étoiles) *"
+                        class="text-xs text-slate-200"
+                      />
+                      <div class="mt-1 flex items-center gap-3">
+                        <input
+                          id="average_rating"
+                          v-model.number="form.average_rating"
+                          type="number"
+                          min="0"
+                          max="5"
+                          step="0.1"
+                          class="block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
+                          required
+                        />
+                        <span class="text-lg font-semibold text-amber-400">
+                          {{ form.average_rating }}★
+                        </span>
+                      </div>
+                      <InputError
+                        class="mt-1 text-xs"
+                        :message="form.errors.average_rating"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="space-y-3">
+                    <h3 class="text-sm font-semibold">Appels à l'action</h3>
+
+                    <div>
+                      <InputLabel
+                        for="cta_text"
+                        value="Texte du bouton principal *"
                         class="text-xs text-slate-200"
                       />
                       <TextInput
-                        id="intermediate_cta_title"
-                        v-model="form.intermediate_cta_title"
+                        id="cta_text"
+                        v-model="form.cta_text"
                         type="text"
                         class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
+                        maxlength="100"
+                        required
+                      />
+                      <p class="mt-1 text-[11px] text-slate-400">
+                        {{ ctaTextCount }}/100 caractères
+                      </p>
+                      <InputError
+                        class="mt-1 text-xs"
+                        :message="form.errors.cta_text"
                       />
                     </div>
-                    <div>
-                      <InputLabel
-                        for="intermediate_cta_subtitle"
-                        value="Sous-titre CTA intermédiaire"
-                        class="text-xs text-slate-200"
-                      />
-                      <textarea
-                        id="intermediate_cta_subtitle"
-                        v-model="form.intermediate_cta_subtitle"
-                        rows="2"
-                        class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
-                      />
+
+                    <div class="grid grid-cols-1 gap-3">
+                      <div>
+                        <InputLabel
+                          for="intermediate_cta_title"
+                          value="Titre CTA intermédiaire"
+                          class="text-xs text-slate-200"
+                        />
+                        <TextInput
+                          id="intermediate_cta_title"
+                          v-model="form.intermediate_cta_title"
+                          type="text"
+                          class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
+                        />
+                      </div>
+                      <div>
+                        <InputLabel
+                          for="intermediate_cta_subtitle"
+                          value="Sous-titre CTA intermédiaire"
+                          class="text-xs text-slate-200"
+                        />
+                        <textarea
+                          id="intermediate_cta_subtitle"
+                          v-model="form.intermediate_cta_subtitle"
+                          rows="2"
+                          class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
               <!-- Sections titres supplémentaires -->
-              <div id="content-sections" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="space-y-3">
-                  <InputLabel
-                    for="pricing_title"
-                    value="Titre section tarifs"
-                    class="text-xs text-slate-200"
-                  />
-                  <TextInput
-                    id="pricing_title"
-                    v-model="form.pricing_title"
-                    type="text"
-                    class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                  />
-                  <textarea
-                    id="pricing_subtitle"
-                    v-model="form.pricing_subtitle"
-                    rows="2"
-                    class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
-                  />
+              <div
+                id="content-sections"
+                class="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-5 mt-4"
+              >
+                <h3 class="text-sm font-semibold flex items-center gap-2">
+                  <FileText class="h-4 w-4 text-purple-300" />
+                  <span>Sections de page</span>
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-3">
+                    <InputLabel
+                      for="pricing_title"
+                      value="Titre section tarifs"
+                      class="text-xs text-slate-200"
+                    />
+                    <TextInput
+                      id="pricing_title"
+                      v-model="form.pricing_title"
+                      type="text"
+                      class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
+                    />
+                    <textarea
+                      id="pricing_subtitle"
+                      v-model="form.pricing_subtitle"
+                      rows="2"
+                      class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div class="space-y-3">
+                    <InputLabel
+                      for="transformations_title"
+                      value="Titre section transformations"
+                      class="text-xs text-slate-200"
+                    />
+                    <TextInput
+                      id="transformations_title"
+                      v-model="form.transformations_title"
+                      type="text"
+                      class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
+                    />
+                    <textarea
+                      id="transformations_subtitle"
+                      v-model="form.transformations_subtitle"
+                      rows="2"
+                      class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
+                    />
+                  </div>
                 </div>
 
                 <div class="space-y-3">
                   <InputLabel
-                    for="transformations_title"
-                    value="Titre section transformations"
+                    for="final_cta_title"
+                    value="Titre section finale"
                     class="text-xs text-slate-200"
                   />
                   <TextInput
-                    id="transformations_title"
-                    v-model="form.transformations_title"
+                    id="final_cta_title"
+                    v-model="form.final_cta_title"
                     type="text"
                     class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
                   />
                   <textarea
-                    id="transformations_subtitle"
-                    v-model="form.transformations_subtitle"
-                    rows="2"
+                    id="final_cta_subtitle"
+                    v-model="form.final_cta_subtitle"
+                    rows="3"
                     class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
                   />
                 </div>
-              </div>
-
-              <div class="space-y-3">
-                <InputLabel
-                  for="final_cta_title"
-                  value="Titre section finale"
-                  class="text-xs text-slate-200"
-                />
-                <TextInput
-                  id="final_cta_title"
-                  v-model="form.final_cta_title"
-                  type="text"
-                  class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                />
-                <textarea
-                  id="final_cta_subtitle"
-                  v-model="form.final_cta_subtitle"
-                  rows="3"
-                  class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
-                />
               </div>
 
               <!-- Social links -->
-              <div id="content-social" class="space-y-3">
+              <div id="content-social" class="space-y-3 mt-4">
                 <h3 class="text-sm font-semibold flex items-center gap-2">
                   <Share2 class="h-4 w-4 text-sky-300" />
                   <span>Réseaux sociaux</span>

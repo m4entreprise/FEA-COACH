@@ -2,6 +2,10 @@
 import { Head, router } from '@inertiajs/vue3';
 import { Search, UserPlus, TrendingUp, MessageSquare, Users } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
   clients: Array,
@@ -47,6 +51,36 @@ const getLatestWeight = (client) => {
   if (!client.measurements || client.measurements.length === 0) return null;
   const sorted = [...client.measurements].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   return sorted[0].weight;
+};
+
+// Client creation modal
+const showClientModal = ref(false);
+const clientForm = useForm({
+  first_name: '',
+  last_name: '',
+  email: '',
+  phone: '',
+  address: '',
+  vat_number: '',
+});
+
+const openCreateModal = () => {
+  clientForm.reset();
+  showClientModal.value = true;
+};
+
+const closeClientModal = () => {
+  showClientModal.value = false;
+  clientForm.reset();
+};
+
+const submitClient = () => {
+  clientForm.post(route('dashboard.clients.store', { beta: 1 }), {
+    preserveScroll: true,
+    onSuccess: () => {
+      closeClientModal();
+    },
+  });
 };
 
 </script>
@@ -101,7 +135,7 @@ const getLatestWeight = (client) => {
             <button
               type="button"
               class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
-              @click="router.visit(route('dashboard.clients.create'))"
+              @click="openCreateModal"
             >
               <UserPlus class="h-3.5 w-3.5" />
               <span>Nouveau client</span>
@@ -202,6 +236,10 @@ const getLatestWeight = (client) => {
               </div>
 
               <div class="p-4 space-y-3 text-xs">
+                <div class="mb-3 px-3 py-2 bg-indigo-500/20 border border-indigo-500/30 rounded-lg">
+                  <p class="text-[10px] uppercase text-indigo-300 mb-1">Code élève</p>
+                  <p class="text-lg font-bold text-indigo-100 tracking-wider">{{ client.share_code }}</p>
+                </div>
                 <div class="grid grid-cols-2 gap-3">
                   <div class="rounded-lg bg-slate-800/50 p-3 border border-slate-700">
                     <p class="text-[10px] uppercase text-slate-400 mb-1">Poids actuel</p>
@@ -265,5 +303,119 @@ const getLatestWeight = (client) => {
         </section>
       </div>
     </main>
+
+    <!-- Client Creation Modal -->
+    <div
+      v-if="showClientModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
+      @click="closeClientModal"
+    >
+      <div
+        class="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
+        @click.stop
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-slate-100">Nouveau client</h2>
+          <button
+            type="button"
+            class="text-slate-400 hover:text-slate-200 text-xl"
+            @click="closeClientModal"
+          >
+            ✕
+          </button>
+        </div>
+
+        <form @submit.prevent="submitClient" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <InputLabel for="first_name" value="Prénom *" class="text-slate-200" />
+              <TextInput
+                id="first_name"
+                v-model="clientForm.first_name"
+                type="text"
+                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+                required
+              />
+              <InputError class="mt-1" :message="clientForm.errors.first_name" />
+            </div>
+
+            <div>
+              <InputLabel for="last_name" value="Nom *" class="text-slate-200" />
+              <TextInput
+                id="last_name"
+                v-model="clientForm.last_name"
+                type="text"
+                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+                required
+              />
+              <InputError class="mt-1" :message="clientForm.errors.last_name" />
+            </div>
+          </div>
+
+          <div>
+            <InputLabel for="email" value="Email" class="text-slate-200" />
+            <TextInput
+              id="email"
+              v-model="clientForm.email"
+              type="email"
+              class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+            />
+            <InputError class="mt-1" :message="clientForm.errors.email" />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <InputLabel for="phone" value="Téléphone" class="text-slate-200" />
+              <TextInput
+                id="phone"
+                v-model="clientForm.phone"
+                type="text"
+                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+              />
+              <InputError class="mt-1" :message="clientForm.errors.phone" />
+            </div>
+
+            <div>
+              <InputLabel for="vat_number" value="N° TVA" class="text-slate-200" />
+              <TextInput
+                id="vat_number"
+                v-model="clientForm.vat_number"
+                type="text"
+                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+              />
+              <InputError class="mt-1" :message="clientForm.errors.vat_number" />
+            </div>
+          </div>
+
+          <div>
+            <InputLabel for="address" value="Adresse" class="text-slate-200" />
+            <textarea
+              id="address"
+              v-model="clientForm.address"
+              rows="3"
+              class="mt-1 block w-full rounded-lg border-slate-700 bg-slate-950 text-slate-100 placeholder-slate-500 focus:border-purple-500 focus:ring-purple-500"
+            ></textarea>
+            <InputError class="mt-1" :message="clientForm.errors.address" />
+          </div>
+
+          <div class="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              class="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 transition-colors"
+              @click="closeClientModal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 transition-all"
+              :disabled="clientForm.processing"
+            >
+              {{ clientForm.processing ? 'Création...' : 'Créer le client' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>

@@ -1,5 +1,4 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import { User, TrendingUp, MessageSquare, FileText, ArrowLeft, Send, Paperclip, Download, Plus, Edit2, Trash2, Upload } from 'lucide-vue-next';
@@ -13,6 +12,26 @@ const props = defineProps({
 });
 
 const activeTab = ref('profile');
+
+// Watch activeTab to mark messages as read when opening messages tab
+const markMessagesAsRead = () => {
+  if (activeTab.value === 'messages' && unreadClientMessages.value > 0) {
+    router.post(route('dashboard.clients.messages.markRead', props.client.id), {}, {
+      preserveScroll: true,
+      only: ['client'],
+    });
+  }
+};
+
+// Watch for tab changes
+const previousTab = ref('profile');
+const onTabChange = (newTab) => {
+  activeTab.value = newTab;
+  if (newTab === 'messages' && previousTab.value !== 'messages') {
+    markMessagesAsRead();
+  }
+  previousTab.value = newTab;
+};
 const tabs = [
   { id: 'profile', label: 'Profil & Données', icon: User },
   { id: 'analytics', label: 'Évolution', icon: TrendingUp },
@@ -165,13 +184,103 @@ const formatDate = (dateString) => {
 const documentsByType = (type) => {
   return props.client.documents?.filter(doc => doc.type === type).sort((a, b) => b.version - a.version) || [];
 };
+
+// Measurements
+const showMeasurementModal = ref(false);
+const editingMeasurement = ref(null);
+const measurementForm = useForm({
+  weight: '',
+  height: '',
+  chest: '',
+  waist: '',
+  hips: '',
+});
+
+const openMeasurementModal = (measurement = null) => {
+  editingMeasurement.value = measurement;
+  if (measurement) {
+    measurementForm.weight = measurement.weight || '';
+    measurementForm.height = measurement.height || '';
+    measurementForm.chest = measurement.chest || '';
+    measurementForm.waist = measurement.waist || '';
+    measurementForm.hips = measurement.hips || '';
+  } else {
+    measurementForm.reset();
+  }
+  showMeasurementModal.value = true;
+};
+
+const closeMeasurementModal = () => {
+  showMeasurementModal.value = false;
+  editingMeasurement.value = null;
+  measurementForm.reset();
+};
+
+const submitMeasurement = () => {
+  // Calculate BMI if weight and height are provided
+  const weight = parseFloat(measurementForm.weight);
+  const height = parseFloat(measurementForm.height);
+  
+  if (weight > 0 && height > 0) {
+    const heightInMeters = height / 100;
+    const bmi = weight / (heightInMeters * heightInMeters);
+    measurementForm.bmi = Math.round(bmi * 10) / 10;
+  }
+  
+  if (editingMeasurement.value) {
+    measurementForm.patch(route('dashboard.clients.measurements.update', [props.client.id, editingMeasurement.value.id]), {
+      preserveScroll: true,
+      onSuccess: () => {
+        closeMeasurementModal();
+        router.reload({ only: ['client'] });
+      },
+    });
+  } else {
+    measurementForm.post(route('dashboard.clients.measurements.store', props.client.id), {
+      preserveScroll: true,
+      onSuccess: () => {
+        closeMeasurementModal();
+        router.reload({ only: ['client'] });
+      },
+    });
+  }
+};
+
+const deleteMeasurement = (measurement) => {
+  if (!confirm('Supprimer ce relevé ?')) return;
+  
+  router.delete(route('dashboard.clients.measurements.destroy', [props.client.id, measurement.id]), {
+    preserveScroll: true,
+    onSuccess: () => {
+      router.reload({ only: ['client'] });
+    },
+  });
+};
+
+// Photos
+const showPhotoModal = ref(false);
+const selectedMeasurement = ref(null);
+
+const viewPhotos = (measurement) => {
+  selectedMeasurement.value = measurement;
+  showPhotoModal.value = true;
+};
+
+const closePhotoModal = () => {
+  showPhotoModal.value = false;
+  selectedMeasurement.value = null;
+};
+
+const getPhotoUrl = (path) => {
+  if (!path) return null;
+  return route('clients.dashboard.photo', [props.client.share_token, path]);
+};
 </script>
 
 <template>
-  <AuthenticatedLayout>
-    <Head :title="`Gérer ${client.first_name} ${client.last_name}`" />
+  <Head :title="`Gérer ${client.first_name} ${client.last_name}`" />
 
-    <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+  <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <!-- Header -->
         <div class="mb-6">
@@ -198,6 +307,10 @@ const documentsByType = (type) => {
                   {{ client.first_name }} {{ client.last_name }}
                 </h1>
                 <p class="text-sm text-slate-400">{{ client.email || 'Pas d\'email' }}</p>
+                <div class="mt-2 inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/20 border border-indigo-500/30 rounded-full">
+                  <span class="text-xs text-indigo-300">Code élève:</span>
+                  <span class="text-sm font-bold text-indigo-100 tracking-wider">{{ client.share_code }}</span>
+                </div>
               </div>
               <div v-if="unreadClientMessages > 0" class="flex items-center gap-2 px-4 py-2 bg-indigo-500/20 border border-indigo-500/30 rounded-full">
                 <MessageSquare class="h-4 w-4 text-indigo-400" />
@@ -242,7 +355,7 @@ const documentsByType = (type) => {
               <button
                 v-for="tab in tabs"
                 :key="tab.id"
-                @click="activeTab = tab.id"
+                @click="onTabChange(tab.id)"
                 :class="[
                   'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all',
                   activeTab === tab.id
@@ -315,7 +428,7 @@ const documentsByType = (type) => {
 
               <!-- Health & Nutrition -->
               <div class="bg-slate-800/30 rounded-xl p-6 border border-slate-700">
-                <h3 class="text-lg font-semibold text-slate-200 mb-4">Santé & Nutrition</h3>
+                <h3 class="text-lg font-semibold text-slate-200 mb-4">Santé & Physiologie</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
                     <p class="text-slate-400 mb-1">Problèmes de santé</p>
@@ -326,16 +439,44 @@ const documentsByType = (type) => {
                     <p class="text-slate-100">{{ client.medications || '—' }}</p>
                   </div>
                   <div>
+                    <p class="text-slate-400 mb-1">Blessures et douleurs</p>
+                    <p class="text-slate-100">{{ client.injuries || '—' }}</p>
+                  </div>
+                  <div>
+                    <p class="text-slate-400 mb-1">Niveau de stress</p>
+                    <p class="text-slate-100">{{ client.stress_level ? client.stress_level + '/10' : '—' }}</p>
+                  </div>
+                  <div>
+                    <p class="text-slate-400 mb-1">Qualité du sommeil</p>
+                    <p class="text-slate-100">{{ client.sleep_quality || '—' }}</p>
+                  </div>
+                  <div v-if="client.menstrual_tracking">
+                    <p class="text-slate-400 mb-1">Dernières règles</p>
+                    <p class="text-slate-100">{{ client.last_period ? new Date(client.last_period).toLocaleDateString('fr-FR') : '—' }}</p>
+                  </div>
+                  <div>
                     <p class="text-slate-400 mb-1">Allergies alimentaires</p>
-                    <p class="text-slate-100">{{ client.food_allergies || '—' }}</p>
+                    <p class="text-slate-100">{{ client.food_allergies || client.allergies || '—' }}</p>
                   </div>
                   <div>
                     <p class="text-slate-400 mb-1">Aliments non aimés</p>
-                    <p class="text-slate-100">{{ client.food_dislikes || '—' }}</p>
+                    <p class="text-slate-100">{{ client.food_dislikes || client.dislikes || '—' }}</p>
                   </div>
                   <div>
                     <p class="text-slate-400 mb-1">Régime alimentaire</p>
                     <p class="text-slate-100">{{ client.dietary_preference || '—' }}</p>
+                  </div>
+                  <div>
+                    <p class="text-slate-400 mb-1">Compléments alimentaires</p>
+                    <p class="text-slate-100">{{ client.supplements || '—' }}</p>
+                  </div>
+                  <div>
+                    <p class="text-slate-400 mb-1">Budget courses</p>
+                    <p class="text-slate-100">{{ client.grocery_budget || '—' }}</p>
+                  </div>
+                  <div v-if="client.kitchen_equipment">
+                    <p class="text-slate-400 mb-1">Équipement cuisine</p>
+                    <p class="text-slate-100">{{ Array.isArray(client.kitchen_equipment) ? client.kitchen_equipment.join(', ') : client.kitchen_equipment }}</p>
                   </div>
                 </div>
               </div>
@@ -343,7 +484,7 @@ const documentsByType = (type) => {
               <!-- Sports & Psychology -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-slate-800/30 rounded-xl p-6 border border-slate-700">
-                  <h3 class="text-lg font-semibold text-slate-200 mb-4">Contexte sportif</h3>
+                  <h3 class="text-lg font-semibold text-slate-200 mb-4">Contexte sportif & Logistique</h3>
                   <div class="space-y-3 text-sm">
                     <div>
                       <p class="text-slate-400 mb-1">Niveau sportif</p>
@@ -355,21 +496,41 @@ const documentsByType = (type) => {
                     </div>
                     <div>
                       <p class="text-slate-400 mb-1">Fréquence sportive</p>
-                      <p class="text-slate-100">{{ client.sports_frequency || '—' }}</p>
+                      <p class="text-slate-100">{{ client.sports_frequency || client.training_frequency || '—' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-slate-400 mb-1">Durée par séance</p>
+                      <p class="text-slate-100">{{ client.session_duration || '—' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-slate-400 mb-1">Activité quotidienne</p>
+                      <p class="text-slate-100">{{ client.daily_activity || '—' }}</p>
+                    </div>
+                    <div v-if="client.available_equipment">
+                      <p class="text-slate-400 mb-1">Matériel disponible</p>
+                      <p class="text-slate-100">{{ Array.isArray(client.available_equipment) ? client.available_equipment.join(', ') : client.available_equipment }}</p>
                     </div>
                   </div>
                 </div>
 
                 <div class="bg-slate-800/30 rounded-xl p-6 border border-slate-700">
-                  <h3 class="text-lg font-semibold text-slate-200 mb-4">Psychologie</h3>
+                  <h3 class="text-lg font-semibold text-slate-200 mb-4">Psychologie & Objectifs</h3>
                   <div class="space-y-3 text-sm">
                     <div>
-                      <p class="text-slate-400 mb-1">Motivation</p>
-                      <p class="text-slate-100">{{ client.motivation || '—' }}</p>
+                      <p class="text-slate-400 mb-1">Objectif principal</p>
+                      <p class="text-slate-100">{{ client.main_goal || '—' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-slate-400 mb-1">Motivation profonde</p>
+                      <p class="text-slate-100">{{ client.deep_motivation || client.motivation || '—' }}</p>
                     </div>
                     <div>
                       <p class="text-slate-400 mb-1">Obstacles</p>
                       <p class="text-slate-100">{{ client.obstacles || '—' }}</p>
+                    </div>
+                    <div>
+                      <p class="text-slate-400 mb-1">Style de coaching</p>
+                      <p class="text-slate-100">{{ client.coaching_style || '—' }}</p>
                     </div>
                   </div>
                 </div>
@@ -415,11 +576,11 @@ const documentsByType = (type) => {
                 <div class="flex items-center justify-between mb-4">
                   <h3 class="text-lg font-semibold text-slate-200">Historique des relevés</h3>
                   <button
-                    @click="router.visit(route('clients.dashboard.profile', client.share_token))"
+                    @click="openMeasurementModal()"
                     class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-semibold hover:from-purple-600 hover:to-pink-600 transition-all"
                   >
                     <Plus class="h-4 w-4" />
-                    <span>Voir le profil client</span>
+                    <span>Ajouter un relevé</span>
                   </button>
                 </div>
 
@@ -439,9 +600,25 @@ const documentsByType = (type) => {
                         </p>
                       </div>
                       <div class="flex items-center gap-2">
-                        <span v-if="measurement.photo_front || measurement.photo_side || measurement.photo_back" class="px-2 py-1 bg-indigo-500/20 border border-indigo-500/30 rounded text-xs text-indigo-300">
-                          📸 Photos
-                        </span>
+                        <button
+                          v-if="measurement.photo_front || measurement.photo_side || measurement.photo_back"
+                          @click="viewPhotos(measurement)"
+                          class="px-2 py-1 bg-indigo-500/20 border border-indigo-500/30 rounded text-xs text-indigo-300 hover:bg-indigo-500/30 transition-colors"
+                        >
+                          📸 Voir photos
+                        </button>
+                        <button
+                          @click="openMeasurementModal(measurement)"
+                          class="flex items-center gap-1 px-2 py-1 rounded text-xs text-slate-300 hover:bg-slate-600/50 transition-colors"
+                        >
+                          <Edit2 class="h-3 w-3" />
+                        </button>
+                        <button
+                          @click="deleteMeasurement(measurement)"
+                          class="flex items-center gap-1 px-2 py-1 rounded text-xs text-red-400 hover:bg-red-500/20 transition-colors"
+                        >
+                          <Trash2 class="h-3 w-3" />
+                        </button>
                       </div>
                     </div>
 
@@ -638,13 +815,13 @@ const documentsByType = (type) => {
               <div class="bg-slate-800/30 rounded-xl border border-slate-700 p-6">
                 <div class="flex items-center justify-between mb-4">
                   <h3 class="text-lg font-semibold text-slate-200">Documents partagés</h3>
-                  <a
-                    :href="route('dashboard.clients.index', { beta: 1 })"
+                  <button
+                    @click="goBack"
                     class="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-700/50 text-slate-300 text-sm font-semibold hover:bg-slate-700 transition-all"
                   >
                     <Upload class="h-4 w-4" />
-                    <span>Gérer les documents</span>
-                  </a>
+                    <span>Retour à ClientsBeta</span>
+                  </button>
                 </div>
 
                 <div class="space-y-4">
@@ -744,5 +921,173 @@ const documentsByType = (type) => {
         </form>
       </div>
     </div>
-  </AuthenticatedLayout>
+
+    <!-- Measurement Modal -->
+    <div
+      v-if="showMeasurementModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
+      @click="closeMeasurementModal"
+    >
+      <div
+        class="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
+        @click.stop
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-slate-100">
+            {{ editingMeasurement ? 'Modifier le relevé' : 'Nouveau relevé' }}
+          </h2>
+          <button
+            type="button"
+            class="text-slate-400 hover:text-slate-200 text-xl"
+            @click="closeMeasurementModal"
+          >
+            ✕
+          </button>
+        </div>
+
+        <form @submit.prevent="submitMeasurement" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <InputLabel for="weight" value="Poids (kg)" class="text-slate-200" />
+              <TextInput
+                id="weight"
+                v-model="measurementForm.weight"
+                type="number"
+                step="0.1"
+                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+              />
+              <InputError class="mt-1" :message="measurementForm.errors.weight" />
+            </div>
+
+            <div>
+              <InputLabel for="height" value="Taille (cm)" class="text-slate-200" />
+              <TextInput
+                id="height"
+                v-model="measurementForm.height"
+                type="number"
+                step="0.1"
+                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+              />
+              <InputError class="mt-1" :message="measurementForm.errors.height" />
+            </div>
+
+            <div>
+              <InputLabel for="chest" value="Tour de poitrine (cm)" class="text-slate-200" />
+              <TextInput
+                id="chest"
+                v-model="measurementForm.chest"
+                type="number"
+                step="0.1"
+                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+              />
+              <InputError class="mt-1" :message="measurementForm.errors.chest" />
+            </div>
+
+            <div>
+              <InputLabel for="waist" value="Tour de taille (cm)" class="text-slate-200" />
+              <TextInput
+                id="waist"
+                v-model="measurementForm.waist"
+                type="number"
+                step="0.1"
+                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+              />
+              <InputError class="mt-1" :message="measurementForm.errors.waist" />
+            </div>
+
+            <div>
+              <InputLabel for="hips" value="Tour de hanches (cm)" class="text-slate-200" />
+              <TextInput
+                id="hips"
+                v-model="measurementForm.hips"
+                type="number"
+                step="0.1"
+                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+              />
+              <InputError class="mt-1" :message="measurementForm.errors.hips" />
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              class="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 transition-colors"
+              @click="closeMeasurementModal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 transition-all"
+              :disabled="measurementForm.processing"
+            >
+              {{ measurementForm.processing ? 'Enregistrement...' : 'Enregistrer' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Photo Modal -->
+    <div
+      v-if="showPhotoModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4"
+      @click="closePhotoModal"
+    >
+      <div
+        class="w-full max-w-6xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
+        @click.stop
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-slate-100">
+            Photos du {{ selectedMeasurement ? new Date(selectedMeasurement.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '' }}
+          </h2>
+          <button
+            type="button"
+            class="text-slate-400 hover:text-slate-200 text-xl"
+            @click="closePhotoModal"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div v-if="selectedMeasurement?.photo_front" class="space-y-2">
+            <p class="text-sm font-semibold text-slate-300 text-center">Vue de face</p>
+            <img
+              :src="getPhotoUrl(selectedMeasurement.photo_front)"
+              alt="Photo de face"
+              class="w-full rounded-lg border border-slate-700"
+            />
+          </div>
+          <div v-if="selectedMeasurement?.photo_side" class="space-y-2">
+            <p class="text-sm font-semibold text-slate-300 text-center">Vue de profil</p>
+            <img
+              :src="getPhotoUrl(selectedMeasurement.photo_side)"
+              alt="Photo de profil"
+              class="w-full rounded-lg border border-slate-700"
+            />
+          </div>
+          <div v-if="selectedMeasurement?.photo_back" class="space-y-2">
+            <p class="text-sm font-semibold text-slate-300 text-center">Vue de dos</p>
+            <img
+              :src="getPhotoUrl(selectedMeasurement.photo_back)"
+              alt="Photo de dos"
+              class="w-full rounded-lg border border-slate-700"
+            />
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+          <button
+            type="button"
+            class="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 transition-colors"
+            @click="closePhotoModal"
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>

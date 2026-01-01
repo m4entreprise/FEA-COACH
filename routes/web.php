@@ -213,7 +213,13 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
 
     // Client messaging (coach side)
     Route::post('/dashboard/clients/{client}/messages', [ClientController::class, 'sendMessage'])->name('dashboard.clients.messages.send');
+    Route::post('/dashboard/clients/{client}/messages/mark-read', [ClientController::class, 'markMessagesAsRead'])->name('dashboard.clients.messages.markRead');
     Route::get('/dashboard/clients/{client}/messages/{message}/download', [ClientController::class, 'downloadMessageAttachment'])->name('dashboard.clients.messages.download');
+
+    // Client measurements (coach side)
+    Route::post('/dashboard/clients/{client}/measurements', [ClientController::class, 'storeMeasurement'])->name('dashboard.clients.measurements.store');
+    Route::patch('/dashboard/clients/{client}/measurements/{measurement}', [ClientController::class, 'updateMeasurement'])->name('dashboard.clients.measurements.update');
+    Route::delete('/dashboard/clients/{client}/measurements/{measurement}', [ClientController::class, 'destroyMeasurement'])->name('dashboard.clients.measurements.destroy');
 
     // Legal terms management
     Route::get('/dashboard/legal', [LegalController::class, 'edit'])->name('dashboard.legal');

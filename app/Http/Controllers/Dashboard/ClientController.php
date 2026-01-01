@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\ClientNote;
 use App\Models\ClientDocument;
 use App\Models\ClientMessage;
+use App\Models\ClientMeasurement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -30,6 +31,8 @@ class ClientController extends Controller
             ->with([
                 'notes',
                 'documents' => fn ($query) => $query->orderBy('type')->orderByDesc('version'),
+                'messages' => fn ($query) => $query->orderBy('created_at', 'desc'),
+                'measurements' => fn ($query) => $query->orderBy('created_at', 'desc'),
             ])
             ->orderBy('last_name')
             ->orderBy('first_name')
@@ -243,6 +246,25 @@ class ClientController extends Controller
     }
 
     /**
+     * Mark client messages as read (coach side).
+     */
+    public function markMessagesAsRead(Request $request, Client $client)
+    {
+        $coach = auth()->user()->coach;
+
+        if (!$coach || $client->coach_id !== $coach->id) {
+            return back()->with('error', 'Accès non autorisé.');
+        }
+
+        $client->messages()
+            ->where('sender_type', 'client')
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        return back();
+    }
+
+    /**
      * Download message attachment (coach side).
      */
     public function downloadMessageAttachment(Request $request, Client $client, ClientMessage $message)
@@ -265,6 +287,101 @@ class ClientController extends Controller
             $message->attachment_path,
             $message->attachment_name
         );
+    }
+
+    /**
+     * Store a new measurement for the client (coach side).
+     */
+    public function storeMeasurement(Request $request, Client $client)
+    {
+        $coach = auth()->user()->coach;
+
+        if (!$coach || $client->coach_id !== $coach->id) {
+            return back()->with('error', 'Accès non autorisé.');
+        }
+
+        $validated = $request->validate([
+            'weight' => ['nullable', 'numeric', 'min:0', 'max:500'],
+            'height' => ['nullable', 'numeric', 'min:0', 'max:300'],
+            'chest' => ['nullable', 'numeric', 'min:0', 'max:300'],
+            'waist' => ['nullable', 'numeric', 'min:0', 'max:300'],
+            'hips' => ['nullable', 'numeric', 'min:0', 'max:300'],
+        ]);
+
+        $measurementData = $validated;
+        
+        if (isset($validated['weight']) && isset($validated['height']) && $validated['weight'] > 0 && $validated['height'] > 0) {
+            $heightInMeters = $validated['height'] / 100;
+            $measurementData['bmi'] = round($validated['weight'] / ($heightInMeters * $heightInMeters), 2);
+        }
+
+        // Check if there's already a measurement this week
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+        
+        $existingMeasurement = $client->measurements()
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->first();
+
+        if ($existingMeasurement) {
+            // Update existing measurement with new values (only non-null values)
+            $updateData = array_filter($measurementData, function($value) {
+                return !is_null($value);
+            });
+            $existingMeasurement->update($updateData);
+            return back()->with('success', 'Relevé de cette semaine mis à jour avec succès.');
+        } else {
+            // Create new measurement
+            $client->measurements()->create($measurementData);
+            return back()->with('success', 'Relevé ajouté avec succès.');
+        }
+    }
+
+    /**
+     * Update a measurement (coach side).
+     */
+    public function updateMeasurement(Request $request, Client $client, ClientMeasurement $measurement)
+    {
+        $coach = auth()->user()->coach;
+
+        if (!$coach || $client->coach_id !== $coach->id || $measurement->client_id !== $client->id) {
+            return back()->with('error', 'Accès non autorisé.');
+        }
+
+        $validated = $request->validate([
+            'weight' => ['nullable', 'numeric', 'min:0', 'max:500'],
+            'height' => ['nullable', 'numeric', 'min:0', 'max:300'],
+            'chest' => ['nullable', 'numeric', 'min:0', 'max:300'],
+            'waist' => ['nullable', 'numeric', 'min:0', 'max:300'],
+            'hips' => ['nullable', 'numeric', 'min:0', 'max:300'],
+        ]);
+
+        $measurementData = $validated;
+        
+        if (isset($validated['weight']) && isset($validated['height']) && $validated['weight'] > 0 && $validated['height'] > 0) {
+            $heightInMeters = $validated['height'] / 100;
+            $measurementData['bmi'] = round($validated['weight'] / ($heightInMeters * $heightInMeters), 2);
+        }
+
+        $measurement->update($measurementData);
+
+        return back()->with('success', 'Relevé modifié avec succès.');
+    }
+
+    /**
+     * Delete a measurement (coach side).
+     */
+    public function destroyMeasurement(Client $client, ClientMeasurement $measurement)
+    {
+        $coach = auth()->user()->coach;
+
+        if (!$coach || $client->coach_id !== $coach->id || $measurement->client_id !== $client->id) {
+            return back()->with('error', 'Accès non autorisé.');
+        }
+
+        $measurement->delete();
+
+        return back()->with('success', 'Relevé supprimé avec succès.');
     }
 
     private function generateShareCode(): string

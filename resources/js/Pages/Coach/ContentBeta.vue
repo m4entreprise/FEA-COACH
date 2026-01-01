@@ -172,6 +172,7 @@ const fetchPreview = async () => {
       headers: {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
+        'X-Requested-With': 'XMLHttpRequest',
         Accept: 'application/json',
       },
       credentials: 'same-origin',

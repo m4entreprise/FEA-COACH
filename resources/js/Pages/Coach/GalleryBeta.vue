@@ -155,7 +155,7 @@ watch(isPreviewFullscreen, (active) => {
           <div class="flex flex-wrap gap-2">
             <button
               type="button"
-              class="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-50 hover:border-indigo-400 hover:bg-slate-800"
+              class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-50 hover:border-indigo-400 hover:bg-slate-800"
               @click="openPreview"
             >
               <Search class="h-3.5 w-3.5" />
@@ -163,7 +163,7 @@ watch(isPreviewFullscreen, (active) => {
             </button>
             <button
               type="button"
-              class="inline-flex items-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
               @click="showAddModal = true"
             >
               <Plus class="h-3.5 w-3.5" />

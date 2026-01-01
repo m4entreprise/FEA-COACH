@@ -402,7 +402,7 @@ const deletePhoto = () => {
               <!-- About section -->
               <div
                 id="content-about"
-                class="space-y-3 rounded-2xl border border-slate-800 bg-slate-950/60 p-5"
+                class="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-5"
               >
                 <div class="flex items-center justify-between gap-3">
                   <h3 class="text-sm font-semibold flex items-center gap-2">
@@ -413,20 +413,99 @@ const deletePhoto = () => {
                     {{ aboutTextCount }}/5000
                   </span>
                 </div>
-                <textarea
-                  id="about_text"
-                  v-model="form.about_text"
-                  rows="6"
-                  class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
-                  maxlength="5000"
-                />
-                <p class="mt-1 text-[11px] text-slate-500">
-                  S'affiche dans la section "À propos" de votre site vitrine.
-                </p>
-                <InputError
-                  class="mt-1 text-xs"
-                  :message="form.errors.about_text"
-                />
+
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+                  <div class="space-y-3 lg:col-span-3">
+                    <textarea
+                      id="about_text"
+                      v-model="form.about_text"
+                      rows="6"
+                      class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
+                      maxlength="5000"
+                    />
+                    <p class="text-[11px] text-slate-500">
+                      S'affiche dans la section "À propos" de votre site vitrine.
+                    </p>
+                    <InputError
+                      class="text-xs"
+                      :message="form.errors.about_text"
+                    />
+                  </div>
+
+                  <div class="lg:col-span-2">
+                    <div
+                      class="h-full rounded-2xl border border-slate-800 bg-slate-950/60 p-4 space-y-4"
+                    >
+                      <div class="flex items-center gap-3">
+                        <div
+                          class="h-9 w-9 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-sm"
+                        >
+                          📸
+                        </div>
+                        <div>
+                          <p class="text-sm font-semibold">Photo de profil</p>
+                          <p class="text-[11px] text-slate-400">
+                            Image affichée dans la section À propos et sur votre site.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="space-y-4">
+                        <div class="flex justify-center">
+                          <div v-if="photoPreview" class="relative">
+                            <img
+                              :src="photoPreview"
+                              alt="Photo de profil"
+                              class="h-28 w-28 rounded-full object-cover shadow-lg ring-2 ring-slate-700"
+                            />
+                            <button
+                              type="button"
+                              class="absolute -right-2 -top-2 rounded-full bg-red-600 p-1.5 text-white text-xs shadow"
+                              @click="deletePhoto"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                          <div
+                            v-else
+                            class="flex h-28 w-28 items-center justify-center rounded-full bg-slate-800 text-slate-500 text-2xl"
+                          >
+                            ?
+                          </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2">
+                          <input
+                            ref="photoInput"
+                            type="file"
+                            accept="image/*"
+                            class="hidden"
+                            @change="updatePhotoPreview"
+                          />
+                          <button
+                            type="button"
+                            class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-900 hover:bg-white"
+                            @click="selectPhoto"
+                          >
+                            Choisir une photo
+                          </button>
+                          <button
+                            v-if="photoInput?.files?.length"
+                            type="button"
+                            class="inline-flex items-center rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-medium text-emerald-950 hover:bg-emerald-400"
+                            @click="uploadPhoto"
+                          >
+                            Enregistrer
+                          </button>
+                        </div>
+
+                        <p class="text-[11px] text-slate-500">
+                          Formats JPG, PNG, WEBP · max 2MB.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <!-- Method section -->
@@ -763,15 +842,22 @@ const deletePhoto = () => {
               </div>
 
               <!-- Social links -->
-              <div id="content-social" class="space-y-3 mt-4">
-                <h3 class="text-sm font-semibold flex items-center gap-2">
-                  <Share2 class="h-4 w-4 text-sky-300" />
-                  <span>Réseaux sociaux</span>
-                </h3>
-                <p class="text-[11px] text-slate-400">
-                  Liens optionnels affichés dans les sections sociales de votre
-                  site.
-                </p>
+              <div
+                id="content-social"
+                class="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-5 mt-4"
+              >
+                <div class="flex items-center justify-between gap-3">
+                  <div>
+                    <h3 class="text-sm font-semibold flex items-center gap-2">
+                      <Share2 class="h-4 w-4 text-sky-300" />
+                      <span>Réseaux sociaux</span>
+                    </h3>
+                    <p class="text-[11px] text-slate-400">
+                      Liens optionnels affichés dans les sections sociales de votre
+                      site.
+                    </p>
+                  </div>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <InputLabel
@@ -992,83 +1078,6 @@ const deletePhoto = () => {
                 Cet aperçu est indicatif : le design final de votre site peut
                 être différent.
               </p>
-            </section>
-
-            <!-- Profile photo card -->
-            <section
-              class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl space-y-4"
-            >
-              <header class="flex items-center gap-3">
-                <div
-                  class="h-9 w-9 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-sm"
-                >
-                  📸
-                </div>
-                <div>
-                  <h3 class="text-sm font-semibold">Photo de profil</h3>
-                  <p class="text-xs text-slate-400">
-                    Image utilisée sur votre site public et dans certains
-                    blocs.
-                  </p>
-                </div>
-              </header>
-
-              <div class="flex flex-col sm:flex-row gap-4 items-center">
-                <div class="flex-shrink-0">
-                  <div v-if="photoPreview" class="relative">
-                    <img
-                      :src="photoPreview"
-                      alt="Photo de profil"
-                      class="h-24 w-24 rounded-full object-cover shadow-lg ring-2 ring-slate-700"
-                    />
-                    <button
-                      type="button"
-                      class="absolute -right-2 -top-2 rounded-full bg-red-600 p-1.5 text-white text-xs shadow"
-                      @click="deletePhoto"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                  <div
-                    v-else
-                    class="flex h-24 w-24 items-center justify-center rounded-full bg-slate-800 text-slate-500 text-2xl"
-                  >
-                    ?
-                  </div>
-                </div>
-
-                <div class="flex-1 space-y-3">
-                  <input
-                    ref="photoInput"
-                    type="file"
-                    accept="image/*"
-                    class="hidden"
-                    @change="updatePhotoPreview"
-                  />
-
-                  <div class="flex gap-2">
-                    <button
-                      type="button"
-                      class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-900 hover:bg-white"
-                      @click="selectPhoto"
-                    >
-                      Choisir une photo
-                    </button>
-                    <button
-                      v-if="photoInput?.files?.length"
-                      type="button"
-                      class="inline-flex items-center rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-medium text-emerald-950 hover:bg-emerald-400"
-                      @click="uploadPhoto"
-                    >
-                      Enregistrer
-                    </button>
-                  </div>
-
-                  <p class="text-[11px] text-slate-400">
-                    Formats JPG, PNG, WEBP · max 2MB.
-                  </p>
-                </div>
-              </div>
             </section>
 
             <!-- FAQ card -->

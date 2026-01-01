@@ -970,7 +970,7 @@ onBeforeUnmount(() => {
           </section>
 
           <!-- Live preview -->
-          <aside class="space-y-4 xl:sticky xl:top-6">
+          <aside class="space-y-4 lg:sticky lg:top-6 lg:self-start">
             <div
               class="rounded-2xl border border-slate-800 bg-slate-950/70 p-5 shadow-xl flex flex-col h-full"
             >
@@ -1095,7 +1095,7 @@ onBeforeUnmount(() => {
             v-if="isPreviewFullscreen"
             class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-xl flex flex-col"
           >
-            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800 text-slate-200">
+            <div class="flex flex-wrap items-start justify-between gap-4 px-6 py-4 border-b border-slate-800 text-slate-200">
               <div class="flex items-center gap-3">
                 <MonitorPlay class="h-5 w-5 text-indigo-300" />
                 <div>
@@ -1103,7 +1103,23 @@ onBeforeUnmount(() => {
                   <p class="text-xs text-slate-400">Affichage {{ form.site_layout }}</p>
                 </div>
               </div>
-              <div class="flex items-center gap-2 text-xs text-slate-400">
+              <div class="flex flex-wrap items-center gap-3 text-xs text-slate-300">
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    v-for="layout in siteLayouts"
+                    :key="`fullscreen-${layout.key}`"
+                    type="button"
+                    class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 transition-all"
+                    :class="[
+                      form.site_layout === layout.key
+                        ? 'border-indigo-400 bg-indigo-500/20 text-white'
+                        : 'border-slate-600 hover:border-slate-400',
+                    ]"
+                    @click="form.site_layout = layout.key"
+                  >
+                    <span class="font-semibold">{{ layout.label }}</span>
+                  </button>
+                </div>
                 <span v-if="previewLoading" class="animate-pulse text-yellow-300">Mise à jour…</span>
                 <button
                   type="button"

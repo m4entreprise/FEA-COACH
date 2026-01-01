@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\CoachDashboardHero;
 use App\Filament\Widgets\CoachDashboardQuickActions;
 use App\Filament\Widgets\CoachDashboardStats;
 use App\Http\Middleware\EnsureOnboardingCompleted;
@@ -42,10 +43,10 @@ class CoachPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
+                CoachDashboardHero::class,
                 CoachDashboardStats::class,
                 CoachDashboardQuickActions::class,
                 AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

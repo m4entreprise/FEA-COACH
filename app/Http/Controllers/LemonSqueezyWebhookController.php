@@ -204,14 +204,29 @@ class LemonSqueezyWebhookController extends Controller
             return;
         }
 
-        $user->update([
+        $update = [
             'subscription_status' => $attributes['status'] ?? 'cancelled',
             'cancel_at_period_end' => true,
-        ]);
+        ];
+
+        // Update trial_ends_at if still present (cancel pendant le trial)
+        if (! empty($attributes['trial_ends_at'])) {
+            $update['trial_ends_at'] = Carbon::parse($attributes['trial_ends_at']);
+        }
+
+        // Update period end with renews_at or ends_at
+        if (! empty($attributes['renews_at'])) {
+            $update['subscription_current_period_end'] = Carbon::parse($attributes['renews_at']);
+        } elseif (! empty($attributes['ends_at'])) {
+            $update['subscription_current_period_end'] = Carbon::parse($attributes['ends_at']);
+        }
+
+        $user->update($update);
 
         Log::info('Lemon Squeezy subscription_cancelled handled', [
             'user_id' => $user->id,
             'subscription_id' => $subscriptionId,
+            'updates' => $update,
         ]);
     }
 

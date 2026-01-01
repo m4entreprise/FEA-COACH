@@ -46,7 +46,6 @@ class CoachPanelProvider extends PanelProvider
                 CoachDashboardHero::class,
                 CoachDashboardStats::class,
                 CoachDashboardQuickActions::class,
-                AccountWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

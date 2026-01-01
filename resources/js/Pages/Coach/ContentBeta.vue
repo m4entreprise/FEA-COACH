@@ -267,7 +267,7 @@ onBeforeUnmount(() => {
           </div>
         </section>
 
-        <div class="grid gap-6 xl:grid-cols-[1.8fr,1fr]">
+        <div class="grid gap-6 lg:grid-cols-[minmax(0,1.7fr)_minmax(320px,1fr)] lg:items-start">
           <!-- Main content form -->
           <section class="space-y-8">
             <header class="space-y-1">

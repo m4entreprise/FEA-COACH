@@ -11,7 +11,10 @@ class ClientShareController extends Controller
 {
     public function show(Request $request, string $token)
     {
-        $client = Client::with(['documents' => fn ($query) => $query->orderBy('type')->orderByDesc('version')])
+        $client = Client::with([
+                'documents' => fn ($query) => $query->orderBy('type')->orderByDesc('version'),
+                'notes' => fn ($query) => $query->orderByDesc('created_at'),
+            ])
             ->where('share_token', $token)
             ->firstOrFail();
 

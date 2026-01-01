@@ -6,7 +6,7 @@ use Filament\Widgets\Widget;
 
 class CoachQuickActions extends Widget
 {
-    protected static string $view = 'filament.widgets.coach-quick-actions';
+    protected string $view = 'filament.widgets.coach-quick-actions';
 
     protected static ?int $sort = 20;
 

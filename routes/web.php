@@ -178,6 +178,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('dashboard.clients.store');
     Route::patch('/dashboard/clients/{client}', [ClientController::class, 'update'])->name('dashboard.clients.update');
     Route::delete('/dashboard/clients/{client}', [ClientController::class, 'destroy'])->name('dashboard.clients.destroy');
+    Route::post('/dashboard/clients/preview', [ClientController::class, 'preview'])->name('dashboard.clients.preview');
     
     // Client notes management
     Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'storeNote'])->name('dashboard.clients.notes.store');

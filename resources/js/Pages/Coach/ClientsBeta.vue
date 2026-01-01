@@ -1,10 +1,11 @@
 <script setup>
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import axios from 'axios';
+import { Search, UserPlus, Users, FileText, Mail, Phone } from 'lucide-vue-next';
+import { ref, computed, watch } from 'vue';
 
 const props = defineProps({
   clients: Array,
@@ -44,6 +45,10 @@ const showNotesModal = ref(false);
 const editingClient = ref(null);
 const selectedClient = ref(null);
 const editingNote = ref(null);
+const previewHtml = ref('');
+const previewLoading = ref(false);
+const previewError = ref(null);
+const isPreviewFullscreen = ref(false);
 
 const clientForm = useForm({
   first_name: '',
@@ -199,6 +204,42 @@ const formatDate = (d) =>
     hour: '2-digit',
     minute: '2-digit',
   });
+
+const fetchPreview = async () => {
+  previewLoading.value = true;
+  previewError.value = null;
+
+  try {
+    const { data } = await axios.post(
+      route('dashboard.clients.preview', { beta: 1 }),
+      {},
+      {
+        headers: { Accept: 'application/json' },
+        withCredentials: true,
+      },
+    );
+
+    previewHtml.value = data.html;
+  } catch (error) {
+    previewError.value =
+      error.response?.data?.message || "Impossible de générer l’aperçu pour le moment.";
+  } finally {
+    previewLoading.value = false;
+  }
+};
+
+const openPreview = () => {
+  isPreviewFullscreen.value = true;
+  fetchPreview();
+};
+
+const closePreview = () => {
+  isPreviewFullscreen.value = false;
+};
+
+watch(isPreviewFullscreen, (active) => {
+  document.body.classList.toggle('overflow-hidden', active);
+});
 </script>
 
 <template>
@@ -238,6 +279,35 @@ const formatDate = (d) =>
       <div class="max-w-6xl mx-auto space-y-6">
         <!-- Stats & search -->
         <section class="space-y-4">
+          <div
+            class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+          >
+            <div>
+              <h2 class="text-lg font-semibold">Gestion des clients</h2>
+              <p class="text-sm text-slate-400">
+                Centralisez prospects, clients et notes pour suivre vos séances.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-50 hover:border-indigo-400 hover:bg-slate-800"
+                @click="openPreview"
+              >
+                <Search class="h-3.5 w-3.5" />
+                <span>Aperçu plein écran</span>
+              </button>
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
+                @click="openCreateModal"
+              >
+                <UserPlus class="h-3.5 w-3.5" />
+                <span>Nouveau client</span>
+              </button>
+            </div>
+          </div>
+
           <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div
               class="rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 p-4 text-white shadow-xl border border-purple-400/40"
@@ -279,31 +349,31 @@ const formatDate = (d) =>
                 v-model="searchQuery"
                 type="text"
                 placeholder="Rechercher un client..."
-                class="block w-full rounded-full border border-slate-700 bg-slate-950 py-2.5 pl-9 pr-9 text-xs text-slate-50 focus:border-purple-500 focus:ring-purple-500"
+                class="block w-full rounded-full border border-slate-700 bg-slate-950 py-2.5 pl-10 pr-10 text-xs text-slate-50 focus:border-purple-500 focus:ring-purple-500"
               />
-              <span
-                class="pointer-events-none absolute left-3 top-2.5 text-slate-500 text-xs"
-              >
-                🔍
-              </span>
+              <Search
+                class="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-500"
+              />
               <button
                 v-if="searchQuery"
                 type="button"
                 class="absolute right-3 top-2.5 text-slate-500 hover:text-slate-200 text-xs"
                 @click="searchQuery = ''"
               >
-                ✕
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
-            <PrimaryButton
+            <button
               type="button"
-              class="text-xs self-start"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600 self-start"
               @click="openCreateModal"
             >
-              <span class="mr-1">+</span>
-              Nouveau client
-            </PrimaryButton>
+              <UserPlus class="h-3.5 w-3.5" />
+              <span>Nouveau client</span>
+            </button>
           </div>
         </section>
 
@@ -341,7 +411,7 @@ const formatDate = (d) =>
 
               <div class="p-4 space-y-3 text-xs">
                 <p class="flex items-center gap-2 text-slate-300">
-                  <span class="text-slate-500">📱</span>
+                  <Phone class="h-4 w-4 text-slate-500" />
                   <span>{{ client.phone || 'Pas de téléphone' }}</span>
                 </p>
                 <p v-if="client.vat_number" class="text-slate-400">
@@ -398,7 +468,7 @@ const formatDate = (d) =>
               <div
                 class="h-14 w-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg"
               >
-                <span class="text-2xl">👥</span>
+                <Users class="h-7 w-7 text-white" />
               </div>
             </div>
             <h3 class="text-lg font-semibold mb-2">
@@ -686,4 +756,74 @@ const formatDate = (d) =>
       </div>
     </main>
   </div>
+
+  <teleport to="body">
+    <div
+      v-if="isPreviewFullscreen"
+      class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col"
+    >
+      <div class="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-800 text-slate-200">
+        <div>
+          <p class="text-xs uppercase tracking-wide text-indigo-300">
+            Aperçu clients
+          </p>
+          <h3 class="text-lg font-semibold">Site public (mise à jour en direct)</h3>
+        </div>
+        <div class="flex items-center gap-3 text-xs">
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1.5 hover:border-slate-400 hover:text-white"
+            @click="fetchPreview"
+            :disabled="previewLoading"
+          >
+            <span v-if="previewLoading" class="animate-pulse text-yellow-300">Actualisation…</span>
+            <span v-else>Rafraîchir</span>
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1.5 hover:border-slate-400 hover:text-white"
+            @click="closePreview"
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+
+      <div class="flex-1 p-4">
+        <div
+          class="relative h-full rounded-2xl border border-slate-800 bg-slate-950/80 shadow-2xl overflow-hidden"
+        >
+          <div
+            v-if="previewLoading && !previewHtml"
+            class="absolute inset-0 flex flex-col items-center justify-center text-slate-200 text-sm gap-3"
+          >
+            <svg class="h-8 w-8 animate-spin text-indigo-300" viewBox="0 0 24 24" fill="none">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            <p>Chargement de l’aperçu...</p>
+          </div>
+          <div
+            v-else-if="previewError"
+            class="absolute inset-0 flex flex-col items-center justify-center text-center text-red-300 text-sm px-8 gap-3"
+          >
+            <p>{{ previewError }}</p>
+            <button
+              type="button"
+              class="text-xs underline decoration-dotted"
+              @click="fetchPreview"
+            >
+              Réessayer
+            </button>
+          </div>
+          <iframe
+            v-show="previewHtml"
+            class="w-full h-full bg-white"
+            sandbox="allow-same-origin allow-forms"
+            :srcdoc="previewHtml"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </teleport>
 </template>

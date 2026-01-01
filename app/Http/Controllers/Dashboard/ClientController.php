@@ -167,4 +167,43 @@ class ClientController extends Controller
 
         return back()->with('success', 'Note supprimée avec succès !');
     }
+
+    /**
+     * Render a fullscreen preview showing clients applied to the public site.
+     */
+    public function preview(Request $request)
+    {
+        $coach = $request->user()->coach;
+
+        if (!$coach) {
+            abort(404, 'Coach introuvable.');
+        }
+
+        $coach->loadMissing([
+            'user',
+            'media',
+            'clients.notes' => fn ($query) => $query->orderByDesc('created_at'),
+            'plans' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('price'),
+            'transformations' => fn ($query) => $query->with('media')->orderBy('order'),
+            'faqs' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('created_at'),
+        ]);
+
+        $layouts = config('coach_site.layouts', []);
+        $defaultLayout = config('coach_site.default_layout', 'classic');
+        $layoutKey = $coach->site_layout ?: $defaultLayout;
+        $layoutKey = array_key_exists($layoutKey, $layouts) ? $layoutKey : $defaultLayout;
+        $viewName = $layouts[$layoutKey]['view'] ?? 'coach-site.layouts.classic';
+
+        $html = view($viewName, [
+            'coach' => $coach,
+            'clients' => $coach->clients,
+            'plans' => $coach->plans,
+            'transformations' => $coach->transformations,
+            'faqs' => $coach->faqs,
+        ])->render();
+
+        return response()->json([
+            'html' => $html,
+        ]);
+    }
 }

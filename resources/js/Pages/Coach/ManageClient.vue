@@ -58,6 +58,32 @@ const latestMeasurement = computed(() => {
   return props.client.measurements[0];
 });
 
+const calculatedBmi = computed(() => {
+  if (!latestMeasurement.value?.weight || !latestMeasurement.value?.height) return null;
+  const weight = parseFloat(latestMeasurement.value.weight);
+  const height = parseFloat(latestMeasurement.value.height);
+  if (weight <= 0 || height <= 0) return null;
+  const heightInMeters = height / 100;
+  return (weight / (heightInMeters * heightInMeters)).toFixed(1);
+});
+
+const shareUrl = computed(() => {
+  return `${window.location.origin}/p/${props.client.share_token}`;
+});
+
+const copyShareLink = () => {
+  navigator.clipboard.writeText(shareUrl.value);
+  alert('Lien copié dans le presse-papier !');
+};
+
+const viewClientDashboard = () => {
+  router.post(route('dashboard.clients.accessDashboard', props.client.id), {}, {
+    onSuccess: (page) => {
+      window.open(shareUrl.value, '_blank');
+    },
+  });
+};
+
 const unreadClientMessages = computed(() => {
   return props.client.messages?.filter(m => m.sender_type === 'client' && !m.is_read).length || 0;
 });
@@ -369,9 +395,25 @@ const deleteDocument = (document) => {
                   <span class="text-sm font-bold text-indigo-100 tracking-wider">{{ client.share_code }}</span>
                 </div>
               </div>
-              <div v-if="unreadClientMessages > 0" class="flex items-center gap-2 px-4 py-2 bg-indigo-500/20 border border-indigo-500/30 rounded-full">
-                <MessageSquare class="h-4 w-4 text-indigo-400" />
-                <span class="text-sm font-semibold text-indigo-300">{{ unreadClientMessages }} nouveau{{ unreadClientMessages > 1 ? 'x' : '' }} message{{ unreadClientMessages > 1 ? 's' : '' }}</span>
+              <div class="flex items-center gap-3">
+                <button
+                  @click="viewClientDashboard"
+                  class="flex items-center gap-2 px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-full text-sm font-semibold text-blue-300 hover:bg-blue-500/30 transition-colors"
+                >
+                  <User class="h-4 w-4" />
+                  <span>Voir le dashboard élève</span>
+                </button>
+                <button
+                  @click="copyShareLink"
+                  class="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full text-sm font-semibold text-emerald-300 hover:bg-emerald-500/30 transition-colors"
+                >
+                  <span>🔗</span>
+                  <span>Partager le lien</span>
+                </button>
+                <div v-if="unreadClientMessages > 0" class="flex items-center gap-2 px-4 py-2 bg-indigo-500/20 border border-indigo-500/30 rounded-full">
+                  <MessageSquare class="h-4 w-4 text-indigo-400" />
+                  <span class="text-sm font-semibold text-indigo-300">{{ unreadClientMessages }} nouveau{{ unreadClientMessages > 1 ? 'x' : '' }} message{{ unreadClientMessages > 1 ? 's' : '' }}</span>
+                </div>
               </div>
             </div>
 
@@ -386,7 +428,7 @@ const deleteDocument = (document) => {
               <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
                 <p class="text-xs uppercase text-slate-400 mb-1">IMC</p>
                 <p class="text-2xl font-bold text-slate-50">
-                  {{ latestMeasurement?.bmi ? latestMeasurement.bmi.toFixed(1) : '—' }}
+                  {{ calculatedBmi || latestMeasurement?.bmi?.toFixed(1) || '—' }}
                 </p>
               </div>
               <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700">

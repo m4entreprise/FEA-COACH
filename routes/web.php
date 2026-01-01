@@ -201,6 +201,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::get('/dashboard/clients', [ClientController::class, 'index'])->name('dashboard.clients.index');
     Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('dashboard.clients.store');
     Route::get('/dashboard/clients/{client}/manage', [ClientController::class, 'manage'])->name('dashboard.clients.manage');
+    Route::post('/dashboard/clients/{client}/access-dashboard', [ClientController::class, 'accessDashboard'])->name('dashboard.clients.accessDashboard');
     Route::patch('/dashboard/clients/{client}', [ClientController::class, 'update'])->name('dashboard.clients.update');
     Route::delete('/dashboard/clients/{client}', [ClientController::class, 'destroy'])->name('dashboard.clients.destroy');
     Route::post('/dashboard/clients/{client}/documents', [ClientDocumentController::class, 'store'])->name('dashboard.clients.documents.store');

@@ -75,6 +75,24 @@ class ClientController extends Controller
     }
 
     /**
+     * Grant coach direct access to client dashboard.
+     */
+    public function accessDashboard(Request $request, Client $client)
+    {
+        $coach = $request->user()->coach;
+
+        if (!$coach || $client->coach_id !== $coach->id) {
+            return back()->with('error', 'Accès non autorisé.');
+        }
+
+        // Store client access in session (same logic as ClientShareController::unlock)
+        $sessionKey = 'client_access_' . $client->id;
+        $request->session()->put($sessionKey, true);
+
+        return back();
+    }
+
+    /**
      * Store a newly created client.
      */
     public function store(Request $request)

@@ -275,6 +275,60 @@ const getPhotoUrl = (path) => {
   if (!path) return null;
   return route('clients.dashboard.photo', [props.client.share_token, path]);
 };
+
+// Documents
+const showDocumentModal = ref(false);
+const documentForm = useForm({
+  type: '',
+  title: '',
+  document: null,
+});
+const documentFileInput = ref(null);
+const selectedDocumentFile = ref(null);
+
+const openDocumentModal = () => {
+  documentForm.reset();
+  selectedDocumentFile.value = null;
+  showDocumentModal.value = true;
+};
+
+const closeDocumentModal = () => {
+  showDocumentModal.value = false;
+  documentForm.reset();
+  selectedDocumentFile.value = null;
+  if (documentFileInput.value) {
+    documentFileInput.value.value = '';
+  }
+};
+
+const handleDocumentFileSelect = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    selectedDocumentFile.value = file;
+    documentForm.document = file;
+  }
+};
+
+const submitDocument = () => {
+  documentForm.post(route('dashboard.clients.documents.store', props.client.id), {
+    preserveScroll: true,
+    onSuccess: () => {
+      closeDocumentModal();
+      router.reload({ only: ['client'] });
+    },
+  });
+};
+
+const deleteDocument = (document) => {
+  if (!confirm(`Supprimer le document "${document.title || document.filename}" ?`)) return;
+  
+  router.delete(route('dashboard.clients.documents.destroy', document.id), {
+    preserveScroll: true,
+    onSuccess: () => {
+      router.reload({ only: ['client'] });
+    },
+  });
+};
 </script>
 
 <template>
@@ -816,11 +870,11 @@ const getPhotoUrl = (path) => {
                 <div class="flex items-center justify-between mb-4">
                   <h3 class="text-lg font-semibold text-slate-200">Documents partagés</h3>
                   <button
-                    @click="goBack"
-                    class="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-700/50 text-slate-300 text-sm font-semibold hover:bg-slate-700 transition-all"
+                    @click="openDocumentModal"
+                    class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-semibold hover:from-purple-600 hover:to-pink-600 transition-all"
                   >
                     <Upload class="h-4 w-4" />
-                    <span>Retour à ClientsBeta</span>
+                    <span>Gérer les documents</span>
                   </button>
                 </div>
 
@@ -847,12 +901,20 @@ const getPhotoUrl = (path) => {
                           <p class="text-slate-200 font-medium">v{{ doc.version }} · {{ doc.title || doc.filename }}</p>
                           <p class="text-slate-400 text-[10px]">{{ formatDate(doc.created_at) }}</p>
                         </div>
-                        <a
-                          :href="route('dashboard.clients.documents.download', doc.id)"
-                          class="text-purple-400 hover:text-purple-300"
-                        >
-                          <Download class="h-4 w-4" />
-                        </a>
+                        <div class="flex items-center gap-2">
+                          <a
+                            :href="route('dashboard.clients.documents.download', doc.id)"
+                            class="text-purple-400 hover:text-purple-300"
+                          >
+                            <Download class="h-4 w-4" />
+                          </a>
+                          <button
+                            @click="deleteDocument(doc)"
+                            class="text-red-400 hover:text-red-300"
+                          >
+                            <Trash2 class="h-4 w-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <p v-else class="text-xs text-slate-500">Aucun document partagé</p>
@@ -1087,6 +1149,104 @@ const getPhotoUrl = (path) => {
             Fermer
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Document Upload Modal -->
+    <div
+      v-if="showDocumentModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
+      @click="closeDocumentModal"
+    >
+      <div
+        class="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
+        @click.stop
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-slate-100">Ajouter un document</h2>
+          <button
+            type="button"
+            class="text-slate-400 hover:text-slate-200 text-xl"
+            @click="closeDocumentModal"
+          >
+            ✕
+          </button>
+        </div>
+
+        <form @submit.prevent="submitDocument" class="space-y-4">
+          <div>
+            <InputLabel for="doc_type" value="Type de document *" class="text-slate-200" />
+            <select
+              id="doc_type"
+              v-model="documentForm.type"
+              class="mt-1 block w-full rounded-lg border-slate-700 bg-slate-950 text-slate-100 focus:border-purple-500 focus:ring-purple-500"
+              required
+            >
+              <option value="">-- Sélectionnez un type --</option>
+              <option v-for="(label, key) in documentTypes" :key="key" :value="key">
+                {{ label }}
+              </option>
+            </select>
+            <InputError class="mt-1" :message="documentForm.errors.type" />
+          </div>
+
+          <div>
+            <InputLabel for="doc_title" value="Titre / Note (optionnel)" class="text-slate-200" />
+            <TextInput
+              id="doc_title"
+              v-model="documentForm.title"
+              type="text"
+              class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-100"
+              placeholder="Ex: Programme semaine 1, Plan nutritionnel Mars..."
+            />
+            <InputError class="mt-1" :message="documentForm.errors.title" />
+          </div>
+
+          <div>
+            <InputLabel for="doc_file" value="Fichier *" class="text-slate-200" />
+            <input
+              ref="documentFileInput"
+              id="doc_file"
+              type="file"
+              @change="handleDocumentFileSelect"
+              class="mt-1 block w-full text-sm text-slate-400
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-lg file:border-0
+                file:text-sm file:font-semibold
+                file:bg-purple-500 file:text-white
+                hover:file:bg-purple-600
+                file:cursor-pointer"
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+              required
+            />
+            <p class="mt-1 text-xs text-slate-500">PDF, Word, Excel, Images (max 10 MB)</p>
+            <InputError class="mt-1" :message="documentForm.errors.document" />
+          </div>
+
+          <div v-if="selectedDocumentFile" class="p-3 bg-slate-800/50 rounded-lg border border-slate-700">
+            <p class="text-sm text-slate-300">
+              📄 {{ selectedDocumentFile.name }}
+              <span class="text-xs text-slate-500">({{ formatFileSize(selectedDocumentFile.size) }})</span>
+            </p>
+          </div>
+
+          <div class="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              class="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 transition-colors"
+              @click="closeDocumentModal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 transition-all"
+              :disabled="documentForm.processing"
+            >
+              {{ documentForm.processing ? 'Upload en cours...' : 'Ajouter le document' }}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 </template>

@@ -73,4 +73,31 @@ class ClientDocumentController extends Controller
 
         return Storage::disk('local')->download($document->storage_path, $document->filename);
     }
+
+    public function destroy(Request $request, ClientDocument $document)
+    {
+        $coach = $request->user()->coach;
+
+        if (!$coach || $document->client->coach_id !== $coach->id) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+        // Delete the file from storage
+        if (Storage::disk('local')->exists($document->storage_path)) {
+            Storage::disk('local')->delete($document->storage_path);
+        }
+
+        // Log the deletion
+        $document->logs()->create([
+            'action' => 'deleted',
+            'actor' => 'coach',
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        // Delete the document record
+        $document->delete();
+
+        return back()->with('success', 'Document supprimé avec succès.');
+    }
 }

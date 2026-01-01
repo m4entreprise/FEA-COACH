@@ -205,6 +205,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::delete('/dashboard/clients/{client}', [ClientController::class, 'destroy'])->name('dashboard.clients.destroy');
     Route::post('/dashboard/clients/{client}/documents', [ClientDocumentController::class, 'store'])->name('dashboard.clients.documents.store');
     Route::get('/dashboard/clients/documents/{document}', [ClientDocumentController::class, 'download'])->name('dashboard.clients.documents.download');
+    Route::delete('/dashboard/clients/documents/{document}', [ClientDocumentController::class, 'destroy'])->name('dashboard.clients.documents.destroy');
     
     // Client notes management
     Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'storeNote'])->name('dashboard.clients.notes.store');

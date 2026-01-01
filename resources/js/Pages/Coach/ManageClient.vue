@@ -271,9 +271,11 @@ const closePhotoModal = () => {
   selectedMeasurement.value = null;
 };
 
-const getPhotoUrl = (path) => {
-  if (!path) return null;
-  return route('clients.dashboard.photo', [props.client.share_token, path]);
+const getPhotoUrl = (measurement, type) => {
+  if (!measurement) return null;
+  const photoField = `photo_${type}`;
+  if (!measurement[photoField]) return null;
+  return route('clients.dashboard.photo', [props.client.share_token, measurement.id, type]);
 };
 
 // Documents
@@ -281,6 +283,7 @@ const showDocumentModal = ref(false);
 const documentForm = useForm({
   type: '',
   title: '',
+  description: '',
   document: null,
 });
 const documentFileInput = ref(null);
@@ -1117,7 +1120,7 @@ const deleteDocument = (document) => {
           <div v-if="selectedMeasurement?.photo_front" class="space-y-2">
             <p class="text-sm font-semibold text-slate-300 text-center">Vue de face</p>
             <img
-              :src="getPhotoUrl(selectedMeasurement.photo_front)"
+              :src="getPhotoUrl(selectedMeasurement, 'front')"
               alt="Photo de face"
               class="w-full rounded-lg border border-slate-700"
             />
@@ -1125,7 +1128,7 @@ const deleteDocument = (document) => {
           <div v-if="selectedMeasurement?.photo_side" class="space-y-2">
             <p class="text-sm font-semibold text-slate-300 text-center">Vue de profil</p>
             <img
-              :src="getPhotoUrl(selectedMeasurement.photo_side)"
+              :src="getPhotoUrl(selectedMeasurement, 'side')"
               alt="Photo de profil"
               class="w-full rounded-lg border border-slate-700"
             />
@@ -1133,7 +1136,7 @@ const deleteDocument = (document) => {
           <div v-if="selectedMeasurement?.photo_back" class="space-y-2">
             <p class="text-sm font-semibold text-slate-300 text-center">Vue de dos</p>
             <img
-              :src="getPhotoUrl(selectedMeasurement.photo_back)"
+              :src="getPhotoUrl(selectedMeasurement, 'back')"
               alt="Photo de dos"
               class="w-full rounded-lg border border-slate-700"
             />

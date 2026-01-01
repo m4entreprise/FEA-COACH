@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('client_document_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_document_id')->constrained()->cascadeOnDelete();
-            $table->enum('action', ['uploaded', 'downloaded']);
+            $table->enum('action', ['uploaded', 'downloaded', 'deleted']);
             $table->enum('actor', ['coach', 'student']);
             $table->string('ip')->nullable();
             $table->text('user_agent')->nullable();

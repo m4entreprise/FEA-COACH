@@ -1080,8 +1080,7 @@ onBeforeUnmount(() => {
                   <iframe
                     v-show="hasPreviewRequirements && previewHtml"
                     :key="form.site_layout + previewHtml"
-                    class="w-full h-[34rem] bg-white origin-top-left"
-                    style="transform: scale(0.85); width: 117.65%; height: calc(34rem / 0.85);"
+                    class="w-full h-[34rem] bg-white"
                     sandbox="allow-same-origin allow-forms"
                     :srcdoc="previewHtml"
                   ></iframe>

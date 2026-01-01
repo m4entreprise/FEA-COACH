@@ -25,11 +25,9 @@ class SubscriptionController extends Controller
         $user = $request->user();
         
         // Calculate subscription info
-        // Détecte la période d'essai : statut trial, null, ou active_promo (pour les comptes FEA)
-        $isOnTrial = ($user->subscription_status === 'trial' 
-                      || $user->subscription_status === null 
-                      || $user->subscription_status === 'active_promo') 
-                     && $user->trial_ends_at 
+        // Détecte la période d'essai : si trial_ends_at existe et est dans le futur
+        // Note: Lemon Squeezy envoie status="active" même pendant le trial
+        $isOnTrial = $user->trial_ends_at 
                      && now()->isBefore($user->trial_ends_at);
         
         $trialDaysLeft = null;

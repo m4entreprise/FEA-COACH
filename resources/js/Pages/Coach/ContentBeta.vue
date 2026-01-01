@@ -174,6 +174,7 @@ const fetchPreview = async () => {
         'X-CSRF-TOKEN': csrfToken,
         Accept: 'application/json',
       },
+      credentials: 'same-origin',
       body: JSON.stringify(form.data()),
     });
 
@@ -1072,7 +1073,7 @@ onBeforeUnmount(() => {
                     v-show="hasPreviewRequirements && previewHtml"
                     :key="form.site_layout + previewHtml"
                     class="w-full h-[34rem] bg-white"
-                    sandbox="allow-scripts allow-same-origin allow-forms"
+                    sandbox="allow-same-origin allow-forms"
                     :srcdoc="previewHtml"
                   ></iframe>
                 </div>

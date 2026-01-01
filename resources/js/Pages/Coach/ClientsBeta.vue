@@ -1,15 +1,10 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm, router } from '@inertiajs/vue3';
-import { Search, UserPlus, Users, FileText, Mail, Phone, Upload, Link } from 'lucide-vue-next';
-import { ref, computed, watch } from 'vue';
+import { Head, router } from '@inertiajs/vue3';
+import { Search, UserPlus, TrendingUp, MessageSquare, Users } from 'lucide-vue-next';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
   clients: Array,
-  documentTypes: Object,
-  shareBaseUrl: String,
 });
 
 const searchQuery = ref('');
@@ -20,8 +15,7 @@ const filteredClients = computed(() => {
     return (
       c.first_name.toLowerCase().includes(q) ||
       c.last_name.toLowerCase().includes(q) ||
-      (c.email && c.email.toLowerCase().includes(q)) ||
-      (c.phone && c.phone.includes(q))
+      (c.email && c.email.toLowerCase().includes(q))
     );
   });
 });
@@ -29,274 +23,57 @@ const filteredClients = computed(() => {
 const getInitials = (f, l) => (f.charAt(0) + l.charAt(0)).toUpperCase();
 const getAvatarColor = (f, l) => {
   const colors = [
-    'bg-purple-500',
-    'bg-blue-500',
-    'bg-green-500',
-    'bg-yellow-500',
-    'bg-pink-500',
-    'bg-indigo-500',
-    'bg-red-500',
-    'bg-teal-500',
+    'from-purple-500 to-purple-600',
+    'from-blue-500 to-blue-600',
+    'from-green-500 to-green-600',
+    'from-yellow-500 to-yellow-600',
+    'from-pink-500 to-pink-600',
+    'from-indigo-500 to-indigo-600',
+    'from-red-500 to-red-600',
+    'from-teal-500 to-teal-600',
   ];
   return colors[(f.charCodeAt(0) + l.charCodeAt(0)) % colors.length];
 };
 
-const showClientModal = ref(false);
-const showNotesModal = ref(false);
-const editingClient = ref(null);
-const selectedClient = ref(null);
-const editingNote = ref(null);
-const showDocumentsModal = ref(false);
-const documentsClient = ref(null);
-const documentForm = useForm({
-  type: 'program',
-  title: '',
-  description: '',
-  document: null,
-});
-const documentTypesEntries = computed(() =>
-  Object.entries(props.documentTypes || {}),
-);
-
-const clientForm = useForm({
-  first_name: '',
-  last_name: '',
-  email: '',
-  phone: '',
-  address: '',
-  vat_number: '',
-});
-
-const noteForm = useForm({
-  content: '',
-});
-
-const openCreateModal = () => {
-  editingClient.value = null;
-  clientForm.reset();
-  clientForm.clearErrors();
-  showClientModal.value = true;
+const openClientDashboard = (clientId) => {
+  router.visit(route('dashboard.clients.manage', clientId));
 };
 
-const openEditModal = (client) => {
-  editingClient.value = client;
-  clientForm.first_name = client.first_name;
-  clientForm.last_name = client.last_name;
-  clientForm.email = client.email || '';
-  clientForm.phone = client.phone || '';
-  clientForm.address = client.address || '';
-  clientForm.vat_number = client.vat_number || '';
-  clientForm.clearErrors();
-  showClientModal.value = true;
+const getUnreadMessagesCount = (client) => {
+  return client.messages?.filter(m => m.sender_type === 'client' && !m.is_read).length || 0;
 };
 
-const closeClientModal = () => {
-  showClientModal.value = false;
-  editingClient.value = null;
-  clientForm.reset();
-  clientForm.clearErrors();
-};
-
-const submitClient = () => {
-  if (editingClient.value) {
-    clientForm.patch(
-      route('dashboard.clients.update', {
-        client: editingClient.value.id,
-        beta: 1,
-      }),
-      {
-        preserveScroll: true,
-        onSuccess: () => closeClientModal(),
-      },
-    );
-  } else {
-    clientForm.post(route('dashboard.clients.store', { beta: 1 }), {
-      preserveScroll: true,
-      onSuccess: () => closeClientModal(),
-    });
-  }
-};
-
-const deleteClient = (client) => {
-  if (!confirm(`Supprimer ${client.first_name} ${client.last_name} ?`)) {
-    return;
-  }
-
-  router.delete(
-    route('dashboard.clients.destroy', { client: client.id, beta: 1 }),
-    {
-      preserveScroll: true,
-    },
-  );
-};
-
-const openNotesModal = (client) => {
-  selectedClient.value = client;
-  editingNote.value = null;
-  noteForm.reset();
-  noteForm.clearErrors();
-  showNotesModal.value = true;
-};
-
-const closeNotesModal = () => {
-  showNotesModal.value = false;
-  selectedClient.value = null;
-  editingNote.value = null;
-  noteForm.reset();
-};
-
-const openEditNote = (note) => {
-  editingNote.value = note;
-  noteForm.content = note.content;
-};
-
-const cancelEditNote = () => {
-  editingNote.value = null;
-  noteForm.reset();
-};
-
-const submitNote = () => {
-  if (!selectedClient.value) return;
-
-  if (editingNote.value) {
-    noteForm.patch(
-      route('dashboard.clients.notes.update', {
-        note: editingNote.value.id,
-        beta: 1,
-      }),
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          editingNote.value = null;
-          noteForm.reset();
-          router.reload({ only: ['clients'] });
-        },
-      },
-    );
-  } else {
-    noteForm.post(
-      route('dashboard.clients.notes.store', {
-        client: selectedClient.value.id,
-        beta: 1,
-      }),
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          noteForm.reset();
-          router.reload({ only: ['clients'] });
-        },
-      },
-    );
-  }
-};
-
-const deleteNote = (note) => {
-  if (!confirm('Supprimer cette note ?')) {
-    return;
-  }
-
-  router.delete(
-    route('dashboard.clients.notes.destroy', { note: note.id, beta: 1 }),
-    {
-      preserveScroll: true,
-      onSuccess: () => router.reload({ only: ['clients'] }),
-    },
-  );
-};
-
-const formatDate = (d) =>
-  new Date(d).toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-
-const openDocumentsModal = (client) => {
-  documentsClient.value = client;
-  documentForm.reset();
-  documentForm.type = 'program';
-  showDocumentsModal.value = true;
-};
-
-const closeDocumentsModal = () => {
-  showDocumentsModal.value = false;
-  documentsClient.value = null;
-  documentForm.reset();
-  documentForm.type = 'program';
-};
-
-const handleDocumentFile = (event) => {
-  documentForm.document = event.target.files[0];
-};
-
-const submitDocument = () => {
-  if (!documentsClient.value) return;
-  documentForm.post(
-    route('dashboard.clients.documents.store', { client: documentsClient.value.id, beta: 1 }),
-    {
-      preserveScroll: true,
-      forceFormData: true,
-      onSuccess: () => {
-        documentForm.reset();
-        documentForm.type = 'program';
-        router.reload({ only: ['clients'] });
-      },
-    },
-  );
-};
-
-const downloadDocument = (documentId) => {
-  window.open(route('dashboard.clients.documents.download', documentId), '_blank');
-};
-
-const copyShareLink = async (client) => {
-  if (!client?.share_token) return;
-  const link = `${props.shareBaseUrl}/${client.share_token}`;
-  try {
-    await navigator.clipboard.writeText(link);
-    alert('Lien copié dans le presse-papiers.');
-  } catch (e) {
-    alert('Impossible de copier le lien automatiquement.');
-  }
-};
-
-const documentsByType = (client, type) => {
-  return (client.documents || [])
-    .filter((doc) => doc.type === type)
-    .sort((a, b) => b.version - a.version);
-};
-
-const latestDocumentLabel = (doc) => {
-  if (!doc) return 'Aucun document';
-  return `v${doc.version} · ${doc.title || doc.filename}`;
+const getLatestWeight = (client) => {
+  if (!client.measurements || client.measurements.length === 0) return null;
+  const sorted = [...client.measurements].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  return sorted[0].weight;
 };
 
 </script>
 
 <template>
-  <Head title="Clients (beta)" />
+  <Head title="Mes Clients" />
 
-  <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+  <div class="min-h-screen bg-slate-950 text-slate-50">
     <!-- Top bar -->
     <header
-      class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
+      class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl sticky top-0 z-30"
     >
       <div class="flex items-center gap-3">
         <div class="flex flex-col">
           <p class="text-xs uppercase tracking-wide text-slate-400">
-            Panel coach beta
+            Dashboard Coach
           </p>
           <h1 class="text-base md:text-lg font-semibold flex items-center gap-2">
-            <span>Clients</span>
+            <Users class="h-5 w-5" />
+            <span>Mes Clients</span>
           </h1>
         </div>
       </div>
 
       <div class="flex items-center gap-3">
         <a
-          :href="route('dashboard.coach.beta')"
+          :href="route('dashboard')"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
@@ -324,7 +101,7 @@ const latestDocumentLabel = (doc) => {
             <button
               type="button"
               class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
-              @click="openCreateModal"
+              @click="router.visit(route('dashboard.clients.create'))"
             >
               <UserPlus class="h-3.5 w-3.5" />
               <span>Nouveau client</span>
@@ -389,14 +166,6 @@ const latestDocumentLabel = (doc) => {
               </button>
             </div>
 
-            <button
-              type="button"
-              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600 self-start"
-              @click="openCreateModal"
-            >
-              <UserPlus class="h-3.5 w-3.5" />
-              <span>Nouveau client</span>
-            </button>
           </div>
         </section>
 
@@ -433,129 +202,40 @@ const latestDocumentLabel = (doc) => {
               </div>
 
               <div class="p-4 space-y-3 text-xs">
-                <p class="flex items-center gap-2 text-slate-300">
-                  <Phone class="h-4 w-4 text-slate-500" />
-                  <span>{{ client.phone || 'Pas de téléphone' }}</span>
-                </p>
-                <p v-if="client.vat_number" class="text-slate-400">
-                  <span class="font-semibold">TVA :</span>
-                  <span class="ml-1">{{ client.vat_number }}</span>
-                </p>
-                <p v-if="client.address" class="text-slate-400">
-                  <span class="font-semibold">Adresse :</span>
-                  <span class="ml-1">{{ client.address }}</span>
-                </p>
-                <p
-                  v-if="client.notes.length"
-                  class="rounded-xl bg-slate-800/80 border border-slate-700 p-3 text-[11px] text-slate-200"
-                >
-                  <span class="font-semibold">Dernière note :</span>
-                  <br />
-                  {{ client.notes[0].content }}
-                </p>
-                <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-3 space-y-3">
-                  <div class="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <p class="text-[11px] uppercase tracking-wide text-slate-400">
-                        Documents partagés
-                      </p>
-                      <p class="text-xs text-slate-500">
-                        Code élève&nbsp;: <span class="font-semibold tracking-widest">{{ client.share_code }}</span>
-                      </p>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        class="inline-flex items-center gap-1 rounded-full border border-slate-700 px-3 py-1 text-[11px] text-slate-200 hover:bg-slate-800"
-                        @click="openDocumentsModal(client)"
-                      >
-                        <Upload class="h-3.5 w-3.5" />
-                        <span>Uploader</span>
-                      </button>
-                      <button
-                        type="button"
-                        class="inline-flex items-center gap-1 rounded-full border border-slate-700 px-3 py-1 text-[11px] text-slate-200 hover:bg-slate-800"
-                        @click="copyShareLink(client)"
-                      >
-                        <Link class="h-3.5 w-3.5" />
-                        <span>Lien élève</span>
-                      </button>
-                    </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="rounded-lg bg-slate-800/50 p-3 border border-slate-700">
+                    <p class="text-[10px] uppercase text-slate-400 mb-1">Poids actuel</p>
+                    <p class="text-lg font-bold text-slate-50">
+                      {{ getLatestWeight(client) ? getLatestWeight(client) + ' kg' : '—' }}
+                    </p>
                   </div>
-                  <div class="space-y-3">
-                    <div
-                      v-for="[typeKey, typeLabel] in documentTypesEntries"
-                      :key="`client-${client.id}-document-${typeKey}`"
-                      class="rounded-xl border border-slate-800/60 bg-slate-900/60 p-3 space-y-1"
-                    >
-                      <div class="flex items-center justify-between gap-3">
-                        <p class="text-xs font-semibold text-slate-200">{{ typeLabel }}</p>
-                        <p class="text-[11px] text-slate-500">
-                          {{
-                            documentsByType(client, typeKey).length
-                              ? `v${documentsByType(client, typeKey)[0].version}`
-                              : '—'
-                          }}
-                        </p>
-                      </div>
-                      <p class="text-[11px] text-slate-400">
-                        {{
-                          documentsByType(client, typeKey).length
-                            ? latestDocumentLabel(documentsByType(client, typeKey)[0])
-                            : 'Aucun document partagé'
-                        }}
-                      </p>
-                      <div
-                        v-if="documentsByType(client, typeKey).length"
-                        class="mt-2 space-y-1 max-h-36 overflow-y-auto pr-1 border-t border-slate-800 pt-2"
-                      >
-                        <div
-                          v-for="doc in documentsByType(client, typeKey)"
-                          :key="doc.id"
-                          class="flex items-center justify-between gap-2 text-[11px]"
-                        >
-                          <div class="text-slate-400">
-                            <span class="font-medium text-slate-200">v{{ doc.version }}</span>
-                            · {{ doc.created_at ? formatDate(doc.created_at) : '' }}
-                          </div>
-                          <button
-                            type="button"
-                            class="rounded-full border border-slate-700 px-2 py-0.5 text-[11px] text-slate-200 hover:bg-slate-800"
-                            @click="downloadDocument(doc.id)"
-                          >
-                            Télécharger
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="rounded-lg bg-slate-800/50 p-3 border border-slate-700">
+                    <p class="text-[10px] uppercase text-slate-400 mb-1">Messages</p>
+                    <p class="text-lg font-bold text-slate-50 flex items-center gap-1.5">
+                      <MessageSquare class="h-4 w-4" />
+                      {{ getUnreadMessagesCount(client) }}
+                    </p>
                   </div>
                 </div>
-              </div>
 
-              <div
-                class="border-t border-slate-800 px-4 py-3 flex gap-2 text-[11px]"
-              >
-                <button
-                  type="button"
-                  class="flex-1 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 px-3 py-1.5 text-slate-50 hover:from-blue-600 hover:to-cyan-600"
-                  @click="openNotesModal(client)"
-                >
-                  Notes
-                </button>
-                <button
-                  type="button"
-                  class="rounded-full bg-slate-800 px-3 py-1.5 text-slate-100 hover:bg-slate-700"
-                  @click="openEditModal(client)"
-                >
-                  Modifier
-                </button>
-                <button
-                  type="button"
-                  class="rounded-full bg-gradient-to-r from-rose-500 to-rose-600 px-3 py-1.5 text-slate-50 hover:from-rose-600 hover:to-rose-700"
-                  @click="deleteClient(client)"
-                >
-                  Supprimer
-                </button>
+                <div class="rounded-lg bg-gradient-to-br from-slate-800/50 to-slate-800/30 p-3 border border-slate-700">
+                  <p class="text-[10px] uppercase text-slate-400 mb-1">Progression</p>
+                  <div class="flex items-center gap-2">
+                    <TrendingUp class="h-4 w-4 text-emerald-400" />
+                    <p class="text-sm font-semibold text-slate-200">
+                      {{ client.measurements?.length || 0 }} relevés
+                    </p>
+                  </div>
+                </div>
+                <div class="pt-2">
+                  <button
+                    type="button"
+                    class="w-full rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all"
+                    @click="openClientDashboard(client.id)"
+                  >
+                    Gérer ce client →
+                  </button>
+                </div>
               </div>
             </article>
           </div>
@@ -578,478 +258,12 @@ const latestDocumentLabel = (doc) => {
               {{
                 searchQuery
                   ? 'Essayez une autre recherche.'
-                  : 'Ajoutez vos premiers clients pour suivre vos prospects et clients actuels.'
+                  : 'Ajoutez vos premiers clients pour commencer le coaching personnalisé.'
               }}
             </p>
-            <PrimaryButton
-              v-if="!searchQuery"
-              type="button"
-              class="text-xs"
-              @click="openCreateModal"
-            >
-              <span class="mr-1">+</span>
-              Ajouter un client
-            </PrimaryButton>
           </div>
         </section>
       </div>
-
-      <!-- Modal client create/edit -->
-      <div
-        v-if="showClientModal"
-        class="fixed inset-0 z-40 flex items-center justify-center bg-black/60 px-4"
-      >
-        <div
-          class="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-sm font-semibold">
-              {{ editingClient ? 'Modifier le client' : 'Nouveau client' }}
-            </h2>
-            <button
-              type="button"
-              class="text-slate-400 hover:text-slate-200 text-sm"
-              @click="closeClientModal"
-            >
-              ✕
-            </button>
-          </div>
-
-          <form @submit.prevent="submitClient" class="space-y-4 text-xs">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <InputLabel
-                  for="client_first_name"
-                  value="Prénom *"
-                  class="text-xs text-slate-200"
-                />
-                <TextInput
-                  id="client_first_name"
-                  v-model="clientForm.first_name"
-                  type="text"
-                  class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                  required
-                />
-                <InputError
-                  class="mt-1 text-[11px]"
-                  :message="clientForm.errors.first_name"
-                />
-              </div>
-              <div>
-                <InputLabel
-                  for="client_last_name"
-                  value="Nom *"
-                  class="text-xs text-slate-200"
-                />
-                <TextInput
-                  id="client_last_name"
-                  v-model="clientForm.last_name"
-                  type="text"
-                  class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                  required
-                />
-                <InputError
-                  class="mt-1 text-[11px]"
-                  :message="clientForm.errors.last_name"
-                />
-              </div>
-            </div>
-
-            <div>
-              <InputLabel
-                for="client_email"
-                value="Email"
-                class="text-xs text-slate-200"
-              />
-              <TextInput
-                id="client_email"
-                v-model="clientForm.email"
-                type="email"
-                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-              />
-              <InputError
-                class="mt-1 text-[11px]"
-                :message="clientForm.errors.email"
-              />
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <InputLabel
-                  for="client_phone"
-                  value="Téléphone"
-                  class="text-xs text-slate-200"
-                />
-                <TextInput
-                  id="client_phone"
-                  v-model="clientForm.phone"
-                  type="text"
-                  class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                />
-                <InputError
-                  class="mt-1 text-[11px]"
-                  :message="clientForm.errors.phone"
-                />
-              </div>
-              <div>
-                <InputLabel
-                  for="client_vat"
-                  value="N° TVA"
-                  class="text-xs text-slate-200"
-                />
-                <TextInput
-                  id="client_vat"
-                  v-model="clientForm.vat_number"
-                  type="text"
-                  class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                />
-                <InputError
-                  class="mt-1 text-[11px]"
-                  :message="clientForm.errors.vat_number"
-                />
-              </div>
-            </div>
-
-            <div>
-              <InputLabel
-                for="client_address"
-                value="Adresse"
-                class="text-xs text-slate-200"
-              />
-              <textarea
-                id="client_address"
-                v-model="clientForm.address"
-                rows="2"
-                class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-purple-500 focus:ring-purple-500"
-              ></textarea>
-              <InputError
-                class="mt-1 text-[11px]"
-                :message="clientForm.errors.address"
-              />
-            </div>
-
-            <div class="flex justify-end gap-2 pt-2 text-xs">
-              <button
-                type="button"
-                class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-200 hover:bg-slate-800"
-                @click="closeClientModal"
-              >
-                Annuler
-              </button>
-              <button
-                type="submit"
-                class="rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-1.5 font-medium text-slate-50 hover:from-purple-600 hover:to-pink-600 disabled:opacity-60"
-                :disabled="clientForm.processing"
-              >
-                {{ clientForm.processing ? 'Enregistrement...' : 'Enregistrer' }}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Modal notes -->
-      <div
-        v-if="showNotesModal && selectedClient"
-        class="fixed inset-0 z-40 flex items-center justify-center bg-black/60 px-4"
-      >
-        <div
-          class="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-sm font-semibold">
-              Notes pour {{ selectedClient.first_name }}
-              {{ selectedClient.last_name }}
-            </h2>
-            <button
-              type="button"
-              class="text-slate-400 hover:text-slate-200 text-sm"
-              @click="closeNotesModal"
-            >
-              ✕
-            </button>
-          </div>
-
-          <div class="grid gap-4 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-            <div class="space-y-3 max-h-72 overflow-y-auto pr-1">
-              <p
-                v-if="!selectedClient.notes.length"
-                class="text-[11px] text-slate-400"
-              >
-                Aucune note pour le moment.
-              </p>
-              <article
-                v-for="note in selectedClient.notes"
-                :key="note.id"
-                class="rounded-xl border border-slate-800 bg-slate-900/80 p-3 text-xs text-slate-100 space-y-1"
-              >
-                <p class="whitespace-pre-line">
-                  {{ note.content }}
-                </p>
-                <p class="text-[10px] text-slate-500 flex justify-between">
-                  <span>{{ formatDate(note.created_at) }}</span>
-                </p>
-                <div class="flex gap-2 pt-1">
-                  <button
-                    type="button"
-                    class="rounded-full border border-slate-700 px-3 py-1 text-[11px] text-slate-200 hover:bg-slate-800"
-                    @click="openEditNote(note)"
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    type="button"
-                    class="rounded-full border border-rose-600/60 bg-rose-600/10 px-3 py-1 text-[11px] text-rose-200 hover:bg-rose-600/20"
-                    @click="deleteNote(note)"
-                  >
-                    Supprimer
-                  </button>
-                </div>
-              </article>
-            </div>
-
-            <form
-              class="space-y-3 text-xs"
-              @submit.prevent="submitNote"
-            >
-              <InputLabel
-                for="note_content"
-                :value="
-                  editingNote
-                    ? 'Modifier la note'
-                    : 'Ajouter une note'
-                "
-                class="text-xs text-slate-200"
-              />
-              <textarea
-                id="note_content"
-                v-model="noteForm.content"
-                rows="4"
-                class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-blue-500 focus:ring-blue-500"
-                required
-              ></textarea>
-              <InputError
-                class="mt-1 text-[11px]"
-                :message="noteForm.errors.content"
-              />
-
-              <div class="flex gap-2 pt-2">
-                <button
-                  v-if="editingNote"
-                  type="button"
-                  class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-200 hover:bg-slate-800"
-                  @click="cancelEditNote"
-                >
-                  Annuler la modification
-                </button>
-                <button
-                  type="submit"
-                  class="ml-auto rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-1.5 font-medium text-slate-50 hover:from-blue-600 hover:to-cyan-600 disabled:opacity-60"
-                  :disabled="noteForm.processing"
-                >
-                  {{ noteForm.processing ? 'Enregistrement...' : 'Enregistrer' }}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- Modal documents -->
-      <div
-        v-if="showDocumentsModal && documentsClient"
-        class="fixed inset-0 z-40 flex items-center justify-center bg-black/60 px-4"
-      >
-        <div
-          class="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <div>
-              <p class="text-xs uppercase tracking-wide text-slate-400">Documents</p>
-              <h2 class="text-sm font-semibold">
-                {{ documentsClient.first_name }} {{ documentsClient.last_name }}
-              </h2>
-            </div>
-            <button
-              type="button"
-              class="text-slate-400 hover:text-slate-200 text-sm"
-              @click="closeDocumentsModal"
-            >
-              ✕
-            </button>
-          </div>
-
-          <form @submit.prevent="submitDocument" class="space-y-4 text-xs">
-            <div>
-              <InputLabel
-                for="document_type"
-                value="Type de document"
-                class="text-xs text-slate-200"
-              />
-              <select
-                id="document_type"
-                v-model="documentForm.type"
-                class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 px-3 py-2 text-slate-50 focus:border-purple-500 focus:ring-purple-500"
-              >
-                <option
-                  v-for="[typeKey, typeLabel] in documentTypesEntries"
-                  :key="`document-type-${typeKey}`"
-                  :value="typeKey"
-                >
-                  {{ typeLabel }}
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <InputLabel
-                for="document_title"
-                value="Titre (optionnel)"
-                class="text-xs text-slate-200"
-              />
-              <TextInput
-                id="document_title"
-                v-model="documentForm.title"
-                type="text"
-                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                placeholder="Ex : Programme Janvier"
-              />
-              <InputError
-                class="mt-1 text-[11px]"
-                :message="documentForm.errors.title"
-              />
-            </div>
-
-            <div>
-              <InputLabel
-                for="document_description"
-                value="Description"
-                class="text-xs text-slate-200"
-              />
-              <textarea
-                id="document_description"
-                v-model="documentForm.description"
-                rows="3"
-                class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-purple-500 focus:ring-purple-500"
-                placeholder="Notes pour l'élève..."
-              ></textarea>
-              <InputError
-                class="mt-1 text-[11px]"
-                :message="documentForm.errors.description"
-              />
-            </div>
-
-            <div>
-              <InputLabel
-                for="document_file"
-                value="Fichier à partager"
-                class="text-xs text-slate-200"
-              />
-              <input
-                id="document_file"
-                type="file"
-                class="mt-1 block w-full text-[11px] text-slate-200 file:mr-4 file:rounded-full file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-white"
-                @change="handleDocumentFile"
-                required
-              />
-              <InputError
-                class="mt-1 text-[11px]"
-                :message="documentForm.errors.document"
-              />
-              <p class="mt-1 text-[11px] text-slate-500">
-                Formats courants (PDF, DOCX, ZIP) · 10Mo max
-              </p>
-            </div>
-
-            <div class="flex justify-end gap-2 pt-2 text-xs">
-              <button
-                type="button"
-                class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-200 hover:bg-slate-800"
-                @click="closeDocumentsModal"
-              >
-                Annuler
-              </button>
-              <button
-                type="submit"
-                class="rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-1.5 font-medium text-slate-50 hover:from-purple-600 hover:to-pink-600 disabled:opacity-60"
-                :disabled="documentForm.processing"
-              >
-                {{ documentForm.processing ? 'Upload...' : 'Publier' }}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
     </main>
   </div>
-
-  <teleport to="body">
-    <div
-      v-if="isPreviewFullscreen"
-      class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col"
-    >
-      <div class="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-800 text-slate-200">
-        <div>
-          <p class="text-xs uppercase tracking-wide text-indigo-300">
-            Aperçu clients
-          </p>
-          <h3 class="text-lg font-semibold">Site public (mise à jour en direct)</h3>
-        </div>
-        <div class="flex items-center gap-3 text-xs">
-          <button
-            type="button"
-            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1.5 hover:border-slate-400 hover:text-white"
-            @click="fetchPreview"
-            :disabled="previewLoading"
-          >
-            <span v-if="previewLoading" class="animate-pulse text-yellow-300">Actualisation…</span>
-            <span v-else>Rafraîchir</span>
-          </button>
-          <button
-            type="button"
-            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1.5 hover:border-slate-400 hover:text-white"
-            @click="closePreview"
-          >
-            Fermer
-          </button>
-        </div>
-      </div>
-
-      <div class="flex-1 p-4">
-        <div
-          class="relative h-full rounded-2xl border border-slate-800 bg-slate-950/80 shadow-2xl overflow-hidden"
-        >
-          <div
-            v-if="previewLoading && !previewHtml"
-            class="absolute inset-0 flex flex-col items-center justify-center text-slate-200 text-sm gap-3"
-          >
-            <svg class="h-8 w-8 animate-spin text-indigo-300" viewBox="0 0 24 24" fill="none">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-            </svg>
-            <p>Chargement de l’aperçu...</p>
-          </div>
-          <div
-            v-else-if="previewError"
-            class="absolute inset-0 flex flex-col items-center justify-center text-center text-red-300 text-sm px-8 gap-3"
-          >
-            <p>{{ previewError }}</p>
-            <button
-              type="button"
-              class="text-xs underline decoration-dotted"
-              @click="fetchPreview"
-            >
-              Réessayer
-            </button>
-          </div>
-          <iframe
-            v-show="previewHtml"
-            class="w-full h-full bg-white"
-            sandbox="allow-same-origin allow-forms"
-            :srcdoc="previewHtml"
-          ></iframe>
-        </div>
-      </div>
-    </div>
-  </teleport>
 </template>

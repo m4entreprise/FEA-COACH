@@ -200,6 +200,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     // Clients management
     Route::get('/dashboard/clients', [ClientController::class, 'index'])->name('dashboard.clients.index');
     Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('dashboard.clients.store');
+    Route::get('/dashboard/clients/{client}/manage', [ClientController::class, 'manage'])->name('dashboard.clients.manage');
     Route::patch('/dashboard/clients/{client}', [ClientController::class, 'update'])->name('dashboard.clients.update');
     Route::delete('/dashboard/clients/{client}', [ClientController::class, 'destroy'])->name('dashboard.clients.destroy');
     Route::post('/dashboard/clients/{client}/documents', [ClientDocumentController::class, 'store'])->name('dashboard.clients.documents.store');
@@ -209,6 +210,10 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'storeNote'])->name('dashboard.clients.notes.store');
     Route::patch('/dashboard/clients/notes/{note}', [ClientController::class, 'updateNote'])->name('dashboard.clients.notes.update');
     Route::delete('/dashboard/clients/notes/{note}', [ClientController::class, 'destroyNote'])->name('dashboard.clients.notes.destroy');
+
+    // Client messaging (coach side)
+    Route::post('/dashboard/clients/{client}/messages', [ClientController::class, 'sendMessage'])->name('dashboard.clients.messages.send');
+    Route::get('/dashboard/clients/{client}/messages/{message}/download', [ClientController::class, 'downloadMessageAttachment'])->name('dashboard.clients.messages.download');
 
     // Legal terms management
     Route::get('/dashboard/legal', [LegalController::class, 'edit'])->name('dashboard.legal');

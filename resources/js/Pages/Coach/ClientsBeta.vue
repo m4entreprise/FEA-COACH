@@ -3,9 +3,8 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
-import axios from 'axios';
 import { Search, UserPlus, Users, FileText, Mail, Phone } from 'lucide-vue-next';
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
   clients: Array,
@@ -45,10 +44,6 @@ const showNotesModal = ref(false);
 const editingClient = ref(null);
 const selectedClient = ref(null);
 const editingNote = ref(null);
-const previewHtml = ref('');
-const previewLoading = ref(false);
-const previewError = ref(null);
-const isPreviewFullscreen = ref(false);
 
 const clientForm = useForm({
   first_name: '',
@@ -205,41 +200,6 @@ const formatDate = (d) =>
     minute: '2-digit',
   });
 
-const fetchPreview = async () => {
-  previewLoading.value = true;
-  previewError.value = null;
-
-  try {
-    const { data } = await axios.post(
-      route('dashboard.clients.preview', { beta: 1 }),
-      {},
-      {
-        headers: { Accept: 'application/json' },
-        withCredentials: true,
-      },
-    );
-
-    previewHtml.value = data.html;
-  } catch (error) {
-    previewError.value =
-      error.response?.data?.message || "Impossible de générer l’aperçu pour le moment.";
-  } finally {
-    previewLoading.value = false;
-  }
-};
-
-const openPreview = () => {
-  isPreviewFullscreen.value = true;
-  fetchPreview();
-};
-
-const closePreview = () => {
-  isPreviewFullscreen.value = false;
-};
-
-watch(isPreviewFullscreen, (active) => {
-  document.body.classList.toggle('overflow-hidden', active);
-});
 </script>
 
 <template>

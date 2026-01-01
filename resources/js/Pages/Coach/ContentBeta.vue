@@ -433,9 +433,7 @@ onBeforeUnmount(() => {
                       <div class="flex items-center gap-3">
                         <div
                           class="h-9 w-9 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-sm"
-                        >
-                          📸
-                        </div>
+                        ></div>
                         <div>
                           <p class="text-sm font-semibold">Photo de profil</p>
                           <p class="text-[11px] text-slate-400">
@@ -1024,7 +1022,13 @@ onBeforeUnmount(() => {
                 <div class="h-12 flex items-center gap-2 text-xs text-slate-400">
                   <span
                     class="w-2 h-2 rounded-full"
-                    :class="previewLoading ? 'bg-yellow-400 animate-pulse' : 'bg-emerald-400'"
+                    :class="
+                      previewLoading
+                        ? 'bg-yellow-400 animate-pulse'
+                        : previewError
+                          ? 'bg-red-400'
+                          : 'bg-emerald-400 animate-breathe'
+                    "
                   ></span>
                   <span v-if="previewLoading">Génération de l’aperçu...</span>
                   <span v-else-if="previewError">{{ previewError }}</span>
@@ -1157,3 +1161,27 @@ onBeforeUnmount(() => {
     </main>
   </div>
 </template>
+
+<style scoped>
+@keyframes breathe {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45);
+  }
+  70% {
+    transform: scale(1.4);
+    opacity: 0.2;
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 2.2s ease-in-out infinite;
+}
+</style>

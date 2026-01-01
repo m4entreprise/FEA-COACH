@@ -4,12 +4,20 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
-import { FileText, User, HelpCircle, Share2 } from 'lucide-vue-next';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { FileText, User, HelpCircle, Share2, MonitorPlay } from 'lucide-vue-next';
 
 const props = defineProps({
   coach: Object,
   profilePhotoUrl: String,
+  siteLayouts: {
+    type: Array,
+    default: () => [],
+  },
+  defaultLayout: {
+    type: String,
+    default: 'classic',
+  },
 });
 
 const form = useForm({
@@ -42,6 +50,7 @@ const form = useForm({
   linkedin_url: props.coach?.linkedin_url || '',
   youtube_url: props.coach?.youtube_url || '',
   tiktok_url: props.coach?.tiktok_url || '',
+  site_layout: props.coach?.site_layout || props.defaultLayout,
 });
 
 const heroTitleCount = computed(() => form.hero_title.length);
@@ -133,6 +142,77 @@ const deletePhoto = () => {
     },
   );
 };
+
+// Live preview handling
+const previewHtml = ref('');
+const previewLoading = ref(false);
+const previewError = ref(null);
+let previewTimeoutId = null;
+const csrfToken =
+  document.head.querySelector('meta[name="csrf-token"]')?.content ?? '';
+
+const hasPreviewRequirements = computed(() => {
+  return Boolean(form.hero_title?.trim() && form.cta_text?.trim());
+});
+
+const fetchPreview = async () => {
+  if (!hasPreviewRequirements.value) {
+    previewHtml.value = '';
+    previewError.value = null;
+    previewLoading.value = false;
+    return;
+  }
+
+  previewLoading.value = true;
+  previewError.value = null;
+
+  try {
+    const response = await fetch(route('dashboard.content.preview', { beta: 1 }), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(form.data()),
+    });
+
+    if (!response.ok) {
+      throw new Error('Impossible de générer l’aperçu pour le moment.');
+    }
+
+    const data = await response.json();
+    previewHtml.value = data.html;
+  } catch (error) {
+    previewError.value = error.message;
+  } finally {
+    previewLoading.value = false;
+  }
+};
+
+const schedulePreview = () => {
+  if (previewTimeoutId) {
+    clearTimeout(previewTimeoutId);
+  }
+
+  previewTimeoutId = window.setTimeout(() => {
+    fetchPreview();
+  }, 600);
+};
+
+watch(
+  form,
+  () => {
+    schedulePreview();
+  },
+  { deep: true, immediate: true },
+);
+
+onBeforeUnmount(() => {
+  if (previewTimeoutId) {
+    clearTimeout(previewTimeoutId);
+  }
+});
 </script>
 
 <template>
@@ -185,7 +265,7 @@ const deletePhoto = () => {
           </div>
         </section>
 
-        <div class="space-y-6">
+        <div class="grid gap-6 xl:grid-cols-[1.8fr,1fr]">
           <!-- Main content form -->
           <section class="space-y-8">
             <header class="space-y-1">
@@ -887,7 +967,120 @@ const deletePhoto = () => {
             </form>
           </section>
 
+          <!-- Live preview -->
+          <aside class="space-y-4">
+            <div
+              class="rounded-2xl border border-slate-800 bg-slate-950/70 p-5 shadow-xl flex flex-col h-full"
+            >
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs uppercase tracking-wide text-indigo-300 flex items-center gap-2">
+                    <MonitorPlay class="h-4 w-4 text-indigo-300" />
+                    Aperçu live
+                  </p>
+                  <h3 class="text-lg font-semibold text-slate-50">
+                    Site public en temps réel
+                  </h3>
+                  <p class="text-xs text-slate-400">
+                    Les modifications se reflètent automatiquement après quelques secondes.
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <InputLabel
+                  for="site_layout"
+                  value="Layout affiché"
+                  class="text-xs text-slate-200"
+                />
+                <div class="mt-2 flex flex-wrap gap-2">
+                  <button
+                    v-for="layout in siteLayouts"
+                    :key="layout.key"
+                    type="button"
+                    class="flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-all"
+                    :class="[
+                      form.site_layout === layout.key
+                        ? 'border-indigo-500 bg-indigo-500/10 text-indigo-100'
+                        : 'border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500',
+                    ]"
+                    @click="form.site_layout = layout.key"
+                  >
+                    <span class="font-semibold">{{ layout.label }}</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mt-4 flex-1">
+                <div class="h-12 flex items-center gap-2 text-xs text-slate-400">
+                  <span
+                    class="w-2 h-2 rounded-full"
+                    :class="previewLoading ? 'bg-yellow-400 animate-pulse' : 'bg-emerald-400'"
+                  ></span>
+                  <span v-if="previewLoading">Génération de l’aperçu...</span>
+                  <span v-else-if="previewError">{{ previewError }}</span>
+                  <span v-else>Preview synchronisé</span>
+                </div>
+                <div
+                  class="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/50 shadow-inner min-h-[26rem]"
+                >
+                  <div
+                    v-if="!hasPreviewRequirements"
+                    class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 text-slate-400 text-sm gap-2"
+                  >
+                    <p>Complétez au minimum le titre hero et le texte du CTA pour démarrer l’aperçu.</p>
+                  </div>
+                  <div
+                    v-else-if="previewError"
+                    class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 text-red-300 text-sm gap-2"
+                  >
+                    <p>{{ previewError }}</p>
+                    <button
+                      type="button"
+                      class="text-xs underline decoration-dotted"
+                      @click="fetchPreview"
+                    >
+                      Réessayer
+                    </button>
+                  </div>
+                  <div
+                    v-else-if="previewLoading && !previewHtml"
+                    class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 text-slate-300 text-sm gap-2"
+                  >
+                    <svg
+                      class="h-8 w-8 animate-spin text-indigo-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"
+                      />
+                      <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      />
+                    </svg>
+                    <p>Chargement de l’aperçu...</p>
+                  </div>
+                  <iframe
+                    v-show="hasPreviewRequirements && previewHtml"
+                    :key="form.site_layout + previewHtml"
+                    class="w-full h-[34rem] bg-white"
+                    sandbox="allow-scripts allow-same-origin allow-forms"
+                    :srcdoc="previewHtml"
+                  ></iframe>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
+
       </div>
     </main>
   </div>

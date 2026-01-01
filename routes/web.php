@@ -135,6 +135,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     // Content management
     Route::get('/dashboard/content', [ContentController::class, 'edit'])->name('dashboard.content');
     Route::post('/dashboard/content', [ContentController::class, 'update'])->name('dashboard.content.update');
+    Route::post('/dashboard/content/preview', [ContentController::class, 'preview'])->name('dashboard.content.preview');
     Route::post('/dashboard/content/profile-photo', [ContentController::class, 'uploadProfilePhoto'])->name('dashboard.content.profile-photo.upload');
     Route::delete('/dashboard/content/profile-photo', [ContentController::class, 'deleteProfilePhoto'])->name('dashboard.content.profile-photo.delete');
 

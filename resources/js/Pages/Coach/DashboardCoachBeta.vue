@@ -709,7 +709,7 @@ onMounted(() => {
                             </Link>
 
                             <Link
-                                :href="route('profile.edit')"
+                                :href="route('profile.edit', { beta: 1 })"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-purple-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">

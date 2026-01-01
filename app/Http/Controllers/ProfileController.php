@@ -18,7 +18,11 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit', [
+        $view = $request->boolean('beta')
+            ? 'Coach/ProfileBeta'
+            : 'Profile/Edit';
+
+        return Inertia::render($view, [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
         ]);
@@ -37,7 +41,17 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        // Preserve beta=1 after update if the user was on the beta profile view
+        $redirectParams = [];
+        $referer = $request->headers->get('referer');
+        if ($referer) {
+            $query = parse_url($referer, PHP_URL_QUERY) ?? '';
+            if (str_contains($query, 'beta=1')) {
+                $redirectParams['beta'] = 1;
+            }
+        }
+
+        return Redirect::route('profile.edit', $redirectParams);
     }
 
     /**

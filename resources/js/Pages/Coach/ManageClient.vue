@@ -67,6 +67,16 @@ const calculatedBmi = computed(() => {
   return (weight / (heightInMeters * heightInMeters)).toFixed(1);
 });
 
+// Helper function to calculate BMI for any measurement
+const calculateBmi = (measurement) => {
+  if (!measurement?.weight || !measurement?.height) return null;
+  const weight = parseFloat(measurement.weight);
+  const height = parseFloat(measurement.height);
+  if (weight <= 0 || height <= 0) return null;
+  const heightInMeters = height / 100;
+  return (weight / (heightInMeters * heightInMeters)).toFixed(1);
+};
+
 const shareUrl = computed(() => {
   return `${window.location.origin}/p/${props.client.share_token}`;
 });
@@ -659,7 +669,7 @@ const deleteDocument = (document) => {
                 <div class="bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-xl p-4 border border-green-500/30">
                   <p class="text-xs uppercase text-green-300 mb-1">IMC actuel</p>
                   <p class="text-3xl font-bold text-white">
-                    {{ latestMeasurement?.bmi ? latestMeasurement.bmi.toFixed(1) : '—' }}
+                    {{ calculateBmi(latestMeasurement) || latestMeasurement?.bmi?.toFixed(1) || '—' }}
                   </p>
                 </div>
                 <div class="bg-gradient-to-br from-pink-500/20 to-pink-600/20 rounded-xl p-4 border border-pink-500/30">
@@ -732,7 +742,7 @@ const deleteDocument = (document) => {
                       </div>
                       <div>
                         <p class="text-slate-400 text-xs mb-0.5">IMC</p>
-                        <p class="text-slate-100 font-semibold">{{ measurement.bmi ? measurement.bmi.toFixed(1) : '—' }}</p>
+                        <p class="text-slate-100 font-semibold">{{ calculateBmi(measurement) || (measurement.bmi ? measurement.bmi.toFixed(1) : '—') }}</p>
                       </div>
                       <div>
                         <p class="text-slate-400 text-xs mb-0.5">Poitrine</p>

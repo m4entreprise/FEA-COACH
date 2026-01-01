@@ -1,10 +1,11 @@
 <script setup>
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import axios from 'axios';
+import { GripVertical, Plus, Search, CircleDollarSign } from 'lucide-vue-next';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   plans: Array,
@@ -12,12 +13,32 @@ const props = defineProps({
 
 const showModal = ref(false);
 const editingPlan = ref(null);
+const draggingId = ref(null);
+const reorderSaving = ref(false);
+const reorderError = ref(null);
+const previewHtml = ref('');
+const previewLoading = ref(false);
+const previewError = ref(null);
+const isPreviewFullscreen = ref(false);
+
+const plansList = ref([]);
+
+watch(
+  () => props.plans,
+  (value) => {
+    plansList.value = [...(value || [])].sort(
+      (a, b) => (a.order ?? 0) - (b.order ?? 0),
+    );
+  },
+  { immediate: true },
+);
 
 const form = useForm({
   name: '',
   description: '',
   price: '',
   cta_url: '',
+  order: 0,
   is_active: true,
 });
 
@@ -26,6 +47,7 @@ const openCreateModal = () => {
   form.reset();
   form.clearErrors();
   form.is_active = true;
+  form.order = plansList.value.length;
   showModal.value = true;
 };
 
@@ -35,6 +57,7 @@ const openEditModal = (plan) => {
   form.description = plan.description || '';
   form.price = plan.price || '';
   form.cta_url = plan.cta_url || '';
+  form.order = plan.order ?? 0;
   form.is_active = plan.is_active;
   form.clearErrors();
   showModal.value = true;
@@ -60,6 +83,7 @@ const submit = () => {
       },
     );
   } else {
+    form.order = plansList.value.length;
     form.post(route('dashboard.plans.store', { beta: 1 }), {
       preserveScroll: true,
       onSuccess: () => closeModal(),
@@ -83,6 +107,110 @@ const deletePlan = (plan) => {
     },
   );
 };
+
+const onDragStart = (event, plan) => {
+  draggingId.value = plan.id;
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', String(plan.id));
+  }
+};
+
+const onDragEnd = () => {
+  draggingId.value = null;
+};
+
+const onDropCard = (event, targetPlan) => {
+  event.preventDefault();
+  reorderList(draggingId.value, targetPlan?.id ?? null);
+};
+
+const onDropAfterList = (event) => {
+  event.preventDefault();
+  reorderList(draggingId.value, null);
+};
+
+const reorderList = (draggedId, targetId) => {
+  if (!draggedId || draggedId === targetId) return;
+  const updated = [...plansList.value];
+  const fromIndex = updated.findIndex((plan) => plan.id === draggedId);
+  if (fromIndex === -1) return;
+  const [moved] = updated.splice(fromIndex, 1);
+  let toIndex =
+    targetId === null ? updated.length : updated.findIndex((plan) => plan.id === targetId);
+  if (toIndex === -1) {
+    updated.splice(fromIndex, 0, moved);
+    return;
+  }
+  updated.splice(toIndex, 0, moved);
+  plansList.value = updated.map((plan, index) => ({
+    ...plan,
+    order: index,
+  }));
+  draggingId.value = null;
+  saveOrder();
+};
+
+const saveOrder = async () => {
+  reorderSaving.value = true;
+  reorderError.value = null;
+
+  try {
+    await axios.post(
+      route('dashboard.plans.reorder', { beta: 1 }),
+      {
+        order: plansList.value.map((plan, index) => ({
+          id: plan.id,
+          order: index,
+        })),
+      },
+      {
+        headers: { Accept: 'application/json' },
+      },
+    );
+  } catch (error) {
+    reorderError.value =
+      error.response?.data?.message || 'Impossible d’enregistrer le nouvel ordre.';
+  } finally {
+    reorderSaving.value = false;
+  }
+};
+
+const fetchPreview = async () => {
+  previewLoading.value = true;
+  previewError.value = null;
+
+  try {
+    const { data } = await axios.post(
+      route('dashboard.plans.preview', { beta: 1 }),
+      {},
+      {
+        headers: { Accept: 'application/json' },
+        withCredentials: true,
+      },
+    );
+
+    previewHtml.value = data.html;
+  } catch (error) {
+    previewError.value =
+      error.response?.data?.message || "Impossible de générer l’aperçu pour le moment.";
+  } finally {
+    previewLoading.value = false;
+  }
+};
+
+const openPreview = () => {
+  isPreviewFullscreen.value = true;
+  fetchPreview();
+};
+
+const closePreview = () => {
+  isPreviewFullscreen.value = false;
+};
+
+watch(isPreviewFullscreen, (active) => {
+  document.body.classList.toggle('overflow-hidden', active);
+});
 </script>
 
 <template>
@@ -130,85 +258,161 @@ const deletePlan = (plan) => {
               Créez et ajustez les plans visibles sur votre site public.
             </p>
           </div>
-          <PrimaryButton type="button" class="text-xs" @click="openCreateModal">
-            <span class="mr-1">+</span>
-            Nouveau plan
-          </PrimaryButton>
+          <div class="flex flex-wrap gap-2">
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-50 hover:border-indigo-400 hover:bg-slate-800"
+              @click="openPreview"
+            >
+              <Search class="h-3.5 w-3.5" />
+              <span>Aperçu plein écran</span>
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
+              @click="openCreateModal"
+            >
+              <Plus class="h-3.5 w-3.5" />
+              <span>Nouveau plan</span>
+            </button>
+          </div>
+        </section>
+
+        <section
+          class="rounded-2xl border border-slate-800 bg-slate-950/70 p-5 shadow-xl space-y-2"
+        >
+          <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-breathe"></span>
+              <span>{{ plansList.length }} plan(s) affichés</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-slate-400">Glissez-déposez pour réordonner les offres.</span>
+              <span
+                class="inline-flex items-center rounded-full px-3 py-1 text-[11px]"
+                :class="[
+                  reorderSaving
+                    ? 'border-yellow-400/40 text-yellow-200 bg-yellow-400/10'
+                    : reorderError
+                      ? 'border-rose-500/40 text-rose-200 bg-rose-500/10'
+                      : 'border-slate-700 text-slate-300 bg-slate-800/60',
+                ]"
+              >
+                <span v-if="reorderSaving">Enregistrement…</span>
+                <span v-else-if="reorderError">{{ reorderError }}</span>
+                <span v-else>Ordre synchronisé</span>
+              </span>
+            </div>
+          </div>
         </section>
 
         <!-- Plans grid / empty state -->
         <section class="space-y-4">
           <div
-            v-if="plans && plans.length"
+            v-if="plansList.length"
             class="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
           >
             <article
-              v-for="plan in plans"
+              v-for="plan in plansList"
               :key="plan.id"
-              class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col gap-3"
+              class="rounded-2xl border bg-slate-900/80 p-5 shadow-xl flex flex-col gap-3 transition"
+              :class="[
+                draggingId === plan.id
+                  ? 'border-indigo-500/70 bg-slate-900'
+                  : 'border-slate-800 hover:border-slate-700',
+              ]"
+              draggable="true"
+              @dragstart="onDragStart($event, plan)"
+              @dragend="onDragEnd"
+              @dragover.prevent
+              @drop="onDropCard($event, plan)"
             >
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <h3 class="text-sm font-semibold text-slate-50">
-                    {{ plan.name }}
-                  </h3>
-                  <p v-if="plan.price" class="mt-1 text-lg font-bold text-emerald-400">
-                    {{ parseFloat(plan.price).toFixed(2) }}€
+              <div class="flex items-start gap-4">
+                <button
+                  type="button"
+                  class="h-10 w-10 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-400 hover:text-slate-100"
+                >
+                  <GripVertical class="h-4 w-4" />
+                </button>
+                <div class="flex-1 space-y-3">
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="space-y-1">
+                      <p class="text-xs uppercase tracking-wide text-slate-500">Plan</p>
+                      <h3 class="text-sm font-semibold text-slate-50">
+                        {{ plan.name }}
+                      </h3>
+                    </div>
+                    <div class="flex flex-col items-end gap-1 text-right">
+                      <span
+                        class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold"
+                        :class="
+                          plan.is_active
+                            ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
+                            : 'border-slate-700 bg-slate-800 text-slate-300'
+                        "
+                      >
+                        {{ plan.is_active ? 'Actif' : 'Masqué' }}
+                      </span>
+                      <span class="text-[11px] text-slate-500">
+                        Position : {{ plan.order + 1 }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex flex-wrap items-baseline gap-2">
+                    <p
+                      v-if="plan.price"
+                      class="text-lg font-bold text-emerald-400"
+                    >
+                      {{ parseFloat(plan.price).toFixed(2) }}€
+                    </p>
+                    <p v-else class="text-xs text-slate-400 italic">Prix sur demande</p>
+                  </div>
+                  <p
+                    v-if="plan.description"
+                    class="text-xs text-slate-300 line-clamp-3"
+                  >
+                    {{ plan.description }}
                   </p>
-                  <p v-else class="mt-1 text-xs text-slate-400 italic">
-                    Prix sur demande
+                  <p
+                    v-if="plan.cta_url"
+                    class="text-[11px] text-slate-400 truncate"
+                  >
+                    <span class="font-semibold">Lien :</span>
+                    <a
+                      :href="plan.cta_url"
+                      target="_blank"
+                      class="ml-1 text-sky-400 hover:text-sky-300"
+                    >
+                      {{ plan.cta_url }}
+                    </a>
                   </p>
+                  <div class="mt-auto flex gap-2 pt-2 text-[11px]">
+                    <button
+                      type="button"
+                      class="flex-1 rounded-full border border-slate-700 px-4 py-1.5 text-slate-200 hover:bg-slate-800"
+                      @click="openEditModal(plan)"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      type="button"
+                      class="rounded-full border border-rose-500/50 bg-rose-500/10 px-4 py-1.5 text-rose-200 hover:bg-rose-500/20"
+                      @click="deletePlan(plan)"
+                    >
+                      Supprimer
+                    </button>
+                  </div>
                 </div>
-                <span
-                  class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                  :class="
-                    plan.is_active
-                      ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40'
-                      : 'bg-slate-800 text-slate-300 border border-slate-700'
-                  "
-                >
-                  {{ plan.is_active ? 'Actif' : 'Inactif' }}
-                </span>
-              </div>
-
-              <p
-                v-if="plan.description"
-                class="text-xs text-slate-300 line-clamp-3"
-              >
-                {{ plan.description }}
-              </p>
-
-              <p
-                v-if="plan.cta_url"
-                class="text-[11px] text-slate-400 truncate"
-              >
-                <span class="font-semibold">Lien :</span>
-                <a
-                  :href="plan.cta_url"
-                  target="_blank"
-                  class="ml-1 text-sky-400 hover:text-sky-300"
-                >
-                  {{ plan.cta_url }}
-                </a>
-              </p>
-
-              <div class="mt-auto flex gap-2 pt-2 text-[11px]">
-                <button
-                  type="button"
-                  class="flex-1 rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 px-3 py-1.5 font-medium text-slate-50 hover:from-sky-600 hover:to-indigo-600"
-                  @click="openEditModal(plan)"
-                >
-                  Modifier
-                </button>
-                <button
-                  type="button"
-                  class="rounded-full bg-gradient-to-r from-rose-500 to-rose-600 px-3 py-1.5 text-slate-50 hover:from-rose-600 hover:to-rose-700"
-                  @click="deletePlan(plan)"
-                >
-                  Supprimer
-                </button>
               </div>
             </article>
+
+            <div
+              class="h-10 rounded-2xl border border-dashed border-slate-700 text-center text-xs text-slate-500 flex items-center justify-center"
+              @dragover.prevent
+              @drop="onDropAfterList"
+            >
+              Déposez ici pour placer le plan à la fin
+            </div>
           </div>
 
           <div
@@ -219,17 +423,21 @@ const deletePlan = (plan) => {
               <div
                 class="h-14 w-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-lg"
               >
-                <span class="text-2xl">💰</span>
+                <CircleDollarSign class="h-7 w-7 text-white" />
               </div>
             </div>
             <h3 class="text-lg font-semibold mb-2">Aucun plan</h3>
             <p class="text-xs text-slate-400 mb-4">
               Créez vos premières offres pour les afficher sur votre site.
             </p>
-            <PrimaryButton type="button" class="text-xs" @click="openCreateModal">
-              <span class="mr-1">+</span>
-              Créer un plan
-            </PrimaryButton>
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
+              @click="openCreateModal"
+            >
+              <Plus class="h-3.5 w-3.5" />
+              <span>Créer un plan</span>
+            </button>
           </div>
         </section>
       </div>
@@ -243,9 +451,14 @@ const deletePlan = (plan) => {
           class="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
         >
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-sm font-semibold">
-              {{ editingPlan ? 'Modifier le plan' : 'Nouveau plan' }}
-            </h2>
+            <div>
+              <p class="text-xs uppercase tracking-wide text-slate-500">
+                {{ editingPlan ? 'Modifier' : 'Nouveau plan' }}
+              </p>
+              <h2 class="text-sm font-semibold">
+                {{ editingPlan ? 'Modifier le plan' : 'Nouveau plan' }}
+              </h2>
+            </div>
             <button
               type="button"
               class="text-slate-400 hover:text-slate-200 text-sm"
@@ -275,24 +488,44 @@ const deletePlan = (plan) => {
               />
             </div>
 
-            <div>
-              <InputLabel
-                for="plan_price"
-                value="Prix (€)"
-                class="text-xs text-slate-200"
-              />
-              <TextInput
-                id="plan_price"
-                v-model="form.price"
-                type="number"
-                step="0.01"
-                min="0"
-                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-              />
-              <InputError
-                class="mt-1 text-[11px]"
-                :message="form.errors.price"
-              />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <InputLabel
+                  for="plan_price"
+                  value="Prix (€)"
+                  class="text-xs text-slate-200"
+                />
+                <TextInput
+                  id="plan_price"
+                  v-model="form.price"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
+                />
+                <InputError
+                  class="mt-1 text-[11px]"
+                  :message="form.errors.price"
+                />
+              </div>
+              <div>
+                <InputLabel
+                  for="plan_cta_url"
+                  value="URL de réservation"
+                  class="text-xs text-slate-200"
+                />
+                <TextInput
+                  id="plan_cta_url"
+                  v-model="form.cta_url"
+                  type="url"
+                  class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
+                  placeholder="https://..."
+                />
+                <InputError
+                  class="mt-1 text-[11px]"
+                  :message="form.errors.cta_url"
+                />
+              </div>
             </div>
 
             <div>
@@ -313,39 +546,15 @@ const deletePlan = (plan) => {
               />
             </div>
 
-            <div>
-              <InputLabel
-                for="plan_cta_url"
-                value="URL de réservation (optionnel)"
-                class="text-xs text-slate-200"
-              />
-              <TextInput
-                id="plan_cta_url"
-                v-model="form.cta_url"
-                type="url"
-                class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                placeholder="https://..."
-              />
-              <InputError
-                class="mt-1 text-[11px]"
-                :message="form.errors.cta_url"
-              />
-            </div>
-
-            <div class="flex items-center gap-2 rounded-xl bg-slate-900/80 border border-slate-700 px-3 py-2">
+            <label class="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-xs text-slate-200">
               <input
                 id="plan_is_active"
                 v-model="form.is_active"
                 type="checkbox"
                 class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-emerald-500 focus:ring-emerald-500"
               />
-              <label
-                for="plan_is_active"
-                class="text-xs text-slate-200"
-              >
-                Plan actif (visible sur le site)
-              </label>
-            </div>
+              Plan actif (visible sur le site)
+            </label>
 
             <div class="flex justify-end gap-2 pt-2 text-xs">
               <button
@@ -368,4 +577,98 @@ const deletePlan = (plan) => {
       </div>
     </main>
   </div>
+
+  <teleport to="body">
+    <div
+      v-if="isPreviewFullscreen"
+      class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col"
+    >
+      <div class="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-slate-800 text-slate-200">
+        <div>
+          <p class="text-xs uppercase tracking-wide text-indigo-300">
+            Aperçu plans
+          </p>
+          <h3 class="text-lg font-semibold">Site public (mise à jour en direct)</h3>
+        </div>
+        <div class="flex items-center gap-3 text-xs">
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1.5 hover:border-slate-400 hover:text-white"
+            @click="fetchPreview"
+            :disabled="previewLoading"
+          >
+            <span v-if="previewLoading" class="animate-pulse text-yellow-300">Actualisation…</span>
+            <span v-else>Rafraîchir</span>
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1.5 hover:border-slate-400 hover:text-white"
+            @click="closePreview"
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+
+      <div class="flex-1 p-4">
+        <div
+          class="relative h-full rounded-2xl border border-slate-800 bg-slate-950/80 shadow-2xl overflow-hidden"
+        >
+          <div
+            v-if="previewLoading && !previewHtml"
+            class="absolute inset-0 flex flex-col items-center justify-center text-slate-200 text-sm gap-3"
+          >
+            <svg class="h-8 w-8 animate-spin text-indigo-300" viewBox="0 0 24 24" fill="none">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            <p>Chargement de l’aperçu...</p>
+          </div>
+          <div
+            v-else-if="previewError"
+            class="absolute inset-0 flex flex-col items-center justify-center text-center text-red-300 text-sm px-8 gap-3"
+          >
+            <p>{{ previewError }}</p>
+            <button
+              type="button"
+              class="text-xs underline decoration-dotted"
+              @click="fetchPreview"
+            >
+              Réessayer
+            </button>
+          </div>
+          <iframe
+            v-show="previewHtml"
+            class="w-full h-full bg-white"
+            sandbox="allow-same-origin allow-forms"
+            :srcdoc="previewHtml"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </teleport>
 </template>
+
+<style scoped>
+@keyframes breathe {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45);
+  }
+  70% {
+    transform: scale(1.4);
+    opacity: 0.2;
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 2.2s ease-in-out infinite;
+}
+</style>

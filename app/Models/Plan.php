@@ -12,12 +12,14 @@ class Plan extends Model
         'name',
         'description',
         'price',
+        'order',
         'cta_url',
         'is_active',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'order' => 'integer',
         'is_active' => 'boolean',
     ];
 

@@ -151,6 +151,8 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/plans', [PlansController::class, 'store'])->name('dashboard.plans.store');
     Route::patch('/dashboard/plans/{plan}', [PlansController::class, 'update'])->name('dashboard.plans.update');
     Route::delete('/dashboard/plans/{plan}', [PlansController::class, 'destroy'])->name('dashboard.plans.destroy');
+    Route::post('/dashboard/plans/reorder', [PlansController::class, 'reorder'])->name('dashboard.plans.reorder');
+    Route::post('/dashboard/plans/preview', [PlansController::class, 'preview'])->name('dashboard.plans.preview');
 
     // Contact messages management
     Route::get('/dashboard/contact', [ContactController::class, 'index'])->name('dashboard.contact');

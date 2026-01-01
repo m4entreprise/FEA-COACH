@@ -82,7 +82,7 @@ const deleteFaq = (faq) => {
             </h2>
         </template>
 
-        <div class="py-12">
+        <div class="py-10 md:py-12 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 min-h-screen">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <!-- Success Message -->
                 <div v-if="$page.props.flash?.success" class="mb-4 rounded-md bg-green-50 p-4 dark:bg-green-900/20">

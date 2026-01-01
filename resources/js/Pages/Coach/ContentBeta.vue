@@ -414,7 +414,7 @@ const deletePhoto = () => {
                   </span>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
                   <div class="space-y-3 lg:col-span-3">
                     <textarea
                       id="about_text"
@@ -434,7 +434,7 @@ const deletePhoto = () => {
 
                   <div class="lg:col-span-2">
                     <div
-                      class="h-full rounded-2xl border border-slate-800 bg-slate-950/60 p-4 space-y-4"
+                      class="h-full rounded-2xl border border-slate-800 bg-slate-950 p-5 space-y-5"
                     >
                       <div class="flex items-center gap-3">
                         <div
@@ -975,111 +975,8 @@ const deletePhoto = () => {
             </form>
           </section>
 
-          <!-- Side column: photo + FAQ -->
+          <!-- Side column -->
           <div class="space-y-6">
-            <section
-              class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl space-y-4"
-            >
-              <header class="flex items-center justify-between gap-3">
-                <div class="space-y-1">
-                  <h3 class="text-sm font-semibold">Aperçu de votre site</h3>
-                  <p class="text-xs text-slate-400">
-                    Visualisation simplifiée de ce que verront vos visiteurs.
-                  </p>
-                </div>
-              </header>
-
-              <div
-                class="rounded-xl bg-slate-950/80 border border-slate-800 p-4 space-y-4 text-xs"
-              >
-                <div class="space-y-2">
-                  <p
-                    class="text-[10px] uppercase tracking-wide text-slate-500"
-                  >
-                    Bannière d'accueil
-                  </p>
-                  <p class="text-sm font-semibold text-slate-50">
-                    {{ form.hero_title || 'Titre principal de votre page' }}
-                  </p>
-                  <p class="text-[11px] text-slate-300">
-                    {{
-                      form.hero_subtitle ||
-                      "Sous-titre d'accroche qui explique votre promesse."
-                    }}
-                  </p>
-                  <button
-                    type="button"
-                    class="mt-2 inline-flex items-center rounded-full bg-emerald-500 px-3 py-1.5 text-[11px] font-semibold text-emerald-950"
-                  >
-                    {{ form.cta_text || 'Réserver une séance' }}
-                  </button>
-                </div>
-
-                <div
-                  class="pt-3 mt-2 border-t border-slate-800 space-y-2"
-                >
-                  <p
-                    class="text-[10px] uppercase tracking-wide text-slate-500"
-                  >
-                    Section "À propos"
-                  </p>
-                  <p class="text-[11px] text-slate-300 whitespace-pre-line">
-                    {{
-                      form.about_text ||
-                      'Texte de présentation qui raconte votre parcours et votre manière de travailler.'
-                    }}
-                  </p>
-                </div>
-
-                <div
-                  class="pt-3 mt-2 border-t border-slate-800 space-y-2"
-                >
-                  <p
-                    class="text-[10px] uppercase tracking-wide text-slate-500"
-                  >
-                    Section "Ma méthode"
-                  </p>
-                  <p class="text-[11px] font-semibold text-slate-100">
-                    {{ form.method_title || 'Ma méthode en 3 étapes' }}
-                  </p>
-                  <ul class="text-[11px] text-slate-300 space-y-1 list-disc ml-4">
-                    <li v-if="form.method_step1_title">
-                      {{ form.method_step1_title }}
-                    </li>
-                    <li v-if="form.method_step2_title">
-                      {{ form.method_step2_title }}
-                    </li>
-                    <li v-if="form.method_step3_title">
-                      {{ form.method_step3_title }}
-                    </li>
-                    <li v-if="!form.method_step1_title && !form.method_step2_title && !form.method_step3_title">
-                      Exemple : Bilan, Programme, Suivi.
-                    </li>
-                  </ul>
-                </div>
-
-                <div
-                  class="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-300"
-                >
-                  <div>
-                    <p class="font-semibold text-emerald-300">
-                      {{ form.satisfaction_rate }}% de clients satisfaits
-                    </p>
-                  </div>
-                  <div>
-                    <p class="font-semibold text-amber-300">
-                      {{ form.average_rating }}★ sur 5
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <p class="text-[10px] text-slate-500">
-                Cet aperçu est indicatif : le design final de votre site peut
-                être différent.
-              </p>
-            </section>
-
             <!-- FAQ card -->
             <section
               class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl space-y-4"

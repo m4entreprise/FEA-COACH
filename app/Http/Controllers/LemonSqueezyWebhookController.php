@@ -6,6 +6,7 @@ use App\Models\Coach;
 use App\Models\User;
 use App\Services\LemonSqueezyService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -25,9 +26,14 @@ class LemonSqueezyWebhookController extends Controller
     {
         $payload = $request->getContent();
         $signature = $request->header('X-Signature');
+        $headers = $request->headers->all();
 
         if (! $this->service->verifyWebhookSignature($payload, $signature)) {
-            Log::warning('Invalid Lemon Squeezy webhook signature');
+            Log::warning('Invalid Lemon Squeezy webhook signature', [
+                'signature' => $signature,
+                'headers' => $headers,
+                'payload' => $payload,
+            ]);
 
             return response()->json(['error' => 'Invalid signature'], 401);
         }
@@ -66,6 +72,8 @@ class LemonSqueezyWebhookController extends Controller
         } catch (\Throwable $e) {
             Log::error('Error processing Lemon Squeezy webhook', [
                 'event' => $eventName,
+                'headers' => $headers,
+                'payload' => $data,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -88,20 +96,28 @@ class LemonSqueezyWebhookController extends Controller
         $attributes = $data['attributes'] ?? [];
         $subscriptionId = (string) ($data['id'] ?? '');
 
+        $customerId = $attributes['customer_id']
+            ?? ($payload['data']['relationships']['customer']['data']['id'] ?? null);
+
+        $customerId = $customerId !== null ? (string) $customerId : null;
+
         $update = [
-            'fungies_customer_id' => $attributes['customer_id'] ?? null,
-            'fungies_subscription_id' => $subscriptionId,
+            'lemonsqueezy_customer_id' => $customerId,
+            'lemonsqueezy_subscription_id' => $subscriptionId !== '' ? $subscriptionId : null,
             'subscription_status' => $attributes['status'] ?? 'active',
             'cancel_at_period_end' => (bool) ($attributes['cancelled'] ?? false),
         ];
 
         if (! empty($attributes['trial_ends_at'])) {
-            $update['trial_ends_at'] = now()->parse($attributes['trial_ends_at']);
+            $update['trial_ends_at'] = Carbon::parse($attributes['trial_ends_at']);
         }
 
         if (! empty($attributes['renews_at'])) {
-            $update['subscription_current_period_end'] = now()->parse($attributes['renews_at']);
-            $update['subscription_current_period_start'] = now();
+            $update['subscription_current_period_end'] = Carbon::parse($attributes['renews_at']);
+        }
+
+        if (! empty($attributes['created_at'])) {
+            $update['subscription_current_period_start'] = Carbon::parse($attributes['created_at']);
         }
 
         $user->update($update);
@@ -109,7 +125,7 @@ class LemonSqueezyWebhookController extends Controller
         $customData = $payload['meta']['custom_data'] ?? [];
 
         // Terminer l'onboarding et créer le profil coach si nécessaire
-        if (! $user->onboarding_completed && ($customData['onboarding'] ?? false)) {
+        if (! $user->onboarding_completed && $this->customDataFlag($customData, 'onboarding')) {
             $this->createCoachProfile($user);
 
             $user->onboarding_completed = true;
@@ -129,7 +145,7 @@ class LemonSqueezyWebhookController extends Controller
         $attributes = $data['attributes'] ?? [];
         $subscriptionId = (string) ($data['id'] ?? '');
 
-        $user = User::where('fungies_subscription_id', $subscriptionId)->first();
+        $user = User::where('lemonsqueezy_subscription_id', $subscriptionId)->first();
 
         if (! $user) {
             $user = $this->resolveUserFromPayload($payload);
@@ -150,7 +166,7 @@ class LemonSqueezyWebhookController extends Controller
         }
 
         if (! empty($attributes['renews_at'])) {
-            $update['subscription_current_period_end'] = now()->parse($attributes['renews_at']);
+            $update['subscription_current_period_end'] = Carbon::parse($attributes['renews_at']);
         }
 
         if (array_key_exists('cancelled', $attributes)) {
@@ -174,7 +190,7 @@ class LemonSqueezyWebhookController extends Controller
         $attributes = $data['attributes'] ?? [];
         $subscriptionId = (string) ($data['id'] ?? '');
 
-        $user = User::where('fungies_subscription_id', $subscriptionId)->first();
+        $user = User::where('lemonsqueezy_subscription_id', $subscriptionId)->first();
 
         if (! $user) {
             $user = $this->resolveUserFromPayload($payload);
@@ -204,7 +220,7 @@ class LemonSqueezyWebhookController extends Controller
         $data = $payload['data'] ?? [];
         $subscriptionId = (string) ($data['id'] ?? '');
 
-        $user = User::where('fungies_subscription_id', $subscriptionId)->first();
+        $user = User::where('lemonsqueezy_subscription_id', $subscriptionId)->first();
 
         if (! $user) {
             $user = $this->resolveUserFromPayload($payload);
@@ -234,8 +250,8 @@ class LemonSqueezyWebhookController extends Controller
         $meta = $payload['meta'] ?? [];
         $custom = $meta['custom_data'] ?? [];
 
-        if (isset($custom['user_id'])) {
-            $user = User::find($custom['user_id']);
+        if (isset($custom['user_id']) && trim((string) $custom['user_id']) !== '') {
+            $user = User::find((int) $custom['user_id']);
 
             if ($user) {
                 return $user;
@@ -243,13 +259,34 @@ class LemonSqueezyWebhookController extends Controller
         }
 
         $attributes = $payload['data']['attributes'] ?? [];
-        $email = $attributes['user_email'] ?? null;
+        $email = $attributes['user_email'] ?? ($attributes['customer_email'] ?? null);
 
         if ($email) {
             return User::where('email', $email)->first();
         }
 
         return null;
+    }
+
+    private function customDataFlag(array $customData, string $key): bool
+    {
+        if (! array_key_exists($key, $customData)) {
+            return false;
+        }
+
+        $value = $customData[$key];
+
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        if (is_int($value)) {
+            return $value === 1;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return in_array($normalized, ['1', 'true', 'yes', 'y', 'on'], true);
     }
 
     private function createCoachProfile(User $user): void
@@ -262,11 +299,12 @@ class LemonSqueezyWebhookController extends Controller
         $fullName = $fullName !== '' ? $fullName : ($user->name ?? 'Coach');
 
         $baseSlug = Str::slug($fullName);
-        $slug = $baseSlug !== '' ? $baseSlug : 'coach';
+        $seedSlug = $baseSlug !== '' ? $baseSlug : 'coach';
+        $slug = $seedSlug;
         $counter = 1;
 
         while (Coach::where('slug', $slug)->exists()) {
-            $slug = $baseSlug . '-' . $counter;
+            $slug = $seedSlug . '-' . $counter;
             $counter++;
         }
 

@@ -348,7 +348,7 @@ onMounted(() => {
                                 <p :class="[stats.is_active ? 'from-green-600 to-green-500' : 'from-red-600 to-red-500', 'text-3xl font-bold bg-gradient-to-r bg-clip-text text-transparent mb-2']">
                                     {{ stats.is_active ? '✓ Actif' : '✗ Inactif' }}
                                 </p>
-                                <a :href="`http://${coach.slug || coach.subdomain}.${$page.props.appDomain}`" target="_blank" class="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors">
+                                <a :href="route('coach.site', { coach_slug: coach.slug || coach.subdomain })" target="_blank" class="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors">
                                     Voir le site
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>

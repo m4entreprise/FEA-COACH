@@ -163,9 +163,39 @@ Le serveur sera accessible sur `http://localhost:8000`
 - ✅ Onboarding en 3 étapes après connexion
   - Step 1 : type de compte (diplômé FEA / non diplômé)
   - Step 2 : informations légales (nom, prénom, TVA, adresse)
-  - Step 3 : activation par code promo ou paiement (Stripe à intégrer)
+  - Step 3 : activation par code promo ou paiement (Lemon Squeezy)
 - ✅ Activation automatique du compte et du profil coach lors de l'approbation d'une demande de code promo
 - ✅ Redirection intelligente vers le dashboard une fois l'onboarding complété
+
+### Facturation (Lemon Squeezy)
+
+La facturation MVP est basée sur Lemon Squeezy.
+
+Variables d'environnement nécessaires (voir `.env.example`) :
+
+```env
+LEMON_SQUEEZY_API_KEY=
+LEMON_SQUEEZY_STORE_ID=
+LEMON_SQUEEZY_VARIANT_NON_FEA=
+LEMON_SQUEEZY_VARIANT_FEA=
+LEMON_SQUEEZY_WEBHOOK_SECRET=
+LEMON_SQUEEZY_BASE_URL=https://api.lemonsqueezy.com/v1
+```
+
+Webhook (public, protégé par signature) :
+
+- **Endpoint**: `POST /webhooks/lemonsqueezy`
+- **Header de signature**: `X-Signature` (HMAC SHA-256 hex digest du payload brut)
+
+Checklist sandbox / test end-to-end (transaction fictive) :
+
+- **Créer un Store** et des **Variants** en mode test dans Lemon Squeezy
+- **Renseigner** les variables ci-dessus dans `.env`
+- **Configurer** un webhook Lemon Squeezy avec :
+  - URL: `https://<votre-domaine-ou-tunnel>/webhooks/lemonsqueezy`
+  - Signing secret: la même valeur que `LEMON_SQUEEZY_WEBHOOK_SECRET`
+- **Exécuter** le flow onboarding jusqu'au paiement (Step 3)
+- **Vérifier** que l'événement `subscription_created` met à jour l'utilisateur et déclenche la création du profil coach si nécessaire
 
 ### Panel Admin (multi-tenant)
 
@@ -230,7 +260,7 @@ Voir le dossier `/doc` pour plus de détails :
 
 ### 🔄 En cours / À venir
 
-- ⏳ Intégration Stripe complète pour la gestion des abonnements
+- ⏳ Finalisation et tests end-to-end Lemon Squeezy (sandbox + webhooks)
 - ⏳ Tests automatisés (Feature, Unit)
 - ⏳ Optimisation des performances et de la mise en cache
 - ⏳ Configuration production (Redis, Supervisor, workers)

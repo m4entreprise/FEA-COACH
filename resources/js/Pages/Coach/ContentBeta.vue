@@ -431,9 +431,6 @@ onBeforeUnmount(() => {
                       class="h-full rounded-2xl border border-slate-800 bg-slate-950 p-5 space-y-5"
                     >
                       <div class="flex items-center gap-3">
-                        <div
-                          class="h-9 w-9 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-sm"
-                        ></div>
                         <div>
                           <p class="text-sm font-semibold">Photo de profil</p>
                           <p class="text-[11px] text-slate-400">

@@ -515,6 +515,41 @@
     <div class="form-group full-width" style="margin-top: 1.5rem;">
       <label class="form-label">Photos d'évolution (optionnel)</label>
       <span class="form-hint">Ces photos sont privées et ne sont visibles que par votre coach</span>
+      
+      @if($latestMeasurement && ($latestMeasurement->photo_front || $latestMeasurement->photo_side || $latestMeasurement->photo_back))
+        <div style="margin: 1rem 0; padding: 1rem; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 0.75rem;">
+          <div style="font-size: 0.85rem; color: #a5b4fc; margin-bottom: 0.75rem; font-weight: 500;">
+            📸 Vos dernières photos ({{ $latestMeasurement->created_at->translatedFormat('d F Y') }})
+          </div>
+          <div class="photo-upload-grid">
+            @if($latestMeasurement->photo_front)
+              <div class="photo-upload-item">
+                <div class="photo-preview">
+                  <img src="{{ route('clients.dashboard.photo', [$client->share_token, $latestMeasurement->id, 'front']) }}" alt="Face">
+                </div>
+                <div style="text-align: center; font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem;">Vue de Face</div>
+              </div>
+            @endif
+            @if($latestMeasurement->photo_side)
+              <div class="photo-upload-item">
+                <div class="photo-preview">
+                  <img src="{{ route('clients.dashboard.photo', [$client->share_token, $latestMeasurement->id, 'side']) }}" alt="Profil">
+                </div>
+                <div style="text-align: center; font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem;">Vue de Profil</div>
+              </div>
+            @endif
+            @if($latestMeasurement->photo_back)
+              <div class="photo-upload-item">
+                <div class="photo-preview">
+                  <img src="{{ route('clients.dashboard.photo', [$client->share_token, $latestMeasurement->id, 'back']) }}" alt="Dos">
+                </div>
+                <div style="text-align: center; font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem;">Vue de Dos</div>
+              </div>
+            @endif
+          </div>
+        </div>
+      @endif
+
       <div class="photo-upload-grid" style="margin-top: 1rem;">
         <div class="photo-upload-item">
           <div class="photo-preview" id="preview-front">

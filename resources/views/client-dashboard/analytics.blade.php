@@ -199,6 +199,14 @@
     overflow: hidden;
     background: rgba(15, 23, 42, 0.8);
     border: 1px solid rgba(148, 163, 184, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .photo-view:hover {
+    transform: scale(1.05);
+    border-color: rgba(129, 140, 248, 0.5);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
   }
 
   .photo-view img {
@@ -309,6 +317,104 @@
     transform: translateY(-1px);
   }
 
+  /* Lightbox */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    padding: 2rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox.active {
+    display: flex;
+  }
+
+  .lightbox-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .lightbox-image {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 1rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .lightbox-info {
+    text-align: center;
+    color: #f8fafc;
+  }
+
+  .lightbox-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .lightbox-date {
+    font-size: 0.9rem;
+    color: #94a3b8;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: -3rem;
+    right: 0;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    cursor: pointer;
+    color: #f8fafc;
+    transition: all 0.2s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-close:hover {
+    background: rgba(99, 102, 241, 0.3);
+    border-color: rgba(129, 140, 248, 0.6);
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    cursor: pointer;
+    color: #f8fafc;
+    transition: all 0.2s ease;
+  }
+
+  .lightbox-nav:hover {
+    background: rgba(99, 102, 241, 0.3);
+    border-color: rgba(129, 140, 248, 0.6);
+  }
+
+  .lightbox-nav.prev {
+    left: 1rem;
+  }
+
+  .lightbox-nav.next {
+    right: 1rem;
+  }
+
   @media (max-width: 768px) {
     .stats-grid {
       grid-template-columns: 1fr;
@@ -329,6 +435,21 @@
 
     .filter-btn {
       flex: 1;
+    }
+
+    .lightbox {
+      padding: 1rem;
+    }
+
+    .lightbox-nav {
+      padding: 0.5rem;
+    }
+
+    .lightbox-close {
+      top: auto;
+      bottom: -4rem;
+      right: 50%;
+      transform: translateX(50%);
     }
   }
 </style>
@@ -490,7 +611,7 @@
               {{ $measurement->created_at->translatedFormat('d F Y') }}
             </div>
             <div class="photo-views">
-              <div class="photo-view">
+              <div class="photo-view" @if($measurement->photo_front) onclick="openLightbox('{{ route('clients.dashboard.photo', [$client->share_token, $measurement->id, 'front']) }}', 'Face', '{{ $measurement->created_at->translatedFormat('d F Y') }}')" @endif>
                 @if($measurement->photo_front)
                   <img src="{{ route('clients.dashboard.photo', [$client->share_token, $measurement->id, 'front']) }}" alt="Face">
                 @else
@@ -498,7 +619,7 @@
                 @endif
                 <div class="photo-view-label">Face</div>
               </div>
-              <div class="photo-view">
+              <div class="photo-view" @if($measurement->photo_side) onclick="openLightbox('{{ route('clients.dashboard.photo', [$client->share_token, $measurement->id, 'side']) }}', 'Profil', '{{ $measurement->created_at->translatedFormat('d F Y') }}')" @endif>
                 @if($measurement->photo_side)
                   <img src="{{ route('clients.dashboard.photo', [$client->share_token, $measurement->id, 'side']) }}" alt="Profil">
                 @else
@@ -506,7 +627,7 @@
                 @endif
                 <div class="photo-view-label">Profil</div>
               </div>
-              <div class="photo-view">
+              <div class="photo-view" @if($measurement->photo_back) onclick="openLightbox('{{ route('clients.dashboard.photo', [$client->share_token, $measurement->id, 'back']) }}', 'Dos', '{{ $measurement->created_at->translatedFormat('d F Y') }}')" @endif>
                 @if($measurement->photo_back)
                   <img src="{{ route('clients.dashboard.photo', [$client->share_token, $measurement->id, 'back']) }}" alt="Dos">
                 @else
@@ -537,10 +658,49 @@
     </div>
   @endif
 @endif
+
+{{-- Lightbox --}}
+<div class="lightbox" id="photoLightbox" onclick="closeLightbox(event)">
+  <div class="lightbox-content" onclick="event.stopPropagation()">
+    <button class="lightbox-close" onclick="closeLightbox()">
+      <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <img id="lightboxImage" class="lightbox-image" src="" alt="">
+    <div class="lightbox-info">
+      <div class="lightbox-title" id="lightboxTitle"></div>
+      <div class="lightbox-date" id="lightboxDate"></div>
+    </div>
+  </div>
+</div>
 @endsection
 
 @push('scripts')
 <script>
+  // Lightbox functions
+  function openLightbox(imageSrc, title, date) {
+    document.getElementById('lightboxImage').src = imageSrc;
+    document.getElementById('lightboxTitle').textContent = title;
+    document.getElementById('lightboxDate').textContent = date;
+    document.getElementById('photoLightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox(event) {
+    if (!event || event.target.id === 'photoLightbox' || event.currentTarget.classList.contains('lightbox-close')) {
+      document.getElementById('photoLightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Fermer avec Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeLightbox();
+    }
+  });
+
   // Données pour les graphiques
   const measurementsData = @json($measurements->values());
   

@@ -1,6 +1,7 @@
 <script setup>
 import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
+import { Search, Plus, Camera } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
 
 const props = defineProps({
@@ -157,15 +158,16 @@ watch(isPreviewFullscreen, (active) => {
               class="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-50 hover:border-indigo-400 hover:bg-slate-800"
               @click="openPreview"
             >
-              🔍 Aperçu plein écran
+              <Search class="h-3.5 w-3.5" />
+              <span>Aperçu plein écran</span>
             </button>
             <button
               type="button"
               class="inline-flex items-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
               @click="showAddModal = true"
             >
-              <span class="mr-1">+</span>
-              Ajouter une transformation
+              <Plus class="h-3.5 w-3.5" />
+              <span>Ajouter une transformation</span>
             </button>
           </div>
         </section>
@@ -267,7 +269,7 @@ watch(isPreviewFullscreen, (active) => {
               <div
                 class="h-14 w-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg"
               >
-                <span class="text-2xl">📸</span>
+                <Camera class="h-7 w-7 text-white" />
               </div>
             </div>
             <h3 class="text-lg font-semibold mb-2">Aucune transformation</h3>

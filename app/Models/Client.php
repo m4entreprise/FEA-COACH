@@ -79,11 +79,24 @@ class Client extends Model
         return $this->hasOne(ClientMeasurement::class)->latestOfMany();
     }
 
+    public function messages(): HasMany
+    {
+        return $this->hasMany(ClientMessage::class);
+    }
+
     /**
      * Nom complet du client
      */
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * Compter les messages non lus pour ce client
+     */
+    public function unreadMessagesCount(): int
+    {
+        return $this->messages()->unread()->fromSender('coach')->count();
     }
 }

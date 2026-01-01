@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\ClientDocument;
+use App\Models\ClientMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -218,6 +219,90 @@ class ClientShareController extends Controller
         }
 
         return response()->file(Storage::disk('local')->path($path));
+    }
+
+    public function messages(Request $request, string $token)
+    {
+        $client = Client::with(['coach.user', 'messages' => fn($q) => $q->orderBy('created_at')])
+            ->where('share_token', $token)
+            ->firstOrFail();
+
+        if (!$request->session()->get($this->sessionKey($client->id), false)) {
+            return redirect()->route('clients.share.show', $token);
+        }
+
+        // Marquer les messages du coach comme lus
+        $client->messages()->where('sender_type', 'coach')->where('is_read', false)->each(function($message) {
+            $message->markAsRead();
+        });
+
+        return view('client-dashboard.messages', [
+            'client' => $client,
+            'messages' => $client->messages,
+            'programCount' => $client->documents()->where('type', 'program')->count(),
+            'nutritionCount' => $client->documents()->where('type', 'nutrition')->count(),
+            'assessmentCount' => $client->documents()->where('type', 'assessment')->count(),
+            'notesCount' => $client->notes()->count(),
+        ]);
+    }
+
+    public function sendMessage(Request $request, string $token)
+    {
+        $client = Client::where('share_token', $token)->firstOrFail();
+
+        if (!$request->session()->get($this->sessionKey($client->id), false)) {
+            return redirect()->route('clients.share.show', $token);
+        }
+
+        $validated = $request->validate([
+            'message' => ['required', 'string', 'max:5000'],
+            'attachment' => ['nullable', 'file', 'max:10240'], // 10MB max
+        ]);
+
+        $messageData = [
+            'client_id' => $client->id,
+            'sender_type' => 'client',
+            'message' => $validated['message'],
+        ];
+
+        // Gérer l'upload de fichier
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $path = $file->store('message-attachments/' . $client->id, 'local');
+            
+            $messageData['attachment_path'] = $path;
+            $messageData['attachment_name'] = $file->getClientOriginalName();
+            $messageData['attachment_mime'] = $file->getMimeType();
+            $messageData['attachment_size'] = $file->getSize();
+        }
+
+        ClientMessage::create($messageData);
+
+        return redirect()->route('clients.dashboard.messages', $token)
+            ->with('success', 'Message envoyé avec succès.');
+    }
+
+    public function downloadMessageAttachment(Request $request, string $token, int $messageId)
+    {
+        $client = Client::where('share_token', $token)->firstOrFail();
+
+        if (!$request->session()->get($this->sessionKey($client->id), false)) {
+            abort(403);
+        }
+
+        $message = ClientMessage::where('id', $messageId)
+            ->where('client_id', $client->id)
+            ->firstOrFail();
+
+        if (!$message->hasAttachment()) {
+            abort(404);
+        }
+
+        if (!Storage::disk('local')->exists($message->attachment_path)) {
+            abort(404);
+        }
+
+        return Storage::disk('local')->download($message->attachment_path, $message->attachment_name);
     }
 
     public function updateProfile(Request $request, string $token)

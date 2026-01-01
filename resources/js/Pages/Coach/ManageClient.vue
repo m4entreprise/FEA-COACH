@@ -1089,5 +1089,4 @@ const getPhotoUrl = (path) => {
         </div>
       </div>
     </div>
-  </div>
 </template>

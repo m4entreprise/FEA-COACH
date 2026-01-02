@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
     subscription: Object,
@@ -21,8 +22,17 @@ const handleSubscribe = () => {
     router.post(route('dashboard.subscription.checkout'));
 };
 
-const handleManageSubscription = () => {
-    router.post(route('dashboard.subscription.portal'));
+const handleManageSubscription = async () => {
+    try {
+        const { data } = await axios.post(route('dashboard.subscription.portal'));
+
+        if (data.redirect_url) {
+            window.location.href = data.redirect_url;
+        }
+    } catch (error) {
+        console.error('Error accessing customer portal:', error);
+        alert('Une erreur est survenue. Veuillez réessayer.');
+    }
 };
 </script>
 

@@ -100,7 +100,7 @@ class AdminCoachController extends Controller
         $coach = Coach::create([
             'user_id' => $user->id,
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
+            'slug' => $validated['subdomain'], // Use subdomain as slug for consistency
             'subdomain' => $validated['subdomain'],
             'color_primary' => $validated['color_primary'],
             'color_secondary' => $validated['color_secondary'],
@@ -127,6 +127,15 @@ class AdminCoachController extends Controller
     {
         $coach->load('user');
 
+        // Si le coach n'a pas de user, on redirige avec une erreur
+        if (!$coach->user) {
+            return redirect()
+                ->route('admin.coaches.index')
+                ->with('error', 'Ce coach n\'a pas de compte utilisateur associé. Veuillez le supprimer ou le recréer.');
+        }
+
+        $trialEndsAt = $coach->user->trial_ends_at;
+
         return Inertia::render('Admin/Coaches/Edit', [
             'coach' => [
                 'id' => $coach->id,
@@ -140,7 +149,12 @@ class AdminCoachController extends Controller
                 'user_email' => $coach->user->email,
                 'user_name' => $coach->user->name,
                 'is_fea_graduate' => $coach->user->is_fea_graduate ?? false,
-                'trial_ends_at' => $coach->user->trial_ends_at?->format('Y-m-d') ?? null,
+                'trial_ends_at' => $trialEndsAt?->format('Y-m-d') ?? null,
+                'trial_display' => $trialEndsAt?->format('d/m/Y') ?? null,
+                'trial_expired' => $trialEndsAt?->isPast() ?? null,
+                'trial_days_left' => $trialEndsAt && !$trialEndsAt->isPast()
+                    ? $trialEndsAt->diffInDays(now())
+                    : null,
             ],
         ]);
     }
@@ -150,6 +164,13 @@ class AdminCoachController extends Controller
      */
     public function update(Request $request, Coach $coach)
     {
+        // Vérifier que le coach a un user
+        if (!$coach->user) {
+            return redirect()
+                ->route('admin.coaches.index')
+                ->with('error', 'Ce coach n\'a pas de compte utilisateur associé.');
+        }
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($coach->user_id)],
@@ -159,7 +180,6 @@ class AdminCoachController extends Controller
             'is_active' => ['boolean'],
             'password' => ['nullable', 'string', 'min:8'],
             'is_fea_graduate' => ['boolean'],
-            'trial_ends_at' => ['nullable', 'date'],
         ]);
 
         // Update user account
@@ -173,16 +193,12 @@ class AdminCoachController extends Controller
             $userUpdate['password'] = Hash::make($validated['password']);
         }
 
-        if (!empty($validated['trial_ends_at'])) {
-            $userUpdate['trial_ends_at'] = $validated['trial_ends_at'];
-        }
-
         $coach->user->update($userUpdate);
 
         // Update coach profile
         $coach->update([
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
+            'slug' => $validated['subdomain'], // Use subdomain as slug for consistency
             'subdomain' => $validated['subdomain'],
             'color_primary' => $validated['color_primary'],
             'color_secondary' => $validated['color_secondary'],
@@ -204,8 +220,10 @@ class AdminCoachController extends Controller
         // Delete coach (will cascade to related data)
         $coach->delete();
         
-        // Delete user account
-        $user->delete();
+        // Delete user account if exists
+        if ($user) {
+            $user->delete();
+        }
 
         return redirect()
             ->route('admin.coaches.index')

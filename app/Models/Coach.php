@@ -17,6 +17,7 @@ class Coach extends Model implements HasMedia
         'name',
         'slug',
         'subdomain',
+        'desired_custom_domain',
         'site_layout',
         'color_primary',
         'color_secondary',
@@ -51,12 +52,14 @@ class Coach extends Model implements HasMedia
         'youtube_url',
         'tiktok_url',
         'is_active',
+        'custom_contact_locked_until',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'satisfaction_rate' => 'integer',
         'average_rating' => 'decimal:1',
+        'custom_contact_locked_until' => 'datetime',
     ];
 
     /**
@@ -108,6 +111,14 @@ class Coach extends Model implements HasMedia
     }
 
     /**
+     * Get the custom domain for the coach.
+     */
+    public function customDomain()
+    {
+        return $this->hasOne(CustomDomain::class);
+    }
+
+    /**
      * Get the site layout with fallback to default if invalid.
      */
     public function getSiteLayoutOrDefaultAttribute(): string
@@ -135,6 +146,6 @@ class Coach extends Model implements HasMedia
 
         $this->addMediaCollection('profile')
             ->singleFile()
-            ->useFallbackUrl('/images/default-profile.jpg');
+            ->useFallbackUrl('/images/default-profile.svg');
     }
 }

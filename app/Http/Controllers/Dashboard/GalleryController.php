@@ -16,9 +16,10 @@ class GalleryController extends Controller
     public function index(Request $request): Response
     {
         $coach = $request->user()->coach;
+
         $transformations = $coach->transformations()->with('media')->get();
 
-        return Inertia::render('Dashboard/Gallery', [
+        return Inertia::render('Coach/GalleryBeta', [
             'transformations' => $transformations,
         ]);
     }
@@ -75,5 +76,42 @@ class GalleryController extends Controller
 
         return redirect()->route('dashboard.gallery')
             ->with('success', 'Transformation supprimée avec succès.');
+    }
+
+    /**
+     * Provide a fullscreen preview of the public site with current transformations.
+     */
+    public function preview(Request $request)
+    {
+        $coach = $request->user()->coach;
+
+        if (!$coach) {
+            abort(404, 'Coach introuvable.');
+        }
+
+        $coach->loadMissing([
+            'user',
+            'media',
+            'transformations' => fn ($query) => $query->with('media')->orderBy('order'),
+            'plans' => fn ($query) => $query->where('is_active', true)->orderBy('price'),
+            'faqs' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('created_at'),
+        ]);
+
+        $layouts = config('coach_site.layouts', []);
+        $defaultLayout = config('coach_site.default_layout', 'classic');
+        $layoutKey = $coach->site_layout ?: $defaultLayout;
+        $layoutKey = array_key_exists($layoutKey, $layouts) ? $layoutKey : $defaultLayout;
+        $viewName = $layouts[$layoutKey]['view'] ?? 'coach-site.layouts.classic';
+
+        $html = view($viewName, [
+            'coach' => $coach,
+            'plans' => $coach->plans,
+            'transformations' => $coach->transformations,
+            'faqs' => $coach->faqs,
+        ])->render();
+
+        return response()->json([
+            'html' => $html,
+        ]);
     }
 }

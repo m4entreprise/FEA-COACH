@@ -51,6 +51,18 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Support
                                 </NavLink>
+                                <NavLink
+                                    :href="route('admin.custom-domains.index')"
+                                    :active="route().current('admin.custom-domains.*')"
+                                >
+                                    Domaines
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.contact-requests.index')"
+                                    :active="route().current('admin.contact-requests.*')"
+                                >
+                                    Demandes Contact
+                                </NavLink>
                             </div>
                         </div>
 
@@ -170,6 +182,18 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('admin.support-tickets.*')"
                         >
                             Support
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.custom-domains.index')"
+                            :active="route().current('admin.custom-domains.*')"
+                        >
+                            Domaines
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.contact-requests.index')"
+                            :active="route().current('admin.contact-requests.*')"
+                        >
+                            Demandes Contact
                         </ResponsiveNavLink>
                     </div>
 

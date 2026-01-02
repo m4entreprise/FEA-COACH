@@ -117,7 +117,7 @@ const generateSubdomain = () => {
                                         placeholder="nom-coach"
                                     />
                                     <span class="inline-flex items-center rounded-r-md border border-l-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400">
-                                        .kineseducation.academy
+                                        .unicoach.app
                                     </span>
                                 </div>
                                 <InputError class="mt-2" :message="form.errors.subdomain" />

@@ -34,7 +34,7 @@ class ContactController extends Controller
                 'created_at' => $message->created_at->toDateTimeString(),
             ]);
 
-        return Inertia::render('Dashboard/Contact', [
+        return Inertia::render('Coach/ContactBeta', [
             'messages' => $messages,
         ]);
     }
@@ -73,5 +73,51 @@ class ContactController extends Controller
 
         return redirect()->route('dashboard.contact')
             ->with('success', 'Message supprimé avec succès.');
+    }
+
+    /**
+     * Request contact for custom services (domain, custom website, etc.)
+     */
+    public function requestCustomService(Request $request)
+    {
+        $user = $request->user();
+        $coach = $user->coach;
+
+        if (! $coach) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Aucun profil coach associé.');
+        }
+
+        // Empêche les demandes trop fréquentes : une demande tous les 7 jours
+        if ($coach->custom_contact_locked_until && now()->lessThan($coach->custom_contact_locked_until)) {
+            return redirect()->back()
+                ->with('info', 'Vous avez déjà envoyé une demande récemment. Notre équipe vous recontactera sous peu.');
+        }
+
+        $validated = $request->validate([
+            'service_types' => ['required', 'array', 'min:1'],
+            'service_types.*' => ['string', 'max:50'],
+            'message' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        $serviceType = implode(', ', $validated['service_types']);
+
+        // Stocke la demande détaillée pour le panel admin
+        ContactMessage::create([
+            'coach_id' => $coach->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $coach->phone ?? '',
+            'service_type' => $serviceType,
+            'message' => $validated['message'] ?? '',
+            'is_read' => false,
+        ]);
+
+        // Marque le coach comme "contacté" pendant 7 jours
+        $coach->custom_contact_locked_until = now()->addDays(7);
+        $coach->save();
+
+        return redirect()->back()
+            ->with('success', 'Votre demande a été envoyée ! Nous vous recontacterons rapidement.');
     }
 }

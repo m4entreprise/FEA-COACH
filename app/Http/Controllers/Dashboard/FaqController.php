@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class FaqController extends Controller
@@ -33,7 +34,7 @@ class FaqController extends Controller
                 'is_active' => $faq->is_active,
             ]);
 
-        return Inertia::render('Dashboard/Faq', [
+        return Inertia::render('Coach/FaqBeta', [
             'faqs' => $faqs,
         ]);
     }
@@ -57,10 +58,15 @@ class FaqController extends Controller
             'is_active' => ['boolean'],
         ]);
 
+        $nextOrder = ($coach->faqs()->max('order') ?? -1) + 1;
+        $order = array_key_exists('order', $validated)
+            ? $validated['order']
+            : $nextOrder;
+
         $coach->faqs()->create([
             'question' => $validated['question'],
             'answer' => $validated['answer'],
-            'order' => $validated['order'] ?? 0,
+            'order' => $order,
             'is_active' => $validated['is_active'] ?? true,
         ]);
 
@@ -90,7 +96,7 @@ class FaqController extends Controller
         $faq->update([
             'question' => $validated['question'],
             'answer' => $validated['answer'],
-            'order' => $validated['order'] ?? $faq->order,
+            'order' => array_key_exists('order', $validated) ? $validated['order'] : $faq->order,
             'is_active' => $validated['is_active'] ?? $faq->is_active,
         ]);
 
@@ -114,5 +120,78 @@ class FaqController extends Controller
 
         return redirect()->route('dashboard.faq')
             ->with('success', 'Question supprimée avec succès.');
+    }
+
+    /**
+     * Reorder FAQs using drag & drop payload.
+     */
+    public function reorder(Request $request)
+    {
+        $coach = $request->user()->coach;
+
+        if (!$coach) {
+            throw ValidationException::withMessages([
+                'order' => 'Aucun profil coach associé.',
+            ]);
+        }
+
+        $validated = $request->validate([
+            'order' => ['required', 'array'],
+            'order.*.id' => ['required', 'integer'],
+            'order.*.order' => ['required', 'integer', 'min:0'],
+        ]);
+
+        $coachFaqIds = $coach->faqs()->pluck('id')->toArray();
+        $orderPayload = collect($validated['order'])
+            ->filter(fn ($item) => in_array($item['id'], $coachFaqIds))
+            ->sortBy('order')
+            ->values();
+
+        foreach ($orderPayload as $index => $item) {
+            Faq::where('id', $item['id'])
+                ->where('coach_id', $coach->id)
+                ->update(['order' => $index]);
+        }
+
+        return response()->json([
+            'status' => 'ok',
+        ]);
+    }
+
+    /**
+     * Render a preview of the public site to reflect FAQ changes.
+     */
+    public function preview(Request $request)
+    {
+        $coach = $request->user()->coach;
+
+        if (!$coach) {
+            abort(404, 'Coach introuvable.');
+        }
+
+        $coach->loadMissing([
+            'user',
+            'media',
+            'transformations' => fn ($query) => $query->with('media')->orderBy('order'),
+            'plans' => fn ($query) => $query->where('is_active', true)->orderBy('price'),
+            'faqs' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('created_at'),
+        ]);
+
+        $layouts = config('coach_site.layouts', []);
+        $defaultLayout = config('coach_site.default_layout', 'classic');
+        $layoutKey = $coach->site_layout ?: $defaultLayout;
+        $layoutKey = array_key_exists($layoutKey, $layouts) ? $layoutKey : $defaultLayout;
+        $viewName = $layouts[$layoutKey]['view'] ?? 'coach-site.layouts.classic';
+
+        $html = view($viewName, [
+            'coach' => $coach,
+            'plans' => $coach->plans,
+            'transformations' => $coach->transformations,
+            'faqs' => $coach->faqs,
+        ])->render();
+
+        return response()->json([
+            'html' => $html,
+        ]);
     }
 }

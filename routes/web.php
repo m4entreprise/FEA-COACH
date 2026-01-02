@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminCoachController;
+use App\Http\Controllers\Admin\ContactRequestController;
+use App\Http\Controllers\Admin\CustomDomainController;
 use App\Http\Controllers\Admin\PromoCodeRequestController;
 use App\Http\Controllers\Admin\SupportTicketController as AdminSupportController;
 use App\Http\Controllers\CoachSiteController;
@@ -12,6 +14,7 @@ use App\Http\Controllers\Dashboard\GalleryController;
 use App\Http\Controllers\Dashboard\PlansController;
 use App\Http\Controllers\Dashboard\ContactController;
 use App\Http\Controllers\Dashboard\ClientController;
+use App\Http\Controllers\Dashboard\ClientDocumentController;
 use App\Http\Controllers\Dashboard\LegalController;
 use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\Dashboard\SupportTicketController as DashboardSupportController;
@@ -19,6 +22,7 @@ use App\Http\Controllers\LemonSqueezyWebhookController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ClientShareController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,6 +39,28 @@ Route::domain('{coach_slug}.' . config('app.domain', 'localhost'))
         Route::get('/', [CoachSiteController::class, 'show'])->name('coach.site');
         Route::post('/contact', [CoachSiteController::class, 'contact'])->name('coach.contact');
         Route::get('/mentions-legales', [CoachSiteController::class, 'legal'])->name('coach.legal');
+    });
+
+// Public share links for client documents
+Route::middleware('web')
+    ->prefix('p')
+    ->group(function () {
+        Route::get('/{token}', [ClientShareController::class, 'show'])->name('clients.share.show');
+        Route::post('/{token}', [ClientShareController::class, 'unlock'])->name('clients.share.unlock');
+        Route::get('/{token}/documents/{document}', [ClientShareController::class, 'download'])->name('clients.share.download');
+        
+        // Client Dashboard Routes
+        Route::get('/{token}/programme-sportif', [ClientShareController::class, 'program'])->name('clients.dashboard.program');
+        Route::get('/{token}/programme-alimentaire', [ClientShareController::class, 'nutrition'])->name('clients.dashboard.nutrition');
+        Route::get('/{token}/bilans', [ClientShareController::class, 'assessment'])->name('clients.dashboard.assessment');
+        Route::get('/{token}/notes', [ClientShareController::class, 'notes'])->name('clients.dashboard.notes');
+        Route::get('/{token}/profil', [ClientShareController::class, 'profile'])->name('clients.dashboard.profile');
+        Route::patch('/{token}/profil', [ClientShareController::class, 'updateProfile'])->name('clients.dashboard.profile.update');
+        Route::get('/{token}/evolution', [ClientShareController::class, 'analytics'])->name('clients.dashboard.analytics');
+        Route::get('/{token}/photo/{measurement}/{type}', [ClientShareController::class, 'servePhoto'])->name('clients.dashboard.photo');
+        Route::get('/{token}/messagerie', [ClientShareController::class, 'messages'])->name('clients.dashboard.messages');
+        Route::post('/{token}/messagerie', [ClientShareController::class, 'sendMessage'])->name('clients.dashboard.messages.send');
+        Route::get('/{token}/message/{message}/download', [ClientShareController::class, 'downloadMessageAttachment'])->name('clients.dashboard.message.download');
     });
 
 /*
@@ -60,6 +86,10 @@ Route::get('/politique-confidentialite', [App\Http\Controllers\LegalController::
 */
 
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('admin.coaches.index');
+    })->name('admin.dashboard');
+    
     Route::get('/coaches', [AdminCoachController::class, 'index'])->name('admin.coaches.index');
     Route::get('/coaches/create', [AdminCoachController::class, 'create'])->name('admin.coaches.create');
     Route::post('/coaches', [AdminCoachController::class, 'store'])->name('admin.coaches.store');
@@ -77,6 +107,17 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/support-tickets', [AdminSupportController::class, 'index'])->name('admin.support-tickets.index');
     Route::post('/support-tickets/{supportTicket}/reply', [AdminSupportController::class, 'reply'])->name('admin.support-tickets.reply');
     Route::patch('/support-tickets/{supportTicket}/status', [AdminSupportController::class, 'updateStatus'])->name('admin.support-tickets.status');
+
+    // Custom domains management
+    Route::get('/custom-domains', [CustomDomainController::class, 'index'])->name('admin.custom-domains.index');
+    Route::post('/custom-domains', [CustomDomainController::class, 'store'])->name('admin.custom-domains.store');
+    Route::patch('/custom-domains/{customDomain}', [CustomDomainController::class, 'update'])->name('admin.custom-domains.update');
+    Route::delete('/custom-domains/{customDomain}', [CustomDomainController::class, 'destroy'])->name('admin.custom-domains.destroy');
+
+    // Contact requests management
+    Route::get('/contact-requests', [ContactRequestController::class, 'index'])->name('admin.contact-requests.index');
+    Route::post('/contact-requests/{contactMessage}/mark-read', [ContactRequestController::class, 'markAsRead'])->name('admin.contact-requests.mark-read');
+    Route::delete('/contact-requests/{contactMessage}', [ContactRequestController::class, 'destroy'])->name('admin.contact-requests.destroy');
 });
 
 /*
@@ -130,10 +171,12 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     // Branding management
     Route::get('/dashboard/branding', [BrandingController::class, 'edit'])->name('dashboard.branding');
     Route::post('/dashboard/branding', [BrandingController::class, 'update'])->name('dashboard.branding.update');
+    Route::post('/dashboard/branding/preview', [BrandingController::class, 'preview'])->name('dashboard.branding.preview');
 
     // Content management
     Route::get('/dashboard/content', [ContentController::class, 'edit'])->name('dashboard.content');
     Route::post('/dashboard/content', [ContentController::class, 'update'])->name('dashboard.content.update');
+    Route::post('/dashboard/content/preview', [ContentController::class, 'preview'])->name('dashboard.content.preview');
     Route::post('/dashboard/content/profile-photo', [ContentController::class, 'uploadProfilePhoto'])->name('dashboard.content.profile-photo.upload');
     Route::delete('/dashboard/content/profile-photo', [ContentController::class, 'deleteProfilePhoto'])->name('dashboard.content.profile-photo.delete');
 
@@ -141,17 +184,21 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::get('/dashboard/gallery', [GalleryController::class, 'index'])->name('dashboard.gallery');
     Route::post('/dashboard/gallery', [GalleryController::class, 'store'])->name('dashboard.gallery.store');
     Route::delete('/dashboard/gallery/{transformation}', [GalleryController::class, 'destroy'])->name('dashboard.gallery.destroy');
+    Route::post('/dashboard/gallery/preview', [GalleryController::class, 'preview'])->name('dashboard.gallery.preview');
 
     // Plans management
     Route::get('/dashboard/plans', [PlansController::class, 'index'])->name('dashboard.plans');
     Route::post('/dashboard/plans', [PlansController::class, 'store'])->name('dashboard.plans.store');
     Route::patch('/dashboard/plans/{plan}', [PlansController::class, 'update'])->name('dashboard.plans.update');
     Route::delete('/dashboard/plans/{plan}', [PlansController::class, 'destroy'])->name('dashboard.plans.destroy');
+    Route::post('/dashboard/plans/reorder', [PlansController::class, 'reorder'])->name('dashboard.plans.reorder');
+    Route::post('/dashboard/plans/preview', [PlansController::class, 'preview'])->name('dashboard.plans.preview');
 
     // Contact messages management
     Route::get('/dashboard/contact', [ContactController::class, 'index'])->name('dashboard.contact');
     Route::patch('/dashboard/contact/{contactMessage}/read', [ContactController::class, 'markAsRead'])->name('dashboard.contact.read');
     Route::delete('/dashboard/contact/{contactMessage}', [ContactController::class, 'destroy'])->name('dashboard.contact.destroy');
+    Route::post('/dashboard/contact/custom', [ContactController::class, 'requestCustomService'])->name('dashboard.contact.custom');
 
     // Support tickets (coach/user)
     Route::get('/dashboard/support', [DashboardSupportController::class, 'index'])->name('dashboard.support');
@@ -164,17 +211,34 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/faq', [FaqController::class, 'store'])->name('dashboard.faq.store');
     Route::patch('/dashboard/faq/{faq}', [FaqController::class, 'update'])->name('dashboard.faq.update');
     Route::delete('/dashboard/faq/{faq}', [FaqController::class, 'destroy'])->name('dashboard.faq.destroy');
+    Route::post('/dashboard/faq/reorder', [FaqController::class, 'reorder'])->name('dashboard.faq.reorder');
+    Route::post('/dashboard/faq/preview', [FaqController::class, 'preview'])->name('dashboard.faq.preview');
 
     // Clients management
     Route::get('/dashboard/clients', [ClientController::class, 'index'])->name('dashboard.clients.index');
     Route::post('/dashboard/clients', [ClientController::class, 'store'])->name('dashboard.clients.store');
+    Route::get('/dashboard/clients/{client}/manage', [ClientController::class, 'manage'])->name('dashboard.clients.manage');
+    Route::post('/dashboard/clients/{client}/access-dashboard', [ClientController::class, 'accessDashboard'])->name('dashboard.clients.accessDashboard');
     Route::patch('/dashboard/clients/{client}', [ClientController::class, 'update'])->name('dashboard.clients.update');
     Route::delete('/dashboard/clients/{client}', [ClientController::class, 'destroy'])->name('dashboard.clients.destroy');
+    Route::post('/dashboard/clients/{client}/documents', [ClientDocumentController::class, 'store'])->name('dashboard.clients.documents.store');
+    Route::get('/dashboard/clients/documents/{document}', [ClientDocumentController::class, 'download'])->name('dashboard.clients.documents.download');
+    Route::delete('/dashboard/clients/documents/{document}', [ClientDocumentController::class, 'destroy'])->name('dashboard.clients.documents.destroy');
     
     // Client notes management
     Route::post('/dashboard/clients/{client}/notes', [ClientController::class, 'storeNote'])->name('dashboard.clients.notes.store');
     Route::patch('/dashboard/clients/notes/{note}', [ClientController::class, 'updateNote'])->name('dashboard.clients.notes.update');
     Route::delete('/dashboard/clients/notes/{note}', [ClientController::class, 'destroyNote'])->name('dashboard.clients.notes.destroy');
+
+    // Client messaging (coach side)
+    Route::post('/dashboard/clients/{client}/messages', [ClientController::class, 'sendMessage'])->name('dashboard.clients.messages.send');
+    Route::post('/dashboard/clients/{client}/messages/mark-read', [ClientController::class, 'markMessagesAsRead'])->name('dashboard.clients.messages.markRead');
+    Route::get('/dashboard/clients/{client}/messages/{message}/download', [ClientController::class, 'downloadMessageAttachment'])->name('dashboard.clients.messages.download');
+
+    // Client measurements (coach side)
+    Route::post('/dashboard/clients/{client}/measurements', [ClientController::class, 'storeMeasurement'])->name('dashboard.clients.measurements.store');
+    Route::patch('/dashboard/clients/{client}/measurements/{measurement}', [ClientController::class, 'updateMeasurement'])->name('dashboard.clients.measurements.update');
+    Route::delete('/dashboard/clients/{client}/measurements/{measurement}', [ClientController::class, 'destroyMeasurement'])->name('dashboard.clients.measurements.destroy');
 
     // Legal terms management
     Route::get('/dashboard/legal', [LegalController::class, 'edit'])->name('dashboard.legal');
@@ -185,6 +249,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/subscription/checkout', [SubscriptionController::class, 'createCheckoutSession'])->name('dashboard.subscription.checkout');
     Route::post('/dashboard/subscription/portal', [SubscriptionController::class, 'customerPortal'])->name('dashboard.subscription.portal');
     Route::post('/dashboard/subscription/cancel', [SubscriptionController::class, 'cancelSubscription'])->name('dashboard.subscription.cancel');
+    Route::post('/dashboard/subscription/custom-domain', [SubscriptionController::class, 'checkoutCustomDomain'])->name('dashboard.subscription.custom-domain');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

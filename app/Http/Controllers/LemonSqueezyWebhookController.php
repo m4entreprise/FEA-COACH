@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coach;
+use App\Models\CustomDomain;
 use App\Models\User;
 use App\Services\LemonSqueezyService;
 use Illuminate\Http\Request;
@@ -63,8 +64,10 @@ class LemonSqueezyWebhookController extends Controller
             match ($eventName) {
                 'subscription_created' => $this->handleSubscriptionCreated($data),
                 'subscription_updated' => $this->handleSubscriptionUpdated($data),
+                'subscription_resumed' => $this->handleSubscriptionResumed($data),
                 'subscription_cancelled' => $this->handleSubscriptionCancelled($data),
                 'subscription_expired' => $this->handleSubscriptionExpired($data),
+                'order_created' => $this->handleOrderCreated($data),
                 default => Log::info('Unhandled Lemon Squeezy event', ['event' => $eventName]),
             };
 
@@ -154,15 +157,37 @@ class LemonSqueezyWebhookController extends Controller
         if (! $user) {
             Log::error('User not found for Lemon Squeezy subscription_updated', [
                 'subscription_id' => $subscriptionId,
+                'payload' => $payload,
             ]);
 
             return;
         }
 
+        $customerId = $attributes['customer_id']
+            ?? ($payload['data']['relationships']['customer']['data']['id'] ?? null);
+
+        $customerId = $customerId !== null ? (string) $customerId : null;
+
         $update = [];
+
+        // Always sync subscription_id and customer_id
+        if ($subscriptionId !== '' && $user->lemonsqueezy_subscription_id !== $subscriptionId) {
+            $update['lemonsqueezy_subscription_id'] = $subscriptionId;
+        }
+
+        if ($customerId !== null && $user->lemonsqueezy_customer_id !== $customerId) {
+            $update['lemonsqueezy_customer_id'] = $customerId;
+        }
 
         if (isset($attributes['status'])) {
             $update['subscription_status'] = $attributes['status'];
+        }
+
+        // Update trial_ends_at if present, or set to null if not
+        if (array_key_exists('trial_ends_at', $attributes)) {
+            $update['trial_ends_at'] = ! empty($attributes['trial_ends_at']) 
+                ? Carbon::parse($attributes['trial_ends_at']) 
+                : null;
         }
 
         if (! empty($attributes['renews_at'])) {
@@ -181,6 +206,44 @@ class LemonSqueezyWebhookController extends Controller
             'user_id' => $user->id,
             'subscription_id' => $subscriptionId,
             'updates' => $update,
+        ]);
+    }
+
+    protected function handleSubscriptionResumed(array $payload): void
+    {
+        $data = $payload['data'] ?? [];
+        $attributes = $data['attributes'] ?? [];
+        $subscriptionId = (string) ($data['id'] ?? '');
+
+        $user = User::where('lemonsqueezy_subscription_id', $subscriptionId)->first();
+
+        if (! $user) {
+            $user = $this->resolveUserFromPayload($payload);
+        }
+
+        if (! $user) {
+            Log::error('User not found for Lemon Squeezy subscription_resumed', [
+                'subscription_id' => $subscriptionId,
+            ]);
+
+            return;
+        }
+
+        $update = [
+            'subscription_status' => $attributes['status'] ?? 'active',
+            'cancel_at_period_end' => false,
+        ];
+
+        if (! empty($attributes['renews_at'])) {
+            $update['subscription_current_period_end'] = Carbon::parse($attributes['renews_at']);
+        }
+
+        $user->update($update);
+
+        Log::info('Lemon Squeezy subscription_resumed handled', [
+            'user_id' => $user->id,
+            'subscription_id' => $subscriptionId,
+            'status' => $user->subscription_status,
         ]);
     }
 
@@ -204,14 +267,29 @@ class LemonSqueezyWebhookController extends Controller
             return;
         }
 
-        $user->update([
+        $update = [
             'subscription_status' => $attributes['status'] ?? 'cancelled',
             'cancel_at_period_end' => true,
-        ]);
+        ];
+
+        // Update trial_ends_at if still present (cancel pendant le trial)
+        if (! empty($attributes['trial_ends_at'])) {
+            $update['trial_ends_at'] = Carbon::parse($attributes['trial_ends_at']);
+        }
+
+        // Update period end with renews_at or ends_at
+        if (! empty($attributes['renews_at'])) {
+            $update['subscription_current_period_end'] = Carbon::parse($attributes['renews_at']);
+        } elseif (! empty($attributes['ends_at'])) {
+            $update['subscription_current_period_end'] = Carbon::parse($attributes['ends_at']);
+        }
+
+        $user->update($update);
 
         Log::info('Lemon Squeezy subscription_cancelled handled', [
             'user_id' => $user->id,
             'subscription_id' => $subscriptionId,
+            'updates' => $update,
         ]);
     }
 
@@ -242,6 +320,93 @@ class LemonSqueezyWebhookController extends Controller
         Log::info('Lemon Squeezy subscription_expired handled', [
             'user_id' => $user->id,
             'subscription_id' => $subscriptionId,
+        ]);
+    }
+
+    /**
+     * Handle one-off orders (e.g. custom domain purchase).
+     */
+    protected function handleOrderCreated(array $payload): void
+    {
+        $meta = $payload['meta'] ?? [];
+        $customData = $meta['custom_data'] ?? [];
+
+        // We only care about the custom domain product
+        if (($customData['product_type'] ?? null) !== 'custom_domain') {
+            return;
+        }
+
+        $coach = null;
+
+        if (! empty($customData['coach_id'])) {
+            $coach = Coach::find((int) $customData['coach_id']);
+        }
+
+        if (! $coach && ! empty($customData['coach_slug'])) {
+            $coach = Coach::where('slug', $customData['coach_slug'])->first();
+        }
+
+        if (! $coach) {
+            Log::error('Custom domain order: coach not found', [
+                'custom_data' => $customData,
+            ]);
+
+            return;
+        }
+
+        $desiredDomain = trim((string) ($customData['desired_domain'] ?? ''));
+
+        $attributes = $payload['data']['attributes'] ?? [];
+        $orderedAt = ! empty($attributes['created_at'])
+            ? Carbon::parse($attributes['created_at'])
+            : now();
+
+        $domain = $coach->customDomain;
+
+        if (! $domain) {
+            // Create a pending custom domain entry that the admin can finalize
+            $domainName = $desiredDomain !== '' ? $desiredDomain : ($coach->subdomain . '.unicoach.app');
+
+            try {
+                $domain = CustomDomain::create([
+                    'coach_id' => $coach->id,
+                    'domain' => $domainName,
+                    'status' => 'pending',
+                    'purchased_at' => $orderedAt,
+                    'notes' => 'Commande nom de domaine via Lemon Squeezy',
+                ]);
+            } catch (\Throwable $e) {
+                Log::error('Failed to create CustomDomain from order_created', [
+                    'coach_id' => $coach->id,
+                    'domain' => $domainName,
+                    'error' => $e->getMessage(),
+                ]);
+
+                return;
+            }
+        } else {
+            // If a domain exists already, just ensure purchase date is filled
+            if (! $domain->purchased_at) {
+                $domain->purchased_at = $orderedAt;
+            }
+
+            if ($domain->status !== 'active') {
+                $domain->status = 'pending';
+            }
+
+            $domain->save();
+        }
+
+        // Once an order is confirmed, clear the pending desired domain on the coach
+        if ($coach->desired_custom_domain !== null) {
+            $coach->desired_custom_domain = null;
+            $coach->save();
+        }
+
+        Log::info('Custom domain order_created handled', [
+            'coach_id' => $coach->id,
+            'custom_domain_id' => $domain->id,
+            'domain' => $domain->domain,
         ]);
     }
 
@@ -309,6 +474,7 @@ class LemonSqueezyWebhookController extends Controller
         }
 
         $coach = Coach::create([
+            'user_id' => $user->id,
             'name' => $fullName,
             'slug' => $slug,
             'primary_color' => '#9333ea',

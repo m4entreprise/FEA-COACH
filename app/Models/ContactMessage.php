@@ -12,6 +12,7 @@ class ContactMessage extends Model
         'name',
         'email',
         'phone',
+        'service_type',
         'message',
         'is_read',
     ];

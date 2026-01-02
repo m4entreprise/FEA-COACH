@@ -11,7 +11,7 @@ class LegalController extends Controller
     /**
      * Show the legal terms edit form.
      */
-    public function edit()
+    public function edit(Request $request)
     {
         $coach = auth()->user()->coach;
 
@@ -23,7 +23,7 @@ class LegalController extends Controller
         // Texte par défaut des CGV
         $defaultLegalTerms = $this->getDefaultLegalTerms($coach);
 
-        return Inertia::render('Dashboard/Legal', [
+        return Inertia::render('Coach/LegalBeta', [
             'coach' => $coach,
             'user' => auth()->user(),
             'defaultLegalTerms' => $defaultLegalTerms,

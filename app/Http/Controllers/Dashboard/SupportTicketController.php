@@ -43,7 +43,7 @@ class SupportTicketController extends Controller
                 ];
             });
 
-        return Inertia::render('Dashboard/Support', [
+        return Inertia::render('Coach/SupportBeta', [
             'tickets' => $tickets,
         ]);
     }

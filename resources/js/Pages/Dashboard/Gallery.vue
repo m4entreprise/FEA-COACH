@@ -77,14 +77,14 @@ const deleteTransformation = (id) => {
             </div>
         </template>
 
-        <div class="py-12 bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 min-h-screen">
+        <div class="py-10 md:py-12 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 min-h-screen">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <!-- Transformations Grid -->
                 <div v-if="transformations.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div
                         v-for="transformation in transformations"
                         :key="transformation.id"
-                        class="bg-gradient-to-br from-white to-slate-50 dark:from-gray-800 dark:to-slate-900 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 border border-slate-200/50 dark:border-slate-500/30 backdrop-blur-xl"
+                        class="bg-slate-900/85 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 border border-slate-800 backdrop-blur-xl"
                     >
                         <!-- Images -->
                         <div class="grid grid-cols-2">
@@ -95,8 +95,8 @@ const deleteTransformation = (id) => {
                                     alt="Avant"
                                     class="w-full h-48 object-cover"
                                 />
-                                <div v-else class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                    <span class="text-gray-400">Avant</span>
+                                <div v-else class="w-full h-48 bg-slate-800 flex items-center justify-center">
+                                    <span class="text-slate-400 text-sm">Avant</span>
                                 </div>
                                 <div class="absolute top-2 left-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg">
                                     AVANT
@@ -109,8 +109,8 @@ const deleteTransformation = (id) => {
                                     alt="Après"
                                     class="w-full h-48 object-cover"
                                 />
-                                <div v-else class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                    <span class="text-gray-400">Après</span>
+                                <div v-else class="w-full h-48 bg-slate-800 flex items-center justify-center">
+                                    <span class="text-slate-400 text-sm">Apres</span>
                                 </div>
                                 <div class="absolute top-2 right-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg">
                                     APRÈS
@@ -120,10 +120,10 @@ const deleteTransformation = (id) => {
 
                         <!-- Content -->
                         <div class="p-6">
-                            <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100 mb-2">
+                            <h3 class="font-bold text-lg text-slate-50 mb-2">
                                 {{ transformation.title }}
                             </h3>
-                            <p v-if="transformation.description" class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+                            <p v-if="transformation.description" class="text-sm text-slate-300 mb-4 line-clamp-2">
                                 {{ transformation.description }}
                             </p>
                             <button
@@ -137,7 +137,7 @@ const deleteTransformation = (id) => {
                 </div>
 
                 <!-- Empty State -->
-                <div v-else class="bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 rounded-2xl shadow-xl border border-purple-200/50 dark:border-purple-500/30 backdrop-blur-xl p-12 text-center">
+                <div v-else class="bg-slate-900/85 rounded-2xl shadow-xl border border-slate-800 backdrop-blur-xl p-12 text-center text-slate-50">
                     <div class="flex justify-center mb-4">
                         <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-4 shadow-lg">
                             <svg class="h-12 w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,11 +145,11 @@ const deleteTransformation = (id) => {
                             </svg>
                         </div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                        📸 Aucune transformation
+                    <h3 class="text-xl font-bold mb-2">
+                        Aucune transformation
                     </h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                        Commencez par ajouter votre première transformation avant/après
+                    <p class="text-sm text-slate-300 mb-6">
+                        Commencez par ajouter votre premiere transformation avant/apres
                     </p>
                     <button
                         @click="showAddModal = true"

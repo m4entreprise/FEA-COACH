@@ -16,7 +16,7 @@ class DashboardController extends Controller
         
         // Admins see a different view or basic stats
         if ($user->role === 'admin') {
-            return Inertia::render('Dashboard', [
+            return Inertia::render('Coach/DashboardCoachBeta', [
                 'isAdmin' => true,
                 'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
             ]);
@@ -31,21 +31,21 @@ class DashboardController extends Controller
         ])->first();
 
         if (!$coach) {
-            return Inertia::render('Dashboard', [
+            return Inertia::render('Coach/DashboardCoachBeta', [
                 'error' => 'Aucun profil coach associé à votre compte.',
                 'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
             ]);
         }
 
+        $customDomain = $coach->customDomain;
+
         // Calculate stats
         $profileData = $this->calculateProfileCompletion($coach);
         
         // Calculate subscription info
-        // Détecte la période d'essai : statut trial, null, ou active_promo (pour les comptes FEA)
-        $isOnTrial = ($user->subscription_status === 'trial'
-                      || $user->subscription_status === null
-                      || $user->subscription_status === 'active_promo')
-                     && $user->trial_ends_at
+        // Détecte la période d'essai : si trial_ends_at existe et est dans le futur
+        // Note: Lemon Squeezy envoie status="active" même pendant le trial
+        $isOnTrial = $user->trial_ends_at 
                      && now()->isBefore($user->trial_ends_at);
 
         $trialDaysLeft = null;
@@ -61,6 +61,8 @@ class DashboardController extends Controller
             'trial_ends_at' => $user->trial_ends_at,
             'is_on_trial' => $isOnTrial,
             'trial_days_left' => $trialDaysLeft,
+            'current_period_end' => $user->subscription_current_period_end,
+            'cancel_at_period_end' => $user->cancel_at_period_end ?? false,
         ];
         
         $stats = [
@@ -85,21 +87,28 @@ class DashboardController extends Controller
                 'after_url' => $t->hasMedia('after') ? $t->getFirstMediaUrl('after') : null,
             ]);
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Coach/DashboardCoachBeta', [
             'coach' => [
                 'id' => $coach->id,
                 'name' => $coach->name,
                 'slug' => $coach->slug,
                 'subdomain' => $coach->subdomain,
+                'desired_custom_domain' => $coach->desired_custom_domain,
                 'is_active' => $coach->is_active,
                 'color_primary' => $coach->color_primary,
                 'color_secondary' => $coach->color_secondary,
                 'has_logo' => $coach->hasMedia('logo'),
                 'has_hero' => $coach->hasMedia('hero'),
+                'custom_contact_locked_until' => $coach->custom_contact_locked_until,
             ],
             'stats' => $stats,
             'recentTransformations' => $recentTransformations,
             'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
+            'customDomain' => $customDomain ? [
+                'domain' => $customDomain->domain,
+                'status' => $customDomain->status,
+                'purchased_at' => $customDomain->purchased_at,
+            ] : null,
         ]);
     }
 

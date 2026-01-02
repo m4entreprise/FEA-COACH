@@ -24,11 +24,36 @@ class ResolveCoachFromHost
         if (count($parts) >= 3) {
             $slug = $parts[0];
             
-            // Find the coach by slug or subdomain
+            // Find the coach by slug or subdomain (don't filter by is_active yet)
             $coach = Coach::where('slug', $slug)
                 ->orWhere('subdomain', $slug)
-                ->where('is_active', true)
                 ->firstOrFail();
+            
+            // Force reload user to avoid stale cache
+            // Unset the relation first to ensure fresh load
+            $coach->unsetRelation('user');
+            $coach->load('user');
+            $user = $coach->user;
+            
+            // Additional safety: refresh user to get absolute latest data
+            if ($user) {
+                $user->refresh();
+            }
+            
+            // Check if subscription is active
+            $isSubscriptionActive = $this->isSubscriptionActive($user);
+            
+            // If subscription is inactive, show unavailable page
+            if (!$isSubscriptionActive) {
+                return response()->view('coach-site.unavailable', [
+                    'coach' => $coach,
+                ], 200);
+            }
+            
+            // Check if coach profile is active
+            if (!$coach->is_active) {
+                abort(404);
+            }
             
             // Store the coach in the container for use throughout the request
             app()->instance(Coach::class, $coach);
@@ -38,5 +63,42 @@ class ResolveCoachFromHost
         }
         
         return $next($request);
+    }
+    
+    /**
+     * Check if the user has an active subscription
+     */
+    private function isSubscriptionActive($user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+        
+        // Check if on trial (and not cancelled)
+        $isOnTrial = $user->trial_ends_at 
+                     && now()->isBefore($user->trial_ends_at);
+        
+        if ($isOnTrial) {
+            return true;
+        }
+        
+        // Statuts actifs immédiatement
+        $activeStatuses = ['active', 'on_trial', 'active_promo'];
+        
+        if (in_array($user->subscription_status, $activeStatuses, true)) {
+            return true;
+        }
+        
+        // Si cancelled/past_due, vérifier si encore dans la période payée
+        $gracePeriodStatuses = ['cancelled', 'past_due'];
+        
+        if (in_array($user->subscription_status, $gracePeriodStatuses, true)) {
+            // Accès maintenu jusqu'à la fin de la période payée
+            if ($user->subscription_current_period_end && now()->isBefore($user->subscription_current_period_end)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

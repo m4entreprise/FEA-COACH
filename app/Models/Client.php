@@ -19,6 +19,33 @@ class Client extends Model
         'phone',
         'address',
         'vat_number',
+        'share_code',
+        'share_token',
+        'allergies',
+        'dislikes',
+        'general_comments',
+        'injuries',
+        'stress_level',
+        'sleep_quality',
+        'menstrual_tracking',
+        'last_period',
+        'grocery_budget',
+        'kitchen_equipment',
+        'supplements',
+        'available_equipment',
+        'training_frequency',
+        'session_duration',
+        'daily_activity',
+        'main_goal',
+        'deep_motivation',
+        'coaching_style',
+    ];
+
+    protected $casts = [
+        'menstrual_tracking' => 'boolean',
+        'last_period' => 'date',
+        'kitchen_equipment' => 'array',
+        'available_equipment' => 'array',
     ];
 
     /**
@@ -37,11 +64,39 @@ class Client extends Model
         return $this->hasMany(ClientNote::class);
     }
 
+    public function documents(): HasMany
+    {
+        return $this->hasMany(ClientDocument::class);
+    }
+
+    public function measurements(): HasMany
+    {
+        return $this->hasMany(ClientMeasurement::class);
+    }
+
+    public function latestMeasurement()
+    {
+        return $this->hasOne(ClientMeasurement::class)->latestOfMany();
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(ClientMessage::class);
+    }
+
     /**
      * Nom complet du client
      */
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * Compter les messages non lus pour ce client
+     */
+    public function unreadMessagesCount(): int
+    {
+        return $this->messages()->unread()->fromSender('coach')->count();
     }
 }

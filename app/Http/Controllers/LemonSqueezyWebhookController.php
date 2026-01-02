@@ -63,6 +63,7 @@ class LemonSqueezyWebhookController extends Controller
             match ($eventName) {
                 'subscription_created' => $this->handleSubscriptionCreated($data),
                 'subscription_updated' => $this->handleSubscriptionUpdated($data),
+                'subscription_resumed' => $this->handleSubscriptionResumed($data),
                 'subscription_cancelled' => $this->handleSubscriptionCancelled($data),
                 'subscription_expired' => $this->handleSubscriptionExpired($data),
                 default => Log::info('Unhandled Lemon Squeezy event', ['event' => $eventName]),
@@ -203,6 +204,44 @@ class LemonSqueezyWebhookController extends Controller
             'user_id' => $user->id,
             'subscription_id' => $subscriptionId,
             'updates' => $update,
+        ]);
+    }
+
+    protected function handleSubscriptionResumed(array $payload): void
+    {
+        $data = $payload['data'] ?? [];
+        $attributes = $data['attributes'] ?? [];
+        $subscriptionId = (string) ($data['id'] ?? '');
+
+        $user = User::where('lemonsqueezy_subscription_id', $subscriptionId)->first();
+
+        if (! $user) {
+            $user = $this->resolveUserFromPayload($payload);
+        }
+
+        if (! $user) {
+            Log::error('User not found for Lemon Squeezy subscription_resumed', [
+                'subscription_id' => $subscriptionId,
+            ]);
+
+            return;
+        }
+
+        $update = [
+            'subscription_status' => $attributes['status'] ?? 'active',
+            'cancel_at_period_end' => false,
+        ];
+
+        if (! empty($attributes['renews_at'])) {
+            $update['subscription_current_period_end'] = Carbon::parse($attributes['renews_at']);
+        }
+
+        $user->update($update);
+
+        Log::info('Lemon Squeezy subscription_resumed handled', [
+            'user_id' => $user->id,
+            'subscription_id' => $subscriptionId,
+            'status' => $user->subscription_status,
         ]);
     }
 

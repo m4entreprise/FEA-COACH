@@ -132,6 +132,43 @@ const domainExpiryDate = computed(() => {
 
 const hasCustomDomainOrder = computed(() => !!props.customDomain);
 const customDomainStatus = computed(() => props.customDomain?.status ?? null);
+const customDomainStatusMeta = computed(() => {
+  const status = customDomainStatus.value;
+  const defaults = {
+    text: 'Acheté - en attente d’installation',
+    textClass: 'text-emerald-300',
+    badgeClass: 'text-emerald-400',
+  };
+
+  switch (status) {
+    case 'pending':
+      return {
+        text: 'En attente - achat en cours',
+        textClass: 'text-amber-300',
+        badgeClass: 'text-amber-300',
+      };
+    case 'active':
+      return {
+        text: 'Actif',
+        textClass: 'text-emerald-300',
+        badgeClass: 'text-emerald-400',
+      };
+    case 'expired':
+      return {
+        text: 'Le nom de domaine a expiré',
+        textClass: 'text-rose-300',
+        badgeClass: 'text-rose-400',
+      };
+    case 'cancelled':
+      return {
+        text: 'Commande annulée',
+        textClass: 'text-slate-300',
+        badgeClass: 'text-slate-400',
+      };
+    default:
+      return defaults;
+  }
+});
 </script>
 
 <template>
@@ -473,8 +510,8 @@ const customDomainStatus = computed(() => props.customDomain?.status ?? null);
                 </div>
                 <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
                   <p class="text-slate-400 mb-1">Statut</p>
-                  <p class="text-emerald-400 font-semibold">
-                    {{ customDomainStatus === 'active' ? 'Actif' : 'Acheté - en attente d’installation' }}
+                  <p class="font-semibold" :class="customDomainStatusMeta.badgeClass">
+                    {{ customDomainStatusMeta.text }}
                   </p>
                 </div>
               </div>
@@ -502,15 +539,8 @@ const customDomainStatus = computed(() => props.customDomain?.status ?? null);
                       <div>
                         <p class="text-xs text-slate-300 font-medium">Nom de domaine personnalisé</p>
                         <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
-                        <p
-                          v-if="hasCustomDomainOrder"
-                          class="text-[10px] text-emerald-300 font-semibold mt-1"
-                        >
-                          Acheté - en attente d’installation
-                        </p>
                       </div>
                       <button
-                        v-if="!hasCustomDomainOrder"
                         type="button"
                         @click="openDomainModal"
                         class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-4 py-2 text-xs font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
@@ -519,7 +549,8 @@ const customDomainStatus = computed(() => props.customDomain?.status ?? null);
                         Acheter
                       </button>
                       <span
-                        v-else
+                        v-if="hasCustomDomainOrder"
+                        type="button"
                         class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 px-4 py-2 text-xs font-semibold text-emerald-200 whitespace-nowrap"
                       >
                         Acheté

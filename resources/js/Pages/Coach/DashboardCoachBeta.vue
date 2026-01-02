@@ -64,6 +64,49 @@ const safeStats = computed(() => props.stats || {});
 // Etat "Acheté" uniquement si un CustomDomain existe réellement pour ce coach
 const hasCustomDomainOrder = computed(() => !!props.customDomain);
 const customDomainStatus = computed(() => props.customDomain?.status ?? null);
+const customDomainStatusMeta = computed(() => {
+    const status = customDomainStatus.value;
+
+    const defaults = {
+        text: 'Acheté - en cours',
+        textClass: 'text-emerald-300',
+        badgeLabel: 'En cours',
+        badgeClass: 'bg-emerald-500/10 border border-emerald-500/40 text-emerald-200',
+    };
+
+    switch (status) {
+        case 'pending':
+            return {
+                text: 'En attente - achat en cours',
+                textClass: 'text-amber-300',
+                badgeLabel: 'En attente',
+                badgeClass: 'bg-amber-500/10 border border-amber-500/40 text-amber-200',
+            };
+        case 'active':
+            return {
+                text: 'Installé',
+                textClass: 'text-emerald-300',
+                badgeLabel: 'Actif',
+                badgeClass: 'bg-emerald-500/10 border border-emerald-500/40 text-emerald-200',
+            };
+        case 'expired':
+            return {
+                text: 'Le nom de domaine a expiré',
+                textClass: 'text-rose-300',
+                badgeLabel: 'Expiré',
+                badgeClass: 'bg-rose-500/10 border border-rose-500/40 text-rose-200',
+            };
+        case 'cancelled':
+            return {
+                text: 'Commande annulée',
+                textClass: 'text-slate-300',
+                badgeLabel: 'Annulé',
+                badgeClass: 'bg-slate-700/40 border border-slate-600/40 text-slate-200',
+            };
+        default:
+            return defaults;
+    }
+});
 const hasCustomContactLock = computed(
     () => !!props.coach?.custom_contact_locked_until,
 );
@@ -586,9 +629,10 @@ const logout = () => {
                                             <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
                                             <p
                                                 v-if="hasCustomDomainOrder"
-                                                class="text-[10px] text-emerald-300 font-semibold mt-1"
+                                                class="text-[10px] font-semibold mt-1"
+                                                :class="customDomainStatusMeta.textClass"
                                             >
-                                                {{ customDomainStatus === 'active' ? 'Installé' : 'Acheté - en cours' }}
+                                                {{ customDomainStatusMeta.text }}
                                             </p>
                                         </div>
                                         <button
@@ -602,9 +646,10 @@ const logout = () => {
                                         </button>
                                         <span
                                             v-else
-                                            class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 px-3 py-1.5 text-[11px] font-semibold text-emerald-200 whitespace-nowrap"
+                                            class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-semibold whitespace-nowrap"
+                                            :class="customDomainStatusMeta.badgeClass"
                                         >
-                                            Acheté
+                                            {{ customDomainStatusMeta.badgeLabel }}
                                         </span>
                                     </div>
                                     

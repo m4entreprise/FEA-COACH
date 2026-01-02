@@ -28,10 +28,8 @@ class StripeConnectService
                 'country' => 'FR',
                 'email' => $coach->user->email,
                 'business_type' => 'individual',
-                'capabilities' => [
-                    'card_payments' => ['requested' => true],
-                    'transfers' => ['requested' => true],
-                ],
+                'capabilities[card_payments][requested]' => 'true',
+                'capabilities[transfers][requested]' => 'true',
             ]);
 
             if ($response->successful()) {

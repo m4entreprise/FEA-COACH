@@ -158,7 +158,7 @@ const openStripeDashboard = () => {
                                 <div class="flex space-x-3">
                                     <button
                                         @click="openStripeDashboard"
-                                        class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
                                     >
                                         Voir mon dashboard Stripe
                                     </button>

@@ -24,10 +24,9 @@ class StripeConnectService
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
             ])->asForm()->post($this->baseUrl . '/accounts', [
-                'type' => 'standard',
+                'type' => 'express',
                 'country' => 'FR',
                 'email' => $coach->user->email,
-                'business_type' => 'individual',
                 'capabilities[card_payments][requested]' => 'true',
                 'capabilities[transfers][requested]' => 'true',
             ]);

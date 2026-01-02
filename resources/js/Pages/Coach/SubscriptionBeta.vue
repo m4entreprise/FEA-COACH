@@ -55,11 +55,11 @@ const statusLabel = computed(() => {
 });
 
 const handleSubscribe = () => {
-  router.post(route('dashboard.subscription.checkout'));
+  router.post(window.route('dashboard.subscription.checkout'));
 };
 
 const handleManageSubscription = () => {
-  router.post(route('dashboard.subscription.portal'));
+  router.post(window.route('dashboard.subscription.portal'));
 };
 </script>
 

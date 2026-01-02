@@ -1,13 +1,14 @@
 <script setup>
 import { Head, router } from '@inertiajs/vue3';
 import { computed } from 'vue';
-import { CreditCard, Calendar, Check, ExternalLink, AlertCircle, Sparkles, Crown } from 'lucide-vue-next';
+import { CreditCard, Calendar, Check, ExternalLink, AlertCircle, Sparkles, Crown, Globe } from 'lucide-vue-next';
 import axios from 'axios';
 
 const props = defineProps({
   subscription: Object,
   user: Object,
   planInfo: Object,
+  customDomain: Object,
 });
 
 const subscriptionEndDate = computed(() => {
@@ -76,6 +77,30 @@ const handleManageSubscription = async () => {
     alert('Une erreur est survenue. Veuillez réessayer.');
   }
 };
+
+const buyCustomDomain = () => {
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = route('dashboard.subscription.custom-domain');
+  
+  const csrfInput = document.createElement('input');
+  csrfInput.type = 'hidden';
+  csrfInput.name = '_token';
+  csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
+  form.appendChild(csrfInput);
+  
+  document.body.appendChild(form);
+  form.submit();
+};
+
+const domainExpiryDate = computed(() => {
+  if (!props.customDomain?.expires_at) return null;
+  return new Date(props.customDomain.expires_at).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+});
 </script>
 
 <template>
@@ -363,6 +388,95 @@ const handleManageSubscription = async () => {
                 <div class="flex items-start gap-2">
                   <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
                   <span>Mises à jour et nouvelles fonctionnalités incluses</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Custom Domain Section -->
+        <section class="space-y-4">
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl">
+            <div class="flex items-start gap-4 mb-5">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-400 flex items-center justify-center shadow-lg flex-shrink-0">
+                <Globe class="h-4 w-4" />
+              </div>
+              <div class="flex-1">
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                  <div class="space-y-1">
+                    <p class="text-xs uppercase tracking-wide text-slate-500">
+                      Nom de domaine
+                    </p>
+                    <h3 class="text-sm md:text-base font-semibold text-slate-50">
+                      {{ customDomain ? 'Domaine personnalisé actif' : 'Nom de domaine personnalisé' }}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Has custom domain -->
+            <div v-if="customDomain" class="space-y-4">
+              <div class="rounded-xl border border-indigo-500/40 bg-indigo-950/40 p-4">
+                <div class="flex items-start gap-3">
+                  <Check class="h-5 w-5 text-indigo-300 flex-shrink-0" />
+                  <div class="flex-1 space-y-2">
+                    <p class="text-sm font-semibold text-indigo-100">
+                      {{ customDomain.domain || 'Domaine configuré' }}
+                    </p>
+                    <p class="text-xs text-indigo-200">
+                      Votre site est accessible via votre nom de domaine personnalisé.
+                    </p>
+                    <div v-if="domainExpiryDate" class="flex items-center gap-2 text-xs text-indigo-300">
+                      <Calendar class="h-3 w-3" />
+                      <span>Renouvellement le {{ domainExpiryDate }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
+                  <p class="text-slate-400 mb-1">Domaine</p>
+                  <p class="text-slate-50 font-semibold">{{ customDomain.domain || 'Non configuré' }}</p>
+                </div>
+                <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
+                  <p class="text-slate-400 mb-1">Statut</p>
+                  <p class="text-emerald-400 font-semibold">Actif</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- No custom domain - Promotion -->
+            <div v-else class="space-y-4">
+              <div class="rounded-xl border border-slate-700/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4">
+                <div class="flex items-start gap-3">
+                  <Sparkles class="h-5 w-5 text-purple-400 flex-shrink-0" />
+                  <div class="flex-1 space-y-3">
+                    <div>
+                      <p class="text-sm font-semibold text-slate-200 mb-1">
+                        Donnez plus de professionnalisme à votre présence
+                      </p>
+                      <p class="text-xs text-slate-400">
+                        Utilisez votre propre nom de domaine (exemple : <span class="text-purple-300">www.moncoaching.com</span>) au lieu de <span class="text-slate-500">*.unicoach.app</span>
+                      </p>
+                    </div>
+                    
+                    <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-700/50">
+                      <div>
+                        <p class="text-xs text-slate-300 font-medium">Nom de domaine personnalisé</p>
+                        <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
+                      </div>
+                      <button
+                        type="button"
+                        @click="buyCustomDomain"
+                        class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-4 py-2 text-xs font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
+                      >
+                        <CreditCard class="h-3.5 w-3.5" />
+                        Acheter
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

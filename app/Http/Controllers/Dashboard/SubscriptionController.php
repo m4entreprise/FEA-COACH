@@ -62,6 +62,11 @@ class SubscriptionController extends Controller
                 : 'Accédez à toutes les fonctionnalités pour développer votre activité de coaching.',
         ];
 
+        // Check if user has a custom domain (placeholder logic - to be implemented with actual domain tracking)
+        // For now, returns null to show the promotional banner
+        // TODO: Implement custom domain tracking in database
+        $customDomain = null;
+
         return Inertia::render('Coach/SubscriptionBeta', [
             'subscription' => $subscriptionInfo,
             'user' => [
@@ -69,6 +74,7 @@ class SubscriptionController extends Controller
                 'email' => $user->email,
             ],
             'planInfo' => $planInfo,
+            'customDomain' => $customDomain,
         ]);
     }
 

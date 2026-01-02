@@ -28,7 +28,7 @@ class LegalController extends Controller
 
         $coach->load('user');
 
-        return Inertia::render('Dashboard/LegalGenerator', [
+        return Inertia::render('Coach/LegalBeta', [
             'coach' => $coach,
             'user' => auth()->user(),
         ]);

@@ -1,273 +1,231 @@
-[2026-01-02 22:09:36] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 22:09:37] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
-[2026-01-02 22:09:37] local.INFO: Réponse Stripe login_links {"status":400,"successful":false,"body":"{
+[2026-01-02 22:15:08] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:15:12] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
+[2026-01-02 22:15:13] local.INFO: Réponse Stripe login_links {"status":403,"successful":false,"body":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_LrS6zWykdM7844?t=1767391777\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:38] local.ERROR: Échec génération lien dashboard Stripe {"status":400,"response":"{
+[2026-01-02 22:15:13] local.ERROR: Échec génération lien dashboard Stripe {"status":403,"response":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_LrS6zWykdM7844?t=1767391777\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:38] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:15:13] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_LrS6zWykdM7844?t=1767391777\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:38] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:15:13] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_LrS6zWykdM7844?t=1767391777\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:38] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 22:09:39] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
-[2026-01-02 22:09:40] local.INFO: Réponse Stripe login_links {"status":400,"successful":false,"body":"{
+[2026-01-02 22:15:13] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:15:15] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
+[2026-01-02 22:15:16] local.INFO: Réponse Stripe login_links {"status":403,"successful":false,"body":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_nZmGrLH3xTJ72p?t=1767391779\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:40] local.ERROR: Échec génération lien dashboard Stripe {"status":400,"response":"{
+[2026-01-02 22:15:16] local.ERROR: Échec génération lien dashboard Stripe {"status":403,"response":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_nZmGrLH3xTJ72p?t=1767391779\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:40] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:15:16] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_nZmGrLH3xTJ72p?t=1767391779\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:40] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:15:16] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_nZmGrLH3xTJ72p?t=1767391779\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:40] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 22:09:40] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
-[2026-01-02 22:09:41] local.INFO: Réponse Stripe login_links {"status":400,"successful":false,"body":"{
+[2026-01-02 22:15:16] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:55:50] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:55:52] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
+[2026-01-02 22:55:53] local.INFO: Réponse Stripe login_links {"status":403,"successful":false,"body":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_9W85H9hFG5Kl7Y?t=1767391781\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:41] local.ERROR: Échec génération lien dashboard Stripe {"status":400,"response":"{
+[2026-01-02 22:55:53] local.ERROR: Échec génération lien dashboard Stripe {"status":403,"response":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_9W85H9hFG5Kl7Y?t=1767391781\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:41] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:55:53] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_9W85H9hFG5Kl7Y?t=1767391781\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:41] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:55:53] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_9W85H9hFG5Kl7Y?t=1767391781\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:41] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 22:09:43] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
-[2026-01-02 22:09:43] local.INFO: Réponse Stripe login_links {"status":400,"successful":false,"body":"{
+[2026-01-02 22:55:53] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:55:56] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:56:25] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
+[2026-01-02 22:56:26] local.INFO: Réponse Stripe login_links {"status":403,"successful":false,"body":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_8ZgVTzZpDvJUhT?t=1767391783\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:43] local.ERROR: Échec génération lien dashboard Stripe {"status":400,"response":"{
+[2026-01-02 22:56:26] local.ERROR: Échec génération lien dashboard Stripe {"status":403,"response":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_8ZgVTzZpDvJUhT?t=1767391783\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:43] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:56:26] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_8ZgVTzZpDvJUhT?t=1767391783\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:43] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:56:26] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_8ZgVTzZpDvJUhT?t=1767391783\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:43] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 22:09:46] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
-[2026-01-02 22:09:46] local.INFO: Réponse Stripe login_links {"status":400,"successful":false,"body":"{
+[2026-01-02 22:56:26] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:56:30] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
+[2026-01-02 22:56:30] local.INFO: Réponse Stripe login_links {"status":403,"successful":false,"body":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_c4j6by3NuWZKum?t=1767391786\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:46] local.ERROR: Échec génération lien dashboard Stripe {"status":400,"response":"{
+[2026-01-02 22:56:30] local.ERROR: Échec génération lien dashboard Stripe {"status":403,"response":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_c4j6by3NuWZKum?t=1767391786\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:46] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:56:30] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_c4j6by3NuWZKum?t=1767391786\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:46] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:56:30] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_c4j6by3NuWZKum?t=1767391786\",
+    \"code\": \"account_invalid\",
+    \"doc_url\": \"https://stripe.com/docs/error-codes/account-invalid\",
+    \"message\": \"The provided key 'sk_test_*********************************************************************************************eBww70' does not have access to account 'acct_1SlGKAFoGpENmv3Q' (or that account does not exist). Application access may have been revoked.\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:46] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 22:09:50] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
-[2026-01-02 22:09:51] local.INFO: Réponse Stripe login_links {"status":400,"successful":false,"body":"{
+[2026-01-02 22:56:30] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:57:38] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:57:41] local.INFO: Début connexion Stripe {"user_id":22,"coach_id":8,"stripe_key_configured":true} 
+[2026-01-02 22:57:45] local.INFO: Lien Stripe généré avec succès {"coach_id":8,"url_length":69} 
+[2026-01-02 22:57:53] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:58:19] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlHHuFgzMU446EC"} 
+[2026-01-02 22:58:19] local.INFO: Réponse Stripe login_links {"status":400,"successful":false,"body":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_tmdUp4leRlZHOJ?t=1767391791\",
+    \"message\": \"Cannot create a login link for an account that has not completed onboarding.\",
+    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlHHuFgzMU446EC/test/logs/req_fMkBbSOkGqIasn?t=1767394699\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:51] local.ERROR: Échec génération lien dashboard Stripe {"status":400,"response":"{
+[2026-01-02 22:58:19] local.ERROR: Échec génération lien dashboard Stripe {"status":400,"response":"{
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_tmdUp4leRlZHOJ?t=1767391791\",
+    \"message\": \"Cannot create a login link for an account that has not completed onboarding.\",
+    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlHHuFgzMU446EC/test/logs/req_fMkBbSOkGqIasn?t=1767394699\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:51] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:58:19] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlHHuFgzMU446EC","error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_tmdUp4leRlZHOJ?t=1767391791\",
+    \"message\": \"Cannot create a login link for an account that has not completed onboarding.\",
+    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlHHuFgzMU446EC/test/logs/req_fMkBbSOkGqIasn?t=1767394699\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:51] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
+[2026-01-02 22:58:19] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
   \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_tmdUp4leRlZHOJ?t=1767391791\",
+    \"message\": \"Cannot create a login link for an account that has not completed onboarding.\",
+    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlHHuFgzMU446EC/test/logs/req_fMkBbSOkGqIasn?t=1767394699\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 22:09:51] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 22:09:51] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
-[2026-01-02 22:09:52] local.INFO: Réponse Stripe login_links {"status":400,"successful":false,"body":"{
-  \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_qLeqYgVQz7eCLO?t=1767391791\",
-    \"type\": \"invalid_request_error\"
-  }
-}
-"} 
-[2026-01-02 22:09:52] local.ERROR: Échec génération lien dashboard Stripe {"status":400,"response":"{
-  \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_qLeqYgVQz7eCLO?t=1767391791\",
-    \"type\": \"invalid_request_error\"
-  }
-}
-"} 
-[2026-01-02 22:09:52] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
-  \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_qLeqYgVQz7eCLO?t=1767391791\",
-    \"type\": \"invalid_request_error\"
-  }
-}
-"} 
-[2026-01-02 22:09:52] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
-  \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_qLeqYgVQz7eCLO?t=1767391791\",
-    \"type\": \"invalid_request_error\"
-  }
-}
-"} 
-[2026-01-02 22:09:52] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 22:09:52] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlGKAFoGpENmv3Q"} 
-[2026-01-02 22:09:53] local.INFO: Réponse Stripe login_links {"status":400,"successful":false,"body":"{
-  \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_h3edzR9Kx10TdD?t=1767391792\",
-    \"type\": \"invalid_request_error\"
-  }
-}
-"} 
-[2026-01-02 22:09:53] local.ERROR: Échec génération lien dashboard Stripe {"status":400,"response":"{
-  \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_h3edzR9Kx10TdD?t=1767391792\",
-    \"type\": \"invalid_request_error\"
-  }
-}
-"} 
-[2026-01-02 22:09:53] local.ERROR: Exception génération lien dashboard {"account_id":"acct_1SlGKAFoGpENmv3Q","error":"Failed to generate Stripe dashboard link: {
-  \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_h3edzR9Kx10TdD?t=1767391792\",
-    \"type\": \"invalid_request_error\"
-  }
-}
-"} 
-[2026-01-02 22:09:53] local.ERROR: Erreur accès dashboard Stripe {"coach_id":8,"error":"Failed to generate Stripe dashboard link: {
-  \"error\": {
-    \"message\": \"Cannot create an edit link for the account acct_1SlGKAFoGpENmv3Q, which does not have access to the Express Dashboard.\",
-    \"request_log_url\": \"https://dashboard.stripe.com/acct_1SlGKAFoGpENmv3Q/test/logs/req_h3edzR9Kx10TdD?t=1767391792\",
-    \"type\": \"invalid_request_error\"
-  }
-}
-"} 
-[2026-01-02 22:09:53] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 22:58:19] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 

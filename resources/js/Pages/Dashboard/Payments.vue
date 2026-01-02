@@ -18,7 +18,7 @@ const activateModule = () => {
 };
 
 const connectStripe = () => {
-    connectForm.post(route('dashboard.payments.connect'));
+    window.location.href = route('dashboard.payments.connect');
 };
 
 const openStripeDashboard = () => {

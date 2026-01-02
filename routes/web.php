@@ -274,7 +274,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     // Payments module (Stripe Connect)
     Route::get('/dashboard/payments', [PaymentsController::class, 'index'])->name('dashboard.payments.index');
     Route::post('/dashboard/payments/activate', [PaymentsController::class, 'activateModule'])->name('dashboard.payments.activate');
-    Route::post('/dashboard/payments/connect', [PaymentsController::class, 'connectStripe'])->name('dashboard.payments.connect');
+    Route::get('/dashboard/payments/connect', [PaymentsController::class, 'connectStripe'])->name('dashboard.payments.connect');
     Route::get('/dashboard/payments/stripe/return', [PaymentsController::class, 'stripeReturn'])->name('dashboard.payments.stripe.return');
     Route::get('/dashboard/payments/stripe/refresh', [PaymentsController::class, 'stripeRefresh'])->name('dashboard.payments.stripe.refresh');
     Route::post('/dashboard/payments/disconnect', [PaymentsController::class, 'disconnect'])->name('dashboard.payments.disconnect');

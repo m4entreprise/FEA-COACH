@@ -51,6 +51,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Support
                                 </NavLink>
+                                <NavLink
+                                    :href="route('admin.custom-domains.index')"
+                                    :active="route().current('admin.custom-domains.*')"
+                                >
+                                    Domaines
+                                </NavLink>
                             </div>
                         </div>
 
@@ -170,6 +176,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('admin.support-tickets.*')"
                         >
                             Support
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.custom-domains.index')"
+                            :active="route().current('admin.custom-domains.*')"
+                        >
+                            Domaines
                         </ResponsiveNavLink>
                     </div>
 

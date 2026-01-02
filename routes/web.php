@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminCoachController;
+use App\Http\Controllers\Admin\CustomDomainController;
 use App\Http\Controllers\Admin\PromoCodeRequestController;
 use App\Http\Controllers\Admin\SupportTicketController as AdminSupportController;
 use App\Http\Controllers\CoachSiteController;
@@ -107,10 +108,10 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::patch('/support-tickets/{supportTicket}/status', [AdminSupportController::class, 'updateStatus'])->name('admin.support-tickets.status');
 
     // Custom domains management
-    Route::get('/custom-domains', [App\Http\Controllers\Admin\CustomDomainController::class, 'index'])->name('admin.custom-domains.index');
-    Route::post('/custom-domains', [App\Http\Controllers\Admin\CustomDomainController::class, 'store'])->name('admin.custom-domains.store');
-    Route::patch('/custom-domains/{customDomain}', [App\Http\Controllers\Admin\CustomDomainController::class, 'update'])->name('admin.custom-domains.update');
-    Route::delete('/custom-domains/{customDomain}', [App\Http\Controllers\Admin\CustomDomainController::class, 'destroy'])->name('admin.custom-domains.destroy');
+    Route::get('/custom-domains', [CustomDomainController::class, 'index'])->name('admin.custom-domains.index');
+    Route::post('/custom-domains', [CustomDomainController::class, 'store'])->name('admin.custom-domains.store');
+    Route::patch('/custom-domains/{customDomain}', [CustomDomainController::class, 'update'])->name('admin.custom-domains.update');
+    Route::delete('/custom-domains/{customDomain}', [CustomDomainController::class, 'destroy'])->name('admin.custom-domains.destroy');
 });
 
 /*

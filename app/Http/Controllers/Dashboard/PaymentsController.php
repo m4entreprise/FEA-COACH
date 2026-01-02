@@ -24,11 +24,22 @@ class PaymentsController extends Controller
             return redirect()->route('dashboard');
         }
 
+        // Rafraîchir les données depuis la base
+        $user->refresh();
+        
         $stripeAccount = $coach->stripeAccount;
         $stats = $stripeAccount ? $this->bookingService->getBookingStats($coach) : null;
 
+        // Debug: logger les valeurs
+        \Log::info('PaymentsController index', [
+            'user_id' => $user->id,
+            'has_payments_module' => $user->has_payments_module,
+            'has_payments_module_type' => gettype($user->has_payments_module),
+            'payments_module_activated_at' => $user->payments_module_activated_at,
+        ]);
+
         return Inertia::render('Dashboard/Payments', [
-            'hasPaymentsModule' => $user->has_payments_module,
+            'hasPaymentsModule' => (bool) $user->has_payments_module,
             'paymentsModulePrice' => config('stripe.payments_module_price'),
             'stripeAccount' => $stripeAccount ? [
                 'connected' => true,

@@ -10,6 +10,10 @@ const props = defineProps({
   user: Object,
   planInfo: Object,
   customDomain: Object,
+  hasCustomDomainOrder: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const subscriptionEndDate = computed(() => {
@@ -130,7 +134,9 @@ const domainExpiryDate = computed(() => {
   });
 });
 
-const hasCustomDomainOrder = computed(() => !!props.customDomain);
+const hasCustomDomainOrder = computed(
+  () => !!props.customDomain || !!props.hasCustomDomainOrder,
+);
 const customDomainStatus = computed(() => props.customDomain?.status ?? null);
 </script>
 
@@ -502,8 +508,15 @@ const customDomainStatus = computed(() => props.customDomain?.status ?? null);
                       <div>
                         <p class="text-xs text-slate-300 font-medium">Nom de domaine personnalisé</p>
                         <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
+                        <p
+                          v-if="hasCustomDomainOrder"
+                          class="text-[10px] text-emerald-300 font-semibold mt-1"
+                        >
+                          Acheté - en attente d’installation
+                        </p>
                       </div>
                       <button
+                        v-if="!hasCustomDomainOrder"
                         type="button"
                         @click="openDomainModal"
                         class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-4 py-2 text-xs font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
@@ -511,6 +524,12 @@ const customDomainStatus = computed(() => props.customDomain?.status ?? null);
                         <CreditCard class="h-3.5 w-3.5" />
                         Acheter
                       </button>
+                      <span
+                        v-else
+                        class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 px-4 py-2 text-xs font-semibold text-emerald-200 whitespace-nowrap"
+                      >
+                        Acheté
+                      </span>
                     </div>
                   </div>
                 </div>

@@ -62,7 +62,7 @@ class SubscriptionController extends Controller
                 : 'Accédez à toutes les fonctionnalités pour développer votre activité de coaching.',
         ];
 
-        // Get custom domain if exists
+        // Get custom domain if exists (confirmation après paiement / traitement admin)
         $coach = $user->coach;
         $customDomain = null;
         

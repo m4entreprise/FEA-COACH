@@ -61,8 +61,13 @@ const coachSiteUrl = computed(() => {
 });
 
 const safeStats = computed(() => props.stats || {});
-const hasCustomDomainOrder = computed(() => !!props.customDomain);
+const hasCustomDomainOrder = computed(
+    () => !!props.customDomain || !!props.coach?.desired_custom_domain,
+);
 const customDomainStatus = computed(() => props.customDomain?.status ?? null);
+const hasCustomContactLock = computed(
+    () => !!props.coach?.custom_contact_locked_until,
+);
 
 const showDomainModal = ref(false);
 const desiredDomain = ref('');
@@ -609,8 +614,15 @@ const logout = () => {
                                         <div class="flex-1 min-w-0">
                                             <p class="text-[11px] text-slate-300 font-medium">Site web sur mesure, branding & logo, gestion des réseaux sociaux</p>
                                             <p class="text-[10px] text-slate-500">Devis personnalisé</p>
+                                            <p
+                                                v-if="hasCustomContactLock"
+                                                class="text-[10px] text-emerald-300 font-semibold mt-1"
+                                            >
+                                                Demande envoyée - nous vous recontactons sous peu
+                                            </p>
                                         </div>
                                         <button
+                                            v-if="!hasCustomContactLock"
                                             type="button"
                                             @click="openContactModal"
                                             class="inline-flex items-center gap-1.5 rounded-lg bg-slate-700/40 border border-slate-600/40 px-3 py-1.5 text-[11px] font-medium text-slate-100 hover:bg-slate-700/60 hover:border-slate-600/60 transition-colors whitespace-nowrap"
@@ -618,6 +630,12 @@ const logout = () => {
                                             <Mail class="h-3 w-3" />
                                             Contact
                                         </button>
+                                        <span
+                                            v-else
+                                            class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 px-3 py-1.5 text-[11px] font-semibold text-emerald-200 whitespace-nowrap"
+                                        >
+                                            Contacté
+                                        </span>
                                     </div>
                                 </div>
                             </div>

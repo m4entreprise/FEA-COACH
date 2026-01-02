@@ -49,7 +49,7 @@ const safeStats = computed(() => props.stats || {});
                         <ArrowLeft class="h-4 w-4" />
                     </Link>
                     <div>
-                        <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                        <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2 text-slate-50">
                             <CreditCard class="h-5 w-5 text-purple-300" />
                             Paiements & Réservations
                         </h1>

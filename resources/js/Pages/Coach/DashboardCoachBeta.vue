@@ -866,12 +866,10 @@ const logout = () => {
                                         <CreditCard class="h-4 w-4" />
                                     </div>
                                     <div>
-                                        <div>
-                                            <h3 class="text-sm font-semibold text-slate-50">Paiements & Réservations</h3>
-                                            <p class="text-xs text-slate-400">
-                                                Services, disponibilités et réservations en ligne.
-                                            </p>
-                                        </div>
+                                        <h3 class="text-sm font-semibold">Paiements & Réservations</h3>
+                                        <p class="text-xs text-slate-400">
+                                            Services, disponibilités et réservations en ligne.
+                                        </p>
                                     </div>
                                 </div>
                             </Link>

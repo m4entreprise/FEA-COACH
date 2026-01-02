@@ -13,9 +13,6 @@
           Merci de saisir le code à 6 chiffres fourni par votre coach pour consulter les documents.
         </p>
       </div>
-      <div class="code-chip">
-        {{ substr($client->share_code, 0, 2) }}
-      </div>
     </div>
 
     <form method="POST" action="{{ route('clients.share.unlock', $token) }}">

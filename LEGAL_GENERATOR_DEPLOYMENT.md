@@ -246,19 +246,28 @@ Les coachs qui ont déjà des mentions légales manuelles :
 
 ## ⚖️ Validation juridique
 
-**Statut** : ✅ **VALIDÉ À 100% par juriste** (2 janvier 2026)
+**Statut** : ✅ **EXCELLENT - Haute qualité juridique validée** (2 janvier 2026)
+
+**Verdict du juriste :**
+> "Excellent. Ton générateur produit un texte d'une très haute qualité juridique. Il intègre les mises à jour législatives les plus récentes en Belgique."
 
 **6 corrections critiques appliquées** :
 
 1. **Clause de compétence** : Distinction B2C (tribunal du consommateur) vs B2B (tribunal du coach)
-2. **Recouvrement de dettes** : Ajout du délai légal de 14 jours après le rappel gratuit
+2. **Recouvrement de dettes** : Ajout du délai légal de 14 jours après le rappel gratuit (Livre XIX CDE - Sept 2023)
 3. **Force majeure** : Élargie au-delà du seul certificat médical (décès, panne, etc.)
-4. **Droit de rétractation numérique** : Précision sur la nécessité d'une case à cocher au checkout
+4. **Droit de rétractation numérique** : Précision sur la nécessité d'une case à cocher au checkout (Art. VI.53)
 5. **Responsabilité corporelle** : Mention explicite de l'exception en cas de faute lourde du coach
 6. **Abonnements récurrents** : Article 3 bis ajouté sur la tacite reconduction et les modalités de résiliation
 
-**Fichier modifié** : `config/legal_templates.php`  
-**Rapport complet** : Voir `LEGAL_VALIDATION_REPORT.md`
+**Points forts validés :**
+- ✅ Clause de réciprocité (protection contre nullité pour clause abusive)
+- ✅ Gestion RGPD des données de santé (Article 9)
+- ✅ Protection contre les "contrats prison"
+- ✅ Conformité Règlement Bruxelles I bis
+
+**Fichiers modifiés** : `config/legal_templates.php`, `app/Services/LegalContentGenerator.php`  
+**Rapports** : `LEGAL_VALIDATION_REPORT.md`, `LEGAL_FINAL_VERDICT.md`
 
 ⚠️ **Action requise** : Si vous proposez des produits numériques, vous devez implémenter une case à cocher spécifique au moment de l'achat pour que la renonciation au droit de rétractation soit valable (Art. VI.53 CDE).
 

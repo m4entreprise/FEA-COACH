@@ -244,6 +244,25 @@ Les coachs qui ont déjà des mentions légales manuelles :
 
 ---
 
+## ⚖️ Validation juridique
+
+**Statut** : ✅ **Validé par juriste** (2 janvier 2026)
+
+**5 corrections critiques appliquées** :
+
+1. **Clause de compétence** : Distinction B2C (tribunal du consommateur) vs B2B (tribunal du coach)
+2. **Recouvrement de dettes** : Ajout du délai légal de 14 jours après le rappel gratuit
+3. **Force majeure** : Élargie au-delà du seul certificat médical (décès, panne, etc.)
+4. **Droit de rétractation numérique** : Précision sur la nécessité d'une case à cocher au checkout
+5. **Responsabilité corporelle** : Mention explicite de l'exception en cas de faute lourde du coach
+
+**Fichier modifié** : `config/legal_templates.php`  
+**Rapport complet** : Voir `LEGAL_VALIDATION_REPORT.md`
+
+⚠️ **Action requise** : Si vous proposez des produits numériques, vous devez implémenter une case à cocher spécifique au moment de l'achat pour que la renonciation au droit de rétractation soit valable (Art. VI.53 CDE).
+
+---
+
 ## 📝 Checklist de validation
 
 Avant de passer en production :
@@ -255,9 +274,11 @@ Avant de passer en production :
 - [ ] Page publique affiche le contenu généré
 - [ ] HTML sémantique validé (pas d'erreurs)
 - [ ] Tests sur mobile/tablette
-- [ ] Textes validés par un juriste ⚠️ IMPORTANT
+- [x] Textes validés par un juriste ✅ **FAIT**
+- [x] Corrections juridiques appliquées ✅ **FAIT**
 - [ ] Documentation utilisateur créée
 - [ ] Backup de la BDD avant déploiement
+- [ ] ⚠️ Si produits numériques : case à cocher checkout implémentée
 
 ---
 

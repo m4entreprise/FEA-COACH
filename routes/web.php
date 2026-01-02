@@ -112,6 +112,11 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::post('/custom-domains', [CustomDomainController::class, 'store'])->name('admin.custom-domains.store');
     Route::patch('/custom-domains/{customDomain}', [CustomDomainController::class, 'update'])->name('admin.custom-domains.update');
     Route::delete('/custom-domains/{customDomain}', [CustomDomainController::class, 'destroy'])->name('admin.custom-domains.destroy');
+
+    // Contact requests management
+    Route::get('/contact-requests', [ContactRequestController::class, 'index'])->name('admin.contact-requests.index');
+    Route::post('/contact-requests/{contactMessage}/mark-read', [ContactRequestController::class, 'markAsRead'])->name('admin.contact-requests.mark-read');
+    Route::delete('/contact-requests/{contactMessage}', [ContactRequestController::class, 'destroy'])->name('admin.contact-requests.destroy');
 });
 
 /*

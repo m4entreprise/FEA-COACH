@@ -127,6 +127,13 @@ class AdminCoachController extends Controller
     {
         $coach->load('user');
 
+        // Si le coach n'a pas de user, on redirige avec une erreur
+        if (!$coach->user) {
+            return redirect()
+                ->route('admin.coaches.index')
+                ->with('error', 'Ce coach n\'a pas de compte utilisateur associé. Veuillez le supprimer ou le recréer.');
+        }
+
         return Inertia::render('Admin/Coaches/Edit', [
             'coach' => [
                 'id' => $coach->id,
@@ -150,6 +157,13 @@ class AdminCoachController extends Controller
      */
     public function update(Request $request, Coach $coach)
     {
+        // Vérifier que le coach a un user
+        if (!$coach->user) {
+            return redirect()
+                ->route('admin.coaches.index')
+                ->with('error', 'Ce coach n\'a pas de compte utilisateur associé.');
+        }
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($coach->user_id)],
@@ -204,8 +218,10 @@ class AdminCoachController extends Controller
         // Delete coach (will cascade to related data)
         $coach->delete();
         
-        // Delete user account
-        $user->delete();
+        // Delete user account if exists
+        if ($user) {
+            $user->delete();
+        }
 
         return redirect()
             ->route('admin.coaches.index')

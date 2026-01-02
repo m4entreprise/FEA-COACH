@@ -586,26 +586,53 @@ const logout = () => {
                         <!-- Promotional Banners -->
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                             <!-- Formation FEA Banner -->
-                            <a
-                                href="https://fitnesseducation.academy/formations"
-                                target="_blank"
-                                class="group rounded-xl border border-slate-800/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4 shadow-lg hover:border-blue-500/40 hover:shadow-xl transition-all"
-                            >
+                            <div class="rounded-xl border border-slate-800/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4 shadow-lg space-y-3">
                                 <div class="flex items-start gap-3">
                                     <div class="h-8 w-8 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
                                         <GraduationCap class="h-4 w-4 text-blue-400" />
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <div class="flex items-center gap-2 mb-1">
-                                            <p class="text-xs font-semibold text-slate-200">Envie de se former ?</p>
-                                            <ExternalLink class="h-3 w-3 text-slate-400 group-hover:text-blue-400 transition-colors" />
-                                        </div>
+                                        <p class="text-xs font-semibold text-slate-200 mb-1">Envie de se former ?</p>
                                         <p class="text-[11px] text-slate-400 leading-relaxed">
-                                            La <span class="text-blue-300">Fitness Education Academy</span> propose des formations certifiantes EREPS 3 et EREPS 4 NASM.
+                                            Découvrez les formations certifiantes de la <span class="text-blue-300">Fitness Education Academy</span>.
                                         </p>
                                     </div>
                                 </div>
-                            </a>
+                                
+                                <div class="space-y-2 pl-11">
+                                    <!-- Fitness Instructor EREPS 3 -->
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-[11px] text-slate-300 font-medium">Fitness Instructor EREPS 3</p>
+                                            <p class="text-[10px] text-slate-500">Formation certifiante niveau 3</p>
+                                        </div>
+                                        <a
+                                            href="https://fitnesseducation.academy/formations"
+                                            target="_blank"
+                                            class="inline-flex items-center gap-1.5 rounded-lg bg-blue-500/20 border border-blue-500/40 px-3 py-1.5 text-[11px] font-medium text-blue-100 hover:bg-blue-500/30 hover:border-blue-500/60 transition-colors whitespace-nowrap"
+                                        >
+                                            <ExternalLink class="h-3 w-3" />
+                                            Découvrir
+                                        </a>
+                                    </div>
+                                    
+                                    <!-- Personal Trainer NASM EREPS 4 -->
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-[11px] text-slate-300 font-medium">Personal Trainer NASM EREPS 4</p>
+                                            <p class="text-[10px] text-slate-500">Formation certifiante niveau 4</p>
+                                        </div>
+                                        <a
+                                            href="https://fitnesseducation.academy/formations"
+                                            target="_blank"
+                                            class="inline-flex items-center gap-1.5 rounded-lg bg-blue-500/20 border border-blue-500/40 px-3 py-1.5 text-[11px] font-medium text-blue-100 hover:bg-blue-500/30 hover:border-blue-500/60 transition-colors whitespace-nowrap"
+                                        >
+                                            <ExternalLink class="h-3 w-3" />
+                                            Découvrir
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Premium Services Banner -->
                             <div class="rounded-xl border border-slate-800/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4 shadow-lg space-y-3">

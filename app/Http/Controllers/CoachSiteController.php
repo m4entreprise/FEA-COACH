@@ -101,8 +101,17 @@ class CoachSiteController extends Controller
         $coach = app(Coach::class);
         $coach->load('user');
 
+        // Generate HTML if not cached or if in AUTO mode
+        $legalHtml = $coach->legal_terms;
+        
+        if (empty($legalHtml) || $coach->legal_generation_mode === 'AUTO') {
+            $generator = app(\App\Services\LegalContentGenerator::class);
+            $legalHtml = $generator->generate($coach);
+        }
+
         return view('coach-site.legal', [
             'coach' => $coach,
+            'legalHtml' => $legalHtml,
         ]);
     }
 }

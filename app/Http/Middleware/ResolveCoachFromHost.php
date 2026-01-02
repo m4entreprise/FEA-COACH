@@ -24,11 +24,27 @@ class ResolveCoachFromHost
         if (count($parts) >= 3) {
             $slug = $parts[0];
             
-            // Find the coach by slug or subdomain
+            // Find the coach by slug or subdomain (don't filter by is_active yet)
             $coach = Coach::where('slug', $slug)
                 ->orWhere('subdomain', $slug)
-                ->where('is_active', true)
+                ->with('user')
                 ->firstOrFail();
+            
+            // Check if subscription is active
+            $user = $coach->user;
+            $isSubscriptionActive = $this->isSubscriptionActive($user);
+            
+            // If subscription is inactive, show unavailable page
+            if (!$isSubscriptionActive) {
+                return response()->view('coach-site.unavailable', [
+                    'coach' => $coach,
+                ], 200);
+            }
+            
+            // Check if coach profile is active
+            if (!$coach->is_active) {
+                abort(404);
+            }
             
             // Store the coach in the container for use throughout the request
             app()->instance(Coach::class, $coach);
@@ -38,5 +54,26 @@ class ResolveCoachFromHost
         }
         
         return $next($request);
+    }
+    
+    /**
+     * Check if the user has an active subscription
+     */
+    private function isSubscriptionActive($user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+        
+        // Check if on trial
+        $isOnTrial = $user->trial_ends_at 
+                     && now()->isBefore($user->trial_ends_at);
+        
+        if ($isOnTrial) {
+            return true;
+        }
+        
+        // Check if subscription is active
+        return $user->subscription_status === 'active';
     }
 }

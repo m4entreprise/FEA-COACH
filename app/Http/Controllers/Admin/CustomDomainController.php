@@ -25,8 +25,12 @@ class CustomDomainController extends Controller
                 'coach_id' => $domain->coach_id,
                 'coach_name' => $domain->coach?->name ?? 'Coach supprimé',
                 'coach_email' => $domain->coach?->user?->email ?? 'N/A',
-                'purchased_at' => $domain->purchased_at?->format('d/m/Y'),
-                'expires_at' => $domain->expires_at?->format('d/m/Y'),
+                // Raw values for form inputs (type="date")
+                'purchased_at' => $domain->purchased_at?->format('Y-m-d'),
+                'expires_at' => $domain->expires_at?->format('Y-m-d'),
+                // Display versions for the table
+                'purchased_at_display' => $domain->purchased_at?->format('d/m/Y'),
+                'expires_at_display' => $domain->expires_at?->format('d/m/Y'),
                 'notes' => $domain->notes,
                 'created_at' => $domain->created_at->format('d/m/Y H:i'),
             ]);

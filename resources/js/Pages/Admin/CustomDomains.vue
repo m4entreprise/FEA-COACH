@@ -187,10 +187,10 @@ const stats = computed(() => ({
                                             </span>
                                         </td>
                                         <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                            {{ domain.purchased_at || '-' }}
+                                            {{ domain.purchased_at_display || '-' }}
                                         </td>
                                         <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                            {{ domain.expires_at || '-' }}
+                                            {{ domain.expires_at_display || '-' }}
                                         </td>
                                         <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                                             <button

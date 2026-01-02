@@ -473,26 +473,51 @@ const goCategory = (id) => {
                             </a>
 
                             <!-- Premium Services Banner -->
-                            <div class="rounded-xl border border-slate-800/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4 shadow-lg">
+                            <div class="rounded-xl border border-slate-800/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4 shadow-lg space-y-3">
                                 <div class="flex items-start gap-3">
                                     <div class="h-8 w-8 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
                                         <Sparkles class="h-4 w-4 text-purple-400" />
                                     </div>
-                                    <div class="flex-1 min-w-0 space-y-2">
-                                        <div>
-                                            <p class="text-xs font-semibold text-slate-200 mb-1">Envie de plus de personnalisations ?</p>
-                                            <p class="text-[11px] text-slate-400 leading-relaxed">
-                                                Choisissez un <span class="text-purple-300">nom de domaine personnalisé</span> ! UniCoach ne vous suffit pas et vous rêvez d'un site web sur mesure, contactez nous !
-                                            </p>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-xs font-semibold text-slate-200 mb-1">Envie de plus de personnalisations ?</p>
+                                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                                            Donnez plus de professionnalisme à votre présence en ligne.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-2 pl-11">
+                                    <!-- Custom Domain -->
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-[11px] text-slate-300 font-medium">Nom de domaine personnalisé</p>
+                                            <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
+                                        </div>
+                                        <Link
+                                            :href="route('dashboard.subscription.custom-domain')"
+                                            method="post"
+                                            as="button"
+                                            class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-3 py-1.5 text-[11px] font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
+                                        >
+                                            <CreditCard class="h-3 w-3" />
+                                            Acheter
+                                        </Link>
+                                    </div>
+                                    
+                                    <!-- Custom Services -->
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-[11px] text-slate-300 font-medium">Site web sur mesure, logo, gestion média</p>
+                                            <p class="text-[10px] text-slate-500">Devis personnalisé</p>
                                         </div>
                                         <Link
                                             :href="route('dashboard.contact.custom')"
                                             method="post"
                                             as="button"
-                                            class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-3 py-1.5 text-[11px] font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors"
+                                            class="inline-flex items-center gap-1.5 rounded-lg bg-slate-700/40 border border-slate-600/40 px-3 py-1.5 text-[11px] font-medium text-slate-100 hover:bg-slate-700/60 hover:border-slate-600/60 transition-colors whitespace-nowrap"
                                         >
                                             <Mail class="h-3 w-3" />
-                                            Je souhaite être recontacté
+                                            Contact
                                         </Link>
                                     </div>
                                 </div>

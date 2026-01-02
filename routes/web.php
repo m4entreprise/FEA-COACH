@@ -232,6 +232,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/subscription/checkout', [SubscriptionController::class, 'createCheckoutSession'])->name('dashboard.subscription.checkout');
     Route::post('/dashboard/subscription/portal', [SubscriptionController::class, 'customerPortal'])->name('dashboard.subscription.portal');
     Route::post('/dashboard/subscription/cancel', [SubscriptionController::class, 'cancelSubscription'])->name('dashboard.subscription.cancel');
+    Route::post('/dashboard/subscription/custom-domain', [SubscriptionController::class, 'checkoutCustomDomain'])->name('dashboard.subscription.custom-domain');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

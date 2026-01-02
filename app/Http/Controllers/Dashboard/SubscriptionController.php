@@ -165,4 +165,59 @@ class SubscriptionController extends Controller
     {
         return back()->with('info', 'Annulation : gérée via Lemon Squeezy (MVP).');
     }
+
+    /**
+     * Create a Lemon Squeezy checkout session for custom domain.
+     */
+    public function checkoutCustomDomain(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $coach = $user->coach;
+
+            if (!$coach) {
+                return back()->with('error', 'Aucun profil coach associé.');
+            }
+
+            // Get the custom domain variant ID from config
+            $variantId = (int) config('lemonsqueezy.variant_custom_domain');
+            
+            if (!$variantId) {
+                Log::error('Custom domain variant ID not configured');
+                return back()->with('error', 'Le produit nom de domaine n\'est pas configuré.');
+            }
+
+            $checkoutSession = $this->lemonSqueezyService->createCheckoutSession([
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'name' => trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: $user->name,
+                'vat_number' => $user->vat_number,
+            ], [
+                'coach_id' => $coach->id,
+                'coach_slug' => $coach->slug,
+                'product_type' => 'custom_domain',
+                'source' => 'dashboard_premium',
+            ], $variantId);
+
+            $checkoutUrl = $checkoutSession['data']['attributes']['url'] ?? null;
+            if ($checkoutUrl) {
+                return redirect($checkoutUrl);
+            }
+
+            Log::error('Lemon Squeezy checkout session missing URL (custom domain)', [
+                'user_id' => $user->id,
+                'response' => $checkoutSession,
+            ]);
+
+            return back()->with('error', 'Erreur lors de la création de la session de paiement.');
+
+        } catch (\Exception $e) {
+            Log::error('Failed to create Lemon Squeezy checkout session (custom domain)', [
+                'user_id' => $request->user()->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', 'Une erreur est survenue. Veuillez réessayer.');
+        }
+    }
 }

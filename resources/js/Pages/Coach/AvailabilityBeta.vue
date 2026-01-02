@@ -121,7 +121,7 @@ const getDayLabel = (dayValue) => {
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <Link
-                        :href="route('dashboard.payments.index')"
+                        :href="route('dashboard')"
                         class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-700 transition-colors"
                     >
                         <ArrowLeft class="h-4 w-4" />

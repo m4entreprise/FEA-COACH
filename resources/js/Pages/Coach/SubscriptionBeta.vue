@@ -55,6 +55,11 @@ const statusLabel = computed(() => {
   return 'Inactif';
 });
 
+// Check if user has an active subscription (even during trial)
+const hasSubscription = computed(() => {
+  return !!props.subscription.lemonsqueezy_subscription_id;
+});
+
 const handleSubscribe = () => {
   router.post('/dashboard/subscription/checkout');
 };
@@ -169,18 +174,23 @@ const handleManageSubscription = async () => {
                 <Sparkles class="h-5 w-5 text-blue-300 flex-shrink-0" />
                 <div class="flex-1 space-y-2">
                   <p class="text-sm font-semibold text-blue-100">
-                    Profitez de votre essai gratuit
+                    {{ hasSubscription ? 'Période d\'essai avec abonnement actif' : 'Profitez de votre essai gratuit' }}
                   </p>
                   <p class="text-xs text-blue-200">
-                    Il vous reste <span class="font-bold">{{ subscription.trial_days_left }} jour{{ subscription.trial_days_left > 1 ? 's' : '' }}</span> pour tester toutes les fonctionnalités.
+                    <template v-if="hasSubscription">
+                      Votre abonnement est actif. Il vous reste <span class="font-bold">{{ subscription.trial_days_left }} jour{{ subscription.trial_days_left > 1 ? 's' : '' }}</span> d'essai gratuit avant le premier paiement.
+                    </template>
+                    <template v-else>
+                      Il vous reste <span class="font-bold">{{ subscription.trial_days_left }} jour{{ subscription.trial_days_left > 1 ? 's' : '' }}</span> pour tester toutes les fonctionnalités.
+                    </template>
                   </p>
                   <div class="flex items-center gap-2 text-xs text-blue-300">
                     <Calendar class="h-3 w-3" />
-                    <span>Expire le {{ subscriptionEndDate }}</span>
+                    <span>{{ hasSubscription ? 'Premier paiement le' : 'Expire le' }} {{ subscriptionEndDate }}</span>
                   </div>
                   <div v-if="subscription.cancel_at_period_end" class="flex items-center gap-2 text-xs text-amber-300 mt-2 pt-2 border-t border-blue-500/30">
                     <AlertCircle class="h-3 w-3" />
-                    <span>Abonnement annulé - l'accès restera actif jusqu'à la fin de la période d'essai</span>
+                    <span>Abonnement annulé - l'accès restera actif jusqu'au {{ subscriptionEndDate }}</span>
                   </div>
                 </div>
               </div>
@@ -248,35 +258,9 @@ const handleManageSubscription = async () => {
 
             <!-- Actions -->
             <div class="flex flex-wrap gap-2 text-xs">
+              <!-- User has subscription with cancellation scheduled -->
               <button
-                v-if="subscription.is_on_trial && !subscription.cancel_at_period_end"
-                type="button"
-                class="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
-                @click="handleSubscribe"
-              >
-                <Crown class="h-3.5 w-3.5" />
-                S'abonner maintenant
-              </button>
-              <button
-                v-else-if="subscription.is_on_trial && subscription.cancel_at_period_end"
-                type="button"
-                class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-amber-500/50 bg-amber-500/10 px-4 py-2 text-amber-200 hover:bg-amber-500/20"
-                @click="handleManageSubscription"
-              >
-                <ExternalLink class="h-3.5 w-3.5" />
-                Gérer l'annulation sur Lemon Squeezy
-              </button>
-              <button
-                v-else-if="subscription.status === 'active' && !subscription.cancel_at_period_end"
-                type="button"
-                class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-800 px-4 py-2 text-slate-200 hover:bg-slate-700"
-                @click="handleManageSubscription"
-              >
-                <ExternalLink class="h-3.5 w-3.5" />
-                Portail client Lemon Squeezy
-              </button>
-              <button
-                v-else-if="subscription.status === 'active' && subscription.cancel_at_period_end"
+                v-if="hasSubscription && subscription.cancel_at_period_end"
                 type="button"
                 class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-amber-500/50 bg-amber-500/10 px-4 py-2 text-amber-200 hover:bg-amber-500/20"
                 @click="handleManageSubscription"
@@ -284,6 +268,17 @@ const handleManageSubscription = async () => {
                 <ExternalLink class="h-3.5 w-3.5" />
                 Réactiver mon abonnement
               </button>
+              <!-- User has active subscription (trial or paid) -->
+              <button
+                v-else-if="hasSubscription"
+                type="button"
+                class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-800 px-4 py-2 text-slate-200 hover:bg-slate-700"
+                @click="handleManageSubscription"
+              >
+                <ExternalLink class="h-3.5 w-3.5" />
+                Gérer mon abonnement
+              </button>
+              <!-- No subscription yet -->
               <button
                 v-else
                 type="button"
@@ -291,7 +286,7 @@ const handleManageSubscription = async () => {
                 @click="handleSubscribe"
               >
                 <Crown class="h-3.5 w-3.5" />
-                Souscrire un abonnement
+                S'abonner maintenant
               </button>
             </div>
           </div>

@@ -588,9 +588,9 @@ const completionPercentage = computed(() => {
               <div
                 v-else
                 v-html="previewHtml"
-                class="p-6 text-xs text-slate-100 max-h-[calc(100vh-200px)] overflow-y-auto prose prose-invert prose-sm max-w-none
-                       prose-headings:text-slate-100 prose-p:text-slate-300 prose-li:text-slate-300
-                       prose-strong:text-slate-200 prose-a:text-purple-400"
+                class="p-6 text-xs bg-white text-slate-900 max-h-[calc(100vh-200px)] overflow-y-auto prose prose-slate prose-sm max-w-none
+                       prose-headings:text-slate-900 prose-p:text-slate-700 prose-li:text-slate-700
+                       prose-strong:text-slate-900 prose-a:text-purple-600"
               ></div>
             </div>
 

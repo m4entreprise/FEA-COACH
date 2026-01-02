@@ -39,7 +39,7 @@ const form = useForm({
 const previewHtml = ref('');
 const previewLoading = ref(false);
 const previewError = ref(null);
-const showPreview = ref(false);
+const showPreview = ref(true);
 let previewTimeoutId = null;
 
 const hasPreviewRequirements = computed(() => {
@@ -105,11 +105,10 @@ watch(
   { deep: true }
 );
 
-watch(showPreview, (value) => {
-  if (value && hasPreviewRequirements.value) {
-    fetchPreview();
-  }
-});
+// Auto-generate preview on mount if requirements are met
+if (hasPreviewRequirements.value) {
+  fetchPreview();
+}
 
 onBeforeUnmount(() => {
   if (previewTimeoutId) {

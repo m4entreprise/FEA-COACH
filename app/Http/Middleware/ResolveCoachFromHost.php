@@ -82,9 +82,23 @@ class ResolveCoachFromHost
             return true;
         }
         
-        // Consider subscription active if status is 'active', 'on_trial', or 'active_promo'
+        // Statuts actifs immédiatement
         $activeStatuses = ['active', 'on_trial', 'active_promo'];
         
-        return in_array($user->subscription_status, $activeStatuses, true);
+        if (in_array($user->subscription_status, $activeStatuses, true)) {
+            return true;
+        }
+        
+        // Si cancelled/past_due, vérifier si encore dans la période payée
+        $gracePeriodStatuses = ['cancelled', 'past_due'];
+        
+        if (in_array($user->subscription_status, $gracePeriodStatuses, true)) {
+            // Accès maintenu jusqu'à la fin de la période payée
+            if ($user->subscription_current_period_end && now()->isBefore($user->subscription_current_period_end)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

@@ -20,20 +20,10 @@ class AvailabilityController extends Controller
         $slots = $coach->availabilitySlots()
             ->orderBy('day_of_week')
             ->orderBy('start_time')
-            ->get()
-            ->groupBy('day_of_week');
+            ->get();
 
-        $groupedSlots = [];
-        for ($day = 1; $day <= 7; $day++) {
-            $daySlots = $slots->get($day === 7 ? 0 : $day, collect());
-            $groupedSlots[] = [
-                'day' => $day === 7 ? 0 : $day,
-                'slots' => $daySlots,
-            ];
-        }
-
-        return Inertia::render('Dashboard/Availability', [
-            'availability' => $groupedSlots,
+        return Inertia::render('Coach/AvailabilityBeta', [
+            'slots' => $slots,
         ]);
     }
 

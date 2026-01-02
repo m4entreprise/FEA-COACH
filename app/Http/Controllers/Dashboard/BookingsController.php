@@ -22,19 +22,14 @@ class BookingsController extends Controller
             return redirect()->route('dashboard');
         }
 
-        $filter = $request->get('filter', 'upcoming');
+        $bookings = $coach->bookings()
+            ->with(['serviceType', 'client'])
+            ->orderBy('booking_date', 'desc')
+            ->orderBy('start_time', 'desc')
+            ->get();
 
-        $bookingsQuery = $coach->bookings()->with(['serviceType', 'client']);
-
-        $bookings = match($filter) {
-            'past' => $bookingsQuery->past()->paginate(20),
-            'cancelled' => $bookingsQuery->cancelled()->paginate(20),
-            default => $bookingsQuery->upcoming()->paginate(20),
-        };
-
-        return Inertia::render('Dashboard/Bookings', [
+        return Inertia::render('Coach/BookingsBeta', [
             'bookings' => $bookings,
-            'filter' => $filter,
             'stats' => $this->bookingService->getBookingStats($coach),
         ]);
     }

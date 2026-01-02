@@ -21,7 +21,7 @@ class ServicesController extends Controller
             ->orderBy('order')
             ->get();
 
-        return Inertia::render('Dashboard/Services', [
+        return Inertia::render('Coach/ServicesBeta', [
             'services' => $services,
         ]);
     }

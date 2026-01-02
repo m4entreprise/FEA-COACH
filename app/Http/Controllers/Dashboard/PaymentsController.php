@@ -38,7 +38,7 @@ class PaymentsController extends Controller
             'payments_module_activated_at' => $user->payments_module_activated_at,
         ]);
 
-        return Inertia::render('Dashboard/Payments', [
+        return Inertia::render('Coach/PaymentsBeta', [
             'hasPaymentsModule' => (bool) $user->has_payments_module,
             'paymentsModulePrice' => config('stripe.payments_module_price'),
             'stripeAccount' => $stripeAccount ? [

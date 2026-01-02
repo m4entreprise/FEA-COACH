@@ -858,6 +858,23 @@ const logout = () => {
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <Link
+                                :href="route('dashboard.payments.index')"
+                                class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-purple-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                                        <CreditCard class="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-semibold">Paiements & Réservations</h3>
+                                        <p class="text-xs text-slate-400">
+                                            Services, disponibilités et réservations en ligne.
+                                        </p>
+                                    </div>
+                                </div>
+                            </Link>
+
+                            <Link
                                 :href="route('dashboard.plans')"
                                 class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >

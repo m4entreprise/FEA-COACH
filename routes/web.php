@@ -278,7 +278,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::get('/dashboard/payments/stripe/return', [PaymentsController::class, 'stripeReturn'])->name('dashboard.payments.stripe.return');
     Route::get('/dashboard/payments/stripe/refresh', [PaymentsController::class, 'stripeRefresh'])->name('dashboard.payments.stripe.refresh');
     Route::post('/dashboard/payments/disconnect', [PaymentsController::class, 'disconnect'])->name('dashboard.payments.disconnect');
-    Route::post('/dashboard/payments/dashboard', [PaymentsController::class, 'dashboard'])->name('dashboard.payments.dashboard');
+    Route::get('/dashboard/payments/dashboard', [PaymentsController::class, 'dashboard'])->name('dashboard.payments.dashboard');
 
     // Service types management
     Route::get('/dashboard/services', [ServicesController::class, 'index'])->name('dashboard.services.index');

@@ -10,10 +10,6 @@ const props = defineProps({
   user: Object,
   planInfo: Object,
   customDomain: Object,
-  hasCustomDomainOrder: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 const subscriptionEndDate = computed(() => {
@@ -134,9 +130,7 @@ const domainExpiryDate = computed(() => {
   });
 });
 
-const hasCustomDomainOrder = computed(
-  () => !!props.customDomain || !!props.hasCustomDomainOrder,
-);
+const hasCustomDomainOrder = computed(() => !!props.customDomain);
 const customDomainStatus = computed(() => props.customDomain?.status ?? null);
 </script>
 

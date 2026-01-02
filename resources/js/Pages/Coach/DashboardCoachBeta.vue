@@ -61,9 +61,8 @@ const coachSiteUrl = computed(() => {
 });
 
 const safeStats = computed(() => props.stats || {});
-const hasCustomDomainOrder = computed(
-    () => !!props.customDomain || !!props.coach?.desired_custom_domain,
-);
+// Etat "Acheté" uniquement si un CustomDomain existe réellement pour ce coach
+const hasCustomDomainOrder = computed(() => !!props.customDomain);
 const customDomainStatus = computed(() => props.customDomain?.status ?? null);
 const hasCustomContactLock = computed(
     () => !!props.coach?.custom_contact_locked_until,

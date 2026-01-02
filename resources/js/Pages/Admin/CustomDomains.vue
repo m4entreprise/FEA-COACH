@@ -6,6 +6,10 @@ import { ref, computed } from 'vue';
 const props = defineProps({
     domains: Array,
     coaches: Array,
+    pendingRequests: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const showModal = ref(false);
@@ -23,6 +27,15 @@ const form = useForm({
 const openCreateModal = () => {
     form.reset();
     editingDomain.value = null;
+    showModal.value = true;
+};
+
+const openCreateFromRequest = (request) => {
+    form.reset();
+    editingDomain.value = null;
+    form.coach_id = request.coach_id;
+    form.domain = request.desired_domain;
+    form.status = 'pending';
     showModal.value = true;
 };
 
@@ -126,7 +139,7 @@ const stats = computed(() => ({
                         </div>
 
                         <!-- Domains Table -->
-                        <div v-if="domains.length > 0" class="overflow-x-auto">
+                        <div v-if="domains.length > 0" class="overflow-x-auto mb-10">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-900">
                                     <tr>
@@ -206,6 +219,59 @@ const stats = computed(() => ({
                             <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Aucun domaine</h3>
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Commencez par ajouter un nom de domaine personnalisé.</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending requests -->
+        <div class="mx-auto max-w-full px-4 sm:px-6 lg:px-8 mt-8" v-if="pendingRequests.length">
+            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <h3 class="text-md font-semibold mb-3">Demandes de noms de domaine</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        Ces demandes proviennent des coachs via la modale "Nom de domaine" sur leur dashboard.
+                    </p>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-900">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                        Coach
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                        Email
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                        Nom de domaine souhaité
+                                    </th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+                                <tr v-for="request in pendingRequests" :key="request.coach_id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        <div class="text-sm text-gray-900 dark:text-gray-100">{{ request.coach_name }}</div>
+                                    </td>
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        <div class="text-sm text-gray-900 dark:text-gray-100">{{ request.coach_email }}</div>
+                                    </td>
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ request.desired_domain }}</div>
+                                    </td>
+                                    <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                                        <button
+                                            @click="openCreateFromRequest(request)"
+                                            class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                                        >
+                                            Créer le domaine
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

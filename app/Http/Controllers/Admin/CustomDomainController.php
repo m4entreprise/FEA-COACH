@@ -41,9 +41,23 @@ class CustomDomainController extends Controller
                 'email' => $coach->user->email ?? 'N/A',
             ]);
 
+        // Pending custom domain requests (saisies dans la modale)
+        $pendingRequests = Coach::with('user')
+            ->whereHas('user')
+            ->whereNotNull('desired_custom_domain')
+            ->orderBy('name')
+            ->get()
+            ->map(fn($coach) => [
+                'coach_id' => $coach->id,
+                'coach_name' => $coach->name,
+                'coach_email' => $coach->user->email ?? 'N/A',
+                'desired_domain' => $coach->desired_custom_domain,
+            ]);
+
         return Inertia::render('Admin/CustomDomains', [
             'domains' => $domains,
             'coaches' => $coaches,
+            'pendingRequests' => $pendingRequests,
         ]);
     }
 
@@ -61,7 +75,14 @@ class CustomDomainController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        CustomDomain::create($validated);
+        $domain = CustomDomain::create($validated);
+
+        // Clear pending desired domain once a real CustomDomain is created
+        $coach = Coach::find($validated['coach_id']);
+        if ($coach) {
+            $coach->desired_custom_domain = null;
+            $coach->save();
+        }
 
         return redirect()->route('admin.custom-domains.index')
             ->with('success', 'Nom de domaine ajouté avec succès.');

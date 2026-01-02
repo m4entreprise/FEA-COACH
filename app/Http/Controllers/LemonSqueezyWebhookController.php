@@ -397,6 +397,12 @@ class LemonSqueezyWebhookController extends Controller
             $domain->save();
         }
 
+        // Once an order is confirmed, clear the pending desired domain on the coach
+        if ($coach->desired_custom_domain !== null) {
+            $coach->desired_custom_domain = null;
+            $coach->save();
+        }
+
         Log::info('Custom domain order_created handled', [
             'coach_id' => $coach->id,
             'custom_domain_id' => $domain->id,

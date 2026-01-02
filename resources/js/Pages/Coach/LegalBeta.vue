@@ -2,7 +2,7 @@
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref, computed, watch, onBeforeUnmount } from 'vue';
 import InputError from '@/Components/InputError.vue';
-import { Building2, User, Briefcase, Scale, Eye, Save, Copy, AlertCircle, FileText, Sparkles } from 'lucide-vue-next';
+import { Building2, User, Briefcase, Scale, Eye, Save, Copy, AlertCircle, FileText, Sparkles, X, Send, CheckCircle } from 'lucide-vue-next';
 import axios from 'axios';
 
 const props = defineProps({
@@ -152,6 +152,43 @@ const completionPercentage = computed(() => {
 
   return Math.round((filled / total) * 100);
 });
+
+// Custom legal request
+const showCustomRequestModal = ref(false);
+const customRequestMessage = ref('');
+const customRequestLoading = ref(false);
+const customRequestSuccess = ref(false);
+const customRequestError = ref(null);
+
+const submitCustomRequest = async () => {
+  customRequestLoading.value = true;
+  customRequestError.value = null;
+
+  try {
+    const { data } = await axios.post(
+      route('dashboard.legal.request-custom'),
+      {
+        message: customRequestMessage.value,
+      },
+      {
+        headers: { Accept: 'application/json' },
+        withCredentials: true,
+      }
+    );
+
+    customRequestSuccess.value = true;
+    setTimeout(() => {
+      showCustomRequestModal.value = false;
+      customRequestSuccess.value = false;
+      customRequestMessage.value = '';
+    }, 3000);
+  } catch (error) {
+    customRequestError.value =
+      error.response?.data?.message || 'Une erreur est survenue. Veuillez réessayer.';
+  } finally {
+    customRequestLoading.value = false;
+  }
+};
 </script>
 
 <template>
@@ -211,6 +248,43 @@ const completionPercentage = computed(() => {
                     <span>Validé par juriste • Conforme RGPD • Livre XIX CDE</span>
                   </p>
                 </div>
+              </div>
+            </div>
+
+            <!-- Encart publicitaire mentions légales personnalisées -->
+            <div class="rounded-2xl border border-green-500/30 bg-gradient-to-br from-green-900/20 to-emerald-900/20 p-5 shadow-xl">
+              <div class="flex flex-col gap-3">
+                <div class="flex items-start gap-3">
+                  <Scale class="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
+                  <div class="flex-1 space-y-2">
+                    <h3 class="text-sm font-semibold text-green-100">Besoin d'un accompagnement juridique sur mesure ?</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                      Notre générateur couvre les besoins standards, mais si vous souhaitez des <strong class="text-green-200">mentions légales 100% personnalisées</strong>, rédigées par un juriste professionnel spécialisé en droit du sport et coaching, nous pouvons vous accompagner.
+                    </p>
+                    <ul class="text-[11px] text-slate-400 space-y-1 ml-4">
+                      <li class="flex items-center gap-2">
+                        <CheckCircle class="w-3 h-3 text-green-400 flex-shrink-0" />
+                        <span>Analyse approfondie de votre activité</span>
+                      </li>
+                      <li class="flex items-center gap-2">
+                        <CheckCircle class="w-3 h-3 text-green-400 flex-shrink-0" />
+                        <span>Rédaction sur mesure par un juriste belge</span>
+                      </li>
+                      <li class="flex items-center gap-2">
+                        <CheckCircle class="w-3 h-3 text-green-400 flex-shrink-0" />
+                        <span>Protection juridique optimale</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  @click="showCustomRequestModal = true"
+                  class="self-start inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-xs font-semibold text-white hover:from-green-600 hover:to-emerald-600 shadow-lg transition-all"
+                >
+                  <Send class="w-3.5 h-3.5" />
+                  <span>Demander un devis gratuit</span>
+                </button>
               </div>
             </div>
 
@@ -607,5 +681,96 @@ const completionPercentage = computed(() => {
         </div>
       </div>
     </main>
+
+    <!-- Modale demande de mentions légales personnalisées -->
+    <div
+      v-if="showCustomRequestModal"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      @click.self="showCustomRequestModal = false"
+    >
+      <div class="bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl max-w-lg w-full p-6 space-y-4">
+        <!-- Header -->
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+              <Scale class="w-5 h-5 text-green-400" />
+            </div>
+            <div>
+              <h3 class="text-base font-semibold text-slate-100">Demande de devis</h3>
+              <p class="text-xs text-slate-400">Mentions légales personnalisées</p>
+            </div>
+          </div>
+          <button
+            @click="showCustomRequestModal = false"
+            class="text-slate-400 hover:text-slate-200 transition-colors"
+          >
+            <X class="w-5 h-5" />
+          </button>
+        </div>
+
+        <!-- Success State -->
+        <div v-if="customRequestSuccess" class="py-8 text-center space-y-3">
+          <div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto">
+            <CheckCircle class="w-8 h-8 text-green-400" />
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-green-100 mb-1">Demande envoyée !</p>
+            <p class="text-xs text-slate-400">Notre équipe vous contactera rapidement par email.</p>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div v-else class="space-y-4">
+          <div class="rounded-xl bg-slate-950/50 border border-slate-800 p-4">
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Un juriste spécialisé analysera votre activité et rédigera vos mentions légales sur mesure. 
+              <strong class="text-slate-100">Devis gratuit et sans engagement.</strong>
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold text-slate-200">
+              Message (optionnel)
+            </label>
+            <textarea
+              v-model="customRequestMessage"
+              rows="4"
+              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-slate-50 focus:border-green-500 focus:ring-green-500 placeholder:text-slate-500"
+              placeholder="Décrivez votre activité ou vos besoins spécifiques (ex: coaching en ligne + formation, besoin de clauses spécifiques, etc.)"
+            ></textarea>
+            <p class="text-[11px] text-slate-400">
+              Nous utiliserons vos informations de profil pour vous contacter.
+            </p>
+          </div>
+
+          <!-- Error -->
+          <div v-if="customRequestError" class="rounded-lg bg-red-500/10 border border-red-500/20 p-3">
+            <p class="text-xs text-red-300">{{ customRequestError }}</p>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex gap-2 pt-2">
+            <button
+              type="button"
+              @click="showCustomRequestModal = false"
+              class="flex-1 px-4 py-2 rounded-full border border-slate-700 text-xs font-medium text-slate-200 hover:bg-slate-800 transition-colors"
+              :disabled="customRequestLoading"
+            >
+              Annuler
+            </button>
+            <button
+              type="button"
+              @click="submitCustomRequest"
+              class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-xs font-semibold text-white hover:from-green-600 hover:to-emerald-600 disabled:opacity-50 transition-all"
+              :disabled="customRequestLoading"
+            >
+              <div v-if="customRequestLoading" class="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+              <Send v-else class="w-3.5 h-3.5" />
+              <span>{{ customRequestLoading ? 'Envoi...' : 'Envoyer la demande' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\DataTransferObjects\LegalData;
 use App\Http\Controllers\Controller;
+use App\Models\ContactMessage;
 use App\Services\LegalContentGenerator;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -137,5 +138,39 @@ class LegalController extends Controller
         $html = $this->generator->generate($legalData);
 
         return response()->json(['html' => $html]);
+    }
+
+    /**
+     * Submit a request for custom legal terms by a professional jurist.
+     */
+    public function requestCustomLegal(Request $request)
+    {
+        $coach = auth()->user()->coach;
+
+        if (!$coach) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Profil coach non trouvé.',
+            ], 404);
+        }
+
+        $validated = $request->validate([
+            'message' => 'nullable|string|max:1000',
+        ]);
+
+        ContactMessage::create([
+            'coach_id' => $coach->id,
+            'name' => auth()->user()->name ?? 'Coach ' . $coach->name,
+            'email' => auth()->user()->email,
+            'phone' => auth()->user()->phone_contact ?? null,
+            'service_type' => 'Mentions légales personnalisées',
+            'message' => $validated['message'] ?? 'Demande de rédaction de mentions légales personnalisées par un juriste professionnel.',
+            'is_read' => false,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Votre demande a été envoyée avec succès ! Notre équipe vous contactera dans les plus brefs délais.',
+        ]);
     }
 }

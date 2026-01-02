@@ -154,15 +154,19 @@ class PaymentsController extends Controller
         $coach = $request->user()->coach;
         $stripeAccount = $coach->stripeAccount;
 
-        if (!$stripeAccount || !$stripeAccount->isFullyActivated()) {
-            return back()->with('error', 'Compte Stripe non activé');
+        if (!$stripeAccount) {
+            return back()->with('error', 'Aucun compte Stripe connecté');
         }
 
         try {
             $dashboardUrl = $this->stripeService->getDashboardLink($stripeAccount->stripe_account_id);
             return redirect($dashboardUrl);
         } catch (\Exception $e) {
-            return back()->with('error', 'Erreur lors de l\'accès au dashboard Stripe');
+            \Log::error('Erreur accès dashboard Stripe', [
+                'coach_id' => $coach->id,
+                'error' => $e->getMessage(),
+            ]);
+            return back()->with('error', 'Erreur lors de l\'accès au dashboard Stripe: ' . $e->getMessage());
         }
     }
 }

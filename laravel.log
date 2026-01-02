@@ -1,16 +1,15 @@
-[2026-01-02 21:38:47] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 21:38:54] local.INFO: Début connexion Stripe {"user_id":22,"coach_id":8,"stripe_key_configured":true} 
-[2026-01-02 21:38:54] local.ERROR: Failed to create Stripe connected account {"status":400,"response":"{
+[2026-01-02 21:46:22] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 21:46:30] local.INFO: Début connexion Stripe {"user_id":22,"coach_id":8,"stripe_key_configured":true} 
+[2026-01-02 21:46:31] local.ERROR: Failed to create Stripe connected account {"status":400,"response":"{
   \"error\": {
-    \"message\": \"Invalid boolean: 1\",
-    \"param\": \"capabilities[card_payments][requested]\",
-    \"request_log_url\": \"https://dashboard.stripe.com/test/logs/req_EHlBZXX7um8T2C?t=1767389934\",
+    \"message\": \"You can only create new accounts if you've signed up for Connect, which you can learn how to do at https://stripe.com/docs/connect.\",
+    \"request_log_url\": \"https://dashboard.stripe.com/test/logs/req_14iHY1aQH1iZYJ?t=1767390391\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 21:38:54] local.ERROR: Stripe Connect account creation error {"error":"Failed to create Stripe connected account"} 
-[2026-01-02 21:38:54] local.ERROR: Erreur connexion Stripe {"user_id":22,"coach_id":8,"error":"Failed to create Stripe connected account","trace":"#0 /home/ploi/unicoach.app/app/Services/StripeConnectService.php(91): App\\Services\\StripeConnectService->createConnectedAccount()
+[2026-01-02 21:46:31] local.ERROR: Stripe Connect account creation error {"error":"Failed to create Stripe connected account"} 
+[2026-01-02 21:46:31] local.ERROR: Erreur connexion Stripe {"user_id":22,"coach_id":8,"error":"Failed to create Stripe connected account","trace":"#0 /home/ploi/unicoach.app/app/Services/StripeConnectService.php(89): App\\Services\\StripeConnectService->createConnectedAccount()
 #1 /home/ploi/unicoach.app/app/Http/Controllers/Dashboard/PaymentsController.php(89): App\\Services\\StripeConnectService->getOrCreateAccountLink()
 #2 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(47): App\\Http\\Controllers\\Dashboard\\PaymentsController->connectStripe()
 #3 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(266): Illuminate\\Routing\\ControllerDispatcher->dispatch()
@@ -71,19 +70,18 @@
 #58 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle()
 #59 /home/ploi/unicoach.app/public/index.php(17): Illuminate\\Foundation\\Application->handleRequest()
 #60 {main}"} 
-[2026-01-02 21:38:54] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 21:38:57] local.INFO: Début connexion Stripe {"user_id":22,"coach_id":8,"stripe_key_configured":true} 
-[2026-01-02 21:38:58] local.ERROR: Failed to create Stripe connected account {"status":400,"response":"{
+[2026-01-02 21:46:31] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 21:46:34] local.INFO: Début connexion Stripe {"user_id":22,"coach_id":8,"stripe_key_configured":true} 
+[2026-01-02 21:46:35] local.ERROR: Failed to create Stripe connected account {"status":400,"response":"{
   \"error\": {
-    \"message\": \"Invalid boolean: 1\",
-    \"param\": \"capabilities[card_payments][requested]\",
-    \"request_log_url\": \"https://dashboard.stripe.com/test/logs/req_TRks2T7cPr0Bc1?t=1767389938\",
+    \"message\": \"You can only create new accounts if you've signed up for Connect, which you can learn how to do at https://stripe.com/docs/connect.\",
+    \"request_log_url\": \"https://dashboard.stripe.com/test/logs/req_DL8BaEQzyZSOex?t=1767390395\",
     \"type\": \"invalid_request_error\"
   }
 }
 "} 
-[2026-01-02 21:38:58] local.ERROR: Stripe Connect account creation error {"error":"Failed to create Stripe connected account"} 
-[2026-01-02 21:38:58] local.ERROR: Erreur connexion Stripe {"user_id":22,"coach_id":8,"error":"Failed to create Stripe connected account","trace":"#0 /home/ploi/unicoach.app/app/Services/StripeConnectService.php(91): App\\Services\\StripeConnectService->createConnectedAccount()
+[2026-01-02 21:46:35] local.ERROR: Stripe Connect account creation error {"error":"Failed to create Stripe connected account"} 
+[2026-01-02 21:46:35] local.ERROR: Erreur connexion Stripe {"user_id":22,"coach_id":8,"error":"Failed to create Stripe connected account","trace":"#0 /home/ploi/unicoach.app/app/Services/StripeConnectService.php(89): App\\Services\\StripeConnectService->createConnectedAccount()
 #1 /home/ploi/unicoach.app/app/Http/Controllers/Dashboard/PaymentsController.php(89): App\\Services\\StripeConnectService->getOrCreateAccountLink()
 #2 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(47): App\\Http\\Controllers\\Dashboard\\PaymentsController->connectStripe()
 #3 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(266): Illuminate\\Routing\\ControllerDispatcher->dispatch()
@@ -144,77 +142,4 @@
 #58 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle()
 #59 /home/ploi/unicoach.app/public/index.php(17): Illuminate\\Foundation\\Application->handleRequest()
 #60 {main}"} 
-[2026-01-02 21:38:58] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-02 21:38:59] local.INFO: Début connexion Stripe {"user_id":22,"coach_id":8,"stripe_key_configured":true} 
-[2026-01-02 21:38:59] local.ERROR: Failed to create Stripe connected account {"status":400,"response":"{
-  \"error\": {
-    \"message\": \"Invalid boolean: 1\",
-    \"param\": \"capabilities[card_payments][requested]\",
-    \"request_log_url\": \"https://dashboard.stripe.com/test/logs/req_BGZc1Mbx103D5t?t=1767389939\",
-    \"type\": \"invalid_request_error\"
-  }
-}
-"} 
-[2026-01-02 21:38:59] local.ERROR: Stripe Connect account creation error {"error":"Failed to create Stripe connected account"} 
-[2026-01-02 21:38:59] local.ERROR: Erreur connexion Stripe {"user_id":22,"coach_id":8,"error":"Failed to create Stripe connected account","trace":"#0 /home/ploi/unicoach.app/app/Services/StripeConnectService.php(91): App\\Services\\StripeConnectService->createConnectedAccount()
-#1 /home/ploi/unicoach.app/app/Http/Controllers/Dashboard/PaymentsController.php(89): App\\Services\\StripeConnectService->getOrCreateAccountLink()
-#2 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(47): App\\Http\\Controllers\\Dashboard\\PaymentsController->connectStripe()
-#3 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(266): Illuminate\\Routing\\ControllerDispatcher->dispatch()
-#4 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(212): Illuminate\\Routing\\Route->runController()
-#5 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(808): Illuminate\\Routing\\Route->run()
-#6 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(170): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}()
-#7 /home/ploi/unicoach.app/app/Http/Middleware/EnsureSetupCompleted.php(36): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#8 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): App\\Http\\Middleware\\EnsureSetupCompleted->handle()
-#9 /home/ploi/unicoach.app/app/Http/Middleware/EnsureOnboardingCompleted.php(36): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#10 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): App\\Http\\Middleware\\EnsureOnboardingCompleted->handle()
-#11 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Auth/Middleware/EnsureEmailIsVerified.php(41): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#12 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified->handle()
-#13 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Http/Middleware/AddLinkHeadersForPreloadedAssets.php(20): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#14 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Http\\Middleware\\AddLinkHeadersForPreloadedAssets->handle()
-#15 /home/ploi/unicoach.app/vendor/inertiajs/inertia-laravel/src/Middleware.php(96): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#16 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Inertia\\Middleware->handle()
-#17 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#18 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle()
-#19 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(64): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#20 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Auth\\Middleware\\Authenticate->handle()
-#21 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#22 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle()
-#23 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#24 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle()
-#25 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#26 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest()
-#27 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Session\\Middleware\\StartSession->handle()
-#28 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#29 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle()
-#30 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#31 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle()
-#32 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(127): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#33 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate\\Pipeline\\Pipeline->then()
-#34 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack()
-#35 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(750): Illuminate\\Routing\\Router->runRoute()
-#36 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute()
-#37 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(201): Illuminate\\Routing\\Router->dispatch()
-#38 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(170): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}()
-#39 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#40 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
-#41 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle()
-#42 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#43 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
-#44 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle()
-#45 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#46 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Http\\Middleware\\ValidatePostSize->handle()
-#47 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#48 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle()
-#49 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#50 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Http\\Middleware\\HandleCors->handle()
-#51 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#52 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Http\\Middleware\\TrustProxies->handle()
-#53 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#54 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle()
-#55 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(127): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
-#56 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then()
-#57 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
-#58 /home/ploi/unicoach.app/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle()
-#59 /home/ploi/unicoach.app/public/index.php(17): Illuminate\\Foundation\\Application->handleRequest()
-#60 {main}"} 
-[2026-01-02 21:39:00] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-02 21:46:35] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 

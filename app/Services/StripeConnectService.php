@@ -253,21 +253,38 @@ class StripeConnectService
     public function getDashboardLink(string $accountId): string
     {
         try {
+            Log::info('Tentative génération lien dashboard Stripe', [
+                'account_id' => $accountId,
+            ]);
+
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
             ])->asForm()->post($this->baseUrl . '/accounts/' . $accountId . '/login_links');
 
+            Log::info('Réponse Stripe login_links', [
+                'status' => $response->status(),
+                'successful' => $response->successful(),
+                'body' => $response->body(),
+            ]);
+
             if ($response->successful()) {
                 $data = $response->json();
+                Log::info('Lien dashboard généré', ['url' => $data['url']]);
                 return $data['url'];
             }
 
-            return 'https://dashboard.stripe.com/';
+            Log::error('Échec génération lien dashboard Stripe', [
+                'status' => $response->status(),
+                'response' => $response->body(),
+            ]);
+
+            throw new \Exception('Failed to generate Stripe dashboard link: ' . $response->body());
         } catch (\Exception $e) {
-            Log::error('Failed to get Stripe dashboard link', [
+            Log::error('Exception génération lien dashboard', [
+                'account_id' => $accountId,
                 'error' => $e->getMessage(),
             ]);
-            return 'https://dashboard.stripe.com/';
+            throw $e;
         }
     }
 }

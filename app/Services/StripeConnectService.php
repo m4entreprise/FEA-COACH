@@ -25,7 +25,6 @@ class StripeConnectService
                 'Authorization' => 'Bearer ' . $this->apiKey,
             ])->asForm()->post($this->baseUrl . '/accounts', [
                 'type' => 'express',
-                'country' => 'FR',
                 'email' => $coach->user->email,
                 'capabilities[card_payments][requested]' => 'true',
                 'capabilities[transfers][requested]' => 'true',

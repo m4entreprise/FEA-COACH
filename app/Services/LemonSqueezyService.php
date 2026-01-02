@@ -124,6 +124,54 @@ class LemonSqueezyService
     }
 
     /**
+     * Get customer portal URL for a subscription.
+     *
+     * @param string $subscriptionId The Lemon Squeezy subscription ID
+     * @return string|null The customer portal URL or null if not found
+     */
+    public function getCustomerPortalUrl(string $subscriptionId): ?string
+    {
+        try {
+            $response = Http::withHeaders([
+                'Accept' => 'application/vnd.api+json',
+                'Content-Type' => 'application/vnd.api+json',
+                'Authorization' => 'Bearer ' . $this->apiKey,
+            ])->get($this->baseUrl . '/subscriptions/' . $subscriptionId);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                return $data['data']['attributes']['urls']['customer_portal'] ?? null;
+            }
+
+            Log::error('Failed to retrieve customer portal URL', [
+                'subscription_id' => $subscriptionId,
+                'status' => $response->status(),
+                'response' => $response->body(),
+            ]);
+
+            return null;
+        } catch (\Exception $e) {
+            Log::error('Error retrieving customer portal URL', [
+                'subscription_id' => $subscriptionId,
+                'error' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
+    }
+
+    /**
+     * Get fallback customer portal URL (non-signed).
+     *
+     * @return string
+     */
+    public function getFallbackPortalUrl(): string
+    {
+        $storeDomain = config('lemonsqueezy.store_domain', 'unicoach.lemonsqueezy.com');
+        return "https://{$storeDomain}/billing";
+    }
+
+    /**
      * Verify webhook signature from Lemon Squeezy.
      */
     public function verifyWebhookSignature(string $payload, ?string $signature): bool

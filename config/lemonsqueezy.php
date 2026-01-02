@@ -3,6 +3,7 @@
 return [
     'api_key' => env('LEMON_SQUEEZY_API_KEY'),
     'store_id' => env('LEMON_SQUEEZY_STORE_ID'),
+    'store_domain' => env('LEMON_SQUEEZY_STORE_DOMAIN', 'unicoach.lemonsqueezy.com'),
     'variant_non_fea' => env('LEMON_SQUEEZY_VARIANT_NON_FEA'),
     'variant_fea' => env('LEMON_SQUEEZY_VARIANT_FEA'),
     'webhook_secret' => env('LEMON_SQUEEZY_WEBHOOK_SECRET'),

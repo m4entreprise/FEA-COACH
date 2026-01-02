@@ -122,7 +122,38 @@ class SubscriptionController extends Controller
      */
     public function customerPortal(Request $request)
     {
-        return back()->with('info', 'Portail client : à connecter à Lemon Squeezy (MVP).');
+        try {
+            $user = $request->user();
+            
+            // Check if user has a subscription
+            if (!$user->lemonsqueezy_subscription_id) {
+                return back()->with('error', 'Aucun abonnement trouvé.');
+            }
+
+            // Get customer portal URL from Lemon Squeezy API
+            $portalUrl = $this->lemonSqueezyService->getCustomerPortalUrl(
+                (string) $user->lemonsqueezy_subscription_id
+            );
+
+            // If API call fails, use fallback URL
+            if (!$portalUrl) {
+                $portalUrl = $this->lemonSqueezyService->getFallbackPortalUrl();
+                Log::warning('Using fallback portal URL', [
+                    'user_id' => $user->id,
+                ]);
+            }
+
+            // Redirect to Lemon Squeezy customer portal
+            return redirect($portalUrl);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to access customer portal', [
+                'user_id' => $request->user()->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', 'Une erreur est survenue. Veuillez réessayer.');
+        }
     }
 
     /**

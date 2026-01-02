@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
 import { Toaster, toast } from 'vue-sonner';
 import { useAutoAnimate } from '@formkit/auto-animate/vue';
@@ -59,6 +59,14 @@ const safeStats = computed(() => props.stats || {});
 const goCategory = (id) => {
     activeCategory.value = id;
     sidebarOpen.value = false;
+};
+
+const buyCustomDomain = () => {
+    router.post(route('dashboard.subscription.custom-domain'));
+};
+
+const requestCustomContact = () => {
+    router.post(route('dashboard.contact.custom'));
 };
 
 // onMounted(() => {
@@ -493,32 +501,30 @@ const goCategory = (id) => {
                                             <p class="text-[11px] text-slate-300 font-medium">Nom de domaine personnalisé</p>
                                             <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
                                         </div>
-                                        <Link
-                                            :href="route('dashboard.subscription.custom-domain')"
-                                            method="post"
-                                            as="button"
+                                        <button
+                                            type="button"
+                                            @click="buyCustomDomain"
                                             class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-3 py-1.5 text-[11px] font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
                                         >
                                             <CreditCard class="h-3 w-3" />
                                             Acheter
-                                        </Link>
+                                        </button>
                                     </div>
                                     
                                     <!-- Custom Services -->
                                     <div class="flex items-center justify-between gap-3">
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-[11px] text-slate-300 font-medium">Site web sur mesure, logo, gestion média</p>
+                                            <p class="text-[11px] text-slate-300 font-medium">Site web sur mesure, branding & logo, gestion des réseaux sociaux</p>
                                             <p class="text-[10px] text-slate-500">Devis personnalisé</p>
                                         </div>
-                                        <Link
-                                            :href="route('dashboard.contact.custom')"
-                                            method="post"
-                                            as="button"
+                                        <button
+                                            type="button"
+                                            @click="requestCustomContact"
                                             class="inline-flex items-center gap-1.5 rounded-lg bg-slate-700/40 border border-slate-600/40 px-3 py-1.5 text-[11px] font-medium text-slate-100 hover:bg-slate-700/60 hover:border-slate-600/60 transition-colors whitespace-nowrap"
                                         >
                                             <Mail class="h-3 w-3" />
                                             Contact
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

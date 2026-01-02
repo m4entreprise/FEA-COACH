@@ -2,20 +2,23 @@
 
 @section('content')
   <div class="card">
-    <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem;">
-      <div>
-        <p class="text-sm uppercase tracking-[0.2em] text-slate-400">Espace sécurisé</p>
+    <div class="page-header">
+      <div class="page-header-main">
+        <div class="secure-pill">
+          <span class="secure-dot"></span>
+          <span>Espace sécurisé</span>
+        </div>
         <h1 class="title">Accéder aux documents de {{ $client->first_name }}</h1>
         <p class="subtitle">
           Merci de saisir le code à 6 chiffres fourni par votre coach pour consulter les documents.
         </p>
       </div>
-      <div style="width:60px; height:60px; border-radius:1rem; background:linear-gradient(135deg,#38bdf8,#6366f1); display:flex; align-items:center; justify-content:center; font-weight:600; font-size:1.4rem; box-shadow:0 12px 30px rgba(56,189,248,0.4);">
+      <div class="code-chip">
         {{ substr($client->share_code, 0, 2) }}
       </div>
     </div>
 
-    <form method="POST" action="{{ route('clients.share.unlock', $token) }}" class="space-y-4">
+    <form method="POST" action="{{ route('clients.share.unlock', $token) }}">
       @csrf
       <input
         type="text"
@@ -28,7 +31,12 @@
         required
       />
 
-      <input type="submit" value="Déverrouiller" />
+      <div class="form-actions">
+        <p class="form-hint">
+          Le code est strictement personnel et permet d'accéder à l'ensemble de vos documents.
+        </p>
+        <input type="submit" value="Déverrouiller" />
+      </div>
     </form>
 
     @if ($errors->any())

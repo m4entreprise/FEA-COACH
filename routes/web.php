@@ -84,6 +84,10 @@ Route::get('/politique-confidentialite', [App\Http\Controllers\LegalController::
 */
 
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('admin.coaches.index');
+    })->name('admin.dashboard');
+    
     Route::get('/coaches', [AdminCoachController::class, 'index'])->name('admin.coaches.index');
     Route::get('/coaches/create', [AdminCoachController::class, 'create'])->name('admin.coaches.create');
     Route::post('/coaches', [AdminCoachController::class, 'store'])->name('admin.coaches.store');

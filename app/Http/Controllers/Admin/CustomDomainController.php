@@ -32,12 +32,13 @@ class CustomDomainController extends Controller
             ]);
 
         $coaches = Coach::with('user')
+            ->whereHas('user')
             ->orderBy('name')
             ->get()
             ->map(fn($coach) => [
                 'id' => $coach->id,
                 'name' => $coach->name,
-                'email' => $coach->user->email,
+                'email' => $coach->user->email ?? 'N/A',
             ]);
 
         return Inertia::render('Admin/CustomDomains', [

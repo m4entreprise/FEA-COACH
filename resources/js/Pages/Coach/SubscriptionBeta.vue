@@ -101,6 +101,9 @@ const domainExpiryDate = computed(() => {
     year: 'numeric',
   });
 });
+
+const hasCustomDomainOrder = computed(() => !!props.customDomain);
+const customDomainStatus = computed(() => props.customDomain?.status ?? null);
 </script>
 
 <template>
@@ -442,13 +445,18 @@ const domainExpiryDate = computed(() => {
                 </div>
                 <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
                   <p class="text-slate-400 mb-1">Statut</p>
-                  <p class="text-emerald-400 font-semibold">Actif</p>
+                  <p class="text-emerald-400 font-semibold">
+                    {{ customDomainStatus === 'active' ? 'Actif' : 'Acheté - en attente d’installation' }}
+                  </p>
                 </div>
               </div>
             </div>
 
             <!-- No custom domain - Promotion -->
             <div v-else class="space-y-4">
+              <div class="rounded-xl border border-amber-500/40 bg-amber-500/5 text-amber-100 text-xs p-4">
+                Notre équipe vous recontactera dans les 48h ouvrables afin d'installer le nouveau nom de domaine.
+              </div>
               <div class="rounded-xl border border-slate-700/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4">
                 <div class="flex items-start gap-3">
                   <Sparkles class="h-5 w-5 text-purple-400 flex-shrink-0" />

@@ -27,6 +27,10 @@ const props = defineProps({
     coach: Object,
     stats: Object,
     recentTransformations: Array,
+    customDomain: {
+        type: Object,
+        default: null,
+    },
     isAdmin: {
         type: Boolean,
         default: false,
@@ -55,6 +59,8 @@ const coachSiteUrl = computed(() => {
 });
 
 const safeStats = computed(() => props.stats || {});
+const hasCustomDomainOrder = computed(() => !!props.customDomain);
+const customDomainStatus = computed(() => props.customDomain?.status ?? null);
 
 const goCategory = (id) => {
     activeCategory.value = id;
@@ -513,8 +519,15 @@ const requestCustomContact = () => {
                                         <div class="flex-1 min-w-0">
                                             <p class="text-[11px] text-slate-300 font-medium">Nom de domaine personnalisé</p>
                                             <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
+                                            <p
+                                                v-if="hasCustomDomainOrder"
+                                                class="text-[10px] text-emerald-300 font-semibold mt-1"
+                                            >
+                                                {{ customDomainStatus === 'active' ? 'Installé' : 'Acheté - en cours' }}
+                                            </p>
                                         </div>
                                         <button
+                                            v-if="!hasCustomDomainOrder"
                                             type="button"
                                             @click="buyCustomDomain"
                                             class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-3 py-1.5 text-[11px] font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
@@ -522,6 +535,12 @@ const requestCustomContact = () => {
                                             <CreditCard class="h-3 w-3" />
                                             Acheter
                                         </button>
+                                        <span
+                                            v-else
+                                            class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 px-3 py-1.5 text-[11px] font-semibold text-emerald-200 whitespace-nowrap"
+                                        >
+                                            Acheté
+                                        </span>
                                     </div>
                                     
                                     <!-- Custom Services -->

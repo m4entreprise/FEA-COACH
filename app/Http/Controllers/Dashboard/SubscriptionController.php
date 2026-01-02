@@ -68,7 +68,7 @@ class SubscriptionController extends Controller
         
         if ($coach) {
             $domain = $coach->customDomain;
-            if ($domain && $domain->status === 'active') {
+            if ($domain) {
                 $customDomain = [
                     'domain' => $domain->domain,
                     'status' => $domain->status,

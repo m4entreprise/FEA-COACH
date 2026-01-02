@@ -37,6 +37,8 @@ class DashboardController extends Controller
             ]);
         }
 
+        $customDomain = $coach->customDomain;
+
         // Calculate stats
         $profileData = $this->calculateProfileCompletion($coach);
         
@@ -100,6 +102,11 @@ class DashboardController extends Controller
             'stats' => $stats,
             'recentTransformations' => $recentTransformations,
             'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
+            'customDomain' => $customDomain ? [
+                'domain' => $customDomain->domain,
+                'status' => $customDomain->status,
+                'purchased_at' => $customDomain->purchased_at,
+            ] : null,
         ]);
     }
 

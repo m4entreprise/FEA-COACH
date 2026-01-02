@@ -75,13 +75,33 @@ class PaymentsController extends Controller
         $coach = $user->coach;
 
         if (!$user->has_payments_module) {
+            \Log::warning('Tentative de connexion Stripe sans module activé', ['user_id' => $user->id]);
             return back()->with('error', 'Vous devez d\'abord activer le module paiements');
         }
 
         try {
+            \Log::info('Début connexion Stripe', [
+                'user_id' => $user->id,
+                'coach_id' => $coach->id,
+                'stripe_key_configured' => !empty(config('stripe.secret_key')),
+            ]);
+
             $accountLink = $this->stripeService->getOrCreateAccountLink($coach);
+            
+            \Log::info('Lien Stripe généré avec succès', [
+                'coach_id' => $coach->id,
+                'url_length' => strlen($accountLink),
+            ]);
+
             return redirect($accountLink);
         } catch (\Exception $e) {
+            \Log::error('Erreur connexion Stripe', [
+                'user_id' => $user->id,
+                'coach_id' => $coach->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            
             return back()->with('error', 'Erreur lors de la connexion à Stripe: ' . $e->getMessage());
         }
     }

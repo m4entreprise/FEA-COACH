@@ -246,15 +246,16 @@ Les coachs qui ont déjà des mentions légales manuelles :
 
 ## ⚖️ Validation juridique
 
-**Statut** : ✅ **Validé par juriste** (2 janvier 2026)
+**Statut** : ✅ **VALIDÉ À 100% par juriste** (2 janvier 2026)
 
-**5 corrections critiques appliquées** :
+**6 corrections critiques appliquées** :
 
 1. **Clause de compétence** : Distinction B2C (tribunal du consommateur) vs B2B (tribunal du coach)
 2. **Recouvrement de dettes** : Ajout du délai légal de 14 jours après le rappel gratuit
 3. **Force majeure** : Élargie au-delà du seul certificat médical (décès, panne, etc.)
 4. **Droit de rétractation numérique** : Précision sur la nécessité d'une case à cocher au checkout
 5. **Responsabilité corporelle** : Mention explicite de l'exception en cas de faute lourde du coach
+6. **Abonnements récurrents** : Article 3 bis ajouté sur la tacite reconduction et les modalités de résiliation
 
 **Fichier modifié** : `config/legal_templates.php`  
 **Rapport complet** : Voir `LEGAL_VALIDATION_REPORT.md`

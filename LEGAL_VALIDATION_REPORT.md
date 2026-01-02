@@ -184,6 +184,50 @@ vols ou pertes d'effets personnels du Client durant les séances."
 
 ---
 
+## 🔴 6. Article sur les abonnements récurrents (MANQUANT → AJOUTÉ)
+
+### ❌ Problème identifié
+
+**Lacune juridique :**
+- L'option "Abonnements récurrents" était cochée dans le générateur
+- Aucun article n'expliquait les modalités de résiliation
+- En droit belge, la tacite reconduction est strictement encadrée
+
+**Risque juridique :**
+- Le client peut arrêter de payer sans préavis
+- Le renouvellement peut être jugé abusif
+- Impossibilité d'opposer la reconduction tacite
+
+### ✅ Correction appliquée
+
+**Nouvel article 3 bis ajouté :**
+```php
+'article_abonnements' => "Abonnements sans engagement (mensuels) : L'abonnement est 
+conclu pour une durée indéterminée avec paiement mensuel par tacite reconduction. 
+Le Client peut y mettre fin à tout moment via son espace client ou par email. 
+La résiliation prendra effet à la fin de la période mensuelle en cours (tout 
+mois entamé est dû).
+
+Abonnements avec engagement (ex: 3 mois, 6 mois) : L'abonnement est conclu pour 
+une durée ferme. À l'issue de cette période, si le contrat prévoit une reconduction 
+tacite, celle-ci se transforme en contrat à durée indéterminée. Le Client pourra 
+alors résilier le contrat à tout moment sans indemnité, moyennant un préavis de 
+maximum un mois."
+```
+
+**Intégration conditionnelle :**
+- Article affiché uniquement si `has_subscriptions = true`
+- Position : Article 3 bis (après Prix et paiement)
+- Titre : "Durée et Résiliation des abonnements"
+
+**Impact :**
+- ✅ Conformité avec l'encadrement belge de la tacite reconduction
+- ✅ Distinction claire mensuels vs engagement
+- ✅ Modalités de résiliation explicites
+- ✅ Transformation en durée indéterminée après engagement
+
+---
+
 ## 📊 Synthèse de conformité
 
 | Critère juridique | Avant | Après |
@@ -193,6 +237,7 @@ vols ou pertes d'effets personnels du Client durant les séances."
 | **Force majeure** | ⚠️ Restrictif | ✅ Élargi |
 | **Rétractation numérique** | ⚠️ Incomplet | ✅ Précisé* |
 | **Responsabilité faute lourde** | ⚠️ Absente | ✅ Mentionnée |
+| **Article abonnements récurrents** | ❌ Absent | ✅ Ajouté |
 
 **Légende :**
 - ✅ Pleinement conforme
@@ -299,6 +344,28 @@ Ajouter une case à cocher obligatoire :
 
 ---
 
-**Conclusion** : Les CGV générées sont maintenant **juridiquement conformes** au droit belge selon l'analyse du juriste. Le système peut être déployé en production avec les templates corrigés.
+---
 
-**⚠️ Point d'attention** : Si la plateforme propose la vente de produits numériques, l'implémentation de la case à cocher spécifique au checkout est **obligatoire** pour que la renonciation au droit de rétractation soit valable.
+## 🎉 VALIDATION FINALE À 100%
+
+**Statut** : ✅ **VALIDÉ À 100% PAR LE JURISTE** (2 janvier 2026)
+
+### Bilan final sur le fond
+
+✅ **Dettes & Recouvrement** : PARFAIT. Respect du délai de carence de 14 jours (Livre XIX). Inattaquable.
+
+✅ **Rétractation Numérique** : PARFAIT. Mention de la case à cocher (Art VI.53 CDE) protège contre les remboursements abusifs.
+
+✅ **Clause de Réciprocité (Annulation)** : PARFAIT. Évite la qualification de clause abusive.
+
+✅ **Responsabilité & Assurance** : PARFAIT. Distinction sur la "faute lourde" conforme à la jurisprudence.
+
+✅ **Compétence Tribunal** : PARFAIT. Distinction Liège (B2B) / Domicile Client (B2C) est la seule formule légale.
+
+✅ **Abonnements Récurrents** : PARFAIT. Tacite reconduction et résiliation conformes au droit belge.
+
+### Conclusion juridique
+
+Les CGV générées sont maintenant **juridiquement conformes au droit belge à 100%** selon l'analyse approfondie du juriste. Le système peut être déployé en production avec les templates validés.
+
+**⚠️ Point d'attention technique** : Si la plateforme propose la vente de produits numériques, l'implémentation de la case à cocher spécifique au checkout est **obligatoire** pour que la renonciation au droit de rétractation soit valable (action technique, pas juridique).

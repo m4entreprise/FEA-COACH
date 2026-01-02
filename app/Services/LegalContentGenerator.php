@@ -83,6 +83,16 @@ class LegalContentGenerator
         
         $blocks[] = $this->renderArticle($articleNumber, 'Prix et paiement', $prixContent);
 
+        // Article Abonnements (Conditionnel)
+        if ($data->has_subscriptions) {
+            $articleNumber = ($data->is_presentiel || $data->is_online) ? '3 bis' : '2 bis';
+            $blocks[] = $this->renderArticle(
+                $articleNumber,
+                'Durée et Résiliation des abonnements',
+                $this->renderBlock('cgv.article_abonnements', $data)
+            );
+        }
+
         // Article Droit de rétractation
         $articleNumber = ($data->is_presentiel || $data->is_online) ? '4' : '3';
         $retractContent = $this->renderBlock('cgv.article_retractation_intro', $data);

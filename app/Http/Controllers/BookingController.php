@@ -41,9 +41,10 @@ class BookingController extends Controller
         ]);
     }
 
-    public function availableSlots(Request $request, ServiceType $service)
+    public function availableSlots(Request $request, $service)
     {
         $coach = app(Coach::class);
+        $service = ServiceType::findOrFail($service);
         
         $validated = $request->validate([
             'date' => 'required|date|after_or_equal:today',
@@ -57,9 +58,10 @@ class BookingController extends Controller
         ]);
     }
 
-    public function create(Request $request, ServiceType $service)
+    public function create(Request $request, $service)
     {
         $coach = app(Coach::class);
+        $service = ServiceType::findOrFail($service);
         
         $validated = $request->validate([
             'date' => 'required|date|after_or_equal:today',
@@ -87,9 +89,10 @@ class BookingController extends Controller
         ]);
     }
 
-    public function store(Request $request, ServiceType $service)
+    public function store(Request $request, $service)
     {
         $coach = app(Coach::class);
+        $service = ServiceType::findOrFail($service);
         
         $validated = $request->validate([
             'booking_date' => 'required|date|after_or_equal:today',

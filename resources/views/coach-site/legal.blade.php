@@ -48,9 +48,9 @@
                 Mentions Légales & CGV
             </h1>
 
-            @if($coach->legal_terms)
-                <div class="prose prose-lg max-w-none whitespace-pre-line text-gray-800 leading-relaxed">
-                    {{ $coach->legal_terms }}
+            @if(!empty($legalHtml))
+                <div class="legal-container prose prose-lg max-w-none text-gray-800">
+                    {!! $legalHtml !!}
                 </div>
             @else
                 <div class="bg-gray-100 border border-gray-300 rounded-lg p-6 text-center">

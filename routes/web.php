@@ -243,6 +243,8 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     // Legal terms management
     Route::get('/dashboard/legal', [LegalController::class, 'edit'])->name('dashboard.legal');
     Route::post('/dashboard/legal', [LegalController::class, 'update'])->name('dashboard.legal.update');
+    Route::post('/api/legal/generate-preview', [LegalController::class, 'generatePreview'])->name('api.legal.generate-preview');
+    Route::post('/dashboard/legal/request-custom', [LegalController::class, 'requestCustomLegal'])->name('dashboard.legal.request-custom');
 
     // Subscription management
     Route::get('/dashboard/subscription', [SubscriptionController::class, 'index'])->name('dashboard.subscription');

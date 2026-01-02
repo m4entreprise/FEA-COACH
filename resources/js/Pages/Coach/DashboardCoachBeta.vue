@@ -62,7 +62,20 @@ const goCategory = (id) => {
 };
 
 const buyCustomDomain = () => {
-    router.post(route('dashboard.subscription.custom-domain'));
+    // Create a form and submit it (bypass Inertia for external redirects)
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = route('dashboard.subscription.custom-domain');
+    
+    // Add CSRF token
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = '_token';
+    csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
+    form.appendChild(csrfInput);
+    
+    document.body.appendChild(form);
+    form.submit();
 };
 
 const requestCustomContact = () => {

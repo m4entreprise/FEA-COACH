@@ -22,7 +22,7 @@ const connectStripe = () => {
 };
 
 const openStripeDashboard = () => {
-    connectForm.post(route('dashboard.payments.dashboard'));
+    window.location.href = route('dashboard.payments.dashboard');
 };
 </script>
 

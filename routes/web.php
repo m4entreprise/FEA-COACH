@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminCoachController;
+use App\Http\Controllers\Admin\ContactRequestController;
 use App\Http\Controllers\Admin\CustomDomainController;
 use App\Http\Controllers\Admin\PromoCodeRequestController;
 use App\Http\Controllers\Admin\SupportTicketController as AdminSupportController;

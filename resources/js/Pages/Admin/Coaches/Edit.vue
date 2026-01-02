@@ -19,7 +19,6 @@ const form = useForm({
     color_secondary: props.coach.color_secondary,
     is_active: props.coach.is_active,
     is_fea_graduate: props.coach.is_fea_graduate,
-    trial_ends_at: props.coach.trial_ends_at,
 });
 
 const submit = () => {
@@ -107,7 +106,7 @@ const submit = () => {
                                         placeholder="nom-coach"
                                     />
                                     <span class="inline-flex items-center rounded-r-md border border-l-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400">
-                                        .kineseducation.academy
+                                        .unicoach.app
                                     </span>
                                 </div>
                                 <InputError class="mt-2" :message="form.errors.subdomain" />
@@ -183,19 +182,20 @@ const submit = () => {
                                 </label>
                             </div>
 
-                            <!-- Trial End Date -->
+                            <!-- Trial Information (read-only) -->
                             <div>
-                                <InputLabel for="trial_ends_at" value="Fin période d'essai (optionnel)" />
-                                <TextInput
-                                    id="trial_ends_at"
-                                    v-model="form.trial_ends_at"
-                                    type="date"
-                                    class="mt-1 block w-full"
-                                />
-                                <InputError class="mt-2" :message="form.errors.trial_ends_at" />
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                    Date de fin de la période d'essai gratuite (pour les comptes FEA)
-                                </p>
+                                <InputLabel value="Période d'essai Lemon Squeezy" />
+                                <div class="mt-2 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm dark:border-gray-700 dark:bg-gray-900/40">
+                                    <p class="text-gray-900 dark:text-gray-100">
+                                        {{ coach.trial_display ?? 'Non renseigné' }}
+                                    </p>
+                                    <p v-if="coach.trial_display" class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                        {{ coach.trial_expired ? 'Essai expiré' : `Encore ${coach.trial_days_left ?? 0} jour${(coach.trial_days_left ?? 0) > 1 ? 's' : ''}` }}
+                                    </p>
+                                    <p class="mt-2 text-xs text-orange-600 dark:text-orange-400 font-medium">
+                                        ⚠️ Cette date est pilotée par Lemon Squeezy. Toute modification doit être faite depuis leur interface.
+                                    </p>
+                                </div>
                             </div>
                         </div>
 

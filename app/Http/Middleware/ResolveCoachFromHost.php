@@ -27,11 +27,18 @@ class ResolveCoachFromHost
             // Find the coach by slug or subdomain (don't filter by is_active yet)
             $coach = Coach::where('slug', $slug)
                 ->orWhere('subdomain', $slug)
-                ->with('user')
                 ->firstOrFail();
             
-            // Check if subscription is active
+            // Force reload user to avoid stale cache
+            $coach->load('user');
             $user = $coach->user;
+            
+            // Refresh user to get latest data from database
+            if ($user) {
+                $user->refresh();
+            }
+            
+            // Check if subscription is active
             $isSubscriptionActive = $this->isSubscriptionActive($user);
             
             // If subscription is inactive, show unavailable page

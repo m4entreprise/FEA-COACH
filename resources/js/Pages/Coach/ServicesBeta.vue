@@ -28,6 +28,7 @@ const form = useForm({
     description: '',
     duration_minutes: 60,
     price: '',
+    currency: 'EUR',
     is_active: true,
 });
 
@@ -44,6 +45,7 @@ const openEditModal = (service) => {
     form.description = service.description || '';
     form.duration_minutes = service.duration_minutes;
     form.price = service.price;
+    form.currency = service.currency || 'EUR';
     form.is_active = service.is_active;
     showModal.value = true;
 };

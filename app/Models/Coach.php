@@ -17,6 +17,7 @@ class Coach extends Model implements HasMedia
         'name',
         'slug',
         'subdomain',
+        'desired_custom_domain',
         'site_layout',
         'color_primary',
         'color_secondary',
@@ -51,12 +52,14 @@ class Coach extends Model implements HasMedia
         'youtube_url',
         'tiktok_url',
         'is_active',
+        'custom_contact_locked_until',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'satisfaction_rate' => 'integer',
         'average_rating' => 'decimal:1',
+        'custom_contact_locked_until' => 'datetime',
     ];
 
     /**

@@ -196,6 +196,17 @@ class SubscriptionController extends Controller
                 return back()->with('error', 'Aucun profil coach associé.');
             }
 
+            $validated = $request->validate([
+                'desired_domain' => ['nullable', 'string', 'max:255'],
+            ]);
+
+            $desiredDomain = $validated['desired_domain'] ?? null;
+
+            if ($desiredDomain) {
+                $coach->desired_custom_domain = $desiredDomain;
+                $coach->save();
+            }
+
             // Get the custom domain variant ID from config
             $variantId = (int) config('lemonsqueezy.variant_custom_domain');
             
@@ -214,6 +225,7 @@ class SubscriptionController extends Controller
                 'coach_slug' => $coach->slug,
                 'product_type' => 'custom_domain',
                 'source' => 'dashboard_premium',
+                'desired_domain' => $desiredDomain ?? '',
             ], $variantId);
 
             $checkoutUrl = $checkoutSession['data']['attributes']['url'] ?? null;

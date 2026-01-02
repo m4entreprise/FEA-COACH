@@ -22,6 +22,7 @@ class ContactRequestController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
+                'service_type' => $request->service_type,
                 'message' => $request->message,
                 'is_read' => $request->is_read,
                 'coach_id' => $request->coach_id,

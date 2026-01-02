@@ -11,6 +11,7 @@ class CustomDomain extends Model
         'coach_id',
         'domain',
         'status',
+        'requested_domain',
         'purchased_at',
         'expires_at',
         'notes',

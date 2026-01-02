@@ -88,16 +88,34 @@ class ContactController extends Controller
                 ->with('error', 'Aucun profil coach associé.');
         }
 
-        // Create a support ticket or send notification to admin
-        // For now, we'll use the ContactMessage model to store the request
+        // Empêche les demandes trop fréquentes : une demande tous les 7 jours
+        if ($coach->custom_contact_locked_until && now()->lessThan($coach->custom_contact_locked_until)) {
+            return redirect()->back()
+                ->with('info', 'Vous avez déjà envoyé une demande récemment. Notre équipe vous recontactera sous peu.');
+        }
+
+        $validated = $request->validate([
+            'service_types' => ['required', 'array', 'min:1'],
+            'service_types.*' => ['string', 'max:50'],
+            'message' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        $serviceType = implode(', ', $validated['service_types']);
+
+        // Stocke la demande détaillée pour le panel admin
         ContactMessage::create([
             'coach_id' => $coach->id,
             'name' => $user->name,
             'email' => $user->email,
             'phone' => $coach->phone ?? '',
-            'message' => 'Demande de contact pour services premium (nom de domaine personnalisé, site web sur mesure, logo, gestion média).',
+            'service_type' => $serviceType,
+            'message' => $validated['message'] ?? '',
             'is_read' => false,
         ]);
+
+        // Marque le coach comme "contacté" pendant 7 jours
+        $coach->custom_contact_locked_until = now()->addDays(7);
+        $coach->save();
 
         return redirect()->back()
             ->with('success', 'Votre demande a été envoyée ! Nous vous recontacterons rapidement.');

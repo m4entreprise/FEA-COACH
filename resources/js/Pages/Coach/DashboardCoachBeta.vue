@@ -3,6 +3,7 @@ import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
 import { Toaster, toast } from 'vue-sonner';
 import { useAutoAnimate } from '@formkit/auto-animate/vue';
+import Modal from '@/Components/Modal.vue';
 import {
     LayoutDashboard,
     Globe2,
@@ -63,12 +64,21 @@ const safeStats = computed(() => props.stats || {});
 const hasCustomDomainOrder = computed(() => !!props.customDomain);
 const customDomainStatus = computed(() => props.customDomain?.status ?? null);
 
+const showDomainModal = ref(false);
+const desiredDomain = ref('');
+
+const showContactModal = ref(false);
+const contactWebsite = ref(false);
+const contactBranding = ref(false);
+const contactSocial = ref(false);
+const contactMessage = ref('');
+
 const goCategory = (id) => {
     activeCategory.value = id;
     sidebarOpen.value = false;
 };
 
-const buyCustomDomain = () => {
+const buyCustomDomain = (requestedDomain = null) => {
     // Create a form and submit it (bypass Inertia for external redirects)
     const form = document.createElement('form');
     form.method = 'POST';
@@ -80,13 +90,63 @@ const buyCustomDomain = () => {
     csrfInput.name = '_token';
     csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
     form.appendChild(csrfInput);
+
+    if (requestedDomain) {
+        const domainInput = document.createElement('input');
+        domainInput.type = 'hidden';
+        domainInput.name = 'desired_domain';
+        domainInput.value = requestedDomain;
+        form.appendChild(domainInput);
+    }
     
     document.body.appendChild(form);
     form.submit();
 };
 
-const requestCustomContact = () => {
-    router.post(route('dashboard.contact.custom'));
+const openDomainModal = () => {
+    desiredDomain.value = '';
+    showDomainModal.value = true;
+};
+
+const submitDomainPurchase = () => {
+    const value = desiredDomain.value.trim();
+    if (!value) {
+        alert('Veuillez indiquer un nom de domaine souhaité.');
+        return;
+    }
+
+    showDomainModal.value = false;
+    buyCustomDomain(value);
+};
+
+const openContactModal = () => {
+    contactWebsite.value = false;
+    contactBranding.value = false;
+    contactSocial.value = false;
+    contactMessage.value = '';
+    showContactModal.value = true;
+};
+
+const submitContactRequest = () => {
+    const serviceTypes = [];
+    if (contactWebsite.value) serviceTypes.push('Site web');
+    if (contactBranding.value) serviceTypes.push('Branding');
+    if (contactSocial.value) serviceTypes.push('Réseaux sociaux');
+
+    if (!serviceTypes.length) {
+        alert('Sélectionnez au moins un service.');
+        return;
+    }
+
+    router.post(route('dashboard.contact.custom'), {
+        service_types: serviceTypes,
+        message: contactMessage.value || null,
+    }, {
+        preserveScroll: true,
+        onFinish: () => {
+            showContactModal.value = false;
+        },
+    });
 };
 
 const logout = () => {
@@ -530,7 +590,7 @@ const logout = () => {
                                         <button
                                             v-if="!hasCustomDomainOrder"
                                             type="button"
-                                            @click="buyCustomDomain"
+                                            @click="openDomainModal"
                                             class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-3 py-1.5 text-[11px] font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
                                         >
                                             <CreditCard class="h-3 w-3" />
@@ -552,7 +612,7 @@ const logout = () => {
                                         </div>
                                         <button
                                             type="button"
-                                            @click="requestCustomContact"
+                                            @click="openContactModal"
                                             class="inline-flex items-center gap-1.5 rounded-lg bg-slate-700/40 border border-slate-600/40 px-3 py-1.5 text-[11px] font-medium text-slate-100 hover:bg-slate-700/60 hover:border-slate-600/60 transition-colors whitespace-nowrap"
                                         >
                                             <Mail class="h-3 w-3" />
@@ -850,6 +910,109 @@ const logout = () => {
         </div>
 
         <Toaster position="top-right" rich-colors />
+
+        <!-- Modal: custom domain purchase -->
+        <Modal :show="showDomainModal" @close="showDomainModal = false">
+            <div class="p-6 bg-slate-900 text-slate-50">
+                <h2 class="text-lg font-semibold mb-2">Nom de domaine souhaité</h2>
+                <p class="text-xs text-slate-400 mb-4">
+                    Indiquez le nom de domaine que vous aimeriez utiliser pour votre site.
+                    Par exemple : <span class="text-purple-300">www.moncoaching.com</span>
+                </p>
+
+                <div class="space-y-2">
+                    <label class="text-xs text-slate-300">Nom de domaine préféré</label>
+                    <input
+                        v-model="desiredDomain"
+                        type="text"
+                        placeholder="exemple : www.moncoaching.com"
+                        class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 focus:border-purple-500 focus:ring-purple-500"
+                    />
+                </div>
+
+                <div class="mt-6 flex justify-end gap-3">
+                    <button
+                        type="button"
+                        @click="showDomainModal = false"
+                        class="inline-flex items-center rounded-lg border border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-800"
+                    >
+                        Annuler
+                    </button>
+                    <button
+                        type="button"
+                        @click="submitDomainPurchase"
+                        class="inline-flex items-center rounded-lg bg-purple-500 px-3 py-1.5 text-xs font-semibold text-slate-950 hover:bg-purple-400"
+                    >
+                        Continuer vers le paiement
+                    </button>
+                </div>
+            </div>
+        </Modal>
+
+        <!-- Modal: premium services contact -->
+        <Modal :show="showContactModal" @close="showContactModal = false">
+            <div class="p-6 bg-slate-900 text-slate-50">
+                <h2 class="text-lg font-semibold mb-2">Demande de services premium</h2>
+                <p class="text-xs text-slate-400 mb-4">
+                    Sélectionnez les services qui vous intéressent et décrivez brièvement votre projet.
+                </p>
+
+                <div class="space-y-3 mb-4 text-xs">
+                    <p class="font-medium text-slate-300">Services souhaités</p>
+                    <label class="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            v-model="contactWebsite"
+                            class="h-3.5 w-3.5 rounded border-slate-600 bg-slate-900"
+                        />
+                        <span>Site web</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            v-model="contactBranding"
+                            class="h-3.5 w-3.5 rounded border-slate-600 bg-slate-900"
+                        />
+                        <span>Branding</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            v-model="contactSocial"
+                            class="h-3.5 w-3.5 rounded border-slate-600 bg-slate-900"
+                        />
+                        <span>Réseaux sociaux</span>
+                    </label>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-xs font-medium text-slate-300">Votre message (optionnel)</p>
+                    <textarea
+                        v-model="contactMessage"
+                        rows="4"
+                        class="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 focus:border-purple-500 focus:ring-purple-500"
+                        placeholder="Expliquez brièvement votre besoin..."
+                    />
+                </div>
+
+                <div class="mt-6 flex justify-end gap-3">
+                    <button
+                        type="button"
+                        @click="showContactModal = false"
+                        class="inline-flex items-center rounded-lg border border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-800"
+                    >
+                        Annuler
+                    </button>
+                    <button
+                        type="button"
+                        @click="submitContactRequest"
+                        class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-900 hover:bg-white"
+                    >
+                        Envoyer la demande
+                    </button>
+                </div>
+            </div>
+        </Modal>
     </div>
 </template>
 

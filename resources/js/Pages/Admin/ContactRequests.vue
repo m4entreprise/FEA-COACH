@@ -26,7 +26,12 @@ const getStatusBadgeColor = (isRead) => {
         : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
 };
 
-const isCustomServiceRequest = (message) => {
+const isCustomServiceRequest = (request) => {
+    if (request.service_type && request.service_type.length) {
+        return true;
+    }
+
+    const message = request.message || '';
     return message.includes('services premium') || message.includes('nom de domaine') || message.includes('site web sur mesure');
 };
 </script>
@@ -78,14 +83,14 @@ const isCustomServiceRequest = (message) => {
                                                 {{ request.is_read ? 'Lu' : 'Non lu' }}
                                             </span>
                                             <span
-                                                v-if="isCustomServiceRequest(request.message)"
+                                                v-if="isCustomServiceRequest(request)"
                                                 class="inline-flex rounded-full bg-purple-100 px-2 py-1 text-xs font-semibold text-purple-800 dark:bg-purple-900 dark:text-purple-200"
                                             >
                                                 Services Premium
                                             </span>
                                         </div>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-3">
                                             <div>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">Contact</p>
                                                 <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ request.name }}</p>
@@ -102,6 +107,13 @@ const isCustomServiceRequest = (message) => {
                                             <div>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">Date</p>
                                                 <p class="text-sm text-gray-900 dark:text-gray-100">{{ request.created_at }}</p>
+                                            </div>
+
+                                            <div>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">Services</p>
+                                                <p class="text-sm text-gray-900 dark:text-gray-100">
+                                                    {{ request.service_type || 'N/A' }}
+                                                </p>
                                             </div>
                                         </div>
 

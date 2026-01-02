@@ -1,6 +1,7 @@
 <script setup>
 import { Head, router } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import Modal from '@/Components/Modal.vue';
 import { CreditCard, Calendar, Check, ExternalLink, AlertCircle, Sparkles, Crown, Globe } from 'lucide-vue-next';
 import axios from 'axios';
 
@@ -78,7 +79,10 @@ const handleManageSubscription = async () => {
   }
 };
 
-const buyCustomDomain = () => {
+const showDomainModal = ref(false);
+const desiredDomain = ref('');
+
+const buyCustomDomain = (requestedDomain = null) => {
   const form = document.createElement('form');
   form.method = 'POST';
   form.action = route('dashboard.subscription.custom-domain');
@@ -88,9 +92,33 @@ const buyCustomDomain = () => {
   csrfInput.name = '_token';
   csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
   form.appendChild(csrfInput);
+
+  if (requestedDomain) {
+    const domainInput = document.createElement('input');
+    domainInput.type = 'hidden';
+    domainInput.name = 'desired_domain';
+    domainInput.value = requestedDomain;
+    form.appendChild(domainInput);
+  }
   
   document.body.appendChild(form);
   form.submit();
+};
+
+const openDomainModal = () => {
+  desiredDomain.value = '';
+  showDomainModal.value = true;
+};
+
+const submitDomainPurchase = () => {
+  const value = desiredDomain.value.trim();
+  if (!value) {
+    alert("Veuillez indiquer un nom de domaine souhaité.");
+    return;
+  }
+
+  showDomainModal.value = false;
+  buyCustomDomain(value);
 };
 
 const domainExpiryDate = computed(() => {
@@ -477,7 +505,7 @@ const customDomainStatus = computed(() => props.customDomain?.status ?? null);
                       </div>
                       <button
                         type="button"
-                        @click="buyCustomDomain"
+                        @click="openDomainModal"
                         class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-4 py-2 text-xs font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
                       >
                         <CreditCard class="h-3.5 w-3.5" />
@@ -492,6 +520,44 @@ const customDomainStatus = computed(() => props.customDomain?.status ?? null);
         </section>
       </div>
     </main>
+
+    <!-- Modal: custom domain purchase -->
+    <Modal :show="showDomainModal" @close="showDomainModal = false">
+      <div class="p-6 bg-slate-900 text-slate-50">
+        <h2 class="text-lg font-semibold mb-2">Nom de domaine souhaité</h2>
+        <p class="text-xs text-slate-400 mb-4">
+          Indiquez le nom de domaine que vous aimeriez utiliser pour votre site.
+          Par exemple : <span class="text-purple-300">www.moncoaching.com</span>
+        </p>
+
+        <div class="space-y-2">
+          <label class="text-xs text-slate-300">Nom de domaine préféré</label>
+          <input
+            v-model="desiredDomain"
+            type="text"
+            placeholder="exemple : www.moncoaching.com"
+            class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 focus:border-purple-500 focus:ring-purple-500"
+          />
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <button
+            type="button"
+            @click="showDomainModal = false"
+            class="inline-flex items-center rounded-lg border border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-800"
+          >
+            Annuler
+          </button>
+          <button
+            type="button"
+            @click="submitDomainPurchase"
+            class="inline-flex items-center rounded-lg bg-purple-500 px-3 py-1.5 text-xs font-semibold text-slate-950 hover:bg-purple-400"
+          >
+            Continuer vers le paiement
+          </button>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 

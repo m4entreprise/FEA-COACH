@@ -84,7 +84,7 @@ class LegalContentGenerator
         $blocks[] = $this->renderArticle($articleNumber, 'Prix et paiement', $prixContent);
 
         // Article Abonnements (Conditionnel)
-        if ($data->has_subscriptions) {
+        if ($data->has_subscription) {
             $articleNumber = ($data->is_presentiel || $data->is_online) ? '3 bis' : '2 bis';
             $blocks[] = $this->renderArticle(
                 $articleNumber,

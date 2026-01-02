@@ -149,6 +149,8 @@ class AdminCoachController extends Controller
                 'user_email' => $coach->user->email,
                 'user_name' => $coach->user->name,
                 'is_fea_graduate' => $coach->user->is_fea_graduate ?? false,
+                'has_payments_module' => $coach->user->has_payments_module ?? false,
+                'payments_module_activated_at' => $coach->user->payments_module_activated_at?->format('d/m/Y H:i') ?? null,
                 'trial_ends_at' => $trialEndsAt?->format('Y-m-d') ?? null,
                 'trial_display' => $trialEndsAt?->format('d/m/Y') ?? null,
                 'trial_expired' => $trialEndsAt?->isPast() ?? null,
@@ -180,6 +182,7 @@ class AdminCoachController extends Controller
             'is_active' => ['boolean'],
             'password' => ['nullable', 'string', 'min:8'],
             'is_fea_graduate' => ['boolean'],
+            'has_payments_module' => ['boolean'],
         ]);
 
         // Update user account
@@ -187,7 +190,17 @@ class AdminCoachController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'is_fea_graduate' => $validated['is_fea_graduate'] ?? false,
+            'has_payments_module' => $validated['has_payments_module'] ?? false,
         ];
+
+        // Si on active le module paiements et qu'il n'était pas activé avant
+        if (($validated['has_payments_module'] ?? false) && !$coach->user->has_payments_module) {
+            $userUpdate['payments_module_activated_at'] = now();
+        }
+        // Si on désactive le module paiements
+        if (!($validated['has_payments_module'] ?? false) && $coach->user->has_payments_module) {
+            $userUpdate['payments_module_activated_at'] = null;
+        }
 
         if (!empty($validated['password'])) {
             $userUpdate['password'] = Hash::make($validated['password']);

@@ -18,6 +18,12 @@ use App\Http\Controllers\Dashboard\ClientDocumentController;
 use App\Http\Controllers\Dashboard\LegalController;
 use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\Dashboard\SupportTicketController as DashboardSupportController;
+use App\Http\Controllers\Dashboard\PaymentsController;
+use App\Http\Controllers\Dashboard\ServicesController;
+use App\Http\Controllers\Dashboard\AvailabilityController;
+use App\Http\Controllers\Dashboard\BookingsController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\LemonSqueezyWebhookController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
@@ -39,7 +45,19 @@ Route::domain('{coach_slug}.' . config('app.domain', 'localhost'))
         Route::get('/', [CoachSiteController::class, 'show'])->name('coach.site');
         Route::post('/contact', [CoachSiteController::class, 'contact'])->name('coach.contact');
         Route::get('/mentions-legales', [CoachSiteController::class, 'legal'])->name('coach.legal');
+        
+        // Public booking routes
+        Route::get('/reserver', [BookingController::class, 'show'])->name('coach.booking.show');
+        Route::get('/reserver/{service}/creneaux', [BookingController::class, 'availableSlots'])->name('coach.booking.slots');
+        Route::get('/reserver/{service}/nouveau', [BookingController::class, 'create'])->name('coach.booking.create');
+        Route::post('/reserver/{service}', [BookingController::class, 'store'])->name('coach.booking.store');
     });
+
+// Public booking confirmation/cancel routes
+Route::middleware('web')->group(function () {
+    Route::get('/booking/{booking}/success', [BookingController::class, 'success'])->name('booking.success');
+    Route::get('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+});
 
 // Public share links for client documents
 Route::middleware('web')
@@ -253,6 +271,36 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/subscription/cancel', [SubscriptionController::class, 'cancelSubscription'])->name('dashboard.subscription.cancel');
     Route::post('/dashboard/subscription/custom-domain', [SubscriptionController::class, 'checkoutCustomDomain'])->name('dashboard.subscription.custom-domain');
 
+    // Payments module (Stripe Connect)
+    Route::get('/dashboard/payments', [Dashboard\PaymentsController::class, 'index'])->name('dashboard.payments.index');
+    Route::post('/dashboard/payments/activate', [Dashboard\PaymentsController::class, 'activateModule'])->name('dashboard.payments.activate');
+    Route::post('/dashboard/payments/connect', [Dashboard\PaymentsController::class, 'connectStripe'])->name('dashboard.payments.connect');
+    Route::get('/dashboard/payments/stripe/return', [Dashboard\PaymentsController::class, 'stripeReturn'])->name('dashboard.payments.stripe.return');
+    Route::get('/dashboard/payments/stripe/refresh', [Dashboard\PaymentsController::class, 'stripeRefresh'])->name('dashboard.payments.stripe.refresh');
+    Route::post('/dashboard/payments/disconnect', [Dashboard\PaymentsController::class, 'disconnect'])->name('dashboard.payments.disconnect');
+    Route::post('/dashboard/payments/dashboard', [Dashboard\PaymentsController::class, 'dashboard'])->name('dashboard.payments.dashboard');
+
+    // Service types management
+    Route::get('/dashboard/services', [Dashboard\ServicesController::class, 'index'])->name('dashboard.services.index');
+    Route::post('/dashboard/services', [Dashboard\ServicesController::class, 'store'])->name('dashboard.services.store');
+    Route::patch('/dashboard/services/{service}', [Dashboard\ServicesController::class, 'update'])->name('dashboard.services.update');
+    Route::delete('/dashboard/services/{service}', [Dashboard\ServicesController::class, 'destroy'])->name('dashboard.services.destroy');
+    Route::post('/dashboard/services/reorder', [Dashboard\ServicesController::class, 'reorder'])->name('dashboard.services.reorder');
+
+    // Availability management
+    Route::get('/dashboard/availability', [Dashboard\AvailabilityController::class, 'index'])->name('dashboard.availability.index');
+    Route::post('/dashboard/availability', [Dashboard\AvailabilityController::class, 'store'])->name('dashboard.availability.store');
+    Route::patch('/dashboard/availability/{slot}', [Dashboard\AvailabilityController::class, 'update'])->name('dashboard.availability.update');
+    Route::delete('/dashboard/availability/{slot}', [Dashboard\AvailabilityController::class, 'destroy'])->name('dashboard.availability.destroy');
+
+    // Bookings management
+    Route::get('/dashboard/bookings', [Dashboard\BookingsController::class, 'index'])->name('dashboard.bookings.index');
+    Route::get('/dashboard/bookings/{booking}', [Dashboard\BookingsController::class, 'show'])->name('dashboard.bookings.show');
+    Route::patch('/dashboard/bookings/{booking}/notes', [Dashboard\BookingsController::class, 'updateNotes'])->name('dashboard.bookings.notes');
+    Route::post('/dashboard/bookings/{booking}/cancel', [Dashboard\BookingsController::class, 'cancel'])->name('dashboard.bookings.cancel');
+    Route::post('/dashboard/bookings/{booking}/complete', [Dashboard\BookingsController::class, 'markCompleted'])->name('dashboard.bookings.complete');
+    Route::post('/dashboard/bookings/{booking}/no-show', [Dashboard\BookingsController::class, 'markNoShow'])->name('dashboard.bookings.no-show');
+
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -273,6 +321,16 @@ require __DIR__.'/auth.php';
 
 Route::post('/webhooks/lemonsqueezy', [LemonSqueezyWebhookController::class, 'handle'])
     ->name('webhooks.lemonsqueezy')
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+
+/*
+|--------------------------------------------------------------------------
+| Stripe Webhook Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handleWebhook'])
+    ->name('webhooks.stripe')
     ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 
 /*

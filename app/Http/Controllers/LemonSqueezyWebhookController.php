@@ -385,6 +385,7 @@ class LemonSqueezyWebhookController extends Controller
         }
 
         $coach = Coach::create([
+            'user_id' => $user->id,
             'name' => $fullName,
             'slug' => $slug,
             'primary_color' => '#9333ea',

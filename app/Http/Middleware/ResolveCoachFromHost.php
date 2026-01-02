@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Models\Coach;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResolveCoachFromHost
@@ -41,23 +40,8 @@ class ResolveCoachFromHost
                 $user->refresh();
             }
             
-            // DEBUG: Log current subscription state
-            Log::info('ResolveCoachFromHost DEBUG', [
-                'slug' => $slug,
-                'user_id' => $user?->id,
-                'subscription_status' => $user?->subscription_status,
-                'cancel_at_period_end' => $user?->cancel_at_period_end,
-                'trial_ends_at' => $user?->trial_ends_at,
-            ]);
-            
             // Check if subscription is active
             $isSubscriptionActive = $this->isSubscriptionActive($user);
-            
-            // DEBUG: Log result
-            Log::info('ResolveCoachFromHost isActive result', [
-                'slug' => $slug,
-                'is_active' => $isSubscriptionActive,
-            ]);
             
             // If subscription is inactive, show unavailable page
             if (!$isSubscriptionActive) {

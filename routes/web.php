@@ -181,6 +181,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::get('/dashboard/contact', [ContactController::class, 'index'])->name('dashboard.contact');
     Route::patch('/dashboard/contact/{contactMessage}/read', [ContactController::class, 'markAsRead'])->name('dashboard.contact.read');
     Route::delete('/dashboard/contact/{contactMessage}', [ContactController::class, 'destroy'])->name('dashboard.contact.destroy');
+    Route::post('/dashboard/contact/custom', [ContactController::class, 'requestCustomService'])->name('dashboard.contact.custom');
 
     // Support tickets (coach/user)
     Route::get('/dashboard/support', [DashboardSupportController::class, 'index'])->name('dashboard.support');

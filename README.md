@@ -2,6 +2,25 @@
 
 Plateforme SaaS multi-tenant pour coachs sportifs permettant à chaque coach d'avoir son propre site personnalisable via sous-domaine.
 
+## 🧭 Présentation commerciale (partenariat Fitness Education Academy)
+
+UNICOACH est une plateforme web clé-en-main conçue pour être déployée en partenariat avec **Fitness Education Academy (FEA)**, école de formation de coachs sportifs.
+
+### Pour Fitness Education Academy
+
+- **Valoriser les diplômés** : offrir un outil concret pour lancer leur activité en ligne dès la fin de la formation.
+- **Renforcer la marque FEA** : sites des coachs co-brandés via des sous-domaines dédiés qui prolongent l’expérience FEA.
+- **Standardiser la qualité en ligne** : chaque coach dispose d’un site moderne, responsive, aligné avec les bonnes pratiques pédagogiques et marketing.
+
+### Pour les coachs diplômés FEA
+
+- **Site pro en quelques minutes** : création de site via sous-domaine dédié, sans compétences techniques.
+- **Branding personnalisable** : couleurs, logo, visuels et textes ajustables depuis un dashboard simple.
+- **Mise en avant des résultats** : galerie « avant/après », FAQ, appels à l’action optimisés et formulaire de contact intégré.
+- **Tarif préférentiel FEA** : implémentation actuelle d’un abonnement à **20€ HTVA / mois** pour les diplômés FEA (vs **30€ HTVA / mois** standard), géré via Lemon Squeezy (paiement et facturation).
+
+Les sections ci-dessous détaillent l’architecture et l’installation pour l’équipe technique.
+
 ## 🎯 Concept
 
 UNICOACH est une solution (anciennement FEA-COACH) permettant aux coachs sportifs de créer rapidement leur site web personnalisé accessible via un sous-domaine unique (ex: `coach-name.kineseducation.academy`). Chaque coach peut gérer son contenu, ses couleurs, ses images et ses tarifs via un dashboard simple et intuitif.
@@ -313,6 +332,7 @@ server {
 - Validation stricte des inputs
 - Stockage sécurisé des médias
 
-## 📄 License
+## 📄 Licence & droits d'utilisation
 
-Ce projet est sous licence MIT.
+UNICOACH est un logiciel propriétaire distribué dans le cadre d’un partenariat avec Fitness Education Academy et/ou d’accords commerciaux spécifiques.
+Les conditions d’utilisation, de reproduction et de sous-licence sont décrites dans le fichier [`licence.md`](./licence.md).

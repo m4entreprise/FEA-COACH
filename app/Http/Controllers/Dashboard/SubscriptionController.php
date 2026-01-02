@@ -143,8 +143,10 @@ class SubscriptionController extends Controller
                 ]);
             }
 
-            // Redirect to Lemon Squeezy customer portal
-            return redirect($portalUrl);
+            // Return URL in JSON for frontend to handle redirect (avoid CORS with Inertia)
+            return response()->json([
+                'redirect_url' => $portalUrl,
+            ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to access customer portal', [

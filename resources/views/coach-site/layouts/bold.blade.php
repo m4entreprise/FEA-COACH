@@ -179,9 +179,9 @@
             </p>
         </div>
 
-        @if(isset($plans) && $plans->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($plans->count(), 3) }} gap-8">
-                @foreach($plans as $index => $plan)
+        @if(isset($services) && $services->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 3) }} gap-8">
+                @foreach($services as $index => $service)
                     <div class="relative group">
                         <div class="bg-white rounded-3xl shadow-xl border-4 {{ $index === 0 ? 'border-primary scale-105' : 'border-gray-200' }} hover:border-primary transition-all p-10 h-full flex flex-col transform hover:scale-105">
                             @if($index === 0)
@@ -190,24 +190,23 @@
                                 </div>
                             @endif
 
-                            <h3 class="text-3xl font-black text-gray-900 mb-4">{{ $plan->name }}</h3>
+                            <h3 class="text-3xl font-black text-gray-900 mb-4">{{ $service->name }}</h3>
                             
                             <div class="mb-6">
-                                @if($plan->price)
-                                    <div class="flex items-baseline">
-                                        <span class="text-6xl font-black text-primary">{{ number_format($plan->price, 0, ',', ' ') }}</span>
-                                        <span class="text-2xl font-bold text-gray-600 ml-2">€</span>
-                                    </div>
-                                @else
-                                    <div class="text-3xl font-black text-gray-900">Sur demande</div>
+                                <div class="flex items-baseline">
+                                    <span class="text-6xl font-black text-primary">{{ number_format($service->price, 0, ',', ' ') }}</span>
+                                    <span class="text-2xl font-bold text-gray-600 ml-2">€</span>
+                                </div>
+                                @if($service->duration_minutes)
+                                    <p class="text-sm text-gray-500 mt-2">⏱️ {{ $service->duration_minutes }} minutes</p>
                                 @endif
                             </div>
 
-                            <p class="text-lg text-gray-600 mb-8 flex-grow">{{ $plan->description }}</p>
+                            <p class="text-lg text-gray-600 mb-8 flex-grow">{{ $service->description }}</p>
                             
-                            @if($plan->cta_url)
-                                <a href="{{ $plan->cta_url }}" target="_blank" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
-                                    Choisir
+                            @if($service->booking_enabled && $coach->user->has_payments_module)
+                                <a href="{{ route('coach.booking.show', ['coach_slug' => $coach->slug ?: $coach->subdomain]) }}?service={{ $service->id }}" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
+                                    Réserver
                                 </a>
                             @else
                                 <a href="#contact" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">

@@ -113,28 +113,26 @@
             </p>
         </div>
 
-        @if(isset($plans) && $plans->count() > 0)
+        @if(isset($services) && $services->count() > 0)
             <div class="space-y-6">
-                @foreach($plans as $plan)
+                @foreach($services as $service)
                     <div class="bg-white border-2 border-gray-200 rounded-lg p-8 hover:border-primary transition-all">
                         <div class="flex items-center justify-between flex-wrap gap-4">
                             <div class="flex-1">
-                                <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $plan->name }}</h3>
-                                <p class="text-gray-600">{{ $plan->description }}</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $service->name }}</h3>
+                                @if($service->duration_minutes)
+                                    <p class="text-sm text-gray-500 mb-2">⏱️ {{ $service->duration_minutes }} minutes</p>
+                                @endif
+                                <p class="text-gray-600">{{ $service->description }}</p>
                             </div>
                             <div class="flex items-center gap-6">
                                 <div class="text-right">
-                                    @if($plan->price)
-                                        <div class="text-3xl font-bold text-primary">{{ number_format($plan->price, 0, ',', ' ') }}€</div>
-                                    @else
-                                        <div class="text-xl font-semibold text-gray-900">Sur demande</div>
-                                    @endif
+                                    <div class="text-3xl font-bold text-primary">{{ number_format($service->price, 0, ',', ' ') }}€</div>
                                 </div>
-                                @if($plan->cta_url)
-                                    <a href="{{ $plan->cta_url }}" 
-                                       target="_blank"
+                                @if($service->booking_enabled && $coach->user->has_payments_module)
+                                    <a href="{{ route('coach.booking.show', ['coach_slug' => $coach->slug ?: $coach->subdomain]) }}?service={{ $service->id }}" 
                                        class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                        Choisir
+                                        Réserver
                                     </a>
                                 @else
                                     <a href="#contact" 

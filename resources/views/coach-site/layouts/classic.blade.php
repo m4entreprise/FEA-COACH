@@ -179,25 +179,23 @@
             </p>
         </div>
 
-        @if(isset($plans) && $plans->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($plans->count(), 4) }} gap-8">
-                @foreach($plans as $plan)
+        @if(isset($services) && $services->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 4) }} gap-8">
+                @foreach($services as $service)
                     <div class="bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all p-8 flex flex-col">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ $plan->name }}</h3>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ $service->name }}</h3>
                         <div class="text-4xl font-extrabold text-primary mb-4">
-                            @if($plan->price)
-                                {{ number_format($plan->price, 2, ',', ' ') }}€
-                            @else
-                                <span class="text-2xl">Prix sur demande</span>
-                            @endif
+                            {{ number_format($service->price, 2, ',', ' ') }}€
                         </div>
-                        <p class="text-gray-600 mb-6 flex-grow">{{ $plan->description }}</p>
+                        @if($service->duration_minutes)
+                            <p class="text-sm text-gray-500 mb-2">⏱️ {{ $service->duration_minutes }} minutes</p>
+                        @endif
+                        <p class="text-gray-600 mb-6 flex-grow">{{ $service->description }}</p>
                         
-                        @if($plan->cta_url)
-                            <a href="{{ $plan->cta_url }}" 
-                               target="_blank"
+                        @if($service->booking_enabled && $coach->user->has_payments_module)
+                            <a href="{{ route('coach.booking.show', ['coach_slug' => $coach->slug ?: $coach->subdomain]) }}?service={{ $service->id }}" 
                                class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
-                                Choisir cette formule
+                                Réserver en ligne
                             </a>
                         @else
                             <a href="#contact" 

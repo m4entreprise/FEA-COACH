@@ -101,6 +101,12 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/support-tickets', [AdminSupportController::class, 'index'])->name('admin.support-tickets.index');
     Route::post('/support-tickets/{supportTicket}/reply', [AdminSupportController::class, 'reply'])->name('admin.support-tickets.reply');
     Route::patch('/support-tickets/{supportTicket}/status', [AdminSupportController::class, 'updateStatus'])->name('admin.support-tickets.status');
+
+    // Custom domains management
+    Route::get('/custom-domains', [App\Http\Controllers\Admin\CustomDomainController::class, 'index'])->name('admin.custom-domains.index');
+    Route::post('/custom-domains', [App\Http\Controllers\Admin\CustomDomainController::class, 'store'])->name('admin.custom-domains.store');
+    Route::patch('/custom-domains/{customDomain}', [App\Http\Controllers\Admin\CustomDomainController::class, 'update'])->name('admin.custom-domains.update');
+    Route::delete('/custom-domains/{customDomain}', [App\Http\Controllers\Admin\CustomDomainController::class, 'destroy'])->name('admin.custom-domains.destroy');
 });
 
 /*

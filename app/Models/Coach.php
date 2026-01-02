@@ -108,6 +108,14 @@ class Coach extends Model implements HasMedia
     }
 
     /**
+     * Get the custom domain for the coach.
+     */
+    public function customDomain()
+    {
+        return $this->hasOne(CustomDomain::class);
+    }
+
+    /**
      * Get the site layout with fallback to default if invalid.
      */
     public function getSiteLayoutOrDefaultAttribute(): string

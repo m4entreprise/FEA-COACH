@@ -21,6 +21,7 @@ import {
     GraduationCap,
     Sparkles,
     ExternalLink,
+    LogOut,
 } from 'lucide-vue-next';
 
 const props = defineProps({
@@ -86,6 +87,10 @@ const buyCustomDomain = () => {
 
 const requestCustomContact = () => {
     router.post(route('dashboard.contact.custom'));
+};
+
+const logout = () => {
+    router.post(route('logout'));
 };
 
 // onMounted(() => {
@@ -171,19 +176,15 @@ const requestCustomContact = () => {
                 </button>
             </nav>
 
-            <div class="p-4 border-t border-slate-800 text-xs text-slate-400 space-y-2">
-                <p class="font-medium text-slate-200">UNICOACH</p>
-                <p>
-                    Dashboard coach moderne et intuitif.
-                </p>
-                <a
-                    href="https://unicoach.fr"
-                    target="_blank"
-                    class="mt-2 inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-100 hover:border-slate-500 hover:bg-slate-800 transition-colors"
+            <div class="p-4 border-t border-slate-800">
+                <button
+                    type="button"
+                    @click="logout"
+                    class="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-200 hover:border-slate-500 hover:bg-slate-800 transition-colors"
                 >
-                    <ArrowLeftRight class="h-3 w-3" />
-                    En savoir plus
-                </a>
+                    <LogOut class="h-3.5 w-3.5" />
+                    Se déconnecter
+                </button>
             </div>
         </aside>
 

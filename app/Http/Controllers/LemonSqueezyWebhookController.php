@@ -154,20 +154,37 @@ class LemonSqueezyWebhookController extends Controller
         if (! $user) {
             Log::error('User not found for Lemon Squeezy subscription_updated', [
                 'subscription_id' => $subscriptionId,
+                'payload' => $payload,
             ]);
 
             return;
         }
 
+        $customerId = $attributes['customer_id']
+            ?? ($payload['data']['relationships']['customer']['data']['id'] ?? null);
+
+        $customerId = $customerId !== null ? (string) $customerId : null;
+
         $update = [];
+
+        // Always sync subscription_id and customer_id
+        if ($subscriptionId !== '' && $user->lemonsqueezy_subscription_id !== $subscriptionId) {
+            $update['lemonsqueezy_subscription_id'] = $subscriptionId;
+        }
+
+        if ($customerId !== null && $user->lemonsqueezy_customer_id !== $customerId) {
+            $update['lemonsqueezy_customer_id'] = $customerId;
+        }
 
         if (isset($attributes['status'])) {
             $update['subscription_status'] = $attributes['status'];
         }
 
-        // Update trial_ends_at if present
-        if (! empty($attributes['trial_ends_at'])) {
-            $update['trial_ends_at'] = Carbon::parse($attributes['trial_ends_at']);
+        // Update trial_ends_at if present, or set to null if not
+        if (array_key_exists('trial_ends_at', $attributes)) {
+            $update['trial_ends_at'] = ! empty($attributes['trial_ends_at']) 
+                ? Carbon::parse($attributes['trial_ends_at']) 
+                : null;
         }
 
         if (! empty($attributes['renews_at'])) {

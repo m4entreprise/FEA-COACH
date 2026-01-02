@@ -30,10 +30,12 @@ class ResolveCoachFromHost
                 ->firstOrFail();
             
             // Force reload user to avoid stale cache
+            // Unset the relation first to ensure fresh load
+            $coach->unsetRelation('user');
             $coach->load('user');
             $user = $coach->user;
             
-            // Refresh user to get latest data from database
+            // Additional safety: refresh user to get absolute latest data
             if ($user) {
                 $user->refresh();
             }

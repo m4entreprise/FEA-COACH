@@ -165,6 +165,11 @@ class LemonSqueezyWebhookController extends Controller
             $update['subscription_status'] = $attributes['status'];
         }
 
+        // Update trial_ends_at if present
+        if (! empty($attributes['trial_ends_at'])) {
+            $update['trial_ends_at'] = Carbon::parse($attributes['trial_ends_at']);
+        }
+
         if (! empty($attributes['renews_at'])) {
             $update['subscription_current_period_end'] = Carbon::parse($attributes['renews_at']);
         }

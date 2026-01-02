@@ -65,7 +65,7 @@ class ResolveCoachFromHost
             return false;
         }
         
-        // Check if on trial
+        // Check if on trial (and not cancelled)
         $isOnTrial = $user->trial_ends_at 
                      && now()->isBefore($user->trial_ends_at);
         
@@ -73,7 +73,9 @@ class ResolveCoachFromHost
             return true;
         }
         
-        // Check if subscription is active
-        return $user->subscription_status === 'active';
+        // Consider subscription active if status is 'active', 'on_trial', or 'active_promo'
+        $activeStatuses = ['active', 'on_trial', 'active_promo'];
+        
+        return in_array($user->subscription_status, $activeStatuses, true);
     }
 }

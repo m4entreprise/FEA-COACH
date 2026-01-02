@@ -55,6 +55,9 @@ const closeModal = () => {
 };
 
 const submitForm = () => {
+    console.log('Form submit:', form.data());
+    console.log('Editing:', editingService.value);
+    
     if (editingService.value) {
         form.patch(route('dashboard.services.update', editingService.value.id), {
             preserveScroll: true,
@@ -62,7 +65,8 @@ const submitForm = () => {
                 closeModal();
                 toast.success('Service mis à jour avec succès');
             },
-            onError: () => {
+            onError: (errors) => {
+                console.error('Erreur mise à jour:', errors);
                 toast.error('Erreur lors de la mise à jour');
             },
         });
@@ -73,7 +77,8 @@ const submitForm = () => {
                 closeModal();
                 toast.success('Service créé avec succès');
             },
-            onError: () => {
+            onError: (errors) => {
+                console.error('Erreur création:', errors);
                 toast.error('Erreur lors de la création');
             },
         });

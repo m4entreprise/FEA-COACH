@@ -267,9 +267,9 @@ const goBack = () => {
                                 <Clock class="h-5 w-5 text-white" />
                             </div>
                             <div>
-                                <p class="text-xs text-slate-400">À venir</p>
+                                <p class="text-xs text-slate-400">Revenu ce mois</p>
                                 <p class="text-xl font-bold text-slate-50">
-                                    {{ safeStats.upcoming_bookings || 0 }}
+                                    {{ safeStats.this_month_revenue || '0' }}€
                                 </p>
                             </div>
                         </div>

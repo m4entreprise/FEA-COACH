@@ -66,13 +66,12 @@ class StripeWebhookController extends Controller
             throw new \Exception('No webhook secret configured');
         }
 
-        $expectedSignature = hash_hmac('sha256', $payload, $secret);
-        
         $signatureParts = explode(',', $signature);
         $timestamp = null;
         $signatures = [];
-        
+
         foreach ($signatureParts as $part) {
+            $part = trim($part);
             [$key, $value] = explode('=', $part, 2);
             if ($key === 't') {
                 $timestamp = $value;
@@ -81,17 +80,20 @@ class StripeWebhookController extends Controller
             }
         }
 
-        $isValid = false;
+        if (!$timestamp || empty($signatures)) {
+            throw new \Exception('Invalid signature header');
+        }
+
+        $signedPayload = $timestamp . '.' . $payload;
+        $expectedSignature = hash_hmac('sha256', $signedPayload, $secret);
+
         foreach ($signatures as $sig) {
             if (hash_equals($expectedSignature, $sig)) {
-                $isValid = true;
-                break;
+                return;
             }
         }
 
-        if (!$isValid) {
-            throw new \Exception('Invalid signature');
-        }
+        throw new \Exception('Invalid signature');
     }
 
     protected function handleCheckoutCompleted(array $event): void

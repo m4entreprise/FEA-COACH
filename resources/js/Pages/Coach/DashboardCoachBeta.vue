@@ -96,6 +96,16 @@ const coachSiteUrl = computed(() => {
 });
 
 const safeStats = computed(() => props.stats || {});
+const businessOffersCount = computed(() => {
+    const stats = safeStats.value;
+    const count = stats.active_services ?? stats.active_plans ?? 0;
+    return typeof count === 'number' ? count : 0;
+});
+const businessOffersLabel = computed(() => {
+    const count = businessOffersCount.value;
+    const plural = count > 1 || count === 0;
+    return `${count} ${plural ? 'offres actives' : 'offre active'}`;
+});
 // Etat "Acheté" uniquement si un CustomDomain existe réellement pour ce coach
 const hasCustomDomainOrder = computed(() => !!props.customDomain);
 const customDomainStatus = computed(() => props.customDomain?.status ?? null);
@@ -583,7 +593,7 @@ const logout = () => {
                                     <div class="space-y-1">
                                         <p class="text-slate-400">Business</p>
                                         <p class="text-sm font-semibold">
-                                            {{ safeStats.active_services ?? safeStats.active_plans ?? 0 }} offre(s) active(s)
+                                            {{ businessOffersLabel }}
                                         </p>
                                         <p class="text-[11px] text-slate-500">
                                             Structurez vos prestations et suivez vos clients.

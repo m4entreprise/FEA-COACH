@@ -283,6 +283,7 @@ const statusCopy = computed(() => {
               >
                 {{ statusLabel }}
               </span>
+            </div>
           </div>
         </section>
 

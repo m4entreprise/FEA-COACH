@@ -18,11 +18,21 @@ class BookingController extends Controller
         protected StripeConnectService $stripeService
     ) {}
 
-    public function directCheckout(Request $request, $serviceId)
+    public function directCheckout(Request $request)
     {
-        \Log::info('DirectCheckout called', ['service_id' => $serviceId, 'request_data' => $request->all()]);
+        $serviceId = $request->route('serviceId') ?? $request->route('service');
+
+        \Log::info('DirectCheckout called', [
+            'coach_slug' => $request->route('coach_slug'),
+            'service_id' => $serviceId,
+            'request_data' => $request->all(),
+        ]);
         
         $coach = app(Coach::class);
+        if (!$serviceId) {
+            abort(404);
+        }
+
         $service = ServiceType::findOrFail($serviceId);
         
         $validated = $request->validate([

@@ -64,17 +64,20 @@ class BookingController extends Controller
         $service = ServiceType::findOrFail($service);
         
         $validated = $request->validate([
-            'date' => 'required|date|after_or_equal:today',
-            'time' => 'required|date_format:H:i',
+            'date' => 'nullable|date|after_or_equal:today',
+            'time' => 'nullable|date_format:H:i',
         ]);
 
-        $date = Carbon::parse($validated['date']);
-        $slots = $this->bookingService->getAvailableSlots($coach, $date, $service);
+        // If date and time are provided, validate slot availability
+        if (!empty($validated['date']) && !empty($validated['time'])) {
+            $date = Carbon::parse($validated['date']);
+            $slots = $this->bookingService->getAvailableSlots($coach, $date, $service);
 
-        $isSlotAvailable = collect($slots)->contains('time', $validated['time']);
+            $isSlotAvailable = collect($slots)->contains('time', $validated['time']);
 
-        if (!$isSlotAvailable) {
-            return back()->with('error', 'Ce créneau n\'est plus disponible');
+            if (!$isSlotAvailable) {
+                return back()->with('error', 'Ce créneau n\'est plus disponible');
+            }
         }
 
         return Inertia::render('Booking/Create', [
@@ -84,8 +87,8 @@ class BookingController extends Controller
                 'subdomain' => $coach->subdomain,
             ],
             'service' => $service,
-            'selectedDate' => $validated['date'],
-            'selectedTime' => $validated['time'],
+            'selectedDate' => $validated['date'] ?? null,
+            'selectedTime' => $validated['time'] ?? null,
         ]);
     }
 

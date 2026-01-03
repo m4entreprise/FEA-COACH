@@ -13,13 +13,13 @@ const bookService = (service) => {
         alert('Les réservations ne sont pas encore disponibles pour ce coach.');
         return;
     }
-    router.visit(route('coach.booking.create', { service: service.id }), {
-        method: 'get',
-        data: {
-            date: new Date().toISOString().split('T')[0],
-            time: '09:00'
-        }
-    });
+    const date = new Date().toISOString().split('T')[0];
+    const time = '09:00';
+    router.visit(route('coach.booking.create', { 
+        service: service.id,
+        date: date,
+        time: time
+    }));
 };
 </script>
 

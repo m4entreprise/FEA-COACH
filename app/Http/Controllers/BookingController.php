@@ -89,6 +89,7 @@ class BookingController extends Controller
             'service' => $service,
             'selectedDate' => $validated['date'] ?? null,
             'selectedTime' => $validated['time'] ?? null,
+            'stripePublicKey' => config('stripe.public_key'),
         ]);
     }
 

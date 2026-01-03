@@ -14,6 +14,7 @@ const bookService = (service) => {
         return;
     }
     router.visit(route('coach.booking.create', { 
+        coach_slug: props.coach.subdomain,
         service: service.id
     }));
 };

@@ -1,5 +1,5 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { ClockIcon, CreditCardIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
@@ -13,7 +13,13 @@ const bookService = (service) => {
         alert('Les réservations ne sont pas encore disponibles pour ce coach.');
         return;
     }
-    window.location.href = `/reserver/${service.id}/nouveau`;
+    router.visit(route('coach.booking.create', { service: service.id }), {
+        method: 'get',
+        data: {
+            date: new Date().toISOString().split('T')[0],
+            time: '09:00'
+        }
+    });
 };
 </script>
 

@@ -293,4 +293,37 @@ class StripeConnectService
             throw $e;
         }
     }
+
+    public function retrieveCheckoutSession(string $checkoutSessionId, string $accountId): array
+    {
+        try {
+            Log::info('Retrieving Stripe checkout session', [
+                'checkout_session_id' => $checkoutSessionId,
+                'account_id' => $accountId,
+            ]);
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Stripe-Account' => $accountId,
+            ])->get($this->baseUrl . '/checkout/sessions/' . $checkoutSessionId, [
+                'expand[]' => 'payment_intent',
+            ]);
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            Log::error('Failed to retrieve checkout session', [
+                'status' => $response->status(),
+                'response' => $response->body(),
+            ]);
+
+            throw new \Exception('Failed to retrieve checkout session');
+        } catch (\Exception $e) {
+            Log::error('Stripe retrieve checkout session error', [
+                'error' => $e->getMessage(),
+            ]);
+            throw $e;
+        }
+    }
 }

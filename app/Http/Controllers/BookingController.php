@@ -66,6 +66,34 @@ class BookingController extends Controller
 
     public function success(Request $request, Booking $booking)
     {
+        $sessionId = $request->query('session_id');
+
+        if ($sessionId && $booking->payment_status !== 'succeeded') {
+            try {
+                $booking->load(['coach.stripeAccount']);
+                $stripeAccountId = $booking->coach?->stripeAccount?->stripe_account_id;
+
+                if ($stripeAccountId) {
+                    $session = $this->stripeService->retrieveCheckoutSession($sessionId, $stripeAccountId);
+                    $sessionBookingId = $session['metadata']['booking_id'] ?? null;
+
+                    if ((string) $sessionBookingId === (string) $booking->id && ($session['payment_status'] ?? null) === 'paid') {
+                        $paymentIntentId = $session['payment_intent']['id'] ?? ($session['payment_intent'] ?? null);
+                        if ($paymentIntentId) {
+                            $this->bookingService->confirmBooking($booking, $paymentIntentId);
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error('Booking success fallback confirmation failed', [
+                    'booking_id' => $booking->id,
+                    'session_id' => $sessionId,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        $booking->refresh();
         $booking->load(['serviceType', 'coach']);
 
         return Inertia::render('Booking/Success', [

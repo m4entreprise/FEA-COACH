@@ -147,7 +147,7 @@ class BookingService
         return $availableSlots;
     }
 
-    public function confirmBooking(Booking $booking, string $paymentIntentId): void
+    public function confirmBooking(Booking $booking, ?string $paymentIntentId): void
     {
         $booking->update([
             'status' => 'confirmed',

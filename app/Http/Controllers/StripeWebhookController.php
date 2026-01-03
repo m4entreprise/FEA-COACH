@@ -24,8 +24,9 @@ class StripeWebhookController extends Controller
         } catch (\Exception $e) {
             Log::error('Invalid Stripe webhook signature', [
                 'error' => $e->getMessage(),
+                'webhook_secret_configured' => (bool) config('stripe.webhook_secret'),
             ]);
-            return response()->json(['error' => 'Invalid signature'], 400);
+            return response()->json(['error' => $e->getMessage()], 400);
         }
 
         $event = json_decode($payload, true);
@@ -51,7 +52,7 @@ class StripeWebhookController extends Controller
                 'type' => $event['type'],
                 'error' => $e->getMessage(),
             ]);
-            return response()->json(['error' => 'Webhook processing failed'], 500);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
@@ -83,6 +84,11 @@ class StripeWebhookController extends Controller
         if (!$timestamp || empty($signatures)) {
             throw new \Exception('Invalid signature header');
         }
+
+        Log::debug('Stripe webhook signature parsed', [
+            'timestamp' => $timestamp,
+            'signatures_count' => count($signatures),
+        ]);
 
         $signedPayload = $timestamp . '.' . $payload;
         $expectedSignature = hash_hmac('sha256', $signedPayload, $secret);

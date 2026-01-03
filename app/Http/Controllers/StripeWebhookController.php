@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coach;
 use App\Models\Booking;
 use App\Models\StripeAccount;
 use App\Services\BookingService;
@@ -28,8 +29,16 @@ class StripeWebhookController extends Controller
             ]);
             return response()->json(['error' => $e->getMessage()], 400);
         }
-
         $event = json_decode($payload, true);
+
+        if (! is_array($event)) {
+            Log::error('Stripe webhook invalid payload', [
+                'payload' => $payload,
+            ]);
+            return response()->json(['error' => 'Invalid payload'], 400);
+        }
+
+        $this->hydrateCoachContext($event);
 
         Log::info('Stripe webhook received', [
             'type' => $event['type'],
@@ -53,6 +62,65 @@ class StripeWebhookController extends Controller
                 'error' => $e->getMessage(),
             ]);
             return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    protected function hydrateCoachContext(array $event): void
+    {
+        try {
+            $coach = null;
+            $source = null;
+
+            $stripeAccountId = $event['account'] ?? null;
+            if ($stripeAccountId) {
+                $stripeAccount = StripeAccount::where('stripe_account_id', $stripeAccountId)
+                    ->with(['coach.user'])
+                    ->first();
+
+                if ($stripeAccount?->coach) {
+                    $coach = $stripeAccount->coach;
+                    $source = 'event.account';
+                }
+            }
+
+            $object = $event['data']['object'] ?? [];
+            $metadata = is_array($object) ? ($object['metadata'] ?? []) : [];
+
+            if (! $coach) {
+                $coachId = is_array($metadata) ? ($metadata['coach_id'] ?? null) : null;
+
+                if ($coachId) {
+                    $coach = Coach::with('user')->find($coachId);
+                    $source = 'metadata.coach_id';
+                }
+            }
+
+            if (! $coach) {
+                $bookingId = is_array($metadata) ? ($metadata['booking_id'] ?? null) : null;
+                if ($bookingId) {
+                    $booking = Booking::with(['coach.user'])->find($bookingId);
+                    if ($booking?->coach) {
+                        $coach = $booking->coach;
+                        $source = 'metadata.booking_id';
+                    }
+                }
+            }
+
+            if (! $coach) {
+                return;
+            }
+
+            app()->instance(Coach::class, $coach);
+            view()->share('coach', $coach);
+
+            Log::info('Stripe webhook coach context hydrated', [
+                'coach_id' => $coach->id,
+                'source' => $source,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Stripe webhook coach context hydration failed', [
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 

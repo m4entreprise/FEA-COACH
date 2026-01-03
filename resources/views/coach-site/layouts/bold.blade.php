@@ -205,7 +205,7 @@
                             <p class="text-lg text-gray-600 mb-8 flex-grow">{{ $service->description }}</p>
                             
                             @if($service->booking_enabled && $coach->user->has_payments_module)
-                                <form action="{{ route('coach.booking.checkout', ['coach_slug' => $coach->slug ?: $coach->subdomain, 'service' => $service->id]) }}" method="POST">
+                                <form action="{{ route('coach.booking.checkout', ['service' => $service->id]) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="client_email" value="booking@temp.com">
                                     <button type="submit" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">

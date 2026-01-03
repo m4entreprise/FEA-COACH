@@ -904,6 +904,23 @@ const logout = () => {
                                     </div>
                                 </div>
                             </Link>
+
+                            <Link
+                                :href="route('dashboard.services.index')"
+                                class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-400 flex items-center justify-center shadow-lg">
+                                        <Sparkles class="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-semibold">Mes services</h3>
+                                        <p class="text-xs text-slate-400">
+                                            Gérer vos offres et tarifs.
+                                        </p>
+                                    </div>
+                                </div>
+                            </Link>
                         </div>
                     </div>
 
@@ -934,23 +951,6 @@ const logout = () => {
                                         <h3 class="text-sm font-semibold">Paiements</h3>
                                         <p class="text-xs text-slate-400">
                                             Connexion Stripe, encaissements et suivi.
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
-
-                            <Link
-                                :href="route('dashboard.services.index')"
-                                class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
-                            >
-                                <div class="flex items-center gap-3">
-                                    <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-400 flex items-center justify-center shadow-lg">
-                                        <Sparkles class="h-4 w-4" />
-                                    </div>
-                                    <div>
-                                        <h3 class="text-sm font-semibold">Mes services</h3>
-                                        <p class="text-xs text-slate-400">
-                                            Gérer vos offres et tarifs.
                                         </p>
                                     </div>
                                 </div>

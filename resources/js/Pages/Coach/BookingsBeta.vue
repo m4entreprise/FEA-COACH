@@ -1,10 +1,9 @@
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import { toast } from 'vue-sonner';
 import {
     Users,
-    ArrowLeft,
     Calendar,
     Clock,
     Euro,
@@ -12,7 +11,6 @@ import {
     X,
     Mail,
     Phone,
-    MapPin,
     Filter,
     CheckCircle,
     XCircle,
@@ -24,6 +22,21 @@ const props = defineProps({
 });
 
 const selectedFilter = ref('all');
+
+const dashboardBackUrl = computed(() => {
+    if (typeof window === 'undefined') return route('dashboard');
+    const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+    return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+        window.history.back();
+        return;
+    }
+
+    router.visit(dashboardBackUrl.value);
+};
 
 const filteredBookings = computed(() => {
     if (!props.bookings) return [];
@@ -110,28 +123,47 @@ const formatTime = (timeString) => {
 <template>
     <Head title="Mes Réservations" />
 
-    <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 md:px-6 py-6 md:py-8">
-        <div class="max-w-6xl mx-auto space-y-6">
-            <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <Link
-                        :href="route('dashboard')"
-                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-700 transition-colors"
-                    >
-                        <ArrowLeft class="h-4 w-4" />
-                    </Link>
-                    <div>
-                        <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
-                            <Users class="h-5 w-5 text-purple-300" />
-                            Mes Réservations
-                        </h1>
-                        <p class="text-sm text-slate-400 mt-1">
-                            Gérez vos réservations et séances
-                        </p>
-                    </div>
+    <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+        <!-- Top bar -->
+        <header
+            class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
+        >
+            <div class="flex items-center gap-3">
+                <div class="flex flex-col">
+                    <p class="text-xs uppercase tracking-wide text-slate-400">Panel coach</p>
+                    <h1 class="text-base md:text-lg font-semibold flex items-center gap-2">
+                        <span>Mes réservations</span>
+                    </h1>
                 </div>
             </div>
+
+            <div class="flex items-center gap-3">
+                <button
+                    type="button"
+                    @click="goBack"
+                    class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
+                >
+                    <span class="text-xs">←</span>
+                    <span>Retour panel</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main content -->
+        <main
+            class="flex-1 overflow-y-auto bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 md:px-6 py-6 md:py-8"
+        >
+            <div class="max-w-6xl mx-auto space-y-6">
+                <!-- Header -->
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                        <Users class="h-5 w-5 text-purple-300" />
+                        Mes Réservations
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">
+                        Gérez vos réservations et séances
+                    </p>
+                </div>
 
             <!-- Stats -->
             <div v-if="stats" class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -293,6 +325,7 @@ const formatTime = (timeString) => {
                     Les réservations de vos clients apparaîtront ici.
                 </p>
             </div>
-        </div>
+            </div>
+        </main>
     </div>
 </template>

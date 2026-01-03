@@ -1,6 +1,6 @@
 <script setup>
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head, router, useForm } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
 import { toast } from 'vue-sonner';
 import Modal from '@/Components/Modal.vue';
 import {
@@ -8,10 +8,8 @@ import {
     Plus,
     Edit,
     Trash2,
-    ArrowLeft,
     Clock,
     Euro,
-    GripVertical,
     Check,
     X,
 } from 'lucide-vue-next';
@@ -22,6 +20,21 @@ const props = defineProps({
 
 const showModal = ref(false);
 const editingService = ref(null);
+
+const dashboardBackUrl = computed(() => {
+    if (typeof window === 'undefined') return route('dashboard');
+    const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+    return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+        window.history.back();
+        return;
+    }
+
+    router.visit(dashboardBackUrl.value);
+};
 
 const form = useForm({
     name: '',
@@ -105,35 +118,56 @@ const deleteService = (service) => {
 <template>
     <Head title="Mes Services" />
 
-    <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 md:px-6 py-6 md:py-8">
-        <div class="max-w-6xl mx-auto space-y-6">
-            <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <Link
-                        :href="route('dashboard')"
-                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-700 transition-colors"
-                    >
-                        <ArrowLeft class="h-4 w-4" />
-                    </Link>
+    <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+        <!-- Top bar -->
+        <header
+            class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
+        >
+            <div class="flex items-center gap-3">
+                <div class="flex flex-col">
+                    <p class="text-xs uppercase tracking-wide text-slate-400">Panel coach</p>
+                    <h1 class="text-base md:text-lg font-semibold flex items-center gap-2">
+                        <span>Mes services</span>
+                    </h1>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a
+                    href="#"
+                    @click.prevent="goBack"
+                    class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
+                >
+                    <span class="text-xs">←</span>
+                    <span>Retour panel</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Main content -->
+        <main
+            class="flex-1 overflow-y-auto bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 md:px-6 py-6 md:py-8"
+        >
+            <div class="max-w-6xl mx-auto space-y-6">
+                <!-- Header -->
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                        <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                        <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
                             <CreditCard class="h-5 w-5 text-emerald-300" />
                             Mes Services
-                        </h1>
+                        </h2>
                         <p class="text-sm text-slate-400 mt-1">
                             Gérez vos types de séances et vos tarifs
                         </p>
                     </div>
+                    <button
+                        @click="openCreateModal"
+                        class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:bg-emerald-700 transition-colors"
+                    >
+                        <Plus class="h-4 w-4" />
+                        Créer un service
+                    </button>
                 </div>
-                <button
-                    @click="openCreateModal"
-                    class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:bg-emerald-700 transition-colors"
-                >
-                    <Plus class="h-4 w-4" />
-                    Créer un service
-                </button>
-            </div>
 
             <!-- Services list -->
             <div v-if="services && services.length > 0" class="space-y-4">
@@ -219,7 +253,8 @@ const deleteService = (service) => {
                     Créer mon premier service
                 </button>
             </div>
-        </div>
+            </div>
+        </main>
     </div>
 
     <!-- Modal -->

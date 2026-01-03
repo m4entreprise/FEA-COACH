@@ -1,5 +1,5 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref, computed, watch, onBeforeUnmount } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import { Building2, User, Briefcase, Scale, Eye, Save, Copy, AlertCircle, FileText, Sparkles, X, Send, CheckCircle } from 'lucide-vue-next';
@@ -38,6 +38,21 @@ const form = useForm({
 // Preview management
 const previewHtml = ref('');
 const previewLoading = ref(false);
+
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  if (typeof window !== 'undefined' && window.history.length > 1) {
+    window.history.back();
+    return;
+  }
+
+  router.visit(dashboardBackUrl.value);
+};
 const previewError = ref(null);
 const showPreview = ref(true);
 let previewTimeoutId = null;
@@ -216,13 +231,14 @@ const submitCustomRequest = async () => {
           <Sparkles class="w-3 h-3 text-purple-400" />
           <span class="text-xs text-slate-300">{{ completionPercentage }}% complété</span>
         </div>
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 

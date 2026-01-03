@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import { toast } from 'vue-sonner';
 import Modal from '@/Components/Modal.vue';
@@ -8,7 +8,6 @@ import {
     Plus,
     Edit,
     Trash2,
-    ArrowLeft,
     Clock,
     Check,
 } from 'lucide-vue-next';
@@ -44,6 +43,21 @@ const groupedSlots = computed(() => {
     });
     return grouped;
 });
+
+const dashboardBackUrl = computed(() => {
+    if (typeof window === 'undefined') return route('dashboard');
+    const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+    return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+        window.history.back();
+        return;
+    }
+
+    router.visit(dashboardBackUrl.value);
+};
 
 const openCreateModal = () => {
     editingSlot.value = null;
@@ -120,12 +134,13 @@ const getDayLabel = (dayValue) => {
             <!-- Header -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div class="flex items-center gap-4">
-                    <Link
-                        :href="route('dashboard')"
+                    <button
+                        type="button"
+                        @click="goBack"
                         class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-700 transition-colors"
                     >
-                        <ArrowLeft class="h-4 w-4" />
-                    </Link>
+                        <span class="text-lg">&larr;</span>
+                    </button>
                     <div>
                         <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
                             <Calendar class="h-5 w-5 text-blue-300" />

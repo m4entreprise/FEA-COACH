@@ -47,12 +47,23 @@ const form = useForm({
   average_rating: props.coach?.average_rating || 5.0,
   facebook_url: props.coach?.facebook_url || '',
   instagram_url: props.coach?.instagram_url || '',
-  twitter_url: props.coach?.twitter_url || '',
-  linkedin_url: props.coach?.linkedin_url || '',
-  youtube_url: props.coach?.youtube_url || '',
   tiktok_url: props.coach?.tiktok_url || '',
-  site_layout: props.coach?.site_layout || props.defaultLayout,
 });
+
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  if (typeof window !== 'undefined' && window.history.length > 1) {
+    window.history.back();
+    return;
+  }
+
+  router.visit(dashboardBackUrl.value);
+};
 
 const heroTitleCount = computed(() => form.hero_title.length);
 const heroSubtitleCount = computed(() => form.hero_subtitle.length);
@@ -237,13 +248,14 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="flex items-center gap-3">
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 

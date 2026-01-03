@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import { toast } from 'vue-sonner';
 import {
@@ -10,7 +10,6 @@ import {
     Banknote,
     Calendar,
     Users,
-    ArrowLeft,
     ExternalLink,
     Sparkles,
 } from 'lucide-vue-next';
@@ -32,33 +31,64 @@ const openStripeDashboard = () => {
 
 const safeStripeAccount = computed(() => props.stripeAccount || { connected: false });
 const safeStats = computed(() => props.stats || {});
+
+const dashboardBackUrl = computed(() => {
+    if (typeof window === 'undefined') return route('dashboard');
+    const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+    return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+        window.history.back();
+        return;
+    }
+
+    router.visit(dashboardBackUrl.value);
+};
 </script>
 
 <template>
-    <Head title="Paiements & Réservations" />
+    <Head title="Paiements" />
 
-    <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 md:px-6 py-6 md:py-8">
-        <div class="max-w-6xl mx-auto space-y-6">
-            <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <Link
-                        :href="route('dashboard')"
-                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-700 transition-colors"
-                    >
-                        <ArrowLeft class="h-4 w-4" />
-                    </Link>
-                    <div>
-                        <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2 text-slate-50">
-                            <CreditCard class="h-5 w-5 text-purple-300" />
-                            Paiements & Réservations
-                        </h1>
-                        <p class="text-sm text-slate-400 mt-1">
-                            Gérez vos services, disponibilités et réservations en ligne
-                        </p>
-                    </div>
+    <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+        <header
+            class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
+        >
+            <div class="flex items-center gap-3">
+                <div class="flex flex-col">
+                    <p class="text-xs uppercase tracking-wide text-slate-400">Panel coach</p>
+                    <h1 class="text-base md:text-lg font-semibold flex items-center gap-2">
+                        <span>Paiements</span>
+                    </h1>
                 </div>
             </div>
+
+            <div class="flex items-center gap-3">
+                <button
+                    type="button"
+                    @click="goBack"
+                    class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
+                >
+                    <span class="text-xs">←</span>
+                    <span>Retour panel</span>
+                </button>
+            </div>
+        </header>
+
+        <main
+            class="flex-1 overflow-y-auto bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 md:px-6 py-6 md:py-8"
+        >
+            <div class="max-w-6xl mx-auto space-y-6">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2 text-slate-50">
+                        <CreditCard class="h-5 w-5 text-purple-300" />
+                        Paiements
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">
+                        Connexion Stripe, encaissements et suivi
+                    </p>
+                </div>
 
             <!-- Module non activé -->
             <div v-if="!hasPaymentsModule" class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-xl">
@@ -93,10 +123,6 @@ const safeStats = computed(() => props.stats || {});
                             <li class="flex items-start gap-2 text-sm text-slate-300">
                                 <CheckCircle class="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
                                 <span>Gestion des services et tarifs</span>
-                            </li>
-                            <li class="flex items-start gap-2 text-sm text-slate-300">
-                                <CheckCircle class="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-                                <span>Calendrier de disponibilités</span>
                             </li>
                             <li class="flex items-start gap-2 text-sm text-slate-300">
                                 <CheckCircle class="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
@@ -264,61 +290,9 @@ const safeStats = computed(() => props.stats || {});
                     </div>
                 </div>
 
-                <!-- Navigation rapide -->
-                <div v-if="safeStripeAccount.is_fully_activated" class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <Link
-                        :href="route('dashboard.services.index')"
-                        class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors"
-                    >
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-400 flex items-center justify-center shadow-lg">
-                                <CreditCard class="h-5 w-5 text-white" />
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-50">Mes services</h3>
-                                <p class="text-xs text-slate-400">
-                                    Gérer les types de séances et tarifs
-                                </p>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link
-                        :href="route('dashboard.availability.index')"
-                        class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl hover:border-blue-500/60 hover:bg-slate-900/90 transition-colors"
-                    >
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center shadow-lg">
-                                <Calendar class="h-5 w-5 text-white" />
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-50">Mes disponibilités</h3>
-                                <p class="text-xs text-slate-400">
-                                    Définir mes créneaux hebdomadaires
-                                </p>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link
-                        :href="route('dashboard.bookings.index')"
-                        class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl hover:border-purple-500/60 hover:bg-slate-900/90 transition-colors"
-                    >
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-400 flex items-center justify-center shadow-lg">
-                                <Users class="h-5 w-5 text-white" />
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-50">Mes réservations</h3>
-                                <p class="text-xs text-slate-400">
-                                    Voir et gérer les réservations
-                                </p>
-                            </div>
-                        </div>
-                    </Link>
-                </div>
             </div>
-        </div>
+            </div>
+        </main>
     </div>
 </template>
 

@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Toaster, toast } from 'vue-sonner';
 import { useAutoAnimate } from '@formkit/auto-animate/vue';
 import Modal from '@/Components/Modal.vue';
@@ -12,6 +12,7 @@ import {
     Image as ImageIcon,
     HelpCircle,
     CreditCard,
+    Calendar,
     Scale,
     Users,
     Mail,
@@ -52,6 +53,40 @@ const [contentParent] = useAutoAnimate();
 
 const activeCategory = ref('general');
 const sidebarOpen = ref(false);
+
+const validCategories = new Set(['general', 'site', 'business', 'account']);
+
+const readTabFromUrl = () => {
+    if (typeof window === 'undefined') return null;
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (!tab) return null;
+    return validCategories.has(tab) ? tab : null;
+};
+
+const writeTabToUrl = (tab) => {
+    if (typeof window === 'undefined') return;
+    if (!validCategories.has(tab)) return;
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', tab);
+    window.history.replaceState(window.history.state, '', url);
+};
+
+const syncTabFromUrl = () => {
+    const tab = readTabFromUrl();
+    if (tab) {
+        activeCategory.value = tab;
+        return;
+    }
+
+    if (typeof window !== 'undefined') {
+        const stored = window.sessionStorage?.getItem('coach_dashboard_tab');
+        if (stored && validCategories.has(stored)) {
+            activeCategory.value = stored;
+        }
+    }
+};
 
 const coachSiteUrl = computed(() => {
     if (!props.coach) return null;
@@ -124,6 +159,26 @@ const goCategory = (id) => {
     activeCategory.value = id;
     sidebarOpen.value = false;
 };
+
+onMounted(() => {
+    syncTabFromUrl();
+    if (typeof window !== 'undefined') {
+        window.addEventListener('popstate', syncTabFromUrl);
+    }
+});
+
+onBeforeUnmount(() => {
+    if (typeof window !== 'undefined') {
+        window.removeEventListener('popstate', syncTabFromUrl);
+    }
+});
+
+watch(activeCategory, (tab) => {
+    writeTabToUrl(tab);
+    if (typeof window !== 'undefined') {
+        window.sessionStorage?.setItem('coach_dashboard_tab', tab);
+    }
+});
 
 const buyCustomDomain = (requestedDomain = null) => {
     // Create a form and submit it (bypass Inertia for external redirects)
@@ -866,9 +921,43 @@ const logout = () => {
                                         <CreditCard class="h-4 w-4" />
                                     </div>
                                     <div>
-                                        <h3 class="text-sm font-semibold">Paiements & Réservations</h3>
+                                        <h3 class="text-sm font-semibold">Paiements</h3>
                                         <p class="text-xs text-slate-400">
-                                            Services, tarifs, disponibilités et réservations en ligne.
+                                            Connexion Stripe, encaissements et suivi.
+                                        </p>
+                                    </div>
+                                </div>
+                            </Link>
+
+                            <Link
+                                :href="route('dashboard.services.index')"
+                                class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-400 flex items-center justify-center shadow-lg">
+                                        <Sparkles class="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-semibold">Mes services</h3>
+                                        <p class="text-xs text-slate-400">
+                                            Gérer vos offres et tarifs.
+                                        </p>
+                                    </div>
+                                </div>
+                            </Link>
+
+                            <Link
+                                :href="route('dashboard.bookings.index')"
+                                class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-blue-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center shadow-lg">
+                                        <Calendar class="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-semibold">Mes réservations</h3>
+                                        <p class="text-xs text-slate-400">
+                                            Voir et gérer vos réservations.
                                         </p>
                                     </div>
                                 </div>

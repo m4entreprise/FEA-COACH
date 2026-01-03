@@ -233,23 +233,13 @@ const openStripeDashboard = () => {
                     </div>
 
                     <!-- Navigation rapide -->
-                    <div v-if="stripeAccount.is_fully_activated" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div v-if="stripeAccount.is_fully_activated" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <a :href="route('dashboard.services.index')" class="block bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition">
                             <div class="p-6 text-center">
                                 <CreditCardIcon class="h-12 w-12 text-blue-600 mx-auto mb-3" />
                                 <h4 class="font-semibold text-gray-900">Mes services</h4>
                                 <p class="text-sm text-gray-600 mt-2">
                                     Gérer les types de séances et tarifs
-                                </p>
-                            </div>
-                        </a>
-
-                        <a :href="route('dashboard.availability.index')" class="block bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition">
-                            <div class="p-6 text-center">
-                                <CalendarIcon class="h-12 w-12 text-green-600 mx-auto mb-3" />
-                                <h4 class="font-semibold text-gray-900">Disponibilités</h4>
-                                <p class="text-sm text-gray-600 mt-2">
-                                    Définir mes créneaux horaires
                                 </p>
                             </div>
                         </a>

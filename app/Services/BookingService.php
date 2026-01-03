@@ -181,11 +181,15 @@ class BookingService
         
         return [
             'total_bookings' => $coach->bookings()->count(),
+            'total_revenue' => $coach->bookings()
+                ->where('payment_status', 'succeeded')
+                ->sum('amount'),
             'this_month_bookings' => $coach->bookings()
-                ->where('booking_date', '>=', $thisMonth)
+                ->where('paid_at', '>=', $thisMonth)
+                ->where('payment_status', 'succeeded')
                 ->count(),
             'this_month_revenue' => $coach->bookings()
-                ->where('booking_date', '>=', $thisMonth)
+                ->where('paid_at', '>=', $thisMonth)
                 ->where('payment_status', 'succeeded')
                 ->sum('amount'),
             'upcoming_bookings' => $coach->bookings()

@@ -1,48 +1,40 @@
-[2026-01-03 01:44:11] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
-[2026-01-03 01:44:11] local.INFO: Booking created {"booking_id":2} 
-[2026-01-03 01:44:12] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a10RS9EBWGhrjgofBxFKJ7FChuEXmSYQ1bE5dgDRBO1Thpo5ni80bg98ae#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSdkdWxOYHwnPyd1blpxYHZxWjA0VkZSbmBGR1dxZEtWT39yb2Bnak5NMXZzQWhcRE1RdTRoTmJtMzw2NTRhcDBhaUtCaWF9NGpUZzIxf0p3Sndva0FNRFZVQ3J9N3FuNGFMVFI0NDZCZj02NTV%2FVTBLZEZWcicpJ2N3amhWYHdzYHcnP3F3cGApJ2dkZm5id2pwa2FGamlqdyc%2FJyZjY2NjY2MnKSdpZHxqcHFRfHVgJz8ndmxrYmlgWmxxYGgnKSdga2RnaWBVaWRmYG1qaWFgd3YnP3F3cGB4JSUl"} 
-[2026-01-03 01:44:34] local.ERROR: Invalid Stripe webhook signature {"error":"Invalid signature"} 
-[2026-01-03 01:44:34] local.ERROR: Invalid Stripe webhook signature {"error":"Invalid signature"} 
-[2026-01-03 01:44:49] local.ERROR: Invalid Stripe webhook signature {"error":"Invalid signature"} 
-[2026-01-03 01:44:50] local.ERROR: Invalid Stripe webhook signature {"error":"Invalid signature"} 
-[2026-01-03 01:45:30] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 01:45:54] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 01:47:06] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlHKuCDAkmo04zy"} 
-[2026-01-03 01:47:06] local.INFO: Réponse Stripe login_links {"status":200,"successful":true,"body":"{
+[2026-01-03 04:39:23] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
+[2026-01-03 04:39:23] local.INFO: Booking created {"booking_id":9} 
+[2026-01-03 04:39:24] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1tQRFh2rqmV3GLGPZdc8pnuUyd1N0EGjydG5rjEPd2Ku8U15H2ybD3mMn#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
+[2026-01-03 04:39:40] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767415180","signatures_count":1} 
+[2026-01-03 04:39:40] local.INFO: Stripe webhook coach context hydrated {"coach_id":8,"source":"event.account"} 
+[2026-01-03 04:39:40] local.INFO: Stripe webhook received {"type":"payment_intent.succeeded","id":"evt_3SlMcjCDAkmo04zy1MuS4dKb"} 
+[2026-01-03 04:39:40] local.INFO: Booking payment succeeded {"booking_id":9,"payment_intent_id":"pi_3SlMcjCDAkmo04zy1IC0haIB"} 
+[2026-01-03 04:39:40] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767415180","signatures_count":1} 
+[2026-01-03 04:39:40] local.INFO: Stripe webhook coach context hydrated {"coach_id":8,"source":"event.account"} 
+[2026-01-03 04:39:40] local.INFO: Stripe webhook received {"type":"checkout.session.completed","id":"evt_1SlMcqCDAkmo04zy0WRDTUtp"} 
+[2026-01-03 04:39:40] local.INFO: Booking confirmed via checkout {"booking_id":9,"session_id":"cs_test_a1tQRFh2rqmV3GLGPZdc8pnuUyd1N0EGjydG5rjEPd2Ku8U15H2ybD3mMn"} 
+[2026-01-03 04:41:07] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-03 04:41:07] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-03 04:47:01] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
+[2026-01-03 04:47:01] local.INFO: Booking created {"booking_id":10} 
+[2026-01-03 04:47:02] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
+[2026-01-03 04:47:02] local.INFO: Booking created {"booking_id":11} 
+[2026-01-03 04:47:02] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a16UCeZLg7HjfeY6rN0ve7hByUv7bY4JXGsJSlfjxq45eVxS1PGkYdjW8F#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
+[2026-01-03 04:47:03] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1VEmn4RfIIvWuVKswvJLJ0L48pB1ZueQ9N4Q8Id07wcaWGwc6a0yyyQxB#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
+[2026-01-03 04:47:15] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
+[2026-01-03 04:47:15] local.INFO: Booking created {"booking_id":12} 
+[2026-01-03 04:47:16] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1YKn3fkaMK8jdDMcvZEgBdeYfoCf3Oq6Utc3hbOg6slAhEtNq5QOqFoz8#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
+[2026-01-03 04:47:32] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767415651","signatures_count":1} 
+[2026-01-03 04:47:32] local.INFO: Stripe webhook coach context hydrated {"coach_id":8,"source":"event.account"} 
+[2026-01-03 04:47:32] local.INFO: Stripe webhook received {"type":"payment_intent.succeeded","id":"evt_3SlMkQCDAkmo04zy10sByGl0"} 
+[2026-01-03 04:47:32] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767415651","signatures_count":1} 
+[2026-01-03 04:47:32] local.INFO: Stripe webhook coach context hydrated {"coach_id":8,"source":"event.account"} 
+[2026-01-03 04:47:32] local.INFO: Stripe webhook received {"type":"checkout.session.completed","id":"evt_1SlMkRCDAkmo04zy8J2z8yxU"} 
+[2026-01-03 04:47:32] local.INFO: Booking payment succeeded {"booking_id":12,"payment_intent_id":"pi_3SlMkQCDAkmo04zy10SsvXXt"} 
+[2026-01-03 04:47:32] local.INFO: Booking confirmed via checkout {"booking_id":12,"session_id":"cs_test_a1YKn3fkaMK8jdDMcvZEgBdeYfoCf3Oq6Utc3hbOg6slAhEtNq5QOqFoz8"} 
+[2026-01-03 04:47:37] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-03 04:47:38] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-03 04:54:57] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-03 04:54:58] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlHKuCDAkmo04zy"} 
+[2026-01-03 04:54:59] local.INFO: Réponse Stripe login_links {"status":200,"successful":true,"body":"{
   \"object\": \"login_link\",
-  \"created\": 1767404826,
-  \"url\": \"https://connect.stripe.com/express/acct_1SlHKuCDAkmo04zy/7xrVrsODjmm3\"
+  \"created\": 1767416098,
+  \"url\": \"https://connect.stripe.com/express/acct_1SlHKuCDAkmo04zy/Up5YCfRx2qv4\"
 }"} 
-[2026-01-03 01:47:06] local.INFO: Lien dashboard généré {"url":"https://connect.stripe.com/express/acct_1SlHKuCDAkmo04zy/7xrVrsODjmm3"} 
-[2026-01-03 02:03:42] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 02:04:23] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"Fgxf4VkdtFUQCa2ketWiLErkMxwWDh31Asi42E1r","client_email":"booking@temp.com"}} 
-[2026-01-03 02:04:23] local.INFO: Booking created {"booking_id":3} 
-[2026-01-03 02:04:25] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1RaW7zGn7tnBXQppPzyn0Ifp2D1gJV28pHGC0liBgPXH3UorPOpa96hBt#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
-[2026-01-03 02:08:03] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 02:08:53] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 02:20:09] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 02:45:02] local.ERROR: Invalid Stripe webhook signature {"error":"Invalid signature"} 
-[2026-01-03 02:46:00] local.ERROR: Invalid Stripe webhook signature {"error":"Invalid signature"} 
-[2026-01-03 03:03:24] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 03:04:01] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 03:12:02] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 03:12:04] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 03:12:04] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 03:14:31] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
-[2026-01-03 03:14:31] local.INFO: Booking created {"booking_id":4} 
-[2026-01-03 03:14:32] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1Gd8ruSpvcl7OEOR7k8FGUaPR0lYs83ksWMdjtdhC59NzUH3ipCg3fINt#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
-[2026-01-03 03:15:26] local.ERROR: Invalid Stripe webhook signature {"error":"Invalid signature"} 
-[2026-01-03 03:24:50] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 03:38:12] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 03:38:12] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 03:38:38] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
-[2026-01-03 03:38:38] local.INFO: Booking created {"booking_id":5} 
-[2026-01-03 03:38:39] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1jSu0rtvjjQju29w60XHqod0XoCaTUrndZ41zdvzfIZExVwOdwSxE6LKu#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
-[2026-01-03 04:02:24] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
-[2026-01-03 04:02:24] local.INFO: Booking created {"booking_id":6} 
-[2026-01-03 04:02:25] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1jW5JyCXhXSC23AUMcY3uC1LXqxuC5C4yr1SiszJt0JgFvo4rhzVn9G6Y#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
-[2026-01-03 04:02:42] local.INFO: Retrieving Stripe checkout session {"checkout_session_id":"cs_test_a1jW5JyCXhXSC23AUMcY3uC1LXqxuC5C4yr1SiszJt0JgFvo4rhzVn9G6Y","account_id":"acct_1SlHKuCDAkmo04zy"} 
-[2026-01-03 04:07:39] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
-[2026-01-03 04:07:39] local.INFO: Booking created {"booking_id":7} 
-[2026-01-03 04:07:40] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1WRAqBcCPTbqgoXQevOKS8bCYIWMuALhkJYc0PZHVVeM4zoV5HKN6oGxu#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
-[2026-01-03 04:07:57] local.INFO: Retrieving Stripe checkout session {"checkout_session_id":"cs_test_a1WRAqBcCPTbqgoXQevOKS8bCYIWMuALhkJYc0PZHVVeM4zoV5HKN6oGxu","account_id":"acct_1SlHKuCDAkmo04zy"} 
+[2026-01-03 04:54:59] local.INFO: Lien dashboard généré {"url":"https://connect.stripe.com/express/acct_1SlHKuCDAkmo04zy/Up5YCfRx2qv4"} 

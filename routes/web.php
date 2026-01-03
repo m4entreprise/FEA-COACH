@@ -47,12 +47,12 @@ Route::domain('{coach_slug}.' . config('app.domain', 'localhost'))
         Route::get('/mentions-legales', [CoachSiteController::class, 'legal'])->name('coach.legal');
         
         // Direct booking checkout - MUST be inside this domain group
-        Route::post('/reserver/{service}/checkout', [BookingController::class, 'directCheckout'])->name('coach.booking.checkout');
+        Route::post('/reserver/{serviceId}/checkout', [BookingController::class, 'directCheckout'])->name('coach.booking.checkout');
     });
 
 // Fallback routes without domain constraint - for testing
 Route::middleware(['web', 'resolve.coach'])->group(function () {
-    Route::post('/reserver/{service}/checkout', [BookingController::class, 'directCheckout'])->name('booking.checkout.fallback');
+    Route::post('/reserver/{serviceId}/checkout', [BookingController::class, 'directCheckout'])->name('booking.checkout.fallback');
 });
 
 // Public booking confirmation/cancel routes

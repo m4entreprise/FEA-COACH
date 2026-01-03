@@ -62,23 +62,6 @@ class BookingController extends Controller
     {
         $coach = app(Coach::class);
         $service = ServiceType::findOrFail($service);
-        
-        $validated = $request->validate([
-            'date' => 'nullable|date|after_or_equal:today',
-            'time' => 'nullable|date_format:H:i',
-        ]);
-
-        // If date and time are provided, validate slot availability
-        if (!empty($validated['date']) && !empty($validated['time'])) {
-            $date = Carbon::parse($validated['date']);
-            $slots = $this->bookingService->getAvailableSlots($coach, $date, $service);
-
-            $isSlotAvailable = collect($slots)->contains('time', $validated['time']);
-
-            if (!$isSlotAvailable) {
-                return back()->with('error', 'Ce créneau n\'est plus disponible');
-            }
-        }
 
         return Inertia::render('Booking/Create', [
             'coach' => [
@@ -87,8 +70,6 @@ class BookingController extends Controller
                 'subdomain' => $coach->subdomain,
             ],
             'service' => $service,
-            'selectedDate' => $validated['date'] ?? null,
-            'selectedTime' => $validated['time'] ?? null,
             'stripePublicKey' => config('stripe.public_key'),
         ]);
     }
@@ -99,8 +80,6 @@ class BookingController extends Controller
         $service = ServiceType::findOrFail($service);
         
         $validated = $request->validate([
-            'booking_date' => 'required|date|after_or_equal:today',
-            'start_time' => 'required|date_format:H:i',
             'client_first_name' => 'required|string|max:255',
             'client_last_name' => 'required|string|max:255',
             'client_email' => 'required|email|max:255',
@@ -111,6 +90,8 @@ class BookingController extends Controller
         try {
             $booking = $this->bookingService->createBooking([
                 'service_type_id' => $service->id,
+                'booking_date' => null,
+                'start_time' => null,
                 ...$validated,
             ]);
 

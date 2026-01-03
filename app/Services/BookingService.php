@@ -44,14 +44,21 @@ class BookingService
             $serviceType = ServiceType::findOrFail($data['service_type_id']);
             $coach = $serviceType->coach;
 
-            $bookingDate = Carbon::parse($data['booking_date']);
-            $startTime = $data['start_time'];
-            $endTime = Carbon::parse($bookingDate->format('Y-m-d') . ' ' . $startTime)
-                ->addMinutes($serviceType->duration_minutes)
-                ->format('H:i:s');
+            // Handle bookings with or without specific date/time
+            $bookingDate = null;
+            $startTime = null;
+            $endTime = null;
 
-            if (!$this->isSlotAvailable($coach, $bookingDate, $startTime, $serviceType->duration_minutes)) {
-                throw new \Exception('Ce créneau n\'est plus disponible');
+            if (!empty($data['booking_date']) && !empty($data['start_time'])) {
+                $bookingDate = Carbon::parse($data['booking_date']);
+                $startTime = $data['start_time'];
+                $endTime = Carbon::parse($bookingDate->format('Y-m-d') . ' ' . $startTime)
+                    ->addMinutes($serviceType->duration_minutes)
+                    ->format('H:i:s');
+
+                if (!$this->isSlotAvailable($coach, $bookingDate, $startTime, $serviceType->duration_minutes)) {
+                    throw new \Exception('Ce créneau n\'est plus disponible');
+                }
             }
 
             $clientId = null;

@@ -130,10 +130,13 @@
                                     <div class="text-3xl font-bold text-primary">{{ number_format($service->price, 0, ',', ' ') }}€</div>
                                 </div>
                                 @if($service->booking_enabled && $coach->user->has_payments_module)
-                                    <a href="{{ route('coach.booking.show', ['coach_slug' => $coach->slug ?: $coach->subdomain]) }}?service={{ $service->id }}" 
-                                       class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                        Réserver
-                                    </a>
+                                    <form action="{{ route('coach.booking.checkout', ['coach_slug' => $coach->slug ?: $coach->subdomain, 'service' => $service->id]) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        <input type="hidden" name="client_email" value="booking@temp.com">
+                                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
+                                            Réserver
+                                        </button>
+                                    </form>
                                 @else
                                     <a href="#contact" 
                                        class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">

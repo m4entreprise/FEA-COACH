@@ -193,10 +193,13 @@
                         <p class="text-gray-600 mb-6 flex-grow">{{ $service->description }}</p>
                         
                         @if($service->booking_enabled && $coach->user->has_payments_module)
-                            <a href="{{ route('coach.booking.show', ['coach_slug' => $coach->slug ?: $coach->subdomain]) }}?service={{ $service->id }}" 
-                               class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
-                                Réserver en ligne
-                            </a>
+                            <form action="{{ route('coach.booking.checkout', ['coach_slug' => $coach->slug ?: $coach->subdomain, 'service' => $service->id]) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="client_email" value="booking@temp.com">
+                                <button type="submit" class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
+                                    Réserver en ligne
+                                </button>
+                            </form>
                         @else
                             <a href="#contact" 
                                class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">

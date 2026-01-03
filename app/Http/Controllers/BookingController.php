@@ -18,73 +18,13 @@ class BookingController extends Controller
         protected StripeConnectService $stripeService
     ) {}
 
-    public function show(Coach $coach)
-    {
-        $coach->load(['serviceTypes' => function ($query) {
-            $query->where('is_active', true)
-                ->where('booking_enabled', true)
-                ->orderBy('order');
-        }]);
-
-        $stripeAccount = $coach->stripeAccount;
-        $canAcceptBookings = $stripeAccount && $stripeAccount->canAcceptPayments();
-
-        return Inertia::render('Booking/Index', [
-            'coach' => [
-                'id' => $coach->id,
-                'name' => $coach->name,
-                'subdomain' => $coach->subdomain,
-            ],
-            'services' => $coach->serviceTypes,
-            'canAcceptBookings' => $canAcceptBookings,
-            'stripePublicKey' => config('stripe.public_key'),
-        ]);
-    }
-
-    public function availableSlots(Request $request, $service)
+    public function directCheckout(Request $request, $service)
     {
         $coach = app(Coach::class);
         $service = ServiceType::findOrFail($service);
         
         $validated = $request->validate([
-            'date' => 'required|date|after_or_equal:today',
-        ]);
-
-        $date = Carbon::parse($validated['date']);
-        $slots = $this->bookingService->getAvailableSlots($coach, $date, $service);
-
-        return response()->json([
-            'slots' => $slots,
-        ]);
-    }
-
-    public function create(Request $request, $service)
-    {
-        $coach = app(Coach::class);
-        $service = ServiceType::findOrFail($service);
-
-        return Inertia::render('Booking/Create', [
-            'coach' => [
-                'id' => $coach->id,
-                'name' => $coach->name,
-                'subdomain' => $coach->subdomain,
-            ],
-            'service' => $service,
-            'stripePublicKey' => config('stripe.public_key'),
-        ]);
-    }
-
-    public function store(Request $request, $service)
-    {
-        $coach = app(Coach::class);
-        $service = ServiceType::findOrFail($service);
-        
-        $validated = $request->validate([
-            'client_first_name' => 'required|string|max:255',
-            'client_last_name' => 'required|string|max:255',
             'client_email' => 'required|email|max:255',
-            'client_phone' => 'required|string|max:50',
-            'client_notes' => 'nullable|string|max:1000',
         ]);
 
         try {
@@ -92,19 +32,18 @@ class BookingController extends Controller
                 'service_type_id' => $service->id,
                 'booking_date' => null,
                 'start_time' => null,
-                ...$validated,
+                'client_email' => $validated['client_email'],
+                'client_first_name' => null,
+                'client_last_name' => null,
+                'client_phone' => null,
+                'client_notes' => null,
             ]);
 
             $checkoutSession = $this->stripeService->createCheckoutSession($booking);
 
-            return response()->json([
-                'checkout_url' => $checkoutSession['url'],
-                'session_id' => $checkoutSession['id'],
-            ]);
+            return redirect($checkoutSession['url']);
         } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 400);
+            return back()->with('error', 'Erreur lors de la création de la réservation: ' . $e->getMessage());
         }
     }
 

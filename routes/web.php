@@ -46,11 +46,8 @@ Route::domain('{coach_slug}.' . config('app.domain', 'localhost'))
         Route::post('/contact', [CoachSiteController::class, 'contact'])->name('coach.contact');
         Route::get('/mentions-legales', [CoachSiteController::class, 'legal'])->name('coach.legal');
         
-        // Public booking routes
-        Route::get('/reserver', [BookingController::class, 'show'])->name('coach.booking.show');
-        Route::get('/reserver/{service}/creneaux', [BookingController::class, 'availableSlots'])->name('coach.booking.slots');
-        Route::get('/reserver/{service}/nouveau', [BookingController::class, 'create'])->name('coach.booking.create');
-        Route::post('/reserver/{service}', [BookingController::class, 'store'])->name('coach.booking.store');
+        // Direct booking checkout
+        Route::post('/reserver/{service}/checkout', [BookingController::class, 'directCheckout'])->name('coach.booking.checkout');
     });
 
 // Public booking confirmation/cancel routes

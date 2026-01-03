@@ -401,179 +401,226 @@ const customDomainStatusMeta = computed(() => {
           </div>
         </section>
 
-        <!-- Pricing info -->
-        <section class="space-y-4">
-          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl">
-            <div class="flex items-start gap-4 mb-5">
-              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                <Crown class="h-4 w-4" />
-              </div>
-              <div class="flex-1">
-                <div class="flex flex-wrap items-start justify-between gap-4">
-                  <div class="space-y-1">
-                    <p class="text-xs uppercase tracking-wide text-slate-500">
-                      Formule
-                    </p>
-                    <h3 class="text-sm md:text-base font-semibold text-slate-50">
-                      {{ planInfo?.name || 'UNICOACH Pro' }}
-                    </h3>
-                  </div>
+        <!-- Subscription bundles -->
+        <section class="space-y-6">
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <!-- UNICOACH subscription card -->
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl">
+              <div class="flex items-start gap-4 mb-5">
+                <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                  <Crown class="h-4 w-4" />
                 </div>
-              </div>
-            </div>
-
-            <div class="rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 p-5 text-white mb-4">
-              <div class="flex flex-wrap items-baseline justify-between gap-3 mb-3">
-                <div>
-                  <div class="flex items-baseline gap-2">
-                    <span class="text-3xl font-bold">{{ planInfo?.price || '20' }}€</span>
-                    <span class="text-sm opacity-90">{{ planInfo?.interval || 'HTVA / mois' }}</span>
-                  </div>
-                  <p v-if="planInfo?.original_price" class="text-xs opacity-80 mt-1">
-                    Prix normal : <span class="line-through">{{ planInfo.original_price }}€</span>
+                <div class="flex-1">
+                  <p class="text-xs uppercase tracking-wide text-slate-500">
+                    Abonnement
+                  </p>
+                  <h3 class="text-base font-semibold text-slate-50">
+                    UNICOACH
+                  </h3>
+                  <p class="text-xs text-slate-400 mt-1">
+                    Gardez la main sur vos paiements, votre essai gratuit et votre portail client en un clin d'œil.
                   </p>
                 </div>
-                <div
-                  v-if="planInfo?.is_fea_price"
-                  class="rounded-xl bg-white/20 backdrop-blur-sm px-3 py-2 text-right text-xs"
-                >
-                  <p class="text-emerald-200 font-semibold mb-1">Partenariat</p>
-                  <p class="font-bold">Fitness Education Academy</p>
+              </div>
+
+              <div class="rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 p-5 text-white mb-4">
+                <div class="flex flex-wrap items-baseline justify-between gap-3 mb-3">
+                  <div>
+                    <div class="flex items-baseline gap-2">
+                      <span class="text-3xl font-bold">{{ planInfo?.price || '20' }}€</span>
+                      <span class="text-sm opacity-90">{{ planInfo?.interval || 'HTVA / mois' }}</span>
+                    </div>
+                    <p v-if="planInfo?.original_price" class="text-xs opacity-80 mt-1">
+                      Prix normal : <span class="line-through">{{ planInfo.original_price }}€</span>
+                    </p>
+                  </div>
+                  <div
+                    v-if="planInfo?.is_fea_price"
+                    class="rounded-xl bg-white/20 backdrop-blur-sm px-3 py-2 text-right text-xs"
+                  >
+                    <p class="text-emerald-200 font-semibold mb-1">Partenariat</p>
+                    <p class="font-bold">Fitness Education Academy</p>
+                  </div>
+                </div>
+                <p class="text-xs opacity-90">
+                  {{ planInfo?.description || 'Bénéficiez d\'une réduction permanente grâce au partenariat avec FEA.' }}
+                </p>
+              </div>
+
+              <div class="text-xs text-slate-300 flex flex-wrap items-center gap-3">
+                <div class="flex items-center gap-1">
+                  <Check class="h-3.5 w-3.5 text-emerald-400" />
+                  <span>Essai gratuit inclus</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <CreditCard class="h-3.5 w-3.5 text-purple-300" />
+                  <span>Portail Stripe sécurisé</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <Sparkles class="h-3.5 w-3.5 text-pink-300" />
+                  <span>Mises à jour continues</span>
                 </div>
               </div>
-              <p class="text-xs opacity-90">
-                {{ planInfo?.description || 'Bénéficiez d\'une réduction permanente grâce au partenariat avec FEA.' }}
-              </p>
             </div>
 
-            <div class="space-y-2 text-xs text-slate-200">
-              <p class="font-semibold text-slate-100 mb-3">Fonctionnalités incluses :</p>
-              <div class="space-y-2">
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Site web personnalisé avec votre sous-domaine</span>
+            <!-- Domain subscription card -->
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl">
+              <div class="flex items-start gap-4 mb-5">
+                <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-400 flex items-center justify-center shadow-lg flex-shrink-0">
+                  <Globe class="h-4 w-4" />
                 </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Gestion des plans et transformations avant/après</span>
+                <div class="flex-1">
+                  <p class="text-xs uppercase tracking-wide text-slate-500">
+                    Abonnement
+                  </p>
+                  <h3 class="text-base font-semibold text-slate-50">
+                    Nom de domaine
+                  </h3>
+                  <p class="text-xs text-slate-400 mt-1">
+                    Centralisez l'achat, la configuration et le suivi de votre domaine personnalisé.
+                  </p>
                 </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Formulaire de contact et gestion des prospects</span>
+              </div>
+
+              <!-- Has custom domain -->
+              <div v-if="customDomain" class="space-y-4">
+                <div class="rounded-xl border border-indigo-500/40 bg-indigo-950/40 p-4">
+                  <div class="flex items-start gap-3">
+                    <Check class="h-5 w-5 text-indigo-300 flex-shrink-0" />
+                    <div class="flex-1 space-y-2">
+                      <p class="text-sm font-semibold text-indigo-100">
+                        {{ customDomain.domain || 'Domaine configuré' }}
+                      </p>
+                      <p class="text-xs text-indigo-200">
+                        Votre site est accessible via votre nom de domaine personnalisé.
+                      </p>
+                      <div v-if="domainExpiryDate" class="flex items-center gap-2 text-xs text-indigo-300">
+                        <Calendar class="h-3 w-3" />
+                        <span>Renouvellement le {{ domainExpiryDate }}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Base clients avec notes et documents</span>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                  <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
+                    <p class="text-slate-400 mb-1">Domaine</p>
+                    <p class="text-slate-50 font-semibold">{{ customDomain.domain || 'Non configuré' }}</p>
+                  </div>
+                  <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
+                    <p class="text-slate-400 mb-1">Statut</p>
+                    <p class="font-semibold" :class="customDomainStatusMeta.badgeClass">
+                      {{ customDomainStatusMeta.text }}
+                    </p>
+                  </div>
                 </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Support prioritaire par ticket</span>
+              </div>
+
+              <!-- No custom domain - Promotion -->
+              <div v-else class="space-y-4">
+                <div class="rounded-xl border border-amber-500/40 bg-amber-500/5 text-amber-100 text-xs p-4">
+                  Notre équipe vous recontactera dans les 48h ouvrables afin d'installer le nouveau nom de domaine.
                 </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Mises à jour et nouvelles fonctionnalités incluses</span>
+                <div class="rounded-xl border border-slate-700/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4">
+                  <div class="flex items-start gap-3">
+                    <Sparkles class="h-5 w-5 text-purple-400 flex-shrink-0" />
+                    <div class="flex-1 space-y-3">
+                      <div>
+                        <p class="text-sm font-semibold text-slate-200 mb-1">
+                          Donnez plus de professionnalisme à votre présence
+                        </p>
+                        <p class="text-xs text-slate-400">
+                          Utilisez votre propre nom de domaine (exemple : <span class="text-purple-300">www.moncoaching.com</span>) au lieu de <span class="text-slate-500">*.unicoach.app</span>
+                        </p>
+                      </div>
+                      
+                      <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-700/50">
+                        <div>
+                          <p class="text-xs text-slate-300 font-medium">Nom de domaine personnalisé</p>
+                          <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
+                        </div>
+                        <button
+                          type="button"
+                          @click="openDomainModal"
+                          class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-4 py-2 text-xs font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
+                        >
+                          <CreditCard class="h-3.5 w-3.5" />
+                          Acheter
+                        </button>
+                        <span
+                          v-if="hasCustomDomainOrder"
+                          type="button"
+                          class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 px-4 py-2 text-xs font-semibold text-emerald-200 whitespace-nowrap"
+                        >
+                          Acheté
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
 
-        <!-- Custom Domain Section -->
-        <section class="space-y-4">
-          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl">
-            <div class="flex items-start gap-4 mb-5">
-              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-400 flex items-center justify-center shadow-lg flex-shrink-0">
-                <Globe class="h-4 w-4" />
-              </div>
-              <div class="flex-1">
-                <div class="flex flex-wrap items-start justify-between gap-4">
-                  <div class="space-y-1">
-                    <p class="text-xs uppercase tracking-wide text-slate-500">
-                      Nom de domaine
-                    </p>
-                    <h3 class="text-sm md:text-base font-semibold text-slate-50">
-                      {{ customDomain ? 'Domaine personnalisé actif' : 'Nom de domaine personnalisé' }}
-                    </h3>
-                  </div>
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <!-- Formule UNICOACH Pro detail -->
+            <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-5 shadow-xl">
+              <p class="text-xs uppercase tracking-wide text-slate-500">Formule</p>
+              <h3 class="text-lg font-semibold text-slate-50 mb-3">UNICOACH Pro</h3>
+              <p class="text-sm text-slate-300 mb-4">
+                Tout ce dont vous avez besoin pour lancer et scaler votre activité digitale. La formule Pro regroupe l'intégralité des modules coach, les automatisations emailing et des outils marketing dédiés.
+              </p>
+              <div class="space-y-3 text-xs text-slate-200">
+                <div class="flex items-start gap-2">
+                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <span>Site web personnalisé avec votre sous-domaine et pages illimitées</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <span>Gestion des plans, transformations avant/après et suivi client complet</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <span>Formulaire de contact, pipeline prospects et notes internes</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <span>Support prioritaire par ticket et mises à jour continues</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <span>Accès aux nouvelles fonctionnalités en avant-première</span>
                 </div>
               </div>
             </div>
 
-            <!-- Has custom domain -->
-            <div v-if="customDomain" class="space-y-4">
-              <div class="rounded-xl border border-indigo-500/40 bg-indigo-950/40 p-4">
-                <div class="flex items-start gap-3">
-                  <Check class="h-5 w-5 text-indigo-300 flex-shrink-0" />
-                  <div class="flex-1 space-y-2">
-                    <p class="text-sm font-semibold text-indigo-100">
-                      {{ customDomain.domain || 'Domaine configuré' }}
-                    </p>
-                    <p class="text-xs text-indigo-200">
-                      Votre site est accessible via votre nom de domaine personnalisé.
-                    </p>
-                    <div v-if="domainExpiryDate" class="flex items-center gap-2 text-xs text-indigo-300">
-                      <Calendar class="h-3 w-3" />
-                      <span>Renouvellement le {{ domainExpiryDate }}</span>
-                    </div>
-                  </div>
+            <!-- Formule Nom de domaine detail -->
+            <div class="rounded-2xl border border-indigo-500/30 bg-indigo-950/40 p-5 shadow-xl">
+              <p class="text-xs uppercase tracking-wide text-indigo-200">Formule</p>
+              <h3 class="text-lg font-semibold text-white mb-3">Nom de domaine personnalisé</h3>
+              <p class="text-sm text-indigo-100 mb-4">
+                Renforcez votre image de marque avec une adresse professionnelle (ex. <span class="text-white font-semibold">www.moncoaching.com</span>) déjà configurée et sécurisée par l'équipe UNICOACH.
+              </p>
+              <div class="space-y-3 text-xs text-indigo-100">
+                <div class="flex items-start gap-2">
+                  <Check class="h-4 w-4 text-white flex-shrink-0 mt-0.5" />
+                  <span>Achat, configuration DNS et renouvellement annuel gérés pour vous (65€ HTVA / an)</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <Check class="h-4 w-4 text-white flex-shrink-0 mt-0.5" />
+                  <span>Redirection HTTPS, emails techniques et certificat SSL inclus</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <Check class="h-4 w-4 text-white flex-shrink-0 mt-0.5" />
+                  <span>Suivi de statut en temps réel et notifications avant expiration</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <Check class="h-4 w-4 text-white flex-shrink-0 mt-0.5" />
+                  <span>Accompagnement dédié : prise de contact sous 48h ouvrables</span>
                 </div>
               </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
-                  <p class="text-slate-400 mb-1">Domaine</p>
-                  <p class="text-slate-50 font-semibold">{{ customDomain.domain || 'Non configuré' }}</p>
-                </div>
-                <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
-                  <p class="text-slate-400 mb-1">Statut</p>
-                  <p class="font-semibold" :class="customDomainStatusMeta.badgeClass">
-                    {{ customDomainStatusMeta.text }}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- No custom domain - Promotion -->
-            <div v-else class="space-y-4">
-              <div class="rounded-xl border border-amber-500/40 bg-amber-500/5 text-amber-100 text-xs p-4">
-                Notre équipe vous recontactera dans les 48h ouvrables afin d'installer le nouveau nom de domaine.
-              </div>
-              <div class="rounded-xl border border-slate-700/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4">
-                <div class="flex items-start gap-3">
-                  <Sparkles class="h-5 w-5 text-purple-400 flex-shrink-0" />
-                  <div class="flex-1 space-y-3">
-                    <div>
-                      <p class="text-sm font-semibold text-slate-200 mb-1">
-                        Donnez plus de professionnalisme à votre présence
-                      </p>
-                      <p class="text-xs text-slate-400">
-                        Utilisez votre propre nom de domaine (exemple : <span class="text-purple-300">www.moncoaching.com</span>) au lieu de <span class="text-slate-500">*.unicoach.app</span>
-                      </p>
-                    </div>
-                    
-                    <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-700/50">
-                      <div>
-                        <p class="text-xs text-slate-300 font-medium">Nom de domaine personnalisé</p>
-                        <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
-                      </div>
-                      <button
-                        type="button"
-                        @click="openDomainModal"
-                        class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-4 py-2 text-xs font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
-                      >
-                        <CreditCard class="h-3.5 w-3.5" />
-                        Acheter
-                      </button>
-                      <span
-                        v-if="hasCustomDomainOrder"
-                        type="button"
-                        class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 px-4 py-2 text-xs font-semibold text-emerald-200 whitespace-nowrap"
-                      >
-                        Acheté
-                      </span>
-                    </div>
-                  </div>
-                </div>
+              <div class="mt-4 rounded-xl border border-white/20 bg-white/5 p-4 text-xs text-indigo-50">
+                <p>Passez commande maintenant : nous vérifions la disponibilité, achetons le domaine en votre nom et l'activons sur votre site UNICOACH.</p>
               </div>
             </div>
           </div>

@@ -91,6 +91,9 @@ const cancelBooking = (booking) => {
 };
 
 const formatDate = (dateString) => {
+    if (!dateString) {
+        return 'À planifier';
+    }
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('fr-FR', {
         day: '2-digit',
@@ -100,7 +103,7 @@ const formatDate = (dateString) => {
 };
 
 const formatTime = (timeString) => {
-    return timeString?.substring(0, 5) || '';
+    return timeString?.substring(0, 5) || 'À planifier';
 };
 </script>
 

@@ -71,9 +71,9 @@ class BookingController extends Controller
         return Inertia::render('Booking/Success', [
             'booking' => [
                 'id' => $booking->id,
-                'booking_date' => $booking->booking_date->format('d/m/Y'),
-                'start_time' => substr($booking->start_time, 0, 5),
-                'end_time' => substr($booking->end_time, 0, 5),
+                'booking_date' => $booking->booking_date?->format('d/m/Y'),
+                'start_time' => $booking->start_time ? substr($booking->start_time, 0, 5) : null,
+                'end_time' => $booking->end_time ? substr($booking->end_time, 0, 5) : null,
                 'service_name' => $booking->serviceType->name,
                 'coach_name' => $booking->coach->name,
                 'amount' => $booking->formatted_amount,

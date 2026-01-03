@@ -21,6 +21,9 @@ const getStatusBadge = (status) => {
 };
 
 const formatDate = (date) => {
+    if (!date) {
+        return 'À planifier';
+    }
     return new Date(date).toLocaleDateString('fr-FR', {
         weekday: 'long',
         year: 'numeric',
@@ -30,6 +33,9 @@ const formatDate = (date) => {
 };
 
 const formatTime = (time) => {
+    if (!time) {
+        return 'À planifier';
+    }
     return time.substring(0, 5);
 };
 </script>

@@ -191,6 +191,11 @@ class StripeConnectService
         $amount = (int) ($booking->amount * 100);
         $platformFee = $this->calculatePlatformFee($amount);
 
+        $description = 'Séance à planifier';
+        if ($booking->booking_date && $booking->start_time) {
+            $description = 'Séance du ' . $booking->booking_date->format('d/m/Y') . ' à ' . substr($booking->start_time, 0, 5);
+        }
+
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
@@ -208,7 +213,7 @@ class StripeConnectService
                             'currency' => strtolower($booking->currency),
                             'product_data' => [
                                 'name' => $booking->serviceType->name,
-                                'description' => 'Séance du ' . $booking->booking_date->format('d/m/Y') . ' à ' . substr($booking->start_time, 0, 5),
+                                'description' => $description,
                             ],
                             'unit_amount' => $amount,
                         ],

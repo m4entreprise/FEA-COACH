@@ -72,8 +72,12 @@ class Booking extends Model
         return number_format($this->amount, 2) . ' ' . $this->currency;
     }
 
-    public function getBookingDateTimeAttribute(): Carbon
+    public function getBookingDateTimeAttribute(): ?Carbon
     {
+        if (!$this->booking_date || !$this->start_time) {
+            return null;
+        }
+
         return Carbon::parse($this->booking_date->format('Y-m-d') . ' ' . $this->start_time);
     }
 
@@ -104,7 +108,8 @@ class Booking extends Model
 
     public function canBeCancelled(): bool
     {
-        return in_array($this->status, ['pending', 'confirmed']) 
+        return in_array($this->status, ['pending', 'confirmed'])
+            && $this->booking_date_time
             && $this->booking_date_time->isFuture();
     }
 

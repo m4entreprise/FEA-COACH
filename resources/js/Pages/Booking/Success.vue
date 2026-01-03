@@ -1,10 +1,13 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import { CheckCircleIcon, CalendarIcon, ClockIcon, UserIcon, CreditCardIcon } from '@heroicons/vue/24/outline';
+import { computed } from 'vue';
 
 const props = defineProps({
     booking: Object,
 });
+
+const isScheduled = computed(() => !!(props.booking?.booking_date && props.booking?.start_time));
 </script>
 
 <template>
@@ -16,10 +19,10 @@ const props = defineProps({
                 <div class="bg-gradient-to-r from-green-500 to-blue-500 p-8 text-center">
                     <CheckCircleIcon class="h-20 w-20 text-white mx-auto mb-4" />
                     <h1 class="text-3xl font-bold text-white mb-2">
-                        Réservation confirmée !
+                        Paiement confirmé !
                     </h1>
                     <p class="text-green-100">
-                        Votre séance a été réservée avec succès
+                        Votre séance sera planifiée avec le coach
                     </p>
                 </div>
 
@@ -32,7 +35,9 @@ const props = defineProps({
                                 <CalendarIcon class="h-6 w-6 text-gray-400 mr-3 flex-shrink-0 mt-0.5" />
                                 <div>
                                     <p class="text-sm text-gray-600">Date</p>
-                                    <p class="text-base font-medium text-gray-900">{{ booking.booking_date }}</p>
+                                    <p class="text-base font-medium text-gray-900">
+                                        {{ booking.booking_date || 'À planifier' }}
+                                    </p>
                                 </div>
                             </div>
 
@@ -41,7 +46,10 @@ const props = defineProps({
                                 <div>
                                     <p class="text-sm text-gray-600">Horaire</p>
                                     <p class="text-base font-medium text-gray-900">
-                                        {{ booking.start_time }} - {{ booking.end_time }}
+                                        <span v-if="isScheduled">
+                                            {{ booking.start_time }} - {{ booking.end_time }}
+                                        </span>
+                                        <span v-else>À planifier</span>
                                     </p>
                                 </div>
                             </div>
@@ -82,7 +90,7 @@ const props = defineProps({
 
                     <div class="space-y-3">
                         <p class="text-sm text-gray-600 text-center">
-                            📧 Vous recevrez un rappel 24h avant votre séance
+                            📧 Vous recevrez un rappel 24h avant votre séance une fois le créneau défini
                         </p>
 
                         <div class="flex flex-col sm:flex-row gap-3 justify-center">

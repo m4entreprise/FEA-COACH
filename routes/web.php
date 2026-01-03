@@ -46,6 +46,11 @@ Route::domain('{coach_slug}.' . config('app.domain', 'localhost'))
         Route::post('/contact', [CoachSiteController::class, 'contact'])->name('coach.contact');
         Route::get('/mentions-legales', [CoachSiteController::class, 'legal'])->name('coach.legal');
         
+        // Test route
+        Route::post('/test-route', function() {
+            return response()->json(['success' => true, 'message' => 'Route works']);
+        });
+        
         // Direct booking checkout
         Route::post('/reserver/{service}/checkout', [BookingController::class, 'directCheckout'])->name('coach.booking.checkout');
     });

@@ -20,6 +20,8 @@ class BookingController extends Controller
 
     public function directCheckout(Request $request, $service)
     {
+        \Log::info('DirectCheckout called', ['service_id' => $service, 'request_data' => $request->all()]);
+        
         $coach = app(Coach::class);
         $service = ServiceType::findOrFail($service);
         
@@ -39,10 +41,15 @@ class BookingController extends Controller
                 'client_notes' => null,
             ]);
 
+            \Log::info('Booking created', ['booking_id' => $booking->id]);
+
             $checkoutSession = $this->stripeService->createCheckoutSession($booking);
+
+            \Log::info('Checkout session created', ['url' => $checkoutSession['url']]);
 
             return redirect($checkoutSession['url']);
         } catch (\Exception $e) {
+            \Log::error('DirectCheckout failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return back()->with('error', 'Erreur lors de la création de la réservation: ' . $e->getMessage());
         }
     }

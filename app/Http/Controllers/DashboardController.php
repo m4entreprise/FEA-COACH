@@ -27,6 +27,7 @@ class DashboardController extends Controller
             'plans',
             'transformations',
             'faqs',
+            'serviceTypes',
             'user',
         ])->first();
 
@@ -68,6 +69,8 @@ class DashboardController extends Controller
         $stats = [
             'total_plans' => $coach->plans()->count(),
             'active_plans' => $coach->plans()->where('is_active', true)->count(),
+            'total_services' => $coach->serviceTypes()->count(),
+            'active_services' => $coach->serviceTypes()->where('is_active', true)->count(),
             'total_transformations' => $coach->transformations()->count(),
             'is_active' => $coach->is_active,
             'profile_completion' => $profileData['percentage'],

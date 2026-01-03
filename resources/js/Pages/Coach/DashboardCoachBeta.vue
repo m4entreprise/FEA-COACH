@@ -583,18 +583,18 @@ const logout = () => {
                                     <div class="space-y-1">
                                         <p class="text-slate-400">Business</p>
                                         <p class="text-sm font-semibold">
-                                            {{ safeStats.active_plans ?? 0 }} offre(s) active(s)
+                                            {{ safeStats.active_services ?? safeStats.active_plans ?? 0 }} offre(s) active(s)
                                         </p>
                                         <p class="text-[11px] text-slate-500">
-                                            Structurez vos offres et suivez vos clients.
+                                            Structurez vos prestations et suivez vos clients.
                                         </p>
                                         <div class="flex flex-wrap gap-2 mt-1">
                                             <Link
-                                                :href="route('dashboard.plans')"
+                                                :href="route('dashboard.services.index')"
                                                 class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-1 text-[11px] border border-slate-700 hover:bg-slate-700"
                                             >
-                                                <CreditCard class="h-3 w-3" />
-                                                Plans
+                                                <Sparkles class="h-3 w-3" />
+                                                Services
                                             </Link>
                                             <Link
                                                 :href="route('dashboard.clients.index')"

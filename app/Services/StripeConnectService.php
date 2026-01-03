@@ -199,12 +199,15 @@ class StripeConnectService
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
+                'Stripe-Account' => $stripeAccount->stripe_account_id,
             ])->asForm()->post($this->baseUrl . '/checkout/sessions', [
                 'mode' => 'payment',
                 'payment_intent_data' => [
                     'application_fee_amount' => $platformFee,
-                    'transfer_data' => [
-                        'destination' => $stripeAccount->stripe_account_id,
+                    'metadata' => [
+                        'booking_id' => $booking->id,
+                        'coach_id' => $coach->id,
+                        'service_type_id' => $booking->service_type_id,
                     ],
                 ],
                 'line_items' => [

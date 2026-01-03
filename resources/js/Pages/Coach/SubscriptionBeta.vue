@@ -429,20 +429,53 @@ const statusCopy = computed(() => {
               <div class="flex items-center gap-2">
                 <Check class="h-4 w-4 text-emerald-400" />
                 <span>Essai gratuit inclus</span>
-                  <Check class="h-4 w-4 text-white flex-shrink-0 mt-0.5" />
-                  <span>Redirection HTTPS, emails techniques et certificat SSL inclus</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-white flex-shrink-0 mt-0.5" />
-                  <span>Suivi de statut en temps réel et notifications avant expiration</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-white flex-shrink-0 mt-0.5" />
-                  <span>Accompagnement dédié : prise de contact sous 48h ouvrables</span>
-                </div>
               </div>
-              <div class="mt-4 rounded-xl border border-white/20 bg-white/5 p-4 text-xs text-indigo-50">
-                <p>Passez commande maintenant : nous vérifions la disponibilité, achetons le domaine en votre nom et l'activons sur votre site UNICOACH.</p>
+              <div class="flex items-center gap-2">
+                <CreditCard class="h-4 w-4 text-purple-300" />
+                <span>Portail Stripe sécurisé</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Sparkles class="h-4 w-4 text-pink-300" />
+                <span>Mises à jour continues</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Domain highlight -->
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl space-y-5">
+            <div class="flex items-start gap-4">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-400 flex items-center justify-center shadow-lg flex-shrink-0">
+                <Globe class="h-4 w-4" />
+              </div>
+              <div class="flex-1">
+                <p class="text-xs uppercase tracking-wide text-slate-500">Abonnement</p>
+                <h3 class="text-base font-semibold text-slate-50">Nom de domaine</h3>
+                <p class="text-xs text-slate-400 mt-1">Centralisez l'achat, la configuration et le suivi de votre domaine personnalisé.</p>
+              </div>
+            </div>
+
+            <p class="rounded-xl border border-amber-500/40 bg-amber-500/5 text-amber-100 text-sm p-4">
+              Notre équipe vous recontactera dans les 48h ouvrables afin d'installer le nouveau nom de domaine.
+            </p>
+
+            <div class="space-y-3 text-xs text-slate-200">
+              <p class="text-sm font-semibold text-slate-100">Donnez plus de professionnalisme à votre présence</p>
+              <p class="text-slate-400">
+                Utilisez votre propre nom de domaine (exemple : <span class="text-purple-300">www.moncoaching.com</span>) au lieu de <span class="text-slate-500">*.unicoach.app</span>
+              </p>
+              <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-700/50">
+                <div>
+                  <p class="text-xs text-slate-300 font-medium">Nom de domaine personnalisé</p>
+                  <p class="text-[11px] text-slate-400">65€ HTVA / an</p>
+                </div>
+                <button
+                  type="button"
+                  @click="openDomainModal"
+                  class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-4 py-2 text-xs font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
+                >
+                  <CreditCard class="h-3.5 w-3.5" />
+                  Acheter
+                </button>
               </div>
             </div>
           </div>

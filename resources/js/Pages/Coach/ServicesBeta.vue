@@ -394,7 +394,7 @@ const saveOrder = async () => {
                 <section class="space-y-4">
                     <VueDraggable
                         v-if="servicesList.length"
-                        v-model="servicesList"
+                        :list="servicesList"
                         item-key="id"
                         handle=".service-drag-handle"
                         tag="div"
@@ -403,7 +403,6 @@ const saveOrder = async () => {
                         ghost-class="drag-ghost"
                         chosen-class="drag-chosen"
                         :animation="220"
-                        :force-fallback="true"
                         @start="onDragStart"
                         @end="onDragFinish"
                     >

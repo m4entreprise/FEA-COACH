@@ -262,7 +262,8 @@ watch(isPreviewFullscreen, (active) => {
             </div>
 
             <VueDraggable
-              v-model="transformationsList"
+              :list="transformationsList"
+              item-key="id"
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               :animation="200"
               handle=".drag-handle"
@@ -271,6 +272,8 @@ watch(isPreviewFullscreen, (active) => {
             >
               <template #item="{ element }">
                 <article
+                  :key="element.id"
+                  :data-id="element.id"
                   class="bg-slate-900/80 rounded-2xl shadow-xl overflow-hidden border border-slate-800 relative transition"
                 >
                   <button

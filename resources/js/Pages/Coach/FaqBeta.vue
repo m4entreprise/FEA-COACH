@@ -325,9 +325,9 @@ watch(isPreviewFullscreen, (active) => {
         <section class="space-y-4">
           <VueDraggable
             v-if="faqsList.length"
-            v-model="faqsList"
+            :list="faqsList"
             item-key="id"
-            handle=".drag-handle"
+            handle=".faq-drag-handle"
             class="space-y-3"
             v-auto-animate
             ghost-class="drag-ghost"
@@ -350,7 +350,7 @@ watch(isPreviewFullscreen, (active) => {
                 <div class="flex items-start gap-4">
                   <button
                     type="button"
-                    class="drag-handle h-10 w-10 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-400 hover:text-slate-100"
+                    class="faq-drag-handle h-10 w-10 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-400 hover:text-slate-100"
                   >
                     <GripVertical class="h-4 w-4" />
                   </button>

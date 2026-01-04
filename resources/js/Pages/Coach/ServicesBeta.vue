@@ -394,7 +394,7 @@ const saveOrder = async () => {
                 <section class="space-y-4">
                     <VueDraggable
                         v-if="servicesList.length"
-                        :list="servicesList"
+                        v-model="servicesList"
                         item-key="id"
                         handle=".service-drag-handle"
                         tag="div"

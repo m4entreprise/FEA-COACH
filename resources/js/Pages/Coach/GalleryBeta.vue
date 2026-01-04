@@ -262,7 +262,7 @@ watch(isPreviewFullscreen, (active) => {
             </div>
 
             <VueDraggable
-              :list="transformationsList"
+              v-model="transformationsList"
               item-key="id"
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               :animation="200"

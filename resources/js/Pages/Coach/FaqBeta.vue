@@ -325,7 +325,7 @@ watch(isPreviewFullscreen, (active) => {
         <section class="space-y-4">
           <VueDraggable
             v-if="faqsList.length"
-            :list="faqsList"
+            v-model="faqsList"
             item-key="id"
             handle=".faq-drag-handle"
             class="space-y-3"

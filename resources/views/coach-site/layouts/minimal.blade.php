@@ -145,7 +145,7 @@
                                 @else
                                     <a href="#contact" 
                                        class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                        Contacter
+                                        Me contacter
                                     </a>
                                 @endif
                             </div>

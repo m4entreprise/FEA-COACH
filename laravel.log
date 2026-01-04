@@ -1,294 +1,32 @@
-[2026-01-03 04:39:23] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
-[2026-01-03 04:39:23] local.INFO: Booking created {"booking_id":9} 
-[2026-01-03 04:39:24] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1tQRFh2rqmV3GLGPZdc8pnuUyd1N0EGjydG5rjEPd2Ku8U15H2ybD3mMn#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
-[2026-01-03 04:39:40] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767415180","signatures_count":1} 
-[2026-01-03 04:39:40] local.INFO: Stripe webhook coach context hydrated {"coach_id":8,"source":"event.account"} 
-[2026-01-03 04:39:40] local.INFO: Stripe webhook received {"type":"payment_intent.succeeded","id":"evt_3SlMcjCDAkmo04zy1MuS4dKb"} 
-[2026-01-03 04:39:40] local.INFO: Booking payment succeeded {"booking_id":9,"payment_intent_id":"pi_3SlMcjCDAkmo04zy1IC0haIB"} 
-[2026-01-03 04:39:40] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767415180","signatures_count":1} 
-[2026-01-03 04:39:40] local.INFO: Stripe webhook coach context hydrated {"coach_id":8,"source":"event.account"} 
-[2026-01-03 04:39:40] local.INFO: Stripe webhook received {"type":"checkout.session.completed","id":"evt_1SlMcqCDAkmo04zy0WRDTUtp"} 
-[2026-01-03 04:39:40] local.INFO: Booking confirmed via checkout {"booking_id":9,"session_id":"cs_test_a1tQRFh2rqmV3GLGPZdc8pnuUyd1N0EGjydG5rjEPd2Ku8U15H2ybD3mMn"} 
-[2026-01-03 04:41:07] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 04:41:07] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 04:47:01] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
-[2026-01-03 04:47:01] local.INFO: Booking created {"booking_id":10} 
-[2026-01-03 04:47:02] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
-[2026-01-03 04:47:02] local.INFO: Booking created {"booking_id":11} 
-[2026-01-03 04:47:02] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a16UCeZLg7HjfeY6rN0ve7hByUv7bY4JXGsJSlfjxq45eVxS1PGkYdjW8F#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
-[2026-01-03 04:47:03] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1VEmn4RfIIvWuVKswvJLJ0L48pB1ZueQ9N4Q8Id07wcaWGwc6a0yyyQxB#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
-[2026-01-03 04:47:15] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"2","request_data":{"_token":"4cQe0pcmUwkKueAOfOyaDjnDj7iRXA4af24al5NA","client_email":"booking@temp.com"}} 
-[2026-01-03 04:47:15] local.INFO: Booking created {"booking_id":12} 
-[2026-01-03 04:47:16] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1YKn3fkaMK8jdDMcvZEgBdeYfoCf3Oq6Utc3hbOg6slAhEtNq5QOqFoz8#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
-[2026-01-03 04:47:32] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767415651","signatures_count":1} 
-[2026-01-03 04:47:32] local.INFO: Stripe webhook coach context hydrated {"coach_id":8,"source":"event.account"} 
-[2026-01-03 04:47:32] local.INFO: Stripe webhook received {"type":"payment_intent.succeeded","id":"evt_3SlMkQCDAkmo04zy10sByGl0"} 
-[2026-01-03 04:47:32] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767415651","signatures_count":1} 
-[2026-01-03 04:47:32] local.INFO: Stripe webhook coach context hydrated {"coach_id":8,"source":"event.account"} 
-[2026-01-03 04:47:32] local.INFO: Stripe webhook received {"type":"checkout.session.completed","id":"evt_1SlMkRCDAkmo04zy8J2z8yxU"} 
-[2026-01-03 04:47:32] local.INFO: Booking payment succeeded {"booking_id":12,"payment_intent_id":"pi_3SlMkQCDAkmo04zy10SsvXXt"} 
-[2026-01-03 04:47:32] local.INFO: Booking confirmed via checkout {"booking_id":12,"session_id":"cs_test_a1YKn3fkaMK8jdDMcvZEgBdeYfoCf3Oq6Utc3hbOg6slAhEtNq5QOqFoz8"} 
-[2026-01-03 04:47:37] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 04:47:38] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 04:54:57] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
-[2026-01-03 04:54:58] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlHKuCDAkmo04zy"} 
-[2026-01-03 04:54:59] local.INFO: Réponse Stripe login_links {"status":200,"successful":true,"body":"{
-  \"object\": \"login_link\",
-  \"created\": 1767416098,
-  \"url\": \"https://connect.stripe.com/express/acct_1SlHKuCDAkmo04zy/Up5YCfRx2qv4\"
-}"} 
-[2026-01-03 04:54:59] local.INFO: Lien dashboard généré {"url":"https://connect.stripe.com/express/acct_1SlHKuCDAkmo04zy/Up5YCfRx2qv4"} 
-[2026-01-03 17:28:02] local.INFO: Lemon Squeezy checkout payload {"payload_json":"{
-    \"data\": {
-        \"type\": \"checkouts\",
-        \"attributes\": {
-            \"checkout_data\": {
-                \"email\": \"adada@tata.com\",
-                \"name\": \"Jean Muskul\",
-                \"custom\": {
-                    \"user_id\": \"25\",
-                    \"onboarding\": \"true\",
-                    \"source\": \"onboarding_standard\"
-                }
-            },
-            \"checkout_options\": {
-                \"embed\": false,
-                \"media\": true,
-                \"logo\": true,
-                \"desc\": true,
-                \"discount\": true,
-                \"locale\": \"fr\"
-            },
-            \"product_options\": {
-                \"enabled_variants\": [
-                    1132461
-                ],
-                \"redirect_url\": \"https:\\/\\/unicoach.app\\/onboarding\\/step3\"
-            }
-        },
-        \"relationships\": {
-            \"store\": {
-                \"data\": {
-                    \"type\": \"stores\",
-                    \"id\": \"226870\"
-                }
-            },
-            \"variant\": {
-                \"data\": {
-                    \"type\": \"variants\",
-                    \"id\": \"1132461\"
-                }
-            }
-        }
-    }
-}"} 
-[2026-01-03 17:28:59] local.INFO: Lemon Squeezy webhook received {"event":"order_created","data":{"meta":{"test_mode":true,"event_name":"order_created","custom_data":{"source":"onboarding_standard","user_id":"25","onboarding":"true"},"webhook_id":"b15d3bee-0d78-413c-8c06-45e912dad6bf"},"data":{"type":"orders","id":"7187074","attributes":{"store_id":226870,"customer_id":7484235,"identifier":"f6191e45-eb4f-4a1d-8ac3-1f5a75a99b2b","order_number":22687014,"user_name":"Jean Muskul","user_email":"adada@tata.com","currency":"EUR","currency_rate":"1.17274540","tax_name":"VAT","tax_rate":0,"tax_inclusive":false,"status":"paid","status_formatted":"Paid","refunded":false,"refunded_at":null,"subtotal":3000,"discount_total":0,"tax":0,"setup_fee":0,"total":3000,"refunded_amount":0,"subtotal_usd":3518,"discount_total_usd":0,"tax_usd":0,"setup_fee_usd":0,"total_usd":3518,"refunded_amount_usd":0,"subtotal_formatted":"€30.00","discount_total_formatted":"€0.00","tax_formatted":"€0.00","setup_fee_formatted":"€0.00","total_formatted":"€30.00","refunded_amount_formatted":"€0.00","first_order_item":{"id":7124600,"order_id":7187074,"product_id":719428,"variant_id":1132461,"price_id":1954871,"product_name":"UNICOACH","variant_name":"Non FEA","price":3000,"quantity":1,"created_at":"2026-01-03T17:28:58.000000Z","updated_at":"2026-01-03T17:28:58.000000Z","test_mode":true},"urls":{"receipt":"https://app.lemonsqueezy.com/my-orders/f6191e45-eb4f-4a1d-8ac3-1f5a75a99b2b?expires=1767482938&signature=857b708bab4fc7caf021a6a96f1ed9c60bf9cec85f7fc26d86f02ceeb317cbdf"},"created_at":"2026-01-03T17:28:57.000000Z","updated_at":"2026-01-03T17:28:58.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7187074/store","self":"https://api.lemonsqueezy.com/v1/orders/7187074/relationships/store"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7187074/customer","self":"https://api.lemonsqueezy.com/v1/orders/7187074/relationships/customer"}},"order-items":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7187074/order-items","self":"https://api.lemonsqueezy.com/v1/orders/7187074/relationships/order-items"}},"subscriptions":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7187074/subscriptions","self":"https://api.lemonsqueezy.com/v1/orders/7187074/relationships/subscriptions"}},"license-keys":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7187074/license-keys","self":"https://api.lemonsqueezy.com/v1/orders/7187074/relationships/license-keys"}},"discount-redemptions":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7187074/discount-redemptions","self":"https://api.lemonsqueezy.com/v1/orders/7187074/relationships/discount-redemptions"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/orders/7187074"}}}} 
-[2026-01-03 17:28:59] local.INFO: Lemon Squeezy webhook received {"event":"subscription_created","data":{"meta":{"test_mode":true,"event_name":"subscription_created","custom_data":{"source":"onboarding_standard","user_id":"25","onboarding":"true"},"webhook_id":"7e1bfb76-240c-48c6-a888-a6c575d1a5a0"},"data":{"type":"subscriptions","id":"1766243","attributes":{"store_id":226870,"customer_id":7484235,"order_id":7187074,"order_item_id":7124600,"product_id":719428,"variant_id":1132461,"product_name":"UNICOACH","variant_name":"Non FEA","user_name":"Jean Muskul","user_email":"adada@tata.com","status":"active","status_formatted":"Active","card_brand":"visa","card_last_four":"4242","payment_processor":"stripe","pause":null,"cancelled":false,"trial_ends_at":null,"billing_anchor":3,"first_subscription_item":{"id":6109903,"subscription_id":1766243,"price_id":1961826,"quantity":1,"is_usage_based":false,"created_at":"2026-01-03T17:28:59.000000Z","updated_at":"2026-01-03T17:28:59.000000Z"},"urls":{"update_payment_method":"https://unicoach.lemonsqueezy.com/subscription/1766243/payment-details?expires=1767482939&signature=3ced33004f9f71c1fe6e57aafee8eb9390699eeb57eacdcec16b294531143adc","customer_portal":"https://unicoach.lemonsqueezy.com/billing?expires=1767482939&test_mode=1&user=6248425&signature=7cb18aa6fe06181302ff807fb9141044348b51c705c0ea82e7147bdb3233191c","customer_portal_update_subscription":"https://unicoach.lemonsqueezy.com/billing/1766243/update?expires=1767482939&user=6248425&signature=4824612efd487020d22f1842fc58ee9d73978314993b3e325fe5c9ccceb001ac"},"renews_at":"2026-02-03T17:28:51.000000Z","ends_at":null,"created_at":"2026-01-03T17:28:53.000000Z","updated_at":"2026-01-03T17:28:58.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/store","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/store"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/customer","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/customer"}},"order":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/order","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/order"}},"order-item":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/order-item","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/order-item"}},"product":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/product","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/product"}},"variant":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/variant","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/variant"}},"subscription-items":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/subscription-items","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/subscription-items"}},"subscription-invoices":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/subscription-invoices","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/subscription-invoices"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243"}}}} 
-[2026-01-03 17:28:59] local.INFO: Lemon Squeezy subscription_created handled {"user_id":25,"subscription_id":"1766243","status":"active"} 
-[2026-01-03 17:29:00] local.INFO: Lemon Squeezy webhook received {"event":"subscription_payment_success","data":{"meta":{"test_mode":true,"event_name":"subscription_payment_success","custom_data":{"source":"onboarding_standard","user_id":"25","onboarding":"true"},"webhook_id":"eee486d3-0f74-404a-9bd3-a185ff5a6a08"},"data":{"type":"subscription-invoices","id":"5600756","attributes":{"store_id":226870,"subscription_id":1766243,"customer_id":7484235,"user_name":"Jean Muskul","user_email":"adada@tata.com","billing_reason":"initial","card_brand":"visa","card_last_four":"4242","currency":"EUR","currency_rate":"1.17274540","status":"paid","status_formatted":"Paid","refunded":false,"refunded_at":null,"subtotal":3000,"discount_total":0,"tax":0,"tax_inclusive":false,"total":3000,"refunded_amount":0,"subtotal_usd":3518,"discount_total_usd":0,"tax_usd":0,"total_usd":3518,"refunded_amount_usd":0,"subtotal_formatted":"€30.00","discount_total_formatted":"€0.00","tax_formatted":"€0.00","total_formatted":"€30.00","refunded_amount_formatted":"€0.00","urls":{"invoice_url":"https://app.lemonsqueezy.com/my-orders/f6191e45-eb4f-4a1d-8ac3-1f5a75a99b2b/subscription-invoice/5600756?expires=1767482939&signature=46a7cd2d56a2891778272da7b50b0114a5f67ff6cee637de292c702ff90a6df8"},"created_at":"2026-01-03T17:28:54.000000Z","updated_at":"2026-01-03T17:28:59.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscription-invoices/5600756/store","self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5600756/relationships/store"}},"subscription":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscription-invoices/5600756/subscription","self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5600756/relationships/subscription"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscription-invoices/5600756/customer","self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5600756/relationships/customer"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5600756"}}}} 
-[2026-01-03 17:29:00] local.INFO: Unhandled Lemon Squeezy event {"event":"subscription_payment_success"} 
-[2026-01-03 17:29:29] local.INFO: Lemon Squeezy webhook received {"event":"subscription_updated","data":{"meta":{"test_mode":true,"event_name":"subscription_updated","custom_data":{"source":"onboarding_standard","user_id":"25","onboarding":"true"},"webhook_id":"429969f0-8805-428c-baf7-8282000606c6"},"data":{"type":"subscriptions","id":"1766243","attributes":{"store_id":226870,"customer_id":7484235,"order_id":7187074,"order_item_id":7124600,"product_id":719428,"variant_id":1132461,"product_name":"UNICOACH","variant_name":"Non FEA","user_name":"Jean Muskul","user_email":"adada@tata.com","status":"active","status_formatted":"Active","card_brand":"visa","card_last_four":"4242","payment_processor":"stripe","pause":null,"cancelled":false,"trial_ends_at":null,"billing_anchor":3,"first_subscription_item":{"id":6109903,"subscription_id":1766243,"price_id":1961826,"quantity":1,"is_usage_based":false,"created_at":"2026-01-03T17:28:59.000000Z","updated_at":"2026-01-03T17:29:28.000000Z"},"urls":{"update_payment_method":"https://unicoach.lemonsqueezy.com/subscription/1766243/payment-details?expires=1767482968&signature=a400157044d23e30e2aae5f91a14bfa84dc6a241e96a62814e4102af2ce9008e","customer_portal":"https://unicoach.lemonsqueezy.com/billing?expires=1767482968&test_mode=1&user=6248425&signature=8e22e5bc3a3b3239f264d1d5934929dac0d2b86bceb425db0ba609e62889a36b","customer_portal_update_subscription":"https://unicoach.lemonsqueezy.com/billing/1766243/update?expires=1767482968&user=6248425&signature=143d5d5b64dbbdc1853f3a91596bb549cbea9ad9ed70290683bc03dee8bfe332"},"renews_at":"2026-02-03T17:28:51.000000Z","ends_at":null,"created_at":"2026-01-03T17:28:53.000000Z","updated_at":"2026-01-03T17:28:58.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/store","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/store"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/customer","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/customer"}},"order":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/order","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/order"}},"order-item":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/order-item","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/order-item"}},"product":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/product","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/product"}},"variant":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/variant","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/variant"}},"subscription-items":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/subscription-items","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/subscription-items"}},"subscription-invoices":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/subscription-invoices","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243/relationships/subscription-invoices"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/subscriptions/1766243"}}}} 
-[2026-01-03 17:29:29] local.INFO: Lemon Squeezy subscription_updated handled {"user_id":25,"subscription_id":"1766243","updates":{"subscription_status":"active","trial_ends_at":null,"subscription_current_period_end":"2026-02-03 17:28:51","cancel_at_period_end":false}} 
-[2026-01-03 20:28:08] local.INFO: Lemon Squeezy checkout payload {"payload_json":"{
-    \"data\": {
-        \"type\": \"checkouts\",
-        \"attributes\": {
-            \"checkout_data\": {
-                \"email\": \"adada@tata.com\",
-                \"name\": \"Jean Muskul\",
-                \"custom\": {
-                    \"user_id\": \"25\",
-                    \"coach_id\": \"9\",
-                    \"coach_slug\": \"ARDUENNA-RAW\",
-                    \"product_type\": \"custom_domain\",
-                    \"source\": \"dashboard_premium\",
-                    \"desired_domain\": \"www.ArduennaRaw.ninja\"
-                },
-                \"tax_number\": \"BE5454554544554\"
-            },
-            \"checkout_options\": {
-                \"embed\": false,
-                \"media\": true,
-                \"logo\": true,
-                \"desc\": true,
-                \"discount\": true,
-                \"locale\": \"fr\"
-            },
-            \"product_options\": {
-                \"enabled_variants\": [
-                    1186169
-                ],
-                \"redirect_url\": \"https:\\/\\/unicoach.app\\/onboarding\\/step3\"
-            }
-        },
-        \"relationships\": {
-            \"store\": {
-                \"data\": {
-                    \"type\": \"stores\",
-                    \"id\": \"226870\"
-                }
-            },
-            \"variant\": {
-                \"data\": {
-                    \"type\": \"variants\",
-                    \"id\": \"1186169\"
-                }
-            }
-        }
-    }
-}"} 
-[2026-01-03 20:28:57] local.INFO: Lemon Squeezy webhook received {"event":"order_created","data":{"meta":{"test_mode":true,"event_name":"order_created","custom_data":{"source":"dashboard_premium","user_id":"25","coach_id":"9","coach_slug":"ARDUENNA-RAW","product_type":"custom_domain","desired_domain":"www.ArduennaRaw.ninja"},"webhook_id":"570fea9d-270b-45ea-843c-9f76433bada3"},"data":{"type":"orders","id":"7188097","attributes":{"store_id":226870,"customer_id":7484235,"identifier":"fffd37c5-c6d6-4cef-93b6-1366b9ddfabd","order_number":22687015,"user_name":"Jean Muskul","user_email":"adada@tata.com","currency":"EUR","currency_rate":"1.17274540","tax_name":"VAT","tax_rate":0,"tax_inclusive":false,"status":"paid","status_formatted":"Paid","refunded":false,"refunded_at":null,"subtotal":6500,"discount_total":0,"tax":0,"setup_fee":0,"total":6500,"refunded_amount":0,"subtotal_usd":7623,"discount_total_usd":0,"tax_usd":0,"setup_fee_usd":0,"total_usd":7623,"refunded_amount_usd":0,"subtotal_formatted":"€65.00","discount_total_formatted":"€0.00","tax_formatted":"€0.00","setup_fee_formatted":"€0.00","total_formatted":"€65.00","refunded_amount_formatted":"€0.00","first_order_item":{"id":7125598,"order_id":7188097,"product_id":753679,"variant_id":1186169,"price_id":1955302,"product_name":"Nom de domaine personnalisé","variant_name":"Default","price":6500,"quantity":1,"created_at":"2026-01-03T20:28:57.000000Z","updated_at":"2026-01-03T20:28:57.000000Z","test_mode":true},"urls":{"receipt":"https://app.lemonsqueezy.com/my-orders/fffd37c5-c6d6-4cef-93b6-1366b9ddfabd?expires=1767493737&signature=a81ae05947c725bd2a8d7aa5fc3492dfa5d64a973985508a9db8b124a998c711"},"created_at":"2026-01-03T20:28:56.000000Z","updated_at":"2026-01-03T20:28:57.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188097/store","self":"https://api.lemonsqueezy.com/v1/orders/7188097/relationships/store"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188097/customer","self":"https://api.lemonsqueezy.com/v1/orders/7188097/relationships/customer"}},"order-items":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188097/order-items","self":"https://api.lemonsqueezy.com/v1/orders/7188097/relationships/order-items"}},"subscriptions":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188097/subscriptions","self":"https://api.lemonsqueezy.com/v1/orders/7188097/relationships/subscriptions"}},"license-keys":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188097/license-keys","self":"https://api.lemonsqueezy.com/v1/orders/7188097/relationships/license-keys"}},"discount-redemptions":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188097/discount-redemptions","self":"https://api.lemonsqueezy.com/v1/orders/7188097/relationships/discount-redemptions"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/orders/7188097"}}}} 
-[2026-01-03 20:28:57] local.INFO: Custom domain order_created handled {"coach_id":9,"custom_domain_id":4,"domain":"www.ArduennaRaw.ninja"} 
-[2026-01-03 20:28:58] local.INFO: Lemon Squeezy webhook received {"event":"subscription_created","data":{"meta":{"test_mode":true,"event_name":"subscription_created","custom_data":{"source":"dashboard_premium","user_id":"25","coach_id":"9","coach_slug":"ARDUENNA-RAW","product_type":"custom_domain","desired_domain":"www.ArduennaRaw.ninja"},"webhook_id":"f544c5e7-3df1-48d3-91af-bcc018c0cd5a"},"data":{"type":"subscriptions","id":"1766536","attributes":{"store_id":226870,"customer_id":7484235,"order_id":7188097,"order_item_id":7125598,"product_id":753679,"variant_id":1186169,"product_name":"Nom de domaine personnalisé","variant_name":"Default","user_name":"Jean Muskul","user_email":"adada@tata.com","status":"active","status_formatted":"Active","card_brand":"visa","card_last_four":"4242","payment_processor":"stripe","pause":null,"cancelled":false,"trial_ends_at":null,"billing_anchor":3,"first_subscription_item":{"id":6112344,"subscription_id":1766536,"price_id":1962341,"quantity":1,"is_usage_based":false,"created_at":"2026-01-03T20:28:57.000000Z","updated_at":"2026-01-03T20:28:57.000000Z"},"urls":{"update_payment_method":"https://unicoach.lemonsqueezy.com/subscription/1766536/payment-details?expires=1767493737&signature=a8174fe3957186d6399e6a1ac58c1256a7cb85c238f740f8e4a3581d541ed6d9","customer_portal":"https://unicoach.lemonsqueezy.com/billing?expires=1767493738&test_mode=1&user=6248425&signature=970a70429e8c4d6138c0b39de002a2eb535d8c991c08d1e4f1d4597e10248d97","customer_portal_update_subscription":"https://unicoach.lemonsqueezy.com/billing/1766536/update?expires=1767493738&user=6248425&signature=af01ec0c6caac64df6af564db43890829a2e9988a5d399b7fe5440408b7936c1"},"renews_at":"2027-01-03T20:28:50.000000Z","ends_at":null,"created_at":"2026-01-03T20:28:52.000000Z","updated_at":"2026-01-03T20:28:57.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/store","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/store"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/customer","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/customer"}},"order":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/order","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/order"}},"order-item":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/order-item","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/order-item"}},"product":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/product","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/product"}},"variant":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/variant","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/variant"}},"subscription-items":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/subscription-items","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/subscription-items"}},"subscription-invoices":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/subscription-invoices","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/subscription-invoices"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536"}}}} 
-[2026-01-03 20:28:58] local.INFO: Lemon Squeezy subscription_created handled {"user_id":25,"subscription_id":"1766536","status":"active"} 
-[2026-01-03 20:28:58] local.INFO: Lemon Squeezy webhook received {"event":"subscription_payment_success","data":{"meta":{"test_mode":true,"event_name":"subscription_payment_success","custom_data":{"source":"dashboard_premium","user_id":"25","coach_id":"9","coach_slug":"ARDUENNA-RAW","product_type":"custom_domain","desired_domain":"www.ArduennaRaw.ninja"},"webhook_id":"1177d146-18d4-4ae7-b7fd-688925179d30"},"data":{"type":"subscription-invoices","id":"5602413","attributes":{"store_id":226870,"subscription_id":1766536,"customer_id":7484235,"user_name":"Jean Muskul","user_email":"adada@tata.com","billing_reason":"initial","card_brand":"visa","card_last_four":"4242","currency":"EUR","currency_rate":"1.17274540","status":"paid","status_formatted":"Paid","refunded":false,"refunded_at":null,"subtotal":6500,"discount_total":0,"tax":0,"tax_inclusive":false,"total":6500,"refunded_amount":0,"subtotal_usd":7623,"discount_total_usd":0,"tax_usd":0,"total_usd":7623,"refunded_amount_usd":0,"subtotal_formatted":"€65.00","discount_total_formatted":"€0.00","tax_formatted":"€0.00","total_formatted":"€65.00","refunded_amount_formatted":"€0.00","urls":{"invoice_url":"https://app.lemonsqueezy.com/my-orders/fffd37c5-c6d6-4cef-93b6-1366b9ddfabd/subscription-invoice/5602413?expires=1767493738&signature=02fecdb707b0321601ace57c7301e2d943abdbbbec867ead7b008d64349e73ff"},"created_at":"2026-01-03T20:28:53.000000Z","updated_at":"2026-01-03T20:28:58.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602413/store","self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602413/relationships/store"}},"subscription":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602413/subscription","self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602413/relationships/subscription"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602413/customer","self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602413/relationships/customer"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602413"}}}} 
-[2026-01-03 20:28:58] local.INFO: Unhandled Lemon Squeezy event {"event":"subscription_payment_success"} 
-[2026-01-03 20:29:28] local.INFO: Lemon Squeezy webhook received {"event":"subscription_updated","data":{"meta":{"test_mode":true,"event_name":"subscription_updated","custom_data":{"source":"dashboard_premium","user_id":"25","coach_id":"9","coach_slug":"ARDUENNA-RAW","product_type":"custom_domain","desired_domain":"www.ArduennaRaw.ninja"},"webhook_id":"136c2b45-ff6b-4de7-9672-19f5dda24eb7"},"data":{"type":"subscriptions","id":"1766536","attributes":{"store_id":226870,"customer_id":7484235,"order_id":7188097,"order_item_id":7125598,"product_id":753679,"variant_id":1186169,"product_name":"Nom de domaine personnalisé","variant_name":"Default","user_name":"Jean Muskul","user_email":"adada@tata.com","status":"active","status_formatted":"Active","card_brand":"visa","card_last_four":"4242","payment_processor":"stripe","pause":null,"cancelled":false,"trial_ends_at":null,"billing_anchor":3,"first_subscription_item":{"id":6112344,"subscription_id":1766536,"price_id":1962341,"quantity":1,"is_usage_based":false,"created_at":"2026-01-03T20:28:57.000000Z","updated_at":"2026-01-03T20:29:27.000000Z"},"urls":{"update_payment_method":"https://unicoach.lemonsqueezy.com/subscription/1766536/payment-details?expires=1767493767&signature=72947b97ea416e689f3a43e3eaceafe742f124485234bc25ed19f8395d77a014","customer_portal":"https://unicoach.lemonsqueezy.com/billing?expires=1767493767&test_mode=1&user=6248425&signature=54195b201af12c9c4dc06a08294ef388ce45f24671dab56b5640ae9bfd257355","customer_portal_update_subscription":"https://unicoach.lemonsqueezy.com/billing/1766536/update?expires=1767493767&user=6248425&signature=f3be399e6c6d0cd911a618e071a348e9953ed2208d876b8c392131dfe13896cf"},"renews_at":"2027-01-03T20:28:50.000000Z","ends_at":null,"created_at":"2026-01-03T20:28:52.000000Z","updated_at":"2026-01-03T20:28:57.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/store","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/store"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/customer","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/customer"}},"order":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/order","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/order"}},"order-item":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/order-item","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/order-item"}},"product":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/product","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/product"}},"variant":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/variant","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/variant"}},"subscription-items":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/subscription-items","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/subscription-items"}},"subscription-invoices":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/subscription-invoices","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536/relationships/subscription-invoices"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/subscriptions/1766536"}}}} 
-[2026-01-03 20:29:28] local.INFO: Lemon Squeezy subscription_updated handled {"user_id":25,"subscription_id":"1766536","updates":{"subscription_status":"active","trial_ends_at":null,"subscription_current_period_end":"2027-01-03 20:28:50","cancel_at_period_end":false}} 
-[2026-01-03 20:32:25] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":0,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:32:29] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":0,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:32:30] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":0,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:32:31] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":0,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:32:33] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":0,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:32:33] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":0,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:32:33] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":0,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:41:04] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":0,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:41:09] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":0,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:53:00] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:53:02] local.INFO: Début connexion Stripe {"user_id":25,"coach_id":9,"stripe_key_configured":true} 
-[2026-01-03 20:53:06] local.INFO: Lien Stripe généré avec succès {"coach_id":9,"url_length":69} 
-[2026-01-03 20:53:32] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473612","signatures_count":1} 
-[2026-01-03 20:53:32] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:53:32] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlbpICK0IV16fs1I3QIC38I"} 
-[2026-01-03 20:53:32] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 20:53:35] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473614","signatures_count":1} 
-[2026-01-03 20:53:35] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:53:35] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlbpKCK0IV16fs128jHDnN8"} 
-[2026-01-03 20:53:35] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 20:53:59] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473638","signatures_count":1} 
-[2026-01-03 20:53:59] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:53:59] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlbpiCK0IV16fs1C6McxM5x"} 
-[2026-01-03 20:53:59] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 20:54:06] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473646","signatures_count":1} 
-[2026-01-03 20:54:06] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:54:06] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlbpqCK0IV16fs1NvHW50nh"} 
-[2026-01-03 20:54:06] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 20:54:09] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473649","signatures_count":1} 
-[2026-01-03 20:54:09] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:54:09] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlbptCK0IV16fs1YBHib3dd"} 
-[2026-01-03 20:54:09] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 20:54:26] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473666","signatures_count":1} 
-[2026-01-03 20:54:26] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:54:26] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1Slbq9CK0IV16fs1NncCUu8p"} 
-[2026-01-03 20:54:26] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 20:54:35] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473674","signatures_count":1} 
-[2026-01-03 20:54:35] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:54:35] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlbqICK0IV16fs1FXM3m8pC"} 
-[2026-01-03 20:54:35] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 20:54:44] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473684","signatures_count":1} 
-[2026-01-03 20:54:44] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:54:44] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlbqSCK0IV16fs1BQmbjYuX"} 
-[2026-01-03 20:54:44] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 20:54:47] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:54:57] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlbooCK0IV16fs1"} 
-[2026-01-03 20:54:58] local.INFO: Réponse Stripe login_links {"status":200,"successful":true,"body":"{
-  \"object\": \"login_link\",
-  \"created\": 1767473698,
-  \"url\": \"https://connect.stripe.com/express/acct_1SlbooCK0IV16fs1/z6fF06cSoh7a\"
-}"} 
-[2026-01-03 20:54:58] local.INFO: Lien dashboard généré {"url":"https://connect.stripe.com/express/acct_1SlbooCK0IV16fs1/z6fF06cSoh7a"} 
-[2026-01-03 20:55:13] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:55:16] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:57:51] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 20:57:55] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlbooCK0IV16fs1"} 
-[2026-01-03 20:57:55] local.INFO: Réponse Stripe login_links {"status":200,"successful":true,"body":"{
-  \"object\": \"login_link\",
-  \"created\": 1767473875,
-  \"url\": \"https://connect.stripe.com/express/acct_1SlbooCK0IV16fs1/kUU49xbx2P1W\"
-}"} 
-[2026-01-03 20:57:55] local.INFO: Lien dashboard généré {"url":"https://connect.stripe.com/express/acct_1SlbooCK0IV16fs1/kUU49xbx2P1W"} 
-[2026-01-03 20:59:31] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473971","signatures_count":1} 
-[2026-01-03 20:59:31] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:59:31] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1Slbv5CK0IV16fs1GxmKSQuD"} 
-[2026-01-03 20:59:31] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 20:59:43] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473982","signatures_count":1} 
-[2026-01-03 20:59:43] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:59:43] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlbvGCK0IV16fs1eDAC49oM"} 
-[2026-01-03 20:59:43] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 20:59:47] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767473987","signatures_count":1} 
-[2026-01-03 20:59:47] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 20:59:47] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlbvLCK0IV16fs1gEkqCtgZ"} 
-[2026-01-03 20:59:47] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-03 21:00:05] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 21:00:16] local.INFO: Lemon Squeezy checkout payload {"payload_json":"{
-    \"data\": {
-        \"type\": \"checkouts\",
-        \"attributes\": {
-            \"checkout_data\": {
-                \"email\": \"lvlerrow@gmail.com\",
-                \"name\": \"Jean Dupont\",
-                \"custom\": {
-                    \"user_id\": \"26\",
-                    \"onboarding\": \"true\",
-                    \"source\": \"onboarding_standard\"
-                }
-            },
-            \"checkout_options\": {
-                \"embed\": false,
-                \"media\": true,
-                \"logo\": true,
-                \"desc\": true,
-                \"discount\": true,
-                \"locale\": \"fr\"
-            },
-            \"product_options\": {
-                \"enabled_variants\": [
-                    1132461
-                ],
-                \"redirect_url\": \"https:\\/\\/unicoach.app\\/onboarding\\/step3\"
-            }
-        },
-        \"relationships\": {
-            \"store\": {
-                \"data\": {
-                    \"type\": \"stores\",
-                    \"id\": \"226870\"
-                }
-            },
-            \"variant\": {
-                \"data\": {
-                    \"type\": \"variants\",
-                    \"id\": \"1132461\"
-                }
-            }
-        }
-    }
-}"} 
-[2026-01-03 21:00:20] local.INFO: Tentative génération lien dashboard Stripe {"account_id":"acct_1SlbooCK0IV16fs1"} 
-[2026-01-03 21:00:21] local.INFO: Réponse Stripe login_links {"status":200,"successful":true,"body":"{
-  \"object\": \"login_link\",
-  \"created\": 1767474021,
-  \"url\": \"https://connect.stripe.com/express/acct_1SlbooCK0IV16fs1/GcCbCbTJnyHp\"
-}"} 
-[2026-01-03 21:00:21] local.INFO: Lien dashboard généré {"url":"https://connect.stripe.com/express/acct_1SlbooCK0IV16fs1/GcCbCbTJnyHp"} 
-[2026-01-03 21:00:45] local.INFO: DirectCheckout called {"coach_slug":"arduenna-raw","service_id":"4","request_data":{"_token":"Lmp5aHHbhwxJJWr0gA6WvZlubAaDPpFm927QYQF7","client_email":"booking@temp.com"}} 
-[2026-01-03 21:00:45] local.INFO: Booking created {"booking_id":13} 
-[2026-01-03 21:00:47] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1GvssDZaMRA34XHAWGPfhQnKSecDy8RAaBj3eV3BjGCAvftoYJYuRHaKC#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlnampGTjVMUzQzY3Y0JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"} 
-[2026-01-03 21:01:05] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767474065","signatures_count":1} 
-[2026-01-03 21:01:05] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 21:01:05] local.INFO: Stripe webhook received {"type":"payment_intent.succeeded","id":"evt_3SlbwaCK0IV16fs10oSFbPXB"} 
-[2026-01-03 21:01:05] local.INFO: Booking payment succeeded {"booking_id":13,"payment_intent_id":"pi_3SlbwaCK0IV16fs10rshSOml"} 
-[2026-01-03 21:01:06] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767474065","signatures_count":1} 
-[2026-01-03 21:01:06] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-03 21:01:06] local.INFO: Stripe webhook received {"type":"checkout.session.completed","id":"evt_1SlbwbCK0IV16fs1MTYPISKd"} 
-[2026-01-03 21:01:06] local.INFO: Booking confirmed via checkout {"booking_id":13,"session_id":"cs_test_a1GvssDZaMRA34XHAWGPfhQnKSecDy8RAaBj3eV3BjGCAvftoYJYuRHaKC"} 
-[2026-01-03 21:01:23] local.INFO: Lemon Squeezy webhook received {"event":"order_created","data":{"meta":{"test_mode":true,"event_name":"order_created","custom_data":{"source":"onboarding_standard","user_id":"26","onboarding":"true"},"webhook_id":"b46d8df9-4a1a-4010-8403-4cdd1cbcbd72"},"data":{"type":"orders","id":"7188258","attributes":{"store_id":226870,"customer_id":7485267,"identifier":"13f122a6-88be-418f-97c9-30dbd60320e8","order_number":22687016,"user_name":"Jean Dupont","user_email":"lvlerrow@gmail.com","currency":"EUR","currency_rate":"1.17274540","tax_name":"VAT","tax_rate":0,"tax_inclusive":false,"status":"paid","status_formatted":"Paid","refunded":false,"refunded_at":null,"subtotal":3000,"discount_total":0,"tax":0,"setup_fee":0,"total":3000,"refunded_amount":0,"subtotal_usd":3518,"discount_total_usd":0,"tax_usd":0,"setup_fee_usd":0,"total_usd":3518,"refunded_amount_usd":0,"subtotal_formatted":"€30.00","discount_total_formatted":"€0.00","tax_formatted":"€0.00","setup_fee_formatted":"€0.00","total_formatted":"€30.00","refunded_amount_formatted":"€0.00","first_order_item":{"id":7125757,"order_id":7188258,"product_id":719428,"variant_id":1132461,"price_id":1961826,"product_name":"UNICOACH","variant_name":"Non FEA","price":3000,"quantity":1,"created_at":"2026-01-03T21:01:22.000000Z","updated_at":"2026-01-03T21:01:22.000000Z","test_mode":true},"urls":{"receipt":"https://app.lemonsqueezy.com/my-orders/13f122a6-88be-418f-97c9-30dbd60320e8?expires=1767495683&signature=57c37268d7be7858112eedc5311603faefceba70bfbe9a87cad2edc5a86037cf"},"created_at":"2026-01-03T21:01:22.000000Z","updated_at":"2026-01-03T21:01:22.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188258/store","self":"https://api.lemonsqueezy.com/v1/orders/7188258/relationships/store"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188258/customer","self":"https://api.lemonsqueezy.com/v1/orders/7188258/relationships/customer"}},"order-items":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188258/order-items","self":"https://api.lemonsqueezy.com/v1/orders/7188258/relationships/order-items"}},"subscriptions":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188258/subscriptions","self":"https://api.lemonsqueezy.com/v1/orders/7188258/relationships/subscriptions"}},"license-keys":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188258/license-keys","self":"https://api.lemonsqueezy.com/v1/orders/7188258/relationships/license-keys"}},"discount-redemptions":{"links":{"related":"https://api.lemonsqueezy.com/v1/orders/7188258/discount-redemptions","self":"https://api.lemonsqueezy.com/v1/orders/7188258/relationships/discount-redemptions"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/orders/7188258"}}}} 
-[2026-01-03 21:01:24] local.INFO: Lemon Squeezy webhook received {"event":"subscription_created","data":{"meta":{"test_mode":true,"event_name":"subscription_created","custom_data":{"source":"onboarding_standard","user_id":"26","onboarding":"true"},"webhook_id":"6e5b2291-3dad-4340-a8f8-9a00a20a1ecb"},"data":{"type":"subscriptions","id":"1766585","attributes":{"store_id":226870,"customer_id":7485267,"order_id":7188258,"order_item_id":7125757,"product_id":719428,"variant_id":1132461,"product_name":"UNICOACH","variant_name":"Non FEA","user_name":"Jean Dupont","user_email":"lvlerrow@gmail.com","status":"active","status_formatted":"Active","card_brand":"visa","card_last_four":"4242","payment_processor":"stripe","pause":null,"cancelled":false,"trial_ends_at":null,"billing_anchor":3,"first_subscription_item":{"id":6112761,"subscription_id":1766585,"price_id":1961826,"quantity":1,"is_usage_based":false,"created_at":"2026-01-03T21:01:23.000000Z","updated_at":"2026-01-03T21:01:23.000000Z"},"urls":{"update_payment_method":"https://unicoach.lemonsqueezy.com/subscription/1766585/payment-details?expires=1767495683&signature=ff029376cee1915310557735bc97e3b8ef13025b5144818470e034d8b773e97b","customer_portal":"https://unicoach.lemonsqueezy.com/billing?expires=1767495683&test_mode=1&user=6249265&signature=9f205a0c98dc4e0a24f9ce2cded1cac4a357d5f74a9e319641170120d82045d0","customer_portal_update_subscription":"https://unicoach.lemonsqueezy.com/billing/1766585/update?expires=1767495683&user=6249265&signature=9179e0316e885d084e4be5aa4ee01bf063c4c270118b9b7ba108e9ed78867c30"},"renews_at":"2026-02-03T21:01:15.000000Z","ends_at":null,"created_at":"2026-01-03T21:01:17.000000Z","updated_at":"2026-01-03T21:01:23.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/store","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/store"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/customer","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/customer"}},"order":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/order","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/order"}},"order-item":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/order-item","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/order-item"}},"product":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/product","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/product"}},"variant":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/variant","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/variant"}},"subscription-items":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/subscription-items","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/subscription-items"}},"subscription-invoices":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/subscription-invoices","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/subscription-invoices"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585"}}}} 
-[2026-01-03 21:01:24] local.INFO: Lemon Squeezy subscription_created handled {"user_id":26,"subscription_id":"1766585","status":"active"} 
-[2026-01-03 21:01:24] local.INFO: Lemon Squeezy webhook received {"event":"subscription_payment_success","data":{"meta":{"test_mode":true,"event_name":"subscription_payment_success","custom_data":{"source":"onboarding_standard","user_id":"26","onboarding":"true"},"webhook_id":"62cd6c1a-0430-4458-9c35-77284ec0969a"},"data":{"type":"subscription-invoices","id":"5602687","attributes":{"store_id":226870,"subscription_id":1766585,"customer_id":7485267,"user_name":"Jean Dupont","user_email":"lvlerrow@gmail.com","billing_reason":"initial","card_brand":"visa","card_last_four":"4242","currency":"EUR","currency_rate":"1.17274540","status":"paid","status_formatted":"Paid","refunded":false,"refunded_at":null,"subtotal":3000,"discount_total":0,"tax":0,"tax_inclusive":false,"total":3000,"refunded_amount":0,"subtotal_usd":3518,"discount_total_usd":0,"tax_usd":0,"total_usd":3518,"refunded_amount_usd":0,"subtotal_formatted":"€30.00","discount_total_formatted":"€0.00","tax_formatted":"€0.00","total_formatted":"€30.00","refunded_amount_formatted":"€0.00","urls":{"invoice_url":"https://app.lemonsqueezy.com/my-orders/13f122a6-88be-418f-97c9-30dbd60320e8/subscription-invoice/5602687?expires=1767495684&signature=7b621b6b4e5c1912aecfaae8b44b2b0b548e8ca4866ccf4cb939ce264fc0b0af"},"created_at":"2026-01-03T21:01:18.000000Z","updated_at":"2026-01-03T21:01:23.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602687/store","self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602687/relationships/store"}},"subscription":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602687/subscription","self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602687/relationships/subscription"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602687/customer","self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602687/relationships/customer"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/subscription-invoices/5602687"}}}} 
-[2026-01-03 21:01:24] local.INFO: Unhandled Lemon Squeezy event {"event":"subscription_payment_success"} 
-[2026-01-03 21:01:53] local.INFO: Lemon Squeezy webhook received {"event":"subscription_updated","data":{"meta":{"test_mode":true,"event_name":"subscription_updated","custom_data":{"source":"onboarding_standard","user_id":"26","onboarding":"true"},"webhook_id":"0cdfca9a-15b1-4727-868f-264fc6cc8e9e"},"data":{"type":"subscriptions","id":"1766585","attributes":{"store_id":226870,"customer_id":7485267,"order_id":7188258,"order_item_id":7125757,"product_id":719428,"variant_id":1132461,"product_name":"UNICOACH","variant_name":"Non FEA","user_name":"Jean Dupont","user_email":"lvlerrow@gmail.com","status":"active","status_formatted":"Active","card_brand":"visa","card_last_four":"4242","payment_processor":"stripe","pause":null,"cancelled":false,"trial_ends_at":null,"billing_anchor":3,"first_subscription_item":{"id":6112761,"subscription_id":1766585,"price_id":1961826,"quantity":1,"is_usage_based":false,"created_at":"2026-01-03T21:01:23.000000Z","updated_at":"2026-01-03T21:01:52.000000Z"},"urls":{"update_payment_method":"https://unicoach.lemonsqueezy.com/subscription/1766585/payment-details?expires=1767495713&signature=e874777add698432bf2242c8d60d102a969d01554a83bf99bc9b5d9b0e366c83","customer_portal":"https://unicoach.lemonsqueezy.com/billing?expires=1767495713&test_mode=1&user=6249265&signature=8393a5016d5be9510c4b6c2f457738e66816aeee07e08544fa533343b1ecb0c3","customer_portal_update_subscription":"https://unicoach.lemonsqueezy.com/billing/1766585/update?expires=1767495713&user=6249265&signature=b21c526ca56b4dc21524c46b75e14db87da91a75c1c5fcfd217c19522e01ea2e"},"renews_at":"2026-02-03T21:01:15.000000Z","ends_at":null,"created_at":"2026-01-03T21:01:17.000000Z","updated_at":"2026-01-03T21:01:23.000000Z","test_mode":true},"relationships":{"store":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/store","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/store"}},"customer":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/customer","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/customer"}},"order":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/order","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/order"}},"order-item":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/order-item","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/order-item"}},"product":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/product","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/product"}},"variant":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/variant","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/variant"}},"subscription-items":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/subscription-items","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/subscription-items"}},"subscription-invoices":{"links":{"related":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/subscription-invoices","self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585/relationships/subscription-invoices"}}},"links":{"self":"https://api.lemonsqueezy.com/v1/subscriptions/1766585"}}}} 
-[2026-01-03 21:01:53] local.INFO: Lemon Squeezy subscription_updated handled {"user_id":26,"subscription_id":"1766585","updates":{"subscription_status":"active","trial_ends_at":null,"subscription_current_period_end":"2026-02-03 21:01:15","cancel_at_period_end":false}} 
-[2026-01-03 21:05:25] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 21:09:10] local.INFO: PaymentsController index {"user_id":25,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":null} 
-[2026-01-03 21:24:46] local.INFO: PaymentsController index {"user_id":22,"has_payments_module":1,"has_payments_module_type":"integer","payments_module_activated_at":"2026-01-02 21:28:19"} 
+[2026-01-04 01:31:03] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490263","signatures_count":1} 
+[2026-01-04 01:31:03] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
+[2026-01-04 01:31:03] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1Slg9qCK0IV16fs1VE5tU2bh"} 
+[2026-01-04 01:31:03] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
+[2026-01-04 01:31:11] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490271","signatures_count":1} 
+[2026-01-04 01:31:11] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
+[2026-01-04 01:31:11] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1Slg9yCK0IV16fs1RVZphJPk"} 
+[2026-01-04 01:31:11] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
+[2026-01-04 01:31:11] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490271","signatures_count":1} 
+[2026-01-04 01:31:11] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
+[2026-01-04 01:31:11] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1Slg9yCK0IV16fs1Qbyew0y0"} 
+[2026-01-04 01:31:11] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
+[2026-01-04 01:31:21] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490280","signatures_count":1} 
+[2026-01-04 01:31:21] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
+[2026-01-04 01:31:21] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlgA7CK0IV16fs1ixoVRWhE"} 
+[2026-01-04 01:31:21] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
+[2026-01-04 01:31:29] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490288","signatures_count":1} 
+[2026-01-04 01:31:29] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
+[2026-01-04 01:31:29] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlgAGCK0IV16fs1xRNq8R21"} 
+[2026-01-04 01:31:29] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
+[2026-01-04 01:31:33] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490293","signatures_count":1} 
+[2026-01-04 01:31:33] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
+[2026-01-04 01:31:33] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlgALCK0IV16fs1VDHmgBIv"} 
+[2026-01-04 01:31:33] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
+[2026-01-04 01:31:37] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490297","signatures_count":1} 
+[2026-01-04 01:31:38] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
+[2026-01-04 01:31:38] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlgAOCK0IV16fs193XegMvA"} 
+[2026-01-04 01:31:38] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
+[2026-01-04 01:31:46] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490306","signatures_count":1} 
+[2026-01-04 01:31:46] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
+[2026-01-04 01:31:46] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlgAXCK0IV16fs1BaGiYyzm"} 
+[2026-01-04 01:31:46] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 

@@ -24,13 +24,25 @@ class BookingController extends Controller
         $coach = app(Coach::class);
 
         if (!optional($coach->user)->has_payments_module) {
+            Log::warning('Checkout form blocked: payments module disabled', [
+                'coach_id' => $coach->id ?? null,
+                'serviceId' => $serviceId,
+            ]);
             abort(404);
         }
 
-        $service = $coach->serviceTypes()
+        $serviceQuery = $coach->serviceTypes()
             ->where('is_active', true)
             ->where('booking_enabled', true)
-            ->findOrFail((int) $serviceId);
+            ->where('coach_id', $coach->id);
+
+        Log::info('Checkout form lookup', [
+            'coach_id' => $coach->id,
+            'serviceId' => $serviceId,
+            'eligible_service_ids' => (clone $serviceQuery)->pluck('id'),
+        ]);
+
+        $service = $serviceQuery->findOrFail((int) $serviceId);
 
         $formAction = $request->routeIs('coach.*')
             ? route('coach.booking.checkout', [

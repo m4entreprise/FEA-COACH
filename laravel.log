@@ -1,36 +1,6 @@
-[2026-01-04 01:31:03] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490263","signatures_count":1} 
-[2026-01-04 01:31:03] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-04 01:31:03] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1Slg9qCK0IV16fs1VE5tU2bh"} 
-[2026-01-04 01:31:03] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-04 01:31:11] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490271","signatures_count":1} 
-[2026-01-04 01:31:11] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-04 01:31:11] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1Slg9yCK0IV16fs1RVZphJPk"} 
-[2026-01-04 01:31:11] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-04 01:31:11] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490271","signatures_count":1} 
-[2026-01-04 01:31:11] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-04 01:31:11] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1Slg9yCK0IV16fs1Qbyew0y0"} 
-[2026-01-04 01:31:11] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-04 01:31:21] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490280","signatures_count":1} 
-[2026-01-04 01:31:21] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-04 01:31:21] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlgA7CK0IV16fs1ixoVRWhE"} 
-[2026-01-04 01:31:21] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-04 01:31:29] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490288","signatures_count":1} 
-[2026-01-04 01:31:29] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-04 01:31:29] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlgAGCK0IV16fs1xRNq8R21"} 
-[2026-01-04 01:31:29] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-04 01:31:33] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490293","signatures_count":1} 
-[2026-01-04 01:31:33] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-04 01:31:33] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlgALCK0IV16fs1VDHmgBIv"} 
-[2026-01-04 01:31:33] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-04 01:31:37] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490297","signatures_count":1} 
-[2026-01-04 01:31:38] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-04 01:31:38] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlgAOCK0IV16fs193XegMvA"} 
-[2026-01-04 01:31:38] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-04 01:31:46] local.DEBUG: Stripe webhook signature parsed {"timestamp":"1767490306","signatures_count":1} 
-[2026-01-04 01:31:46] local.INFO: Stripe webhook coach context hydrated {"coach_id":9,"source":"event.account"} 
-[2026-01-04 01:31:46] local.INFO: Stripe webhook received {"type":"account.updated","id":"evt_1SlgAXCK0IV16fs1BaGiYyzm"} 
-[2026-01-04 01:31:46] local.INFO: Stripe account updated {"account_id":"acct_1SlbooCK0IV16fs1","coach_id":9} 
-[2026-01-04 01:38:18] local.INFO: Checkout form lookup {"coach_id":8,"serviceId":"m4-entreprise-1","eligible_service_ids":{"Illuminate\\Support\\Collection":[2]}} 
-[2026-01-04 01:38:20] local.INFO: Checkout form lookup {"coach_id":8,"serviceId":"m4-entreprise-1","eligible_service_ids":{"Illuminate\\Support\\Collection":[2]}} 
-[2026-01-04 01:38:22] local.INFO: Checkout form lookup {"coach_id":8,"serviceId":"m4-entreprise-1","eligible_service_ids":{"Illuminate\\Support\\Collection":[2]}} 
-[2026-01-04 01:38:29] local.INFO: Checkout form lookup {"coach_id":8,"serviceId":"m4-entreprise-1","eligible_service_ids":{"Illuminate\\Support\\Collection":[2]}} 
+[2026-01-04 02:50:27] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":3} 
+[2026-01-04 02:50:49] local.INFO: ServicesController@store incoming payload {"coach_id":8,"name":"ceci est le test 404","has_image":true,"price_raw":"404"} 
+[2026-01-04 02:50:49] local.INFO: ServicesController@store image stored {"service_name":"ceci est le test 404","path":"service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png"} 
+[2026-01-04 02:50:49] local.INFO: ServicesController@store service created {"service_id":11,"image_path":"service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png","image_url":"https://m4-entreprise-1.unicoach.app/storage/service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png"} 
+[2026-01-04 02:50:49] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 02:50:56] local.INFO: Checkout form lookup {"coach_id":8,"serviceId_param":"11","route_service_id":"11","serviceId":11,"eligible_service_ids":{"Illuminate\\Support\\Collection":[2,9]}} 

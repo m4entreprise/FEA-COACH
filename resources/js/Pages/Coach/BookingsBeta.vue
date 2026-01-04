@@ -247,7 +247,8 @@ const getClientName = (booking) => {
                     <span>Retour panel</span>
                 </button>
             </div>
-        </header>
+        </div>
+    </header>
 
         <!-- Main content -->
         <main

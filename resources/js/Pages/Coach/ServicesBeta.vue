@@ -382,6 +382,25 @@ const saveOrder = async () => {
                                             </span>
                                         </div>
                                     </div>
+                                    <div
+                                        class="relative w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-950"
+                                    >
+                                        <img
+                                            v-if="service.image_url"
+                                            :src="service.image_url"
+                                            :alt="`Illustration ${service.name}`"
+                                            class="h-40 w-full object-cover"
+                                        />
+                                        <div
+                                            v-else
+                                            class="h-40 w-full flex flex-col items-center justify-center text-slate-500 text-xs gap-2 bg-slate-900"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l6-6 4 4 5.5-5.5M15 7.5h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
+                                            </svg>
+                                            <span>Pas d’image pour l’instant</span>
+                                        </div>
+                                    </div>
                                     <div class="flex flex-wrap items-center gap-3 text-sm">
                                         <div class="inline-flex items-center gap-2 text-slate-300">
                                             <Clock class="h-4 w-4 text-slate-400" />
@@ -603,6 +622,58 @@ const saveOrder = async () => {
                             class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
                         />
                         <InputError class="mt-1 text-[11px]" :message="form.errors.max_advance_booking_days" />
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <InputLabel
+                        for="service_image"
+                        value="Photo de présentation"
+                        class="text-xs text-slate-200"
+                    />
+                    <div class="rounded-2xl border border-dashed border-slate-700 bg-slate-950/70 p-4 flex flex-col gap-4">
+                        <div
+                            class="relative aspect-video w-full overflow-hidden rounded-xl border border-slate-800 bg-slate-900"
+                        >
+                            <img
+                                v-if="imagePreview"
+                                :src="imagePreview"
+                                alt="Prévisualisation du service"
+                                class="h-full w-full object-cover"
+                            />
+                            <div
+                                v-else
+                                class="h-full w-full flex flex-col items-center justify-center text-slate-500 text-xs gap-2"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 6.75A2.25 2.25 0 016.75 4.5h10.5A2.25 2.25 0 0119.5 6.75v10.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 17.25V6.75z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15l4.5-4.5 3 3L15 10.5l4.5 4.5" />
+                                </svg>
+                                <span>Ajoutez une image 1280×720 pour un rendu optimal</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-3 text-xs">
+                            <label class="inline-flex cursor-pointer items-center gap-2 rounded-full border border-slate-700 px-4 py-2 text-slate-200 hover:bg-slate-800">
+                                <input
+                                    ref="imageInput"
+                                    id="service_image"
+                                    type="file"
+                                    accept="image/*"
+                                    class="hidden"
+                                    @change="handleImageChange"
+                                />
+                                <span>Choisir une image</span>
+                            </label>
+                            <button
+                                v-if="imagePreview"
+                                type="button"
+                                class="inline-flex items-center gap-2 rounded-full border border-rose-500/40 bg-rose-500/10 px-4 py-2 text-rose-100 hover:bg-rose-500/20"
+                                @click="removeImage"
+                            >
+                                Retirer
+                            </button>
+                        </div>
+                        <InputError class="text-[11px]" :message="form.errors.image" />
                     </div>
                 </div>
 

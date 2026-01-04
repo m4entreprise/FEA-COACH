@@ -14,6 +14,7 @@ import {
     Filter,
     CheckCircle,
     XCircle,
+    Trash2,
 } from 'lucide-vue-next';
 
 const props = defineProps({

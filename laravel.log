@@ -135,3 +135,26 @@
 [2026-01-04 03:49:26] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
 [2026-01-04 03:49:35] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
 [2026-01-04 03:54:36] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:57:56] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:58:05] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:58:13] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:58:18] local.INFO: ServicesController@store incoming payload {"coach_id":8,"name":"test","has_image":true,"price_raw":"111"} 
+[2026-01-04 03:58:18] local.INFO: ServicesController@store image stored {"service_name":"test","path":"service-images/cHgwEIwNpe4fHcCjMSq2jnfpriY4Dqf9RA8lqmuI.png"} 
+[2026-01-04 03:58:18] local.INFO: ServicesController@store service created {"service_id":12,"image_path":"service-images/cHgwEIwNpe4fHcCjMSq2jnfpriY4Dqf9RA8lqmuI.png","image_url":"https://m4-entreprise-1.unicoach.app/storage/service-images/cHgwEIwNpe4fHcCjMSq2jnfpriY4Dqf9RA8lqmuI.png"} 
+[2026-01-04 03:58:18] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":5} 
+[2026-01-04 03:58:21] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:58:31] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":5} 
+[2026-01-04 03:58:53] local.INFO: ServicesController@store incoming payload {"coach_id":9,"name":"L'éclaireur","has_image":true,"price_raw":"50"} 
+[2026-01-04 03:58:53] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:59:15] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":5} 
+[2026-01-04 03:59:21] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":5} 
+[2026-01-04 03:59:33] local.INFO: ServicesController@store incoming payload {"coach_id":9,"name":"L'éclaireur","has_image":true,"price_raw":"50"} 
+[2026-01-04 03:59:33] local.INFO: ServicesController@store image stored {"service_name":"L'éclaireur","path":"service-images/4ZCUuQR9RPLsQOHXmXn3XV9HEHbbwWQPVonLgl0k.png"} 
+[2026-01-04 03:59:33] local.INFO: ServicesController@store service created {"service_id":13,"image_path":"service-images/4ZCUuQR9RPLsQOHXmXn3XV9HEHbbwWQPVonLgl0k.png","image_url":"https://unicoach.app/storage/service-images/4ZCUuQR9RPLsQOHXmXn3XV9HEHbbwWQPVonLgl0k.png"} 
+[2026-01-04 03:59:33] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":4} 
+[2026-01-04 03:59:46] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":4} 
+[2026-01-04 04:00:03] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":4} 
+[2026-01-04 04:00:13] local.INFO: ServicesController@destroy deleted image from disk {"service_id":13,"path":"service-images/4ZCUuQR9RPLsQOHXmXn3XV9HEHbbwWQPVonLgl0k.png"} 
+[2026-01-04 04:00:13] local.INFO: ServicesController@destroy service removed {"service_id":13} 
+[2026-01-04 04:00:14] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 04:00:20] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 

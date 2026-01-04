@@ -182,17 +182,27 @@ const closeModal = () => {
     }
 };
 
+const resetTransform = () => {
+    form.transform((data) => data);
+};
+
 const submit = () => {
     if (editingService.value) {
-        form.patch(route('dashboard.services.update', editingService.value.id), {
+        form.transform((data) => ({
+            ...data,
+            _method: 'PATCH',
+        }));
+        form.post(route('dashboard.services.update', editingService.value.id), {
             forceFormData: true,
             preserveScroll: true,
             onSuccess: () => {
                 closeModal();
                 toast.success('Service mis à jour avec succès');
             },
+            onFinish: resetTransform,
         });
     } else {
+        resetTransform();
         form.order = servicesList.value.length;
         form.post(route('dashboard.services.store'), {
             forceFormData: true,

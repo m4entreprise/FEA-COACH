@@ -185,6 +185,7 @@ const closeModal = () => {
 const submit = () => {
     if (editingService.value) {
         form.patch(route('dashboard.services.update', editingService.value.id), {
+            forceFormData: true,
             preserveScroll: true,
             onSuccess: () => {
                 closeModal();
@@ -194,6 +195,7 @@ const submit = () => {
     } else {
         form.order = servicesList.value.length;
         form.post(route('dashboard.services.store'), {
+            forceFormData: true,
             preserveScroll: true,
             onSuccess: () => {
                 closeModal();

@@ -263,103 +263,101 @@ watch(isPreviewFullscreen, (active) => {
 
             <VueDraggable
               v-model="transformationsList"
-              item-key="id"
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               :animation="200"
               handle=".drag-handle"
               ghost-class="!opacity-40"
               @end="handleReorder"
             >
-              <template #item="{ element }">
-                <article
-                  :key="element.id"
-                  :data-id="element.id"
-                  class="bg-slate-900/80 rounded-2xl shadow-xl overflow-hidden border border-slate-800 relative transition"
+              <article
+                v-for="element in transformationsList"
+                :key="element.id"
+                :data-id="element.id"
+                class="bg-slate-900/80 rounded-2xl shadow-xl overflow-hidden border border-slate-800 relative transition"
+              >
+                <button
+                  type="button"
+                  class="drag-handle absolute top-3 right-3 z-10 inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 p-1.5 text-slate-300 hover:text-white"
+                  title="Glisser pour réordonner"
                 >
+                  <GripVertical class="h-4 w-4" />
+                </button>
+                <div class="grid grid-cols-2">
+                  <div class="relative">
+                    <img
+                      v-if="
+                        element.media?.find(
+                          (m) => m.collection_name === 'before',
+                        )
+                      "
+                      :src="
+                        element.media.find(
+                          (m) => m.collection_name === 'before',
+                        ).original_url
+                      "
+                      alt="Avant"
+                      class="w-full h-40 object-cover"
+                    />
+                    <div
+                      v-else
+                      class="w-full h-40 bg-slate-800 flex items-center justify-center"
+                    >
+                      <span class="text-slate-400 text-xs">Avant</span>
+                    </div>
+                    <div
+                      class="absolute top-2 left-2 bg-red-500/90 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow"
+                    >
+                      AVANT
+                    </div>
+                  </div>
+                  <div class="relative">
+                    <img
+                      v-if="
+                        element.media?.find(
+                          (m) => m.collection_name === 'after',
+                        )
+                      "
+                      :src="
+                        element.media.find(
+                          (m) => m.collection_name === 'after',
+                        ).original_url
+                      "
+                      alt="Après"
+                      class="w-full h-40 object-cover"
+                    />
+                    <div
+                      v-else
+                      class="w-full h-40 bg-slate-800 flex items-center justify-center"
+                    >
+                      <span class="text-slate-400 text-xs">Après</span>
+                    </div>
+                    <div
+                      class="absolute top-2 right-2 bg-emerald-500/90 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow"
+                    >
+                      APRÈS
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-4 space-y-3">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    {{ element.title }}
+                  </h3>
+                  <p
+                    v-if="element.description"
+                    class="text-xs text-slate-300 line-clamp-3"
+                  >
+                    {{ element.description }}
+                  </p>
                   <button
                     type="button"
-                    class="drag-handle absolute top-3 right-3 z-10 inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 p-1.5 text-slate-300 hover:text-white"
-                    title="Glisser pour réordonner"
+                    class="w-full rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-3 py-2 text-xs font-semibold text-white shadow-md hover:from-red-600 hover:to-red-700"
+                    @click="deleteTransformation(element.id)"
                   >
-                    <GripVertical class="h-4 w-4" />
+                    Supprimer
                   </button>
-                  <div class="grid grid-cols-2">
-                    <div class="relative">
-                      <img
-                        v-if="
-                          element.media?.find(
-                            (m) => m.collection_name === 'before',
-                          )
-                        "
-                        :src="
-                          element.media.find(
-                            (m) => m.collection_name === 'before',
-                          ).original_url
-                        "
-                        alt="Avant"
-                        class="w-full h-40 object-cover"
-                      />
-                      <div
-                        v-else
-                        class="w-full h-40 bg-slate-800 flex items-center justify-center"
-                      >
-                        <span class="text-slate-400 text-xs">Avant</span>
-                      </div>
-                      <div
-                        class="absolute top-2 left-2 bg-red-500/90 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow"
-                      >
-                        AVANT
-                      </div>
-                    </div>
-                    <div class="relative">
-                      <img
-                        v-if="
-                          element.media?.find(
-                            (m) => m.collection_name === 'after',
-                          )
-                        "
-                        :src="
-                          element.media.find(
-                            (m) => m.collection_name === 'after',
-                          ).original_url
-                        "
-                        alt="Après"
-                        class="w-full h-40 object-cover"
-                      />
-                      <div
-                        v-else
-                        class="w-full h-40 bg-slate-800 flex items-center justify-center"
-                      >
-                        <span class="text-slate-400 text-xs">Après</span>
-                      </div>
-                      <div
-                        class="absolute top-2 right-2 bg-emerald-500/90 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow"
-                      >
-                        APRÈS
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="p-4 space-y-3">
-                    <h3 class="text-sm font-semibold text-slate-50">
-                      {{ element.title }}
-                    </h3>
-                    <p
-                      v-if="element.description"
-                      class="text-xs text-slate-300 line-clamp-3"
-                    >
-                      {{ element.description }}
-                    </p>
-                    <button
-                      type="button"
-                      class="w-full rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-3 py-2 text-xs font-semibold text-white shadow-md hover:from-red-600 hover:to-red-700"
-                      @click="deleteTransformation(element.id)"
-                    >
-                      Supprimer
-                    </button>
-                  </div>
-                </article>
-              </template>
+                </div>
+              </article>
             </VueDraggable>
           </div>
 

@@ -395,149 +395,146 @@ const saveOrder = async () => {
                     <VueDraggable
                         v-if="servicesList.length"
                         v-model="servicesList"
-                        item-key="id"
                         handle=".service-drag-handle"
                         tag="div"
                         class="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
-                        v-auto-animate
                         ghost-class="drag-ghost"
                         chosen-class="drag-chosen"
                         :animation="220"
                         @start="onDragStart"
                         @end="onDragFinish"
                     >
-                        <template #item="{ element: service }">
-                            <article
-                                :key="service.id"
-                                :data-id="service.id"
-                                class="rounded-2xl border bg-slate-900/80 p-5 shadow-xl flex flex-col gap-3 transition"
-                                :class="[
-                                    draggingId === service.id
-                                        ? 'border-indigo-500/70 bg-slate-900'
-                                        : 'border-slate-800 hover:border-slate-700',
-                                ]"
-                            >
-                                <div class="flex items-start gap-4">
-                                    <button
-                                        type="button"
-                                        class="service-drag-handle h-10 w-10 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-400 hover:text-slate-100"
-                                    >
-                                        <GripVertical class="h-4 w-4" />
-                                    </button>
-                                    <div class="flex-1 space-y-3">
-                                        <div class="flex items-start justify-between gap-3">
-                                            <div class="space-y-1">
-                                                <p class="text-xs uppercase tracking-wide text-slate-500">
-                                                    Service
-                                                </p>
-                                                <div class="flex items-center flex-wrap gap-2">
-                                                    <h3 class="text-sm font-semibold text-slate-50">
-                                                        {{ service.name }}
-                                                    </h3>
-                                                    <span
-                                                        v-if="service.is_featured"
-                                                        class="inline-flex items-center rounded-full border border-amber-400/50 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-200"
-                                                    >
-                                                        Offre mise en avant
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="flex flex-col items-end gap-1 text-right">
+                        <article
+                            v-for="service in servicesList"
+                            :key="service.id"
+                            :data-id="service.id"
+                            class="rounded-2xl border bg-slate-900/80 p-5 shadow-xl flex flex-col gap-3 transition"
+                            :class="[
+                                draggingId === service.id
+                                    ? 'border-indigo-500/70 bg-slate-900'
+                                    : 'border-slate-800 hover:border-slate-700',
+                            ]"
+                        >
+                            <div class="flex items-start gap-4">
+                                <button
+                                    type="button"
+                                    class="service-drag-handle h-10 w-10 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-400 hover:text-slate-100"
+                                >
+                                    <GripVertical class="h-4 w-4" />
+                                </button>
+                                <div class="flex-1 space-y-3">
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div class="space-y-1">
+                                            <p class="text-xs uppercase tracking-wide text-slate-500">
+                                                Service
+                                            </p>
+                                            <div class="flex items-center flex-wrap gap-2">
+                                                <h3 class="text-sm font-semibold text-slate-50">
+                                                    {{ service.name }}
+                                                </h3>
                                                 <span
-                                                    class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold"
-                                                    :class="
-                                                        service.is_active
-                                                            ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
-                                                            : 'border-slate-700 bg-slate-800 text-slate-300'
-                                                    "
+                                                    v-if="service.is_featured"
+                                                    class="inline-flex items-center rounded-full border border-amber-400/50 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-200"
                                                 >
-                                                    <Check v-if="service.is_active" class="h-3 w-3 mr-1" />
-                                                    <X v-else class="h-3 w-3 mr-1" />
-                                                    {{ service.is_active ? 'Actif' : 'Masqué' }}
-                                                </span>
-                                                <span class="text-[11px] text-slate-500">
-                                                    Position : {{ (service.order ?? 0) + 1 }}
+                                                    Offre mise en avant
                                                 </span>
                                             </div>
                                         </div>
-                                        <div
-                                            class="relative w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-950"
-                                        >
-                                            <img
-                                                v-if="service.image_url"
-                                                :src="service.image_url"
-                                                :alt="`Illustration ${service.name}`"
-                                                class="h-40 w-full object-cover"
-                                            />
-                                            <div
-                                                v-else
-                                                class="h-40 w-full flex flex-col items-center justify-center text-slate-500 text-xs gap-2 bg-slate-900"
-                                            >
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l6-6 4 4 5.5-5.5M15 7.5h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
-                                                </svg>
-                                                <span>Pas d’image pour l’instant</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-wrap items-center gap-3 text-sm">
-                                            <div class="inline-flex items-center gap-2 text-slate-300">
-                                                <Clock class="h-4 w-4 text-slate-400" />
-                                                <span>{{ service.duration_minutes }} min</span>
-                                            </div>
-                                            <div class="inline-flex items-center gap-2 text-emerald-400 font-semibold">
-                                                <Euro class="h-4 w-4" />
-                                                <span>{{ service.price }} {{ service.currency }}</span>
-                                            </div>
+                                        <div class="flex flex-col items-end gap-1 text-right">
                                             <span
-                                                class="text-[11px] px-2 py-0.5 rounded-full border"
+                                                class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold"
                                                 :class="
-                                                    service.is_featured
-                                                        ? 'border-amber-400/50 bg-amber-500/10 text-amber-100'
+                                                    service.is_active
+                                                        ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
                                                         : 'border-slate-700 bg-slate-800 text-slate-300'
                                                 "
                                             >
-                                                {{ service.is_featured ? 'Offre mise en avant' : 'Offre standard' }}
+                                                <Check v-if="service.is_active" class="h-3 w-3 mr-1" />
+                                                <X v-else class="h-3 w-3 mr-1" />
+                                                {{ service.is_active ? 'Actif' : 'Masqué' }}
                                             </span>
-                                            <span
-                                                class="text-[11px] px-2 py-0.5 rounded-full border"
-                                                :class="
-                                                    service.booking_enabled
-                                                        ? 'border-emerald-400/50 bg-emerald-500/10 text-emerald-100'
-                                                        : 'border-slate-700 bg-slate-800 text-slate-300'
-                                                "
-                                            >
-                                                {{ service.booking_enabled ? 'Payable en ligne' : 'Contact uniquement' }}
+                                            <span class="text-[11px] text-slate-500">
+                                                Position : {{ (service.order ?? 0) + 1 }}
                                             </span>
-                                        </div>
-                                        <div
-                                            v-if="service.description"
-                                            class="prose prose-invert max-w-none text-xs text-slate-300 max-h-24 overflow-hidden [&_*]:text-inherit [&_*]:text-xs [&_*]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-4 [&_li]:my-0.5"
-                                            v-html="service.description"
-                                        />
-                                        <p class="text-[11px] text-slate-500">
-                                            Réservable minimum {{ service.min_advance_booking_hours }}h avant ·
-                                            jusqu’à {{ service.max_advance_booking_days }} jours d’avance
-                                        </p>
-                                        <div class="mt-auto flex gap-2 pt-2 text-[11px]">
-                                            <button
-                                                type="button"
-                                                class="flex-1 rounded-full border border-slate-700 px-4 py-1.5 text-slate-200 hover:bg-slate-800"
-                                                @click="openEditModal(service)"
-                                            >
-                                                Modifier
-                                            </button>
-                                            <button
-                                                type="button"
-                                                class="rounded-full border border-rose-500/50 bg-rose-500/10 px-4 py-1.5 text-rose-200 hover:bg-rose-500/20"
-                                                @click="deleteService(service)"
-                                            >
-                                                Supprimer
-                                            </button>
                                         </div>
                                     </div>
+                                    <div
+                                        class="relative w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-950"
+                                    >
+                                        <img
+                                            v-if="service.image_url"
+                                            :src="service.image_url"
+                                            :alt="`Illustration ${service.name}`"
+                                            class="h-40 w-full object-cover"
+                                        />
+                                        <div
+                                            v-else
+                                            class="h-40 w-full flex flex-col items-center justify-center text-slate-500 text-xs gap-2 bg-slate-900"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l6-6 4 4 5.5-5.5M15 7.5h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
+                                            </svg>
+                                            <span>Pas d’image pour l’instant</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-wrap items-center gap-3 text-sm">
+                                        <div class="inline-flex items-center gap-2 text-slate-300">
+                                            <Clock class="h-4 w-4 text-slate-400" />
+                                            <span>{{ service.duration_minutes }} min</span>
+                                        </div>
+                                        <div class="inline-flex items-center gap-2 text-emerald-400 font-semibold">
+                                            <Euro class="h-4 w-4" />
+                                            <span>{{ service.price }} {{ service.currency }}</span>
+                                        </div>
+                                        <span
+                                            class="text-[11px] px-2 py-0.5 rounded-full border"
+                                            :class="
+                                                service.is_featured
+                                                    ? 'border-amber-400/50 bg-amber-500/10 text-amber-100'
+                                                    : 'border-slate-700 bg-slate-800 text-slate-300'
+                                            "
+                                        >
+                                            {{ service.is_featured ? 'Offre mise en avant' : 'Offre standard' }}
+                                        </span>
+                                        <span
+                                            class="text-[11px] px-2 py-0.5 rounded-full border"
+                                            :class="
+                                                service.booking_enabled
+                                                    ? 'border-emerald-400/50 bg-emerald-500/10 text-emerald-100'
+                                                    : 'border-slate-700 bg-slate-800 text-slate-300'
+                                            "
+                                        >
+                                            {{ service.booking_enabled ? 'Payable en ligne' : 'Contact uniquement' }}
+                                        </span>
+                                    </div>
+                                    <div
+                                        v-if="service.description"
+                                        class="prose prose-invert max-w-none text-xs text-slate-300 max-h-24 overflow-hidden [&_*]:text-inherit [&_*]:text-xs [&_*]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-4 [&_li]:my-0.5"
+                                        v-html="service.description"
+                                    />
+                                    <p class="text-[11px] text-slate-500">
+                                        Réservable minimum {{ service.min_advance_booking_hours }}h avant ·
+                                        jusqu’à {{ service.max_advance_booking_days }} jours d’avance
+                                    </p>
+                                    <div class="mt-auto flex gap-2 pt-2 text-[11px]">
+                                        <button
+                                            type="button"
+                                            class="flex-1 rounded-full border border-slate-700 px-4 py-1.5 text-slate-200 hover:bg-slate-800"
+                                            @click="openEditModal(service)"
+                                        >
+                                            Modifier
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="rounded-full border border-rose-500/50 bg-rose-500/10 px-4 py-1.5 text-rose-200 hover:bg-rose-500/20"
+                                            @click="deleteService(service)"
+                                        >
+                                            Supprimer
+                                        </button>
+                                    </div>
                                 </div>
-                            </article>
-                        </template>
+                            </div>
+                        </article>
                     </VueDraggable>
 
                     <div

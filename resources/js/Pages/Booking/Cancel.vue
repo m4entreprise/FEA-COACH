@@ -44,12 +44,6 @@ const props = defineProps({
 
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
                         <a
-                            :href="route('booking.success', { booking: booking?.id })"
-                            class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                        >
-                            Voir la page de confirmation
-                        </a>
-                        <a
                             href="/"
                             class="inline-flex justify-center items-center px-6 py-3 bg-rose-500 border border-rose-600 text-base font-semibold text-white rounded-md hover:bg-rose-400"
                         >

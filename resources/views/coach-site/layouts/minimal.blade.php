@@ -1,5 +1,9 @@
 @extends('layouts.coach-site')
 
+@php
+    use Stevebauman\Purify\Facades\Purify;
+@endphp
+
 @section('content')
 
 {{-- Layout Minimal - Version épurée et focalisée sur le texte et les CTA --}}
@@ -131,7 +135,9 @@
                                 @if($service->duration_minutes)
                                     <p class="text-sm text-gray-500 mb-2">⏱️ {{ $service->duration_minutes }} minutes</p>
                                 @endif
-                                <p class="text-gray-600">{{ $service->description }}</p>
+                                <div class="text-gray-600 leading-relaxed text-sm">
+                                    {!! Purify::clean($service->description) !!}
+                                </div>
                             </div>
                             <div class="flex items-center gap-6">
                                 <div class="text-right">

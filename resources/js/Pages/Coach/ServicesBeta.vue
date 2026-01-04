@@ -4,7 +4,9 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onBeforeUnmount } from 'vue';
+import { EditorContent, useEditor } from '@tiptap/vue-3';
+import StarterKit from '@tiptap/starter-kit';
 import { toast } from 'vue-sonner';
 import {
     Clock,
@@ -38,6 +40,12 @@ const goBack = () => {
     router.visit(dashboardBackUrl.value);
 };
 
+onBeforeUnmount(() => {
+    if (editor.value) {
+        editor.value.destroy();
+    }
+});
+
 watch(
     () => props.services,
     (value) => {
@@ -64,6 +72,54 @@ const form = useForm({
     remove_image: false,
 });
 
+const pendingEditorContent = ref('');
+
+const editor = useEditor({
+    extensions: [
+        StarterKit.configure({
+            blockquote: false,
+            codeBlock: false,
+            heading: false,
+            horizontalRule: false,
+            orderedList: false,
+            strike: false,
+        }),
+    ],
+    content: '',
+    editorProps: {
+        attributes: {
+            class: 'focus:outline-none text-sm leading-relaxed text-slate-100 caret-emerald-400',
+            spellcheck: 'false',
+        },
+    },
+    onUpdate: ({ editor }) => {
+        form.description = editor.getHTML();
+    },
+});
+
+const syncEditorContent = (value) => {
+    pendingEditorContent.value = value || '';
+    if (editor.value) {
+        editor.value.commands.setContent(
+            pendingEditorContent.value.trim() ? pendingEditorContent.value : '<p></p>',
+            false,
+        );
+    }
+};
+
+watch(
+    editor,
+    (instance) => {
+        if (instance) {
+            instance.commands.setContent(
+                pendingEditorContent.value.trim() ? pendingEditorContent.value : '<p></p>',
+                false,
+            );
+        }
+    },
+    { immediate: true },
+);
+
 const openCreateModal = () => {
     editingService.value = null;
     form.reset();
@@ -79,6 +135,8 @@ const openCreateModal = () => {
     form.image = null;
     form.remove_image = false;
     imagePreview.value = null;
+    form.description = '';
+    syncEditorContent('');
     if (imageInput.value) {
         imageInput.value.value = null;
     }
@@ -100,6 +158,7 @@ const openEditModal = (service) => {
     form.order = service.order ?? 0;
     form.image = null;
     form.remove_image = false;
+    syncEditorContent(form.description);
     imagePreview.value = service.image_url ?? null;
     if (imageInput.value) {
         imageInput.value.value = null;
@@ -115,6 +174,8 @@ const closeModal = () => {
     form.clearErrors();
     form.image = null;
     form.remove_image = false;
+    form.description = '';
+    syncEditorContent('');
     imagePreview.value = null;
     if (imageInput.value) {
         imageInput.value.value = null;
@@ -596,12 +657,61 @@ const saveOrder = async () => {
                         value="Description"
                         class="text-xs text-slate-200"
                     />
-                    <textarea
+                    <div
+                        class="mt-1 rounded-xl border border-slate-800 bg-slate-950"
                         id="service_description"
-                        v-model="form.description"
-                        rows="3"
-                        class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-emerald-500 focus:ring-emerald-500"
-                    ></textarea>
+                    >
+                        <div
+                            class="flex items-center justify-between border-b border-slate-800 px-3 py-2 text-[11px] text-slate-300"
+                        >
+                            <div class="flex items-center gap-1.5">
+                                <button
+                                    type="button"
+                                    class="inline-flex h-7 w-7 items-center justify-center rounded-md border text-[11px] font-semibold transition disabled:opacity-40"
+                                    :class="[
+                                        editor && editor.isActive('bold')
+                                            ? 'border-emerald-400 bg-emerald-500/10 text-emerald-200'
+                                            : 'border-slate-700 bg-slate-900 text-slate-300 hover:text-slate-100',
+                                    ]"
+                                    @click="editor && editor.chain().focus().toggleBold().run()"
+                                    :disabled="!editor"
+                                >
+                                    B
+                                </button>
+                                <button
+                                    type="button"
+                                    class="inline-flex h-7 w-7 items-center justify-center rounded-md border text-[11px] italic transition disabled:opacity-40"
+                                    :class="[
+                                        editor && editor.isActive('italic')
+                                            ? 'border-emerald-400 bg-emerald-500/10 text-emerald-200'
+                                            : 'border-slate-700 bg-slate-900 text-slate-300 hover:text-slate-100',
+                                    ]"
+                                    @click="editor && editor.chain().focus().toggleItalic().run()"
+                                    :disabled="!editor"
+                                >
+                                    I
+                                </button>
+                                <button
+                                    type="button"
+                                    class="inline-flex h-7 w-7 items-center justify-center rounded-md border text-[11px] transition disabled:opacity-40"
+                                    :class="[
+                                        editor && editor.isActive('bulletList')
+                                            ? 'border-emerald-400 bg-emerald-500/10 text-emerald-200'
+                                            : 'border-slate-700 bg-slate-900 text-slate-300 hover:text-slate-100',
+                                    ]"
+                                    @click="editor && editor.chain().focus().toggleBulletList().run()"
+                                    :disabled="!editor"
+                                >
+                                    ••
+                                </button>
+                            </div>
+                            <span class="text-[10px] text-slate-500">Texte enrichi</span>
+                        </div>
+                        <EditorContent
+                            :editor="editor"
+                            class="tiptap-content min-h-[150px] px-3 py-3 text-xs leading-relaxed text-slate-100"
+                        />
+                    </div>
                     <InputError class="mt-1 text-[11px]" :message="form.errors.description" />
                 </div>
 

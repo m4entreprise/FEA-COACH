@@ -1,5 +1,9 @@
 @extends('layouts.coach-site')
 
+@php
+    use Stevebauman\Purify\Facades\Purify;
+@endphp
+
 @section('content')
 
 <!-- Hero Section -->
@@ -198,7 +202,9 @@
                         @if($service->duration_minutes)
                             <p class="text-sm text-gray-500 mb-2">⏱️ {{ $service->duration_minutes }} minutes</p>
                         @endif
-                        <p class="text-gray-600 mb-6 flex-grow">{{ $service->description }}</p>
+                        <div class="text-gray-600 mb-6 flex-grow leading-relaxed text-sm">
+                            {!! Purify::clean($service->description) !!}
+                        </div>
                         
                         @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
                             <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"

@@ -1,5 +1,9 @@
 ﻿@extends('layouts.coach-site')
 
+@php
+    use Stevebauman\Purify\Facades\Purify;
+@endphp
+
 @section('content')
 
 {{-- Layout Bold/Impact - Version très visuelle avec de grosses sections hero --}}
@@ -207,7 +211,9 @@
                                 @endif
                             </div>
 
-                            <p class="text-lg text-gray-600 mb-8 flex-grow">{{ $service->description }}</p>
+                            <div class="text-lg text-gray-600 mb-8 flex-grow leading-relaxed">
+                                {!! Purify::clean($service->description) !!}
+                            </div>
                             
                             @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
                                 <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"

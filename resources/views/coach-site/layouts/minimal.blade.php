@@ -137,10 +137,20 @@
                                 <div class="text-right">
                                     <div class="text-3xl font-bold text-primary">{{ number_format($service->price, 0, ',', ' ') }}€</div>
                                 </div>
-                                <a href="#contact" 
-                                   class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                    Contacter
-                                </a>
+                                @if(optional($coach->user)->has_payments_module)
+                                    <form action="{{ route('coach.booking.checkout', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        <input type="hidden" name="client_email" value="booking@temp.com">
+                                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
+                                            Payer en ligne
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="#contact" 
+                                       class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
+                                        Contacter
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -207,9 +207,19 @@
 
                             <p class="text-lg text-gray-600 mb-8 flex-grow">{{ $service->description }}</p>
                             
-                            <a href="#contact" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
-                                Contacter
-                            </a>
+                            @if(optional($coach->user)->has_payments_module)
+                                <form action="{{ route('coach.booking.checkout', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="client_email" value="booking@temp.com">
+                                    <button type="submit" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
+                                        Payer en ligne
+                                    </button>
+                                </form>
+                            @else
+                                <a href="#contact" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
+                                    Contacter
+                                </a>
+                            @endif
                         </div>
                     </div>
                 @endforeach

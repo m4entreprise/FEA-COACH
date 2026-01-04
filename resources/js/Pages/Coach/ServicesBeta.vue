@@ -26,6 +26,8 @@ const draggingId = ref(null);
 const reorderSaving = ref(false);
 const reorderError = ref(null);
 const servicesList = ref([]);
+const imageInput = ref(null);
+const imagePreview = ref(null);
 
 const dashboardBackUrl = computed(() => {
     const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
@@ -57,6 +59,8 @@ const form = useForm({
     max_advance_booking_days: 60,
     min_advance_booking_hours: 24,
     order: 0,
+    image: null,
+    remove_image: false,
 });
 
 const openCreateModal = () => {
@@ -70,6 +74,12 @@ const openCreateModal = () => {
     form.max_advance_booking_days = 60;
     form.min_advance_booking_hours = 24;
     form.order = servicesList.value.length;
+    form.image = null;
+    form.remove_image = false;
+    imagePreview.value = null;
+    if (imageInput.value) {
+        imageInput.value.value = null;
+    }
     showModal.value = true;
 };
 
@@ -85,6 +95,12 @@ const openEditModal = (service) => {
     form.max_advance_booking_days = service.max_advance_booking_days ?? 60;
     form.min_advance_booking_hours = service.min_advance_booking_hours ?? 24;
     form.order = service.order ?? 0;
+    form.image = null;
+    form.remove_image = false;
+    imagePreview.value = service.image_url ?? null;
+    if (imageInput.value) {
+        imageInput.value.value = null;
+    }
     form.clearErrors();
     showModal.value = true;
 };
@@ -94,6 +110,12 @@ const closeModal = () => {
     editingService.value = null;
     form.reset();
     form.clearErrors();
+    form.image = null;
+    form.remove_image = false;
+    imagePreview.value = null;
+    if (imageInput.value) {
+        imageInput.value.value = null;
+    }
 };
 
 const submit = () => {
@@ -114,6 +136,28 @@ const submit = () => {
                 toast.success('Service créé avec succès');
             },
         });
+    }
+};
+
+const handleImageChange = (event) => {
+    const file = event.target?.files?.[0];
+    if (!file) {
+        return;
+    }
+
+    form.image = file;
+    form.remove_image = false;
+    imagePreview.value = URL.createObjectURL(file);
+};
+
+const removeImage = () => {
+    form.image = null;
+    if (editingService.value) {
+        form.remove_image = true;
+    }
+    imagePreview.value = null;
+    if (imageInput.value) {
+        imageInput.value.value = null;
     }
 };
 

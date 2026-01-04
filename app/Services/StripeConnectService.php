@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\StripeAccount;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class StripeConnectService
 {
@@ -181,6 +182,8 @@ class StripeConnectService
 
     public function createCheckoutSession(Booking $booking): array
     {
+        $booking->loadMissing('serviceType');
+
         $coach = $booking->coach;
         $stripeAccount = $coach->stripeAccount;
 
@@ -191,10 +194,16 @@ class StripeConnectService
         $amount = (int) ($booking->amount * 100);
         $platformFee = $this->calculatePlatformFee($amount);
 
-        $description = 'Séance à planifier';
+        $defaultDescription = 'Séance à planifier';
         if ($booking->booking_date && $booking->start_time) {
-            $description = 'Séance du ' . $booking->booking_date->format('d/m/Y') . ' à ' . substr($booking->start_time, 0, 5);
+            $defaultDescription = 'Séance du ' . $booking->booking_date->format('d/m/Y') . ' à ' . substr($booking->start_time, 0, 5);
         }
+
+        $serviceDescription = trim((string) $booking->serviceType?->description);
+        $description = Str::limit($serviceDescription !== '' ? $serviceDescription : $defaultDescription, 200);
+
+        $imageUrl = $booking->serviceType?->image_url;
+        $productImages = $imageUrl ? [$imageUrl] : [];
 
         try {
             $response = Http::withHeaders([
@@ -217,6 +226,7 @@ class StripeConnectService
                             'product_data' => [
                                 'name' => $booking->serviceType->name,
                                 'description' => $description,
+                                'images' => $productImages,
                             ],
                             'unit_amount' => $amount,
                         ],

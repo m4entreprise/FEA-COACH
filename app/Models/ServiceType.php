@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class ServiceType extends Model
 {
@@ -20,6 +21,7 @@ class ServiceType extends Model
         'max_advance_booking_days',
         'min_advance_booking_hours',
         'order',
+        'image_path',
     ];
 
     protected $casts = [
@@ -30,6 +32,10 @@ class ServiceType extends Model
         'max_advance_booking_days' => 'integer',
         'min_advance_booking_hours' => 'integer',
         'order' => 'integer',
+    ];
+
+    protected $appends = [
+        'image_url',
     ];
 
     public function coach(): BelongsTo
@@ -50,5 +56,14 @@ class ServiceType extends Model
     public function getFormattedPriceAttribute(): string
     {
         return number_format($this->price, 2) . ' ' . $this->currency;
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image_path) {
+            return null;
+        }
+
+        return url(Storage::url($this->image_path));
     }
 }

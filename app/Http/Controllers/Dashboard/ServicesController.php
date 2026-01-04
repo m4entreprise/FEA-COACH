@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\ServiceType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ServicesController extends Controller
@@ -38,16 +39,23 @@ class ServicesController extends Controller
             'booking_enabled' => 'boolean',
             'max_advance_booking_days' => 'integer|min:1|max:365',
             'min_advance_booking_hours' => 'integer|min:0|max:168',
+            'image' => 'nullable|image|max:5120',
         ]);
 
         $coach = $request->user()->coach;
 
         $maxOrder = $coach->serviceTypes()->max('order') ?? 0;
 
-        $service = $coach->serviceTypes()->create([
+        $data = [
             ...$validated,
             'order' => $maxOrder + 1,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('service-images', 'public');
+        }
+
+        $service = $coach->serviceTypes()->create($data);
 
         return back()->with('success', 'Service créé avec succès');
     }
@@ -66,9 +74,27 @@ class ServicesController extends Controller
             'booking_enabled' => 'boolean',
             'max_advance_booking_days' => 'integer|min:1|max:365',
             'min_advance_booking_hours' => 'integer|min:0|max:168',
+            'image' => 'nullable|image|max:5120',
+            'remove_image' => 'nullable|boolean',
         ]);
 
-        $service->update($validated);
+        $data = $validated;
+
+        if ($request->hasFile('image')) {
+            if ($service->image_path) {
+                Storage::disk('public')->delete($service->image_path);
+            }
+            $data['image_path'] = $request->file('image')->store('service-images', 'public');
+        } elseif ($request->boolean('remove_image')) {
+            if ($service->image_path) {
+                Storage::disk('public')->delete($service->image_path);
+            }
+            $data['image_path'] = null;
+        }
+
+        unset($data['image'], $data['remove_image']);
+
+        $service->update($data);
 
         return back()->with('success', 'Service mis à jour avec succès');
     }
@@ -76,6 +102,10 @@ class ServicesController extends Controller
     public function destroy(ServiceType $service)
     {
         $this->authorize('delete', $service);
+
+        if ($service->image_path) {
+            Storage::disk('public')->delete($service->image_path);
+        }
 
         $service->delete();
 

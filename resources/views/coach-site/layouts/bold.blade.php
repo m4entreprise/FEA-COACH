@@ -39,18 +39,18 @@
             {{ $coach->hero_subtitle ?? 'Coaching sportif personnalisé' }}
         </p>
 
-        <div class="grid grid-cols-3 gap-8 max-w-3xl mx-auto mb-12">
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <div class="text-5xl font-black mb-2">{{ isset($transformations) ? $transformations->count() : 0 }}+</div>
-                <div class="text-sm uppercase tracking-wider">Clients</div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-3xl mx-auto mb-12">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center sm:text-left">
+                <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ isset($transformations) ? $transformations->count() : 0 }}+</div>
+                <div class="text-xs sm:text-sm uppercase tracking-wider">Clients</div>
             </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <div class="text-5xl font-black mb-2">{{ $coach->satisfaction_rate ?? 100 }}%</div>
-                <div class="text-sm uppercase tracking-wider">Satisfaction</div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center sm:text-left">
+                <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ $coach->satisfaction_rate ?? 100 }}%</div>
+                <div class="text-xs sm:text-sm uppercase tracking-wider">Satisfaction</div>
             </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <div class="text-5xl font-black mb-2">{{ $coach->average_rating ?? 5.0 }}</div>
-                <div class="text-sm uppercase tracking-wider">Note</div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center sm:text-left">
+                <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ $coach->average_rating ?? 5.0 }}</div>
+                <div class="text-xs sm:text-sm uppercase tracking-wider">Note</div>
             </div>
         </div>
 

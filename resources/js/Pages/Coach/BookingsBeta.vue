@@ -1,7 +1,7 @@
 <script setup>
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
-import { toast } from 'vue-sonner';
+import { Toaster, toast } from 'vue-sonner';
 import {
     Users,
     Calendar,
@@ -221,20 +221,20 @@ const getClientName = (booking) => {
 </script>
 
 <template>
-    <Head title="Mes Réservations" />
+  <Head title="Mes Réservations" />
 
-    <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
-        <!-- Top bar -->
-        <header
-            class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
-        >
-            <div class="flex items-center gap-3">
-                <div class="flex flex-col">
-                    <p class="text-xs uppercase tracking-wide text-slate-400">Panel coach</p>
-                    <h1 class="text-base md:text-lg font-semibold flex items-center gap-2">
-                        <span>Mes réservations</span>
-                    </h1>
-                </div>
+  <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
+    <!-- Top bar -->
+    <header
+        class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
+    >
+        <div class="flex items-center gap-3">
+            <div class="flex flex-col">
+                <p class="text-xs uppercase tracking-wide text-slate-400">Panel coach</p>
+                <h1 class="text-base md:text-lg font-semibold flex items-center gap-2">
+                    <span>Mes réservations</span>
+                </h1>
             </div>
 
             <div class="flex items-center gap-3">

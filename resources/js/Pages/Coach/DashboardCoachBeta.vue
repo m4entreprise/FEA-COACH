@@ -29,7 +29,6 @@ import {
 const props = defineProps({
     coach: Object,
     stats: Object,
-    recentTransformations: Array,
     customDomain: {
         type: Object,
         default: null,
@@ -786,49 +785,6 @@ const logout = () => {
                             </div>
                         </div>
 
-                        <!-- Recent transformations -->
-                        <div
-                            v-if="recentTransformations && recentTransformations.length"
-                            class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl space-y-4"
-                        >
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <ImageIcon class="h-4 w-4 text-slate-300" />
-                                    <h3 class="text-sm font-semibold">Transformations recentes</h3>
-                                </div>
-                                <Link
-                                    :href="route('dashboard.gallery')"
-                                    class="text-[11px] text-purple-300 hover:text-purple-200 flex items-center gap-1"
-                                >
-                                    Ouvrir la galerie
-                                </Link>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                                <article
-                                    v-for="t in recentTransformations"
-                                    :key="t.id"
-                                    class="rounded-xl border border-slate-700/60 bg-slate-900/80 p-3 flex flex-col gap-2"
-                                >
-                                    <p class="text-[11px] text-slate-300 line-clamp-3">
-                                        {{ t.description }}
-                                    </p>
-                                    <div class="flex gap-2 mt-auto">
-                                        <div
-                                            v-if="t.before_url"
-                                            class="flex-1 h-16 rounded-lg bg-slate-800 overflow-hidden"
-                                        >
-                                            <img :src="t.before_url" alt="Avant" class="w-full h-full object-cover" />
-                                        </div>
-                                        <div
-                                            v-if="t.after_url"
-                                            class="flex-1 h-16 rounded-lg bg-slate-800 overflow-hidden"
-                                        >
-                                            <img :src="t.after_url" alt="Apres" class="w-full h-full object-cover" />
-                                        </div>
-                                    </div>
-                                </article>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Site vitrine -->

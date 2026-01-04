@@ -183,7 +183,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 4) }} gap-8">
                 @foreach($services as $service)
                     <div class="relative bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all p-8 flex flex-col overflow-hidden">
-                        @if($service->booking_enabled)
+                        @if($service->is_featured)
                             <span class="absolute top-6 right-6 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 shadow-lg">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5.5 3 1.5-6.5L3 8.5l6.6-.5L12 2l2.4 6 6.6.5-5 4.9 1.5 6.5z" />
@@ -200,7 +200,7 @@
                         @endif
                         <p class="text-gray-600 mb-6 flex-grow">{{ $service->description }}</p>
                         
-                        @if(optional($coach->user)->has_payments_module)
+                        @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
                             <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
                                class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
                                 Payer en ligne

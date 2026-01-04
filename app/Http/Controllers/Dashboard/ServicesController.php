@@ -57,6 +57,7 @@ class ServicesController extends Controller
             'currency' => 'required|string|size:3',
             'is_active' => 'boolean',
             'booking_enabled' => 'boolean',
+            'is_featured' => 'boolean',
             'max_advance_booking_days' => 'integer|min:1|max:365',
             'min_advance_booking_hours' => 'integer|min:0|max:168',
             'image' => 'nullable|image|max:5120',
@@ -69,6 +70,8 @@ class ServicesController extends Controller
         $data = [
             ...$validated,
             'order' => $maxOrder + 1,
+            'booking_enabled' => $request->boolean('booking_enabled'),
+            'is_featured' => $request->boolean('is_featured'),
         ];
 
         if ($request->hasFile('image')) {
@@ -106,6 +109,7 @@ class ServicesController extends Controller
             'currency' => 'required|string|size:3',
             'is_active' => 'boolean',
             'booking_enabled' => 'boolean',
+            'is_featured' => 'boolean',
             'max_advance_booking_days' => 'integer|min:1|max:365',
             'min_advance_booking_hours' => 'integer|min:0|max:168',
             'image' => 'nullable|image|max:5120',
@@ -113,6 +117,8 @@ class ServicesController extends Controller
         ]);
 
         $data = $validated;
+        $data['booking_enabled'] = $request->boolean('booking_enabled');
+        $data['is_featured'] = $request->boolean('is_featured');
 
         if ($request->hasFile('image')) {
             if ($service->image_path) {

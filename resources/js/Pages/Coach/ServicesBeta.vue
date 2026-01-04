@@ -55,7 +55,8 @@ const form = useForm({
     price: '',
     currency: 'EUR',
     is_active: true,
-    booking_enabled: false,
+    booking_enabled: true,
+    is_featured: false,
     max_advance_booking_days: 60,
     min_advance_booking_hours: 24,
     order: 0,
@@ -70,7 +71,8 @@ const openCreateModal = () => {
     form.duration_minutes = 60;
     form.currency = 'EUR';
     form.is_active = true;
-    form.booking_enabled = false;
+    form.booking_enabled = true;
+    form.is_featured = false;
     form.max_advance_booking_days = 60;
     form.min_advance_booking_hours = 24;
     form.order = servicesList.value.length;
@@ -91,7 +93,8 @@ const openEditModal = (service) => {
     form.price = service.price ?? '';
     form.currency = service.currency || 'EUR';
     form.is_active = service.is_active;
-    form.booking_enabled = service.booking_enabled ?? false;
+    form.booking_enabled = service.booking_enabled ?? true;
+    form.is_featured = service.is_featured ?? false;
     form.max_advance_booking_days = service.max_advance_booking_days ?? 60;
     form.min_advance_booking_hours = service.min_advance_booking_hours ?? 24;
     form.order = service.order ?? 0;
@@ -357,7 +360,7 @@ const saveOrder = async () => {
                                                     {{ service.name }}
                                                 </h3>
                                                 <span
-                                                    v-if="service.booking_enabled"
+                                                    v-if="service.is_featured"
                                                     class="inline-flex items-center rounded-full border border-amber-400/50 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-200"
                                                 >
                                                     Offre mise en avant
@@ -413,12 +416,22 @@ const saveOrder = async () => {
                                         <span
                                             class="text-[11px] px-2 py-0.5 rounded-full border"
                                             :class="
-                                                service.booking_enabled
+                                                service.is_featured
                                                     ? 'border-amber-400/50 bg-amber-500/10 text-amber-100'
                                                     : 'border-slate-700 bg-slate-800 text-slate-300'
                                             "
                                         >
-                                            {{ service.booking_enabled ? 'Offre mise en avant' : 'Offre standard' }}
+                                            {{ service.is_featured ? 'Offre mise en avant' : 'Offre standard' }}
+                                        </span>
+                                        <span
+                                            class="text-[11px] px-2 py-0.5 rounded-full border"
+                                            :class="
+                                                service.booking_enabled
+                                                    ? 'border-emerald-400/50 bg-emerald-500/10 text-emerald-100'
+                                                    : 'border-slate-700 bg-slate-800 text-slate-300'
+                                            "
+                                        >
+                                            {{ service.booking_enabled ? 'Payable en ligne' : 'Contact uniquement' }}
                                         </span>
                                     </div>
                                     <p
@@ -677,22 +690,30 @@ const saveOrder = async () => {
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label class="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-xs text-slate-200">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <label class="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-200">
                         <input
                             v-model="form.is_active"
                             type="checkbox"
                             class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-emerald-500 focus:ring-emerald-500"
                         />
-                        Service actif (visible)
+                        Service actif<br /><span class="text-[11px] text-slate-500">Visible sur le site</span>
                     </label>
-                    <label class="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-xs text-slate-200">
+                    <label class="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-200">
+                        <input
+                            v-model="form.is_featured"
+                            type="checkbox"
+                            class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-amber-500 focus:ring-amber-500"
+                        />
+                        Offre mise en avant<br /><span class="text-[11px] text-slate-500">Badge et focus visuel</span>
+                    </label>
+                    <label class="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-200">
                         <input
                             v-model="form.booking_enabled"
                             type="checkbox"
                             class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-emerald-500 focus:ring-emerald-500"
                         />
-                        Mettre cette offre en avant
+                        Payable en ligne<br /><span class="text-[11px] text-slate-500">Affiche “Payer en ligne”</span>
                     </label>
                 </div>
 

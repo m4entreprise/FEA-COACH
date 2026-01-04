@@ -200,7 +200,23 @@ class StripeConnectService
         }
 
         $rawDescription = (string) $booking->serviceType?->description;
-        $serviceDescription = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags($rawDescription), ENT_QUOTES | ENT_HTML5)));
+        $normalizedHtml = preg_replace(
+            [
+                '/<\s*\/?(p|div|h[1-6]|ul|ol)\b[^>]*>/iu',
+                '/<\s*br\s*\/?>/iu',
+                '/<\s*li\b[^>]*>/iu',
+            ],
+            [
+                "\n",
+                "\n",
+                "\n• ",
+            ],
+            $rawDescription
+        );
+        $plainText = html_entity_decode(strip_tags($normalizedHtml), ENT_QUOTES | ENT_HTML5);
+        $plainText = preg_replace("/(\r\n|\r|\n)+/u", "\n", $plainText);
+        $plainText = preg_replace('/[ \t]+/u', ' ', $plainText);
+        $serviceDescription = trim(str_replace("\n", ' ', preg_replace('/\s+/u', ' ', $plainText)));
         $description = Str::limit($serviceDescription !== '' ? $serviceDescription : $defaultDescription, 200);
 
         $imageUrl = $booking->serviceType?->image_url;

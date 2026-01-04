@@ -118,20 +118,26 @@ const deleteBooking = (booking) => {
     });
 };
 
-const formatDate = (dateString) => {
-    if (!dateString) {
-        return 'À planifier';
+const formatPaymentDate = (paidAt) => {
+    if (!paidAt) {
+        return 'Date de paiement inconnue';
     }
-    const date = new Date(dateString);
     return new Intl.DateTimeFormat('fr-FR', {
-        day: '2-digit',
-        month: 'long',
+        weekday: 'long',
         year: 'numeric',
-    }).format(date);
+        month: 'long',
+        day: 'numeric',
+    }).format(new Date(paidAt));
 };
 
-const formatTime = (timeString) => {
-    return timeString?.substring(0, 5) || 'À planifier';
+const formatPaymentTime = (paidAt) => {
+    if (!paidAt) {
+        return '--:--';
+    }
+    return new Intl.DateTimeFormat('fr-FR', {
+        hour: '2-digit',
+        minute: '2-digit',
+    }).format(new Date(paidAt));
 };
 </script>
 
@@ -267,11 +273,11 @@ const formatTime = (timeString) => {
                                     <div class="flex flex-wrap items-center gap-3 text-sm text-slate-400">
                                         <div class="flex items-center gap-1.5">
                                             <Calendar class="h-3.5 w-3.5" />
-                                            <span>{{ formatDate(booking.booking_date) }}</span>
+                                            <span>{{ formatPaymentDate(booking.paid_at || booking.created_at) }}</span>
                                         </div>
                                         <div class="flex items-center gap-1.5">
                                             <Clock class="h-3.5 w-3.5" />
-                                            <span>{{ formatTime(booking.start_time) }} - {{ formatTime(booking.end_time) }}</span>
+                                            <span>{{ formatPaymentTime(booking.paid_at || booking.created_at) }}</span>
                                         </div>
                                         <div class="flex items-center gap-1.5 text-emerald-400 font-medium">
                                             <Euro class="h-3.5 w-3.5" />
@@ -283,9 +289,9 @@ const formatTime = (timeString) => {
 
                             <!-- Client info -->
                             <div class="rounded-lg border border-slate-700 bg-slate-800/50 p-4">
-                                <p class="text-xs text-slate-400 mb-2">Client</p>
-                                <div class="space-y-2 text-sm">
-                                    <p class="font-medium text-slate-200">{{ booking.client_name }}</p>
+                                <p class="text-xs text-slate-400 mb-2">Infos client</p>
+                                <div class="space-y-2 text-sm text-slate-200">
+                                    <p class="font-semibold">{{ booking.client_name }}</p>
                                     <div class="flex flex-wrap gap-3 text-slate-400">
                                         <div v-if="booking.client_email" class="flex items-center gap-1.5">
                                             <Mail class="h-3.5 w-3.5" />

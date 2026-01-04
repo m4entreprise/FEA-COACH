@@ -7,7 +7,7 @@ import axios from 'axios';
 import { computed, ref, watch, onBeforeUnmount } from 'vue';
 import { EditorContent, useEditor } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
-import { toast } from 'vue-sonner';
+import { Toaster, toast } from 'vue-sonner';
 import {
     Clock,
     Euro,
@@ -199,6 +199,11 @@ const submit = () => {
                 closeModal();
                 toast.success('Service mis à jour avec succès');
             },
+            onError: () => {
+                toast.error('Impossible de mettre à jour le service', {
+                    description: 'Vérifiez les champs requis puis réessayez.',
+                });
+            },
             onFinish: resetTransform,
         });
     } else {
@@ -210,6 +215,11 @@ const submit = () => {
             onSuccess: () => {
                 closeModal();
                 toast.success('Service créé avec succès');
+            },
+            onError: () => {
+                toast.error('Création impossible', {
+                    description: 'Corrigez les champs requis puis réessayez.',
+                });
             },
         });
     }
@@ -243,6 +253,10 @@ const deleteService = (service) => {
     router.delete(route('dashboard.services.destroy', service.id), {
         preserveScroll: true,
         onSuccess: () => toast.success('Service supprimé'),
+        onError: () =>
+            toast.error('Suppression impossible', {
+                description: 'Réessayez dans un instant.',
+            }),
     });
 };
 
@@ -306,9 +320,13 @@ const saveOrder = async () => {
                 headers: { Accept: 'application/json' },
             },
         );
+        toast.success('Ordre mis à jour');
     } catch (error) {
         reorderError.value =
             error.response?.data?.message || 'Impossible d’enregistrer le nouvel ordre.';
+        toast.error('Synchronisation impossible', {
+            description: reorderError.value,
+        });
     } finally {
         reorderSaving.value = false;
     }
@@ -319,6 +337,7 @@ const saveOrder = async () => {
     <Head title="Mes services" />
 
     <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+        <Toaster rich-colors theme="dark" position="top-right" close-button />
         <header
             class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
         >

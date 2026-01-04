@@ -22,7 +22,7 @@ const isScheduled = computed(() => !!(props.booking?.booking_date && props.booki
                         Paiement confirmé !
                     </h1>
                     <p class="text-green-100">
-                        Votre séance sera planifiée avec le coach
+                        Votre coach vous recontactera très rapidement pour fixer votre séance
                     </p>
                 </div>
 
@@ -88,10 +88,29 @@ const isScheduled = computed(() => !!(props.booking?.booking_date && props.booki
                         </div>
                     </div>
 
-                    <div class="space-y-3">
+                    <div class="space-y-4">
                         <p class="text-sm text-gray-600 text-center">
-                            📧 Vous recevrez un rappel 24h avant votre séance une fois le créneau défini
+                            📧 Vous recevrez un rappel 24h avant votre séance une fois le créneau défini.
                         </p>
+
+                        <div
+                            v-if="booking.client_share_link"
+                            class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 space-y-2"
+                        >
+                            <p class="font-semibold">Accédez à votre espace client</p>
+                            <p>
+                                Conservez ce lien pour retrouver vos documents et programmes :
+                                <a
+                                    :href="booking.client_share_link"
+                                    class="text-blue-700 underline break-all"
+                                >
+                                    {{ booking.client_share_link }}
+                                </a>
+                            </p>
+                            <p>
+                                Code d'accès : <strong>{{ booking.client_share_code }}</strong>
+                            </p>
+                        </div>
 
                         <div class="flex flex-col sm:flex-row gap-3 justify-center">
                             <button
@@ -106,7 +125,7 @@ const isScheduled = computed(() => !!(props.booking?.booking_date && props.booki
 
                 <div class="bg-gray-50 px-8 py-6 text-center border-t border-gray-200">
                     <p class="text-sm text-gray-600">
-                        Des questions ? Contactez votre coach directement
+                        Des questions ? Contactez directement {{ booking.coach_name }} à l'adresse qui figure dans l'email de confirmation.
                     </p>
                 </div>
             </div>

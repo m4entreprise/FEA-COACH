@@ -153,7 +153,14 @@ class BookingController extends Controller
         }
 
         $booking->refresh();
-        $booking->load(['serviceType', 'coach']);
+        $booking->load(['serviceType', 'coach', 'client']);
+
+        $clientShareLink = null;
+        $clientShareCode = null;
+        if ($booking->client && $booking->client->share_token) {
+            $clientShareCode = $booking->client->share_code;
+            $clientShareLink = route('clients.share.show', $booking->client->share_token);
+        }
 
         return Inertia::render('Booking/Success', [
             'booking' => [
@@ -165,6 +172,8 @@ class BookingController extends Controller
                 'coach_name' => $booking->coach->name,
                 'amount' => $booking->formatted_amount,
                 'client_email' => $booking->client_email,
+                'client_share_code' => $clientShareCode,
+                'client_share_link' => $clientShareLink,
             ],
         ]);
     }

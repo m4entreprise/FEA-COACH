@@ -63,14 +63,18 @@ class BookingsController extends Controller
         $this->authorize('update', $booking);
 
         $validated = $request->validate([
-            'reason' => 'required|string|max:500',
+            'reason' => 'nullable|string|max:500',
         ]);
 
         if (!$booking->canBeCancelled()) {
             return back()->with('error', 'Cette réservation ne peut plus être annulée');
         }
 
-        $this->bookingService->cancelBooking($booking, $validated['reason'], 'coach');
+        $this->bookingService->cancelBooking(
+            $booking,
+            $validated['reason'] ?? 'Annulé par le coach',
+            'coach'
+        );
 
         return back()->with('success', 'Réservation annulée');
     }
@@ -99,5 +103,14 @@ class BookingsController extends Controller
         $booking->update(['status' => 'no_show']);
 
         return back()->with('success', 'Client marqué comme absent');
+    }
+
+    public function destroy(Booking $booking)
+    {
+        $this->authorize('delete', $booking);
+
+        $booking->delete();
+
+        return back()->with('success', 'Réservation supprimée');
     }
 }

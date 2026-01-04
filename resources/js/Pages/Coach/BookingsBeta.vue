@@ -218,6 +218,7 @@ const handleConfirmAction = () => {
     const baseOptions = {
         preserveScroll: true,
         onSuccess: () => {
+            actionModal.value.loading = false;
             toast.success(config.successMessage);
             closeActionModal();
         },

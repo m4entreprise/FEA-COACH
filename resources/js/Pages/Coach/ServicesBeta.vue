@@ -598,10 +598,10 @@ const saveOrder = async () => {
                     />
                     <TextInput
                         id="service_name"
+                        name="name"
                         v-model="form.name"
                         type="text"
                         class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                        required
                     />
                     <InputError class="mt-1 text-[11px]" :message="form.errors.name" />
                 </div>
@@ -615,6 +615,7 @@ const saveOrder = async () => {
                         />
                         <TextInput
                             id="service_duration"
+                            name="duration_minutes"
                             v-model="form.duration_minutes"
                             type="number"
                             min="15"
@@ -633,6 +634,7 @@ const saveOrder = async () => {
                         <div class="mt-1 flex gap-2">
                             <TextInput
                                 id="service_price"
+                                name="price"
                                 v-model="form.price"
                                 type="number"
                                 min="0"
@@ -641,6 +643,7 @@ const saveOrder = async () => {
                             />
                             <select
                                 v-model="form.currency"
+                                name="currency"
                                 class="rounded-md border border-slate-700 bg-slate-950 px-3 text-xs text-slate-100 focus:border-emerald-500 focus:ring-emerald-500"
                             >
                                 <option value="EUR">EUR</option>
@@ -725,6 +728,7 @@ const saveOrder = async () => {
                         />
                         <TextInput
                             id="service_min_advance"
+                            name="min_advance_booking_hours"
                             v-model="form.min_advance_booking_hours"
                             type="number"
                             min="0"
@@ -740,6 +744,7 @@ const saveOrder = async () => {
                         />
                         <TextInput
                             id="service_max_advance"
+                            name="max_advance_booking_days"
                             v-model="form.max_advance_booking_days"
                             type="number"
                             min="1"

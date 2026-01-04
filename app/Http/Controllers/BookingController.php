@@ -153,7 +153,7 @@ class BookingController extends Controller
         }
 
         $booking->refresh();
-        $booking->load(['serviceType', 'coach', 'client']);
+        $booking->load(['serviceType', 'coach.user', 'client']);
 
         $clientShareLink = null;
         $clientShareCode = null;
@@ -161,6 +161,14 @@ class BookingController extends Controller
             $clientShareCode = $booking->client->share_code;
             $clientShareLink = route('clients.share.show', $booking->client->share_token);
         }
+
+        $coachContactEmail = $booking->coach->user?->public_contact_email
+            ?? $booking->coach->user?->email
+            ?? null;
+
+        $coachContactPhone = $booking->coach->user?->phone_contact
+            ?? $booking->coach->phone_contact
+            ?? null;
 
         $isFirstBooking = false;
         if ($booking->client) {
@@ -183,6 +191,8 @@ class BookingController extends Controller
                 'client_share_code' => $clientShareCode,
                 'client_share_link' => $clientShareLink,
                 'is_first_booking' => $isFirstBooking,
+                'coach_contact_email' => $coachContactEmail,
+                'coach_contact_phone' => $coachContactPhone,
             ],
         ]);
     }

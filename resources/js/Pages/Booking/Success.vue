@@ -132,9 +132,26 @@ const isFirstBooking = computed(() => Boolean(props.booking?.is_first_booking));
                 </div>
 
                 <div class="bg-gray-50 px-8 py-6 text-center border-t border-gray-200">
-                    <p class="text-sm text-gray-600">
-                        Des questions ? Contactez directement {{ booking.coach_name }} à l'adresse qui figure dans l'email de confirmation.
-                    </p>
+                    <div class="text-sm text-gray-600 space-y-1">
+                        <p>
+                            Des questions ? Contactez directement <strong>{{ booking.coach_name }}</strong>.
+                        </p>
+                        <p v-if="booking.coach_contact_email">
+                            <span class="font-medium">Email :</span>
+                            <a :href="`mailto:${booking.coach_contact_email}`" class="text-blue-600 underline">
+                                {{ booking.coach_contact_email }}
+                            </a>
+                        </p>
+                        <p v-if="booking.coach_contact_phone">
+                            <span class="font-medium">Téléphone :</span>
+                            <a :href="`tel:${booking.coach_contact_phone}`" class="text-blue-600 underline">
+                                {{ booking.coach_contact_phone }}
+                            </a>
+                        </p>
+                        <p v-if="!booking.coach_contact_email && !booking.coach_contact_phone">
+                            Vous trouverez ses coordonnées dans l'email de confirmation.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

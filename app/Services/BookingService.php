@@ -228,4 +228,13 @@ class BookingService
 
         return round(($completed / $total) * 100, 1);
     }
+
+    private function generateShareCode(): string
+    {
+        do {
+            $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        } while (Client::where('share_code', $code)->exists());
+
+        return $code;
+    }
 }

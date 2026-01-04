@@ -8,6 +8,7 @@ import { GripVertical, Plus, HelpCircle, Search } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import { Toaster, toast } from 'vue-sonner';
+import { VueDraggable } from 'vue-draggable-plus';
 
 const props = defineProps({
   faqs: Array,
@@ -138,46 +139,21 @@ const deleteFaq = (faq) => {
   });
 };
 
-const onDragStart = (event, faq) => {
-  draggingId.value = faq.id;
-  if (event.dataTransfer) {
-    event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('text/plain', String(faq.id));
-  }
+const onDragStart = (event) => {
+  const id = Number(event?.item?.dataset?.id);
+  draggingId.value = Number.isNaN(id) ? null : id;
 };
 
-const onDragEnd = () => {
+const onDragFinish = () => {
   draggingId.value = null;
+  handleReorder();
 };
 
-const onDropCard = (event, targetFaq) => {
-  event.preventDefault();
-  reorderList(draggingId.value, targetFaq?.id ?? null);
-};
-
-const onDropAfterList = (event) => {
-  event.preventDefault();
-  reorderList(draggingId.value, null);
-};
-
-const reorderList = (draggedId, targetId) => {
-  if (!draggedId || draggedId === targetId) return;
-  const updated = [...faqsList.value];
-  const fromIndex = updated.findIndex((faq) => faq.id === draggedId);
-  if (fromIndex === -1) return;
-  const [moved] = updated.splice(fromIndex, 1);
-  let toIndex =
-    targetId === null ? updated.length : updated.findIndex((faq) => faq.id === targetId);
-  if (toIndex === -1) {
-    updated.splice(fromIndex, 0, moved);
-    return;
-  }
-  updated.splice(toIndex, 0, moved);
-  faqsList.value = updated.map((faq, index) => ({
+const handleReorder = () => {
+  faqsList.value = faqsList.value.map((faq, index) => ({
     ...faq,
     order: index,
   }));
-  draggingId.value = null;
   saveOrder();
 };
 
@@ -347,86 +323,87 @@ watch(isPreviewFullscreen, (active) => {
 
         <!-- FAQ list -->
         <section class="space-y-4">
-          <div v-if="faqsList.length" class="space-y-3" v-auto-animate>
-            <article
-              v-for="faq in faqsList"
-              :key="faq.id"
-              class="rounded-2xl border bg-slate-900/80 p-5 shadow-md transition"
-              :class="[
-                draggingId === faq.id
-                  ? 'border-indigo-500/70 bg-slate-900'
-                  : 'border-slate-800 hover:border-slate-700',
-              ]"
-              draggable="true"
-              @dragstart="onDragStart($event, faq)"
-              @dragend="onDragEnd"
-              @dragover.prevent
-              @drop="onDropCard($event, faq)"
-            >
-              <div class="flex items-start gap-4">
-                <button
-                  type="button"
-                  class="h-10 w-10 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-400 hover:text-slate-100"
-                >
-                  <GripVertical class="h-4 w-4" />
-                </button>
-                <div class="flex-1 space-y-3">
-                  <div class="flex flex-wrap items-start justify-between gap-4">
-                    <div class="space-y-1">
-                      <p class="text-xs uppercase tracking-wide text-slate-500">
-                        Question
-                      </p>
-                      <h3 class="text-sm md:text-base font-semibold text-slate-50">
-                        {{ faq.question }}
-                      </h3>
+          <VueDraggable
+            v-if="faqsList.length"
+            v-model="faqsList"
+            item-key="id"
+            handle=".drag-handle"
+            class="space-y-3"
+            v-auto-animate
+            ghost-class="drag-ghost"
+            chosen-class="drag-chosen"
+            :animation="220"
+            @start="onDragStart"
+            @end="onDragFinish"
+          >
+            <template #item="{ element: faq }">
+              <article
+                :key="faq.id"
+                :data-id="faq.id"
+                class="rounded-2xl border bg-slate-900/80 p-5 shadow-md transition"
+                :class="[
+                  draggingId === faq.id
+                    ? 'border-indigo-500/70 bg-slate-900'
+                    : 'border-slate-800 hover:border-slate-700',
+                ]"
+              >
+                <div class="flex items-start gap-4">
+                  <button
+                    type="button"
+                    class="drag-handle h-10 w-10 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-400 hover:text-slate-100"
+                  >
+                    <GripVertical class="h-4 w-4" />
+                  </button>
+                  <div class="flex-1 space-y-3">
+                    <div class="flex flex-wrap items-start justify-between gap-4">
+                      <div class="space-y-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">
+                          Question
+                        </p>
+                        <h3 class="text-sm md:text-base font-semibold text-slate-50">
+                          {{ faq.question }}
+                        </h3>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span
+                          class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold"
+                          :class="
+                            faq.is_active
+                              ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
+                              : 'border-slate-700 bg-slate-800 text-slate-300'
+                          "
+                        >
+                          {{ faq.is_active ? 'Active' : 'Masquée' }}
+                        </span>
+                        <span class="text-[11px] text-slate-500">
+                          Position : {{ faq.order + 1 }}
+                        </span>
+                      </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                      <span
-                        class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold"
-                        :class="
-                          faq.is_active
-                            ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
-                            : 'border-slate-700 bg-slate-800 text-slate-300'
-                        "
+                    <p class="text-xs md:text-sm text-slate-300 whitespace-pre-line">
+                      {{ faq.answer }}
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-2 text-[11px]">
+                      <button
+                        type="button"
+                        class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-200 hover:bg-slate-800"
+                        @click="openEditModal(faq)"
                       >
-                        {{ faq.is_active ? 'Active' : 'Masquée' }}
-                      </span>
-                      <span class="text-[11px] text-slate-500">
-                        Position : {{ faq.order + 1 }}
-                      </span>
+                        Modifier
+                      </button>
+                      <button
+                        type="button"
+                        class="rounded-full border border-rose-500/40 bg-rose-500/10 px-3 py-1.5 text-rose-200 hover:bg-rose-500/20"
+                        @click="deleteFaq(faq)"
+                      >
+                        Supprimer
+                      </button>
                     </div>
-                  </div>
-                  <p class="text-xs md:text-sm text-slate-300 whitespace-pre-line">
-                    {{ faq.answer }}
-                  </p>
-                  <div class="flex flex-wrap justify-end gap-2 text-[11px]">
-                    <button
-                      type="button"
-                      class="rounded-full border border-slate-700 px-4 py-1.5 text-slate-200 hover:bg-slate-800"
-                      @click="openEditModal(faq)"
-                    >
-                      Modifier
-                    </button>
-                    <button
-                      type="button"
-                      class="rounded-full border border-rose-500/50 bg-rose-500/10 px-4 py-1.5 text-rose-200 hover:bg-rose-500/20"
-                      @click="deleteFaq(faq)"
-                    >
-                      Supprimer
-                    </button>
                   </div>
                 </div>
-              </div>
-            </article>
-
-            <div
-              class="h-10 rounded-2xl border border-dashed border-slate-700 text-center text-xs text-slate-500 flex items-center justify-center"
-              @dragover.prevent
-              @drop="onDropAfterList"
-            >
-              Déposez ici pour placer la question à la fin
-            </div>
-          </div>
+              </article>
+            </template>
+          </VueDraggable>
 
           <div
             v-else

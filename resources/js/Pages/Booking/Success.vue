@@ -8,6 +8,8 @@ const props = defineProps({
 });
 
 const isScheduled = computed(() => !!(props.booking?.booking_date && props.booking?.start_time));
+const hasClientPortal = computed(() => Boolean(props.booking?.client_share_link));
+const isFirstBooking = computed(() => Boolean(props.booking?.is_first_booking));
 </script>
 
 <template>
@@ -94,22 +96,28 @@ const isScheduled = computed(() => !!(props.booking?.booking_date && props.booki
                         </p>
 
                         <div
-                            v-if="booking.client_share_link"
-                            class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 space-y-2"
+                            v-if="hasClientPortal"
+                            class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 space-y-3"
                         >
-                            <p class="font-semibold">Accédez à votre espace client</p>
-                            <p>
-                                Conservez ce lien pour retrouver vos documents et programmes :
+                            <div>
+                                <p class="font-semibold">Espace client disponible</p>
+                                <p v-if="isFirstBooking">
+                                    Conservez votre code d'accès : <strong>{{ booking.client_share_code }}</strong>
+                                </p>
+                                <p v-else>
+                                    Connectez-vous depuis votre espace habituel pour retrouver vos documents et programmes.
+                                </p>
+                            </div>
+                            <div>
                                 <a
                                     :href="booking.client_share_link"
-                                    class="text-blue-700 underline break-all"
+                                    target="_blank"
+                                    rel="noopener"
+                                    class="inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-lg hover:bg-blue-700 transition"
                                 >
-                                    {{ booking.client_share_link }}
+                                    Voir mon dashboard
                                 </a>
-                            </p>
-                            <p>
-                                Code d'accès : <strong>{{ booking.client_share_code }}</strong>
-                            </p>
+                            </div>
                         </div>
 
                         <div class="flex flex-col sm:flex-row gap-3 justify-center">

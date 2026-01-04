@@ -162,6 +162,14 @@ class BookingController extends Controller
             $clientShareLink = route('clients.share.show', $booking->client->share_token);
         }
 
+        $isFirstBooking = false;
+        if ($booking->client) {
+            $isFirstBooking = $booking->client->bookings()
+                ->where('payment_status', 'succeeded')
+                ->where('id', '!=', $booking->id)
+                ->count() === 0;
+        }
+
         return Inertia::render('Booking/Success', [
             'booking' => [
                 'id' => $booking->id,
@@ -174,6 +182,7 @@ class BookingController extends Controller
                 'client_email' => $booking->client_email,
                 'client_share_code' => $clientShareCode,
                 'client_share_link' => $clientShareLink,
+                'is_first_booking' => $isFirstBooking,
             ],
         ]);
     }

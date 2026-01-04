@@ -6,6 +6,7 @@ import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { GripVertical, Plus, HelpCircle, Search } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   faqs: Array,
@@ -82,14 +83,34 @@ const submit = () => {
       route('dashboard.faq.update', { faq: editingFaq.value.id, beta: 1 }),
       {
         preserveScroll: true,
-        onSuccess: () => closeModal(),
+        onSuccess: () => {
+          closeModal();
+          toast.success('Question mise à jour', {
+            description: 'La FAQ publique reflète vos dernières modifications.',
+          });
+        },
+        onError: () => {
+          toast.error('Impossible de mettre à jour', {
+            description: 'Vérifiez les champs requis puis réessayez.',
+          });
+        },
       },
     );
   } else {
     form.order = faqsList.value.length;
     form.post(route('dashboard.faq.store'), {
       preserveScroll: true,
-      onSuccess: () => closeModal(),
+      onSuccess: () => {
+        closeModal();
+        toast.success('Question ajoutée', {
+          description: 'Votre nouvelle entrée est prête à apparaître sur le site.',
+        });
+      },
+      onError: () => {
+        toast.error('Impossible de créer la question', {
+          description: 'Corrigez les erreurs de formulaire puis réessayez.',
+        });
+      },
     });
   }
 };
@@ -105,6 +126,14 @@ const deleteFaq = (faq) => {
 
   router.delete(route('dashboard.faq.destroy', { faq: faq.id, beta: 1 }), {
     preserveScroll: true,
+    onSuccess: () => {
+      toast.success('Question supprimée');
+    },
+    onError: () => {
+      toast.error('Suppression impossible', {
+        description: 'Réessayez dans un instant.',
+      });
+    },
   });
 };
 
@@ -168,9 +197,16 @@ const saveOrder = async () => {
         headers: { Accept: 'application/json' },
       },
     );
+    toast.success('Ordre mis à jour', {
+      description: 'La nouvelle hiérarchie a été enregistrée.',
+    });
   } catch (error) {
-    reorderError.value =
+    const message =
       error.response?.data?.message || 'Impossible d’enregistrer le nouvel ordre.';
+    reorderError.value = message;
+    toast.error('Échec de la synchronisation', {
+      description: message,
+    });
   } finally {
     reorderSaving.value = false;
   }
@@ -217,6 +253,7 @@ watch(isPreviewFullscreen, (active) => {
   <Head title="Gestion de la FAQ " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"

@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
     transformations: Array,
@@ -43,6 +44,14 @@ const submit = () => {
             showAddModal.value = false;
             beforePreview.value = null;
             afterPreview.value = null;
+            toast.success('Transformation ajoutée', {
+                description: 'Le duo avant/après est désormais visible dans la galerie.',
+            });
+        },
+        onError: () => {
+            toast.error("Impossible d'ajouter la transformation", {
+                description: 'Vérifiez les images et champs requis avant de réessayer.',
+            });
         },
     });
 };
@@ -51,6 +60,14 @@ const deleteTransformation = (id) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette transformation ?')) {
         router.delete(route('dashboard.gallery.destroy', id), {
             preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Transformation supprimée');
+            },
+            onError: () => {
+                toast.error('Suppression impossible', {
+                    description: 'Réessayez dans un instant.',
+                });
+            },
         });
     }
 };
@@ -60,6 +77,7 @@ const deleteTransformation = (id) => {
     <Head title="Galerie" />
 
     <AuthenticatedLayout>
+        <Toaster rich-colors position="top-right" />
         <template #header>
             <div class="flex justify-between items-center">
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">

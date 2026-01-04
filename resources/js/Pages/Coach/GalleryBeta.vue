@@ -3,6 +3,7 @@ import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { Search, Plus, Camera } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   transformations: Array,
@@ -54,6 +55,14 @@ const submit = () => {
       showAddModal.value = false;
       beforePreview.value = null;
       afterPreview.value = null;
+      toast.success('Transformation ajoutée', {
+        description: 'Le duo avant/après est désormais visible dans la galerie.',
+      });
+    },
+    onError: () => {
+      toast.error("Impossible d'ajouter la transformation", {
+        description: 'Vérifiez les images et champs requis avant de réessayer.',
+      });
     },
   });
 };
@@ -65,12 +74,17 @@ const deleteTransformation = (id) => {
     return;
   }
 
-  router.delete(
-    route('dashboard.gallery.destroy', { transformation: id, beta: 1 }),
-    {
-      preserveScroll: true,
+  router.delete(route('dashboard.gallery.destroy', { transformation: id, beta: 1 }), {
+    preserveScroll: true,
+    onSuccess: () => {
+      toast.success('Transformation supprimée');
     },
-  );
+    onError: () => {
+      toast.error('Suppression impossible', {
+        description: 'Réessayez dans un instant.',
+      });
+    },
+  });
 };
 
 // Live preview (fullscreen only)
@@ -120,6 +134,7 @@ watch(isPreviewFullscreen, (active) => {
   <Head title="Galerie " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"

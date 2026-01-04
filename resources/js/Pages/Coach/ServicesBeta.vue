@@ -497,7 +497,7 @@ const saveOrder = async () => {
                                     </div>
                                     <div
                                         v-if="service.description"
-                                        class="prose prose-invert max-w-none text-xs text-slate-300 line-clamp-3 [&_*]:text-inherit [&_*]:text-xs [&_*]:leading-relaxed"
+                                        class="prose prose-invert max-w-none text-xs text-slate-300 max-h-24 overflow-hidden [&_*]:text-inherit [&_*]:text-xs [&_*]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-4 [&_li]:my-0.5"
                                         v-html="service.description"
                                     />
                                     <p class="text-[11px] text-slate-500">

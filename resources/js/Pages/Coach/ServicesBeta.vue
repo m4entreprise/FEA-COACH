@@ -495,12 +495,11 @@ const saveOrder = async () => {
                                             {{ service.booking_enabled ? 'Payable en ligne' : 'Contact uniquement' }}
                                         </span>
                                     </div>
-                                    <p
+                                    <div
                                         v-if="service.description"
-                                        class="text-xs text-slate-300 line-clamp-3"
-                                    >
-                                        {{ service.description }}
-                                    </p>
+                                        class="prose prose-invert max-w-none text-xs text-slate-300 line-clamp-3 [&_*]:text-inherit [&_*]:text-xs [&_*]:leading-relaxed"
+                                        v-html="service.description"
+                                    />
                                     <p class="text-[11px] text-slate-500">
                                         Réservable minimum {{ service.min_advance_booking_hours }}h avant ·
                                         jusqu’à {{ service.max_advance_booking_days }} jours d’avance

@@ -23,7 +23,10 @@ class CoachSiteController extends Controller
                 $query->orderBy('order');
             },
             'serviceTypes' => function ($query) {
-                $query->where('is_active', true)->orderBy('price');
+                $query
+                    ->where('is_active', true)
+                    ->orderBy('order')
+                    ->orderBy('price');
             },
             'faqs' => function ($query) {
                 $query->where('is_active', true)->orderBy('order')->orderBy('created_at');

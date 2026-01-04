@@ -138,13 +138,10 @@
                                     <div class="text-3xl font-bold text-primary">{{ number_format($service->price, 0, ',', ' ') }}€</div>
                                 </div>
                                 @if(optional($coach->user)->has_payments_module)
-                                    <form action="{{ route('coach.booking.checkout', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        <input type="hidden" name="client_email" value="booking@temp.com">
-                                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                            Payer en ligne
-                                        </button>
-                                    </form>
+                                    <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
+                                       class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
+                                        Payer en ligne
+                                    </a>
                                 @else
                                     <a href="#contact" 
                                        class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
@@ -177,23 +174,47 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @foreach($transformations as $transformation)
+                @php
+                    $beforeUrl = $transformation->hasMedia('before') ? $transformation->getFirstMediaUrl('before') : null;
+                    $afterUrl = $transformation->hasMedia('after') ? $transformation->getFirstMediaUrl('after') : null;
+                @endphp
                 <div class="bg-white rounded-lg overflow-hidden border border-gray-200">
                     <div class="grid grid-cols-2">
-                        <div class="relative">
-                            @if($transformation->hasMedia('before'))
-                                <img src="{{ $transformation->getFirstMediaUrl('before') }}" 
-                                     alt="Avant" 
-                                     class="w-full h-48 object-cover">
+                        <div class="relative group">
+                            @if($beforeUrl)
+                                <button
+                                    type="button"
+                                    class="relative block w-full h-48 focus:outline-none cursor-zoom-in"
+                                    @click="openLightbox('{{ addslashes($beforeUrl) }}', 'Avant')"
+                                    aria-label="Voir la photo avant en grand"
+                                >
+                                    <img src="{{ $beforeUrl }}" 
+                                         alt="Avant" 
+                                         class="w-full h-48 object-cover">
+                                    <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold tracking-wide">
+                                        Cliquer pour agrandir
+                                    </span>
+                                </button>
                             @else
                                 <div class="w-full h-48 bg-gray-100"></div>
                             @endif
                             <div class="absolute bottom-2 left-2 bg-black/70 text-white text-xs font-semibold px-2 py-1 rounded">AVANT</div>
                         </div>
-                        <div class="relative">
-                            @if($transformation->hasMedia('after'))
-                                <img src="{{ $transformation->getFirstMediaUrl('after') }}" 
-                                     alt="Après" 
-                                     class="w-full h-48 object-cover">
+                        <div class="relative group">
+                            @if($afterUrl)
+                                <button
+                                    type="button"
+                                    class="relative block w-full h-48 focus:outline-none cursor-zoom-in"
+                                    @click="openLightbox('{{ addslashes($afterUrl) }}', 'Après')"
+                                    aria-label="Voir la photo après en grand"
+                                >
+                                    <img src="{{ $afterUrl }}" 
+                                         alt="Après" 
+                                         class="w-full h-48 object-cover">
+                                    <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold tracking-wide">
+                                        Cliquer pour agrandir
+                                    </span>
+                                </button>
                             @else
                                 <div class="w-full h-48 bg-gray-100"></div>
                             @endif

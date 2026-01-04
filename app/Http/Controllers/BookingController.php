@@ -10,6 +10,7 @@ use App\Services\StripeConnectService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
@@ -18,25 +19,62 @@ class BookingController extends Controller
         protected StripeConnectService $stripeService
     ) {}
 
+    public function showCheckoutForm(Request $request, int $serviceId)
+    {
+        $coach = app(Coach::class);
+
+        if (!optional($coach->user)->has_payments_module) {
+            abort(404);
+        }
+
+        $service = $coach->serviceTypes()
+            ->where('is_active', true)
+            ->where('booking_enabled', true)
+            ->findOrFail($serviceId);
+
+        $formAction = $request->routeIs('coach.*')
+            ? route('coach.booking.checkout', [
+                'coach_slug' => $coach->slug,
+                'serviceId' => $service->id,
+            ])
+            : route('booking.checkout.fallback', [
+                'serviceId' => $service->id,
+            ]);
+
+        return view('coach-site.booking.checkout', [
+            'coach' => $coach,
+            'service' => $service,
+            'formAction' => $formAction,
+            'backUrl' => url()->previous(),
+        ]);
+    }
+
     public function directCheckout(Request $request)
     {
         $serviceId = $request->route('serviceId') ?? $request->route('service');
 
-        \Log::info('DirectCheckout called', [
+        Log::info('DirectCheckout called', [
             'coach_slug' => $request->route('coach_slug'),
             'service_id' => $serviceId,
             'request_data' => $request->all(),
         ]);
         
         $coach = app(Coach::class);
-        if (!$serviceId) {
+        if (!optional($coach->user)->has_payments_module) {
             abort(404);
         }
 
-        $service = ServiceType::findOrFail($serviceId);
+        $service = $coach->serviceTypes()
+            ->where('is_active', true)
+            ->where('booking_enabled', true)
+            ->findOrFail($serviceId);
         
         $validated = $request->validate([
+            'client_first_name' => 'required|string|max:100',
+            'client_last_name' => 'required|string|max:100',
             'client_email' => 'required|email|max:255',
+            'client_phone' => 'nullable|string|max:30',
+            'client_notes' => 'nullable|string|max:2000',
         ]);
 
         try {
@@ -44,23 +82,23 @@ class BookingController extends Controller
                 'service_type_id' => $service->id,
                 'booking_date' => null,
                 'start_time' => null,
+                'client_first_name' => $validated['client_first_name'],
+                'client_last_name' => $validated['client_last_name'],
                 'client_email' => $validated['client_email'],
-                'client_first_name' => null,
-                'client_last_name' => null,
-                'client_phone' => null,
-                'client_notes' => null,
+                'client_phone' => $validated['client_phone'] ?? null,
+                'client_notes' => $validated['client_notes'] ?? null,
             ]);
 
-            \Log::info('Booking created', ['booking_id' => $booking->id]);
+            Log::info('Booking created', ['booking_id' => $booking->id]);
 
             $checkoutSession = $this->stripeService->createCheckoutSession($booking);
 
-            \Log::info('Checkout session created', ['url' => $checkoutSession['url']]);
+            Log::info('Checkout session created', ['url' => $checkoutSession['url']]);
 
             return redirect($checkoutSession['url']);
         } catch (\Exception $e) {
-            \Log::error('DirectCheckout failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return back()->with('error', 'Erreur lors de la création de la réservation: ' . $e->getMessage());
+            Log::error('DirectCheckout failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return back()->withInput()->with('error', 'Erreur lors de la création de la réservation: ' . $e->getMessage());
         }
     }
 

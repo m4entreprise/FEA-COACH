@@ -45,9 +45,10 @@ const form = useForm({
   intermediate_cta_subtitle: props.coach?.intermediate_cta_subtitle || '',
   satisfaction_rate: props.coach?.satisfaction_rate || 100,
   average_rating: props.coach?.average_rating || 5.0,
-  facebook_url: props.coach?.facebook_url || '',
-  instagram_url: props.coach?.instagram_url || '',
+  linkedin_url: props.coach?.linkedin_url || '',
+  youtube_url: props.coach?.youtube_url || '',
   tiktok_url: props.coach?.tiktok_url || '',
+  site_layout: props.coach?.site_layout || props.defaultLayout || 'classic',
 });
 
 const dashboardBackUrl = computed(() => {

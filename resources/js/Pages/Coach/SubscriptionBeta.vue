@@ -198,7 +198,7 @@ const statusCopy = computed(() => {
   if (props.subscription.status === 'active') {
     return {
       title: 'Abonnement actif',
-      subtitle: 'Abonnement actif',
+      subtitle: 'Renouvellement automatique actif',
       description: 'Vous avez accès à toutes les fonctionnalités de la plateforme.',
       dateText: currentPeriodEndDate.value
         ? `${props.subscription.cancel_at_period_end ? 'Se termine le' : 'Renouvellement le'} ${currentPeriodEndDate.value}`
@@ -285,7 +285,7 @@ const statusCopy = computed(() => {
         <!-- Subscription status -->
         <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
           <!-- Subscription status block -->
-          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl space-y-5">
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col gap-5 h-full">
             <div class="flex items-start gap-4">
               <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
                 <Crown class="h-4 w-4" />
@@ -315,7 +315,7 @@ const statusCopy = computed(() => {
               </div>
             </div>
 
-            <div class="flex flex-wrap gap-2 text-xs">
+            <div class="flex flex-wrap gap-2 text-xs mt-auto">
               <button
                 v-if="hasSubscription"
                 type="button"
@@ -338,7 +338,7 @@ const statusCopy = computed(() => {
           </div>
 
           <!-- Domain card stays on right -->
-          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl space-y-4">
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col gap-5 h-full">
             <div class="flex items-start gap-4">
               <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-400 flex items-center justify-center shadow-lg flex-shrink-0">
                 <Globe class="h-4 w-4" />
@@ -395,7 +395,7 @@ const statusCopy = computed(() => {
         <!-- Offer highlight row -->
         <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
           <!-- UNICOACH highlight -->
-          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl space-y-5">
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col gap-5 h-full">
             <div class="flex items-start gap-4">
               <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
                 <Crown class="h-4 w-4" />
@@ -403,7 +403,7 @@ const statusCopy = computed(() => {
               <div class="flex-1">
                 <p class="text-xs uppercase tracking-wide text-slate-500">Abonnement</p>
                 <h3 class="text-base font-semibold text-slate-50">UNICOACH</h3>
-                <p class="text-xs text-slate-400 mt-1">Gardez la main sur vos paiements, votre essai gratuit et votre portail client.</p>
+                <p class="text-xs text-slate-400 mt-1">Centralisez votre abonnement, vos paiements et votre accès au portail client.</p>
               </div>
             </div>
 
@@ -416,28 +416,52 @@ const statusCopy = computed(() => {
                 Prix normal : <span class="line-through">{{ planInfo.original_price }}€</span>
               </p>
               <p class="text-xs opacity-90 mt-3">
-                {{ planInfo?.description || 'Bénéficiez d\'une réduction permanente grâce au partenariat avec FEA.' }}
+                {{ planInfo?.description || 'Gardez la main sur votre essai gratuit, vos paiements et vos portails client/Stripe.' }}
               </p>
             </div>
 
             <div class="space-y-3 text-sm text-slate-200">
-              <div class="flex items-center gap-2">
-                <Check class="h-4 w-4 text-emerald-400" />
-                <span>Essai gratuit inclus</span>
+              <div class="flex items-start gap-2">
+                <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                <span>Essai gratuit inclus avec rappel automatique avant facturation.</span>
               </div>
-              <div class="flex items-center gap-2">
-                <CreditCard class="h-4 w-4 text-purple-300" />
-                <span>Portail Stripe sécurisé</span>
+              <div class="flex items-start gap-2">
+                <CreditCard class="h-4 w-4 text-purple-200 flex-shrink-0 mt-0.5" />
+                <span>Portail Stripe sécurisé pour gérer vos moyens de paiement.</span>
               </div>
-              <div class="flex items-center gap-2">
-                <Sparkles class="h-4 w-4 text-pink-300" />
-                <span>Mises à jour continues</span>
+              <div class="flex items-start gap-2">
+                <Sparkles class="h-4 w-4 text-pink-200 flex-shrink-0 mt-0.5" />
+                <span>Mises à jour continues et support humain prioritaire.</span>
               </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-800">
+              <p class="text-xs text-slate-400">
+                Gardez la main sur vos paiements, votre essai gratuit et votre portail client.
+              </p>
+              <button
+                v-if="hasSubscription"
+                type="button"
+                @click="handleManageSubscription"
+                class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/15 border border-purple-400/60 px-4 py-2 text-xs font-medium text-white hover:bg-purple-500/25 hover:border-purple-300 transition-colors whitespace-nowrap"
+              >
+                <ExternalLink class="h-3.5 w-3.5" />
+                Gérer
+              </button>
+              <button
+                v-else
+                type="button"
+                @click="handleSubscribe"
+                class="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg hover:from-purple-600 hover:to-pink-600 transition-colors whitespace-nowrap"
+              >
+                <Crown class="h-3.5 w-3.5" />
+                S'abonner
+              </button>
             </div>
           </div>
 
           <!-- Domain highlight -->
-          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl space-y-5">
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col gap-5 h-full">
             <div class="flex items-start gap-4">
               <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center shadow-lg flex-shrink-0">
                 <Globe class="h-4 w-4" />

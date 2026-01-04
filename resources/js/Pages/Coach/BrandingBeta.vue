@@ -3,10 +3,11 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import { Palette, Image as ImageIcon, MonitorPlay, LayoutPanelLeft } from 'lucide-vue-next';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   coach: Object,
@@ -50,6 +51,16 @@ const coachSiteUrl = computed(() => {
   return route('coach.site', { coach_slug: slug });
 });
 
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  router.visit(dashboardBackUrl.value);
+};
+
 const brandingProgress = computed(() => {
   let filled = 0;
   const total = 5;
@@ -88,6 +99,16 @@ const submit = () => {
   form.post(route('dashboard.branding.update'), {
     forceFormData: true,
     preserveScroll: true,
+    onSuccess: () => {
+      toast.success('Apparence mise à jour', {
+        description: 'Votre identité visuelle est désormais en ligne.',
+      });
+    },
+    onError: () => {
+      toast.error('Impossible de sauvegarder', {
+        description: 'Vérifiez les champs coloris / layout puis réessayez.',
+      });
+    },
   });
 };
 
@@ -173,6 +194,7 @@ onBeforeUnmount(() => {
   <Head title="Apparence & logo " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
@@ -189,13 +211,14 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="flex items-center gap-3">
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
         <a
           v-if="coachSiteUrl"
           :href="coachSiteUrl"

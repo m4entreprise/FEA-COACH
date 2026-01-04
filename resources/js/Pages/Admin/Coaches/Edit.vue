@@ -19,6 +19,7 @@ const form = useForm({
     color_secondary: props.coach.color_secondary,
     is_active: props.coach.is_active,
     is_fea_graduate: props.coach.is_fea_graduate,
+    has_payments_module: props.coach.has_payments_module,
 });
 
 const submit = () => {
@@ -180,6 +181,24 @@ const submit = () => {
                                 <label for="is_fea_graduate" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
                                     Diplômé FEA
                                 </label>
+                            </div>
+
+                            <!-- Payments Module Status -->
+                            <div>
+                                <div class="flex items-center">
+                                    <input
+                                        id="has_payments_module"
+                                        v-model="form.has_payments_module"
+                                        type="checkbox"
+                                        class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600 dark:border-gray-700 dark:bg-gray-900 dark:ring-offset-gray-800"
+                                    />
+                                    <label for="has_payments_module" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                                        Module Paiements & Réservations activé (5€/mois)
+                                    </label>
+                                </div>
+                                <p v-if="coach.payments_module_activated_at" class="mt-2 ml-6 text-xs text-gray-500 dark:text-gray-400">
+                                    Activé le {{ coach.payments_module_activated_at }}
+                                </p>
                             </div>
 
                             <!-- Trial Information (read-only) -->

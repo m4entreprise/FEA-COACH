@@ -1,5 +1,9 @@
 ﻿@extends('layouts.coach-site')
 
+@php
+    use Stevebauman\Purify\Facades\Purify;
+@endphp
+
 @section('content')
 
 {{-- Layout Bold/Impact - Version très visuelle avec de grosses sections hero --}}
@@ -14,6 +18,8 @@
     @else
         <div class="absolute inset-0 z-0 bg-gradient-to-br from-primary via-primary-dark to-secondary"></div>
     @endif
+
+    <div class="absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/40 via-slate-950/65 to-slate-950/80"></div>
 
     <div class="absolute inset-0 z-0 opacity-10">
         <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
@@ -33,18 +39,18 @@
             {{ $coach->hero_subtitle ?? 'Coaching sportif personnalisé' }}
         </p>
 
-        <div class="grid grid-cols-3 gap-8 max-w-3xl mx-auto mb-12">
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <div class="text-5xl font-black mb-2">{{ isset($transformations) ? $transformations->count() : 0 }}+</div>
-                <div class="text-sm uppercase tracking-wider">Clients</div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-3xl mx-auto mb-12">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center sm:text-left">
+                <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ isset($transformations) ? $transformations->count() : 0 }}+</div>
+                <div class="text-xs sm:text-sm uppercase tracking-wider">Clients</div>
             </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <div class="text-5xl font-black mb-2">{{ $coach->satisfaction_rate ?? 100 }}%</div>
-                <div class="text-sm uppercase tracking-wider">Satisfaction</div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center sm:text-left">
+                <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ $coach->satisfaction_rate ?? 100 }}%</div>
+                <div class="text-xs sm:text-sm uppercase tracking-wider">Satisfaction</div>
             </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <div class="text-5xl font-black mb-2">{{ $coach->average_rating ?? 5.0 }}</div>
-                <div class="text-sm uppercase tracking-wider">Note</div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center sm:text-left">
+                <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ $coach->average_rating ?? 5.0 }}</div>
+                <div class="text-xs sm:text-sm uppercase tracking-wider">Note</div>
             </div>
         </div>
 
@@ -179,41 +185,68 @@
             </p>
         </div>
 
-        @if(isset($plans) && $plans->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($plans->count(), 3) }} gap-8">
-                @foreach($plans as $index => $plan)
+        @if(isset($services) && $services->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 3) }} gap-8">
+                @foreach($services as $service)
                     <div class="relative group">
-                        <div class="bg-white rounded-3xl shadow-xl border-4 {{ $index === 0 ? 'border-primary scale-105' : 'border-gray-200' }} hover:border-primary transition-all p-10 h-full flex flex-col transform hover:scale-105">
-                            @if($index === 0)
-                                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-6 py-2 rounded-full text-sm font-bold uppercase shadow-lg">
+                        <div class="relative bg-white rounded-3xl shadow-xl border-4 border-gray-200 hover:border-primary transition-all h-full flex flex-col transform hover:scale-105">
+                            @if($service->is_featured)
+                                <span class="absolute -top-4 right-6 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black uppercase tracking-wide px-4 py-1 shadow-xl">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5.5 3 1.5-6.5L3 8.5l6.6-.5L12 2l2.4 6 6.6.5-5 4.9 1.5 6.5z" />
+                                    </svg>
                                     Populaire
-                                </div>
+                                </span>
                             @endif
 
-                            <h3 class="text-3xl font-black text-gray-900 mb-4">{{ $plan->name }}</h3>
-                            
-                            <div class="mb-6">
-                                @if($plan->price)
-                                    <div class="flex items-baseline">
-                                        <span class="text-6xl font-black text-primary">{{ number_format($plan->price, 0, ',', ' ') }}</span>
-                                        <span class="text-2xl font-bold text-gray-600 ml-2">€</span>
-                                    </div>
+                            <div class="mb-8 rounded-3xl overflow-hidden mx-10 mt-10 border-2 border-gray-100">
+                                @if($service->image_url)
+                                    <img
+                                        src="{{ $service->image_url }}"
+                                        alt="Illustration {{ $service->name }}"
+                                        class="w-full h-64 object-cover"
+                                        loading="lazy"
+                                    >
                                 @else
-                                    <div class="text-3xl font-black text-gray-900">Sur demande</div>
+                                    <div class="h-64 bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-sm font-semibold">
+                                        Aucune image pour ce service
+                                    </div>
                                 @endif
                             </div>
 
-                            <p class="text-lg text-gray-600 mb-8 flex-grow">{{ $plan->description }}</p>
+                            <div class="px-10 pb-10 flex-1 flex flex-col">
+                                <h3 class="text-3xl font-black text-gray-900 mb-4">{{ $service->name }}</h3>
                             
-                            @if($plan->cta_url)
-                                <a href="{{ $plan->cta_url }}" target="_blank" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
-                                    Choisir
-                                </a>
-                            @else
-                                <a href="#contact" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
-                                    Contacter
-                                </a>
-                            @endif
+                                <div class="mb-6">
+                                    <div class="flex items-baseline flex-wrap gap-2">
+                                        <span class="text-6xl font-black text-primary leading-none">
+                                            {{ number_format($service->price, 0, ',', ' ') }}
+                                        </span>
+                                        <span class="text-2xl font-bold text-gray-600">€</span>
+                                        <span class="text-sm font-semibold text-gray-400 uppercase tracking-wide">{{ $service->currency }}</span>
+                                    </div>
+                                    @if($service->duration_minutes)
+                                        <p class="text-sm text-gray-500 mt-2">⏱️ {{ $service->duration_minutes }} minutes</p>
+                                    @endif
+                                </div>
+
+                                @if($service->description)
+                                    <div class="prose prose-lg text-gray-600 mb-8 flex-grow leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
+                                        {!! Purify::clean($service->description) !!}
+                                    </div>
+                                @endif
+                                
+                                @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
+                                    <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
+                                       class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
+                                        Payer en ligne
+                                    </a>
+                                @else
+                                    <a href="#contact" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
+                                        Contacter
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -249,7 +282,17 @@
                         <div class="grid grid-cols-2 relative">
                             <div class="relative overflow-hidden">
                                 @if($transformation->hasMedia('before'))
-                                    <img src="{{ $transformation->getFirstMediaUrl('before') }}" alt="Avant" class="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500">
+                                    <button
+                                        type="button"
+                                        class="block w-full h-72 focus:outline-none cursor-zoom-in"
+                                        @click="openLightbox('{{ addslashes($transformation->getFirstMediaUrl('before')) }}', 'Avant')"
+                                        aria-label="Voir la photo avant en grand"
+                                    >
+                                        <img src="{{ $transformation->getFirstMediaUrl('before') }}" alt="Avant" class="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500">
+                                        <span class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-black tracking-wide">
+                                            Cliquer pour agrandir
+                                        </span>
+                                    </button>
                                 @else
                                     <div class="w-full h-72 bg-gray-200"></div>
                                 @endif
@@ -259,7 +302,17 @@
                             </div>
                             <div class="relative overflow-hidden">
                                 @if($transformation->hasMedia('after'))
-                                    <img src="{{ $transformation->getFirstMediaUrl('after') }}" alt="Après" class="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500">
+                                    <button
+                                        type="button"
+                                        class="block w-full h-72 focus:outline-none cursor-zoom-in"
+                                        @click="openLightbox('{{ addslashes($transformation->getFirstMediaUrl('after')) }}', 'Après')"
+                                        aria-label="Voir la photo après en grand"
+                                    >
+                                        <img src="{{ $transformation->getFirstMediaUrl('after') }}" alt="Après" class="w-full h-72 object-cover group-hover:scale-110 transition-transform durée-500">
+                                        <span class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-black tracking-wide">
+                                            Cliquer pour agrandir
+                                        </span>
+                                    </button>
                                 @else
                                     <div class="w-full h-72 bg-gray-200"></div>
                                 @endif

@@ -6,6 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
     faqs: Array,
@@ -49,16 +50,34 @@ const closeModal = () => {
 
 const submit = () => {
     if (editingFaq.value) {
-        // Update existing FAQ
         form.patch(route('dashboard.faq.update', editingFaq.value.id), {
             preserveScroll: true,
-            onSuccess: () => closeModal(),
+            onSuccess: () => {
+                closeModal();
+                toast.success('Question mise à jour', {
+                    description: 'La FAQ publique reflète vos dernières modifications.',
+                });
+            },
+            onError: () => {
+                toast.error('Impossible de mettre à jour', {
+                    description: 'Vérifiez les champs requis puis réessayez.',
+                });
+            },
         });
     } else {
-        // Create new FAQ
         form.post(route('dashboard.faq.store'), {
             preserveScroll: true,
-            onSuccess: () => closeModal(),
+            onSuccess: () => {
+                closeModal();
+                toast.success('Question ajoutée', {
+                    description: 'Votre nouvelle entrée est prête à apparaître sur le site.',
+                });
+            },
+            onError: () => {
+                toast.error('Impossible de créer la question', {
+                    description: 'Corrigez les erreurs de formulaire puis réessayez.',
+                });
+            },
         });
     }
 };
@@ -67,6 +86,14 @@ const deleteFaq = (faq) => {
     if (confirm(`Êtes-vous sûr de vouloir supprimer cette question ?\n"${faq.question}"`)) {
         router.delete(route('dashboard.faq.destroy', faq.id), {
             preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Question supprimée');
+            },
+            onError: () => {
+                toast.error('Suppression impossible', {
+                    description: 'Réessayez dans un instant.',
+                });
+            },
         });
     }
 };
@@ -76,6 +103,7 @@ const deleteFaq = (faq) => {
     <Head title="Gestion de la FAQ" />
 
     <AuthenticatedLayout>
+        <Toaster rich-colors position="top-right" />
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                 Gestion de la FAQ

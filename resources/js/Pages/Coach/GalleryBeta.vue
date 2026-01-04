@@ -1,8 +1,11 @@
 <script setup>
 import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
-import { Search, Plus, Camera } from 'lucide-vue-next';
-import { ref, watch } from 'vue';
+import { Search, Plus, Camera, GripVertical } from 'lucide-vue-next';
+import { computed, ref, watch } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
+import { VueDraggable } from 'vue-draggable-plus';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   transformations: Array,
@@ -11,6 +14,19 @@ const props = defineProps({
 const showAddModal = ref(false);
 const beforePreview = ref(null);
 const afterPreview = ref(null);
+const transformationsList = ref([]);
+const reorderSaving = ref(false);
+const reorderError = ref(null);
+
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  router.visit(dashboardBackUrl.value);
+};
 
 const form = useForm({
   title: '',
@@ -18,6 +34,16 @@ const form = useForm({
   before: null,
   after: null,
 });
+
+watch(
+  () => props.transformations,
+  (value) => {
+    transformationsList.value = [...(value || [])];
+  },
+  { immediate: true },
+);
+
+const hasTransformations = computed(() => transformationsList.value.length > 0);
 
 const handleBeforeChange = (event) => {
   const file = event.target.files[0];
@@ -44,6 +70,14 @@ const submit = () => {
       showAddModal.value = false;
       beforePreview.value = null;
       afterPreview.value = null;
+      toast.success('Transformation ajoutée', {
+        description: 'Le duo avant/après est désormais visible dans la galerie.',
+      });
+    },
+    onError: () => {
+      toast.error("Impossible d'ajouter la transformation", {
+        description: 'Vérifiez les images et champs requis avant de réessayer.',
+      });
     },
   });
 };
@@ -55,12 +89,47 @@ const deleteTransformation = (id) => {
     return;
   }
 
-  router.delete(
-    route('dashboard.gallery.destroy', { transformation: id, beta: 1 }),
-    {
-      preserveScroll: true,
+  router.delete(route('dashboard.gallery.destroy', { transformation: id, beta: 1 }), {
+    preserveScroll: true,
+    onSuccess: () => {
+      toast.success('Transformation supprimée');
     },
-  );
+    onError: () => {
+      toast.error('Suppression impossible', {
+        description: 'Réessayez dans un instant.',
+      });
+    },
+  });
+};
+
+const handleReorder = async () => {
+  reorderSaving.value = true;
+  reorderError.value = null;
+
+  try {
+    await axios.post(
+      route('dashboard.gallery.reorder'),
+      {
+        order: transformationsList.value.map((item, index) => ({
+          id: item.id,
+          order: index,
+        })),
+      },
+      {
+        headers: { Accept: 'application/json' },
+      },
+    );
+    toast.success('Ordre mis à jour');
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Impossible d’enregistrer le nouvel ordre.";
+    reorderError.value = message;
+    toast.error('Échec de la synchronisation', {
+      description: message,
+    });
+  } finally {
+    reorderSaving.value = false;
+  }
 };
 
 // Live preview (fullscreen only)
@@ -110,6 +179,7 @@ watch(isPreviewFullscreen, (active) => {
   <Head title="Galerie " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
@@ -126,13 +196,14 @@ watch(isPreviewFullscreen, (active) => {
       </div>
 
       <div class="flex items-center gap-3">
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 
@@ -175,90 +246,120 @@ watch(isPreviewFullscreen, (active) => {
         <!-- Transformations grid -->
         <section class="space-y-4">
           <div
-            v-if="transformations && transformations.length"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            v-if="hasTransformations"
+            class="space-y-3"
           >
-            <article
-              v-for="transformation in transformations"
-              :key="transformation.id"
-              class="bg-slate-900/80 rounded-2xl shadow-xl overflow-hidden border border-slate-800"
-            >
-              <div class="grid grid-cols-2">
-                <div class="relative">
-                  <img
-                    v-if="
-                      transformation.media?.find(
-                        (m) => m.collection_name === 'before',
-                      )
-                    "
-                    :src="
-                      transformation.media.find(
-                        (m) => m.collection_name === 'before',
-                      ).original_url
-                    "
-                    alt="Avant"
-                    class="w-full h-40 object-cover"
-                  />
-                  <div
-                    v-else
-                    class="w-full h-40 bg-slate-800 flex items-center justify-center"
-                  >
-                    <span class="text-slate-400 text-xs">Avant</span>
-                  </div>
-                  <div
-                    class="absolute top-2 left-2 bg-red-500/90 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow"
-                  >
-                    AVANT
-                  </div>
-                </div>
-                <div class="relative">
-                  <img
-                    v-if="
-                      transformation.media?.find(
-                        (m) => m.collection_name === 'after',
-                      )
-                    "
-                    :src="
-                      transformation.media.find(
-                        (m) => m.collection_name === 'after',
-                      ).original_url
-                    "
-                    alt="Après"
-                    class="w-full h-40 object-cover"
-                  />
-                  <div
-                    v-else
-                    class="w-full h-40 bg-slate-800 flex items-center justify-center"
-                  >
-                    <span class="text-slate-400 text-xs">Après</span>
-                  </div>
-                  <div
-                    class="absolute top-2 right-2 bg-emerald-500/90 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow"
-                  >
-                    APRÈS
-                  </div>
-                </div>
+            <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full" :class="reorderSaving ? 'bg-yellow-400 animate-pulse' : reorderError ? 'bg-rose-400' : 'bg-emerald-400 animate-breathe'"></span>
+                <span>{{ transformationsList.length }} transformation(s)</span>
               </div>
+              <div class="flex items-center gap-2">
+                <span v-if="reorderSaving">Enregistrement...</span>
+                <span v-else-if="reorderError" class="text-rose-300">{{ reorderError }}</span>
+                <span v-else>Ordre synchronisé</span>
+              </div>
+            </div>
 
-              <div class="p-4 space-y-3">
-                <h3 class="text-sm font-semibold text-slate-50">
-                  {{ transformation.title }}
-                </h3>
-                <p
-                  v-if="transformation.description"
-                  class="text-xs text-slate-300 line-clamp-3"
-                >
-                  {{ transformation.description }}
-                </p>
+            <VueDraggable
+              v-model="transformationsList"
+              v-auto-animate
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              :animation="200"
+              handle=".drag-handle"
+              ghost-class="!opacity-40"
+              @end="handleReorder"
+            >
+              <article
+                v-for="element in transformationsList"
+                :key="element.id"
+                :data-id="element.id"
+                class="bg-slate-900/80 rounded-2xl shadow-xl overflow-hidden border border-slate-800 relative transition"
+              >
                 <button
                   type="button"
-                  class="w-full rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-3 py-2 text-xs font-semibold text-white shadow-md hover:from-red-600 hover:to-red-700"
-                  @click="deleteTransformation(transformation.id)"
+                  class="drag-handle absolute top-3 right-3 z-10 inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 p-1.5 text-slate-300 hover:text-white"
+                  title="Glisser pour réordonner"
                 >
-                  Supprimer
+                  <GripVertical class="h-4 w-4" />
                 </button>
-              </div>
-            </article>
+                <div class="grid grid-cols-2">
+                  <div class="relative">
+                    <img
+                      v-if="
+                        element.media?.find(
+                          (m) => m.collection_name === 'before',
+                        )
+                      "
+                      :src="
+                        element.media.find(
+                          (m) => m.collection_name === 'before',
+                        ).original_url
+                      "
+                      alt="Avant"
+                      class="w-full h-40 object-cover"
+                    />
+                    <div
+                      v-else
+                      class="w-full h-40 bg-slate-800 flex items-center justify-center"
+                    >
+                      <span class="text-slate-400 text-xs">Avant</span>
+                    </div>
+                    <div
+                      class="absolute top-2 left-2 bg-red-500/90 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow"
+                    >
+                      AVANT
+                    </div>
+                  </div>
+                  <div class="relative">
+                    <img
+                      v-if="
+                        element.media?.find(
+                          (m) => m.collection_name === 'after',
+                        )
+                      "
+                      :src="
+                        element.media.find(
+                          (m) => m.collection_name === 'after',
+                        ).original_url
+                      "
+                      alt="Après"
+                      class="w-full h-40 object-cover"
+                    />
+                    <div
+                      v-else
+                      class="w-full h-40 bg-slate-800 flex items-center justify-center"
+                    >
+                      <span class="text-slate-400 text-xs">Après</span>
+                    </div>
+                    <div
+                      class="absolute top-2 right-2 bg-emerald-500/90 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow"
+                    >
+                      APRÈS
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-4 space-y-3">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    {{ element.title }}
+                  </h3>
+                  <p
+                    v-if="element.description"
+                    class="text-xs text-slate-300 line-clamp-3"
+                  >
+                    {{ element.description }}
+                  </p>
+                  <button
+                    type="button"
+                    class="w-full rounded-xl bg-gradient-to-r from-red-500 to-red-600 px-3 py-2 text-xs font-semibold text-white shadow-md hover:from-red-600 hover:to-red-700"
+                    @click="deleteTransformation(element.id)"
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              </article>
+            </VueDraggable>
           </div>
 
           <div

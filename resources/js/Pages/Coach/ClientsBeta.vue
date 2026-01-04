@@ -1,8 +1,9 @@
 <script setup>
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import { Search, UserPlus, TrendingUp, MessageSquare, Users } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
+import { Toaster, toast } from 'vue-sonner';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
@@ -39,6 +40,16 @@ const getAvatarColor = (f, l) => {
   return colors[(f.charCodeAt(0) + l.charCodeAt(0)) % colors.length];
 };
 
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  router.visit(dashboardBackUrl.value);
+};
+
 const openClientDashboard = (clientId) => {
   router.visit(route('dashboard.clients.manage', clientId));
 };
@@ -51,6 +62,15 @@ const getLatestWeight = (client) => {
   if (!client.measurements || client.measurements.length === 0) return null;
   const sorted = [...client.measurements].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   return sorted[0].weight;
+};
+
+const getBookingCount = (client) => client.bookings?.length || 0;
+
+const hasRecentBooking = (client) => {
+  if (!client.bookings || client.bookings.length === 0) return false;
+  const latest = new Date(client.bookings[0].created_at);
+  const diffHours = (Date.now() - latest.getTime()) / (1000 * 60 * 60);
+  return diffHours <= 24;
 };
 
 // Client creation modal
@@ -79,6 +99,14 @@ const submitClient = () => {
     preserveScroll: true,
     onSuccess: () => {
       closeClientModal();
+      toast.success('Client ajouté', {
+        description: 'Votre nouveau client est disponible dans la liste.',
+      });
+    },
+    onError: () => {
+      toast.error('Création impossible', {
+        description: 'Corrigez les champs requis puis réessayez.',
+      });
     },
   });
 };
@@ -89,6 +117,7 @@ const submitClient = () => {
   <Head title="Mes Clients" />
 
   <div class="min-h-screen bg-slate-950 text-slate-50">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl sticky top-0 z-30"
@@ -96,7 +125,7 @@ const submitClient = () => {
       <div class="flex items-center gap-3">
         <div class="flex flex-col">
           <p class="text-xs uppercase tracking-wide text-slate-400">
-            Dashboard Coach
+            Panel coach
           </p>
           <h1 class="text-base md:text-lg font-semibold flex items-center gap-2">
             <Users class="h-5 w-5" />
@@ -106,13 +135,14 @@ const submitClient = () => {
       </div>
 
       <div class="flex items-center gap-3">
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 
@@ -207,6 +237,7 @@ const submitClient = () => {
         <section>
           <div
             v-if="filteredClients && filteredClients.length"
+            v-auto-animate
             class="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
           >
             <article
@@ -242,9 +273,15 @@ const submitClient = () => {
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                   <div class="rounded-lg bg-slate-800/50 p-3 border border-slate-700">
-                    <p class="text-[10px] uppercase text-slate-400 mb-1">Poids actuel</p>
-                    <p class="text-lg font-bold text-slate-50">
-                      {{ getLatestWeight(client) ? getLatestWeight(client) + ' kg' : '—' }}
+                    <p class="text-[10px] uppercase text-slate-400 mb-1">Achats</p>
+                    <p class="text-lg font-bold text-slate-50 flex items-center gap-2">
+                      {{ getBookingCount(client) }}
+                      <span
+                        v-if="hasRecentBooking(client)"
+                        class="text-[10px] font-semibold text-emerald-300 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/40"
+                      >
+                        Nouveau
+                      </span>
                     </p>
                   </div>
                   <div class="rounded-lg bg-slate-800/50 p-3 border border-slate-700">

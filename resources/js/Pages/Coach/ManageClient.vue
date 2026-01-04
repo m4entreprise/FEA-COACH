@@ -1,10 +1,11 @@
 <script setup>
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
-import { User, TrendingUp, MessageSquare, FileText, ArrowLeft, Send, Paperclip, Download, Plus, Edit2, Trash2, Upload } from 'lucide-vue-next';
+import { User, TrendingUp, MessageSquare, FileText, ArrowLeft, Send, Paperclip, Download, Plus, Edit2, Trash2, Upload, AlertTriangle } from 'lucide-vue-next';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
+import Modal from '@/Components/Modal.vue';
 
 const props = defineProps({
   client: Object,
@@ -197,14 +198,7 @@ const submitNote = () => {
 };
 
 const deleteNote = (note) => {
-  if (!confirm('Supprimer cette note ?')) return;
-  
-  router.delete(route('dashboard.clients.notes.destroy', note.id), {
-    preserveScroll: true,
-    onSuccess: () => {
-      router.reload({ only: ['client'] });
-    },
-  });
+  openActionModal('delete-note', note);
 };
 
 const formatDate = (dateString) => {
@@ -283,14 +277,7 @@ const submitMeasurement = () => {
 };
 
 const deleteMeasurement = (measurement) => {
-  if (!confirm('Supprimer ce relevé ?')) return;
-  
-  router.delete(route('dashboard.clients.measurements.destroy', [props.client.id, measurement.id]), {
-    preserveScroll: true,
-    onSuccess: () => {
-      router.reload({ only: ['client'] });
-    },
-  });
+  openActionModal('delete-measurement', measurement);
 };
 
 // Photos
@@ -359,14 +346,88 @@ const submitDocument = () => {
 };
 
 const deleteDocument = (document) => {
-  if (!confirm(`Supprimer le document "${document.title || document.filename}" ?`)) return;
-  
-  router.delete(route('dashboard.clients.documents.destroy', document.id), {
+  openActionModal('delete-document', document);
+};
+
+const actionModal = ref({
+  show: false,
+  type: null,
+  payload: null,
+  loading: false,
+});
+
+const actionConfigs = {
+  'delete-note': {
+    title: 'Supprimer la note',
+    description: 'Cette note sera définitivement supprimée du dossier client.',
+    confirmLabel: 'Supprimer la note',
+    iconClasses: 'bg-rose-500/15 text-rose-300 border border-rose-500/40',
+    confirmClasses: 'bg-rose-600 hover:bg-rose-500 focus-visible:ring-rose-400',
+    icon: Trash2,
+  },
+  'delete-measurement': {
+    title: 'Supprimer le relevé',
+    description: 'Toutes les données de ce relevé seront perdues.',
+    confirmLabel: 'Supprimer le relevé',
+    iconClasses: 'bg-amber-500/15 text-amber-300 border border-amber-500/40',
+    confirmClasses: 'bg-amber-500 hover:bg-amber-400 text-slate-950 focus-visible:ring-amber-300',
+    icon: AlertTriangle,
+  },
+  'delete-document': {
+    title: 'Supprimer le document',
+    description: 'Le document ne sera plus accessible pour vous ou votre client.',
+    confirmLabel: 'Supprimer le document',
+    iconClasses: 'bg-slate-500/15 text-slate-300 border border-slate-500/40',
+    confirmClasses: 'bg-slate-700 hover:bg-slate-600 focus-visible:ring-slate-500',
+    icon: Trash2,
+  },
+};
+
+const currentActionConfig = computed(() => {
+  if (!actionModal.value.type) return null;
+  return actionConfigs[actionModal.value.type];
+});
+
+const openActionModal = (type, payload) => {
+  actionModal.value = {
+    show: true,
+    type,
+    payload,
+    loading: false,
+  };
+};
+
+const closeActionModal = () => {
+  actionModal.value.show = false;
+  actionModal.value.type = null;
+  actionModal.value.payload = null;
+  actionModal.value.loading = false;
+};
+
+const handleConfirmAction = () => {
+  if (!actionModal.value.type || !actionModal.value.payload) return;
+
+  actionModal.value.loading = true;
+
+  const baseOptions = {
     preserveScroll: true,
     onSuccess: () => {
+      actionModal.value.loading = false;
       router.reload({ only: ['client'] });
+      closeActionModal();
     },
-  });
+    onFinish: () => {
+      actionModal.value.loading = false;
+    },
+  };
+
+  if (actionModal.value.type === 'delete-note') {
+    router.delete(route('dashboard.clients.notes.destroy', actionModal.value.payload.id), baseOptions);
+  } else if (actionModal.value.type === 'delete-measurement') {
+    router.delete(route('dashboard.clients.measurements.destroy', [props.client.id, actionModal.value.payload.id]), baseOptions);
+  } else if (actionModal.value.type === 'delete-document') {
+    router.delete(route('dashboard.clients.documents.destroy', actionModal.value.payload.id), baseOptions);
+  }
 };
 </script>
 
@@ -983,16 +1044,9 @@ const deleteDocument = (document) => {
     </div>
 
     <!-- Note Modal -->
-    <div
-      v-if="showNoteModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
-      @click="closeNoteModal"
-    >
-      <div
-        class="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
-        @click.stop
-      >
-        <div class="flex items-center justify-between mb-4">
+    <Modal :show="showNoteModal" @close="closeNoteModal" max-width="lg">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
           <h2 class="text-lg font-semibold text-slate-100">
             {{ editingNote ? 'Modifier la note' : 'Nouvelle note' }}
           </h2>
@@ -1005,7 +1059,7 @@ const deleteDocument = (document) => {
           </button>
         </div>
 
-        <form @submit.prevent="submitNote" class="space-y-4">
+        <form @submit.prevent="submitNote" class="p-6 space-y-4">
           <div>
             <InputLabel for="note_content" value="Contenu de la note" class="text-slate-200" />
             <textarea
@@ -1037,19 +1091,12 @@ const deleteDocument = (document) => {
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
 
     <!-- Measurement Modal -->
-    <div
-      v-if="showMeasurementModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
-      @click="closeMeasurementModal"
-    >
-      <div
-        class="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
-        @click.stop
-      >
-        <div class="flex items-center justify-between mb-4">
+    <Modal :show="showMeasurementModal" @close="closeMeasurementModal" max-width="2xl">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
           <h2 class="text-lg font-semibold text-slate-100">
             {{ editingMeasurement ? 'Modifier le relevé' : 'Nouveau relevé' }}
           </h2>
@@ -1062,7 +1109,7 @@ const deleteDocument = (document) => {
           </button>
         </div>
 
-        <form @submit.prevent="submitMeasurement" class="space-y-4">
+        <form @submit.prevent="submitMeasurement" class="p-6 space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <InputLabel for="weight" value="Poids (kg)" class="text-slate-200" />
@@ -1143,19 +1190,12 @@ const deleteDocument = (document) => {
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
 
     <!-- Photo Modal -->
-    <div
-      v-if="showPhotoModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4"
-      @click="closePhotoModal"
-    >
-      <div
-        class="w-full max-w-6xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
-        @click.stop
-      >
-        <div class="flex items-center justify-between mb-4">
+    <Modal :show="showPhotoModal" @close="closePhotoModal" max-width="6xl">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
           <h2 class="text-lg font-semibold text-slate-100">
             Photos du {{ selectedMeasurement ? new Date(selectedMeasurement.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '' }}
           </h2>
@@ -1168,56 +1208,51 @@ const deleteDocument = (document) => {
           </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div v-if="selectedMeasurement?.photo_front" class="space-y-2">
-            <p class="text-sm font-semibold text-slate-300 text-center">Vue de face</p>
-            <img
-              :src="getPhotoUrl(selectedMeasurement, 'front')"
-              alt="Photo de face"
-              class="w-full rounded-lg border border-slate-700"
-            />
+        <div class="p-6 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div v-if="selectedMeasurement?.photo_front" class="space-y-2">
+              <p class="text-sm font-semibold text-slate-300 text-center">Vue de face</p>
+              <img
+                :src="getPhotoUrl(selectedMeasurement, 'front')"
+                alt="Photo de face"
+                class="w-full rounded-lg border border-slate-700"
+              />
+            </div>
+            <div v-if="selectedMeasurement?.photo_side" class="space-y-2">
+              <p class="text-sm font-semibold text-slate-300 text-center">Vue de profil</p>
+              <img
+                :src="getPhotoUrl(selectedMeasurement, 'side')"
+                alt="Photo de profil"
+                class="w-full rounded-lg border border-slate-700"
+              />
+            </div>
+            <div v-if="selectedMeasurement?.photo_back" class="space-y-2">
+              <p class="text-sm font-semibold text-slate-300 text-center">Vue de dos</p>
+              <img
+                :src="getPhotoUrl(selectedMeasurement, 'back')"
+                alt="Photo de dos"
+                class="w-full rounded-lg border border-slate-700"
+              />
+            </div>
           </div>
-          <div v-if="selectedMeasurement?.photo_side" class="space-y-2">
-            <p class="text-sm font-semibold text-slate-300 text-center">Vue de profil</p>
-            <img
-              :src="getPhotoUrl(selectedMeasurement, 'side')"
-              alt="Photo de profil"
-              class="w-full rounded-lg border border-slate-700"
-            />
-          </div>
-          <div v-if="selectedMeasurement?.photo_back" class="space-y-2">
-            <p class="text-sm font-semibold text-slate-300 text-center">Vue de dos</p>
-            <img
-              :src="getPhotoUrl(selectedMeasurement, 'back')"
-              alt="Photo de dos"
-              class="w-full rounded-lg border border-slate-700"
-            />
-          </div>
-        </div>
 
-        <div class="mt-6 flex justify-end">
-          <button
-            type="button"
-            class="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 transition-colors"
-            @click="closePhotoModal"
-          >
-            Fermer
-          </button>
+          <div class="flex justify-end">
+            <button
+              type="button"
+              class="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 transition-colors"
+              @click="closePhotoModal"
+            >
+              Fermer
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </Modal>
 
     <!-- Document Upload Modal -->
-    <div
-      v-if="showDocumentModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
-      @click="closeDocumentModal"
-    >
-      <div
-        class="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
-        @click.stop
-      >
-        <div class="flex items-center justify-between mb-4">
+    <Modal :show="showDocumentModal" @close="closeDocumentModal" max-width="2xl">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
           <h2 class="text-lg font-semibold text-slate-100">Ajouter un document</h2>
           <button
             type="button"
@@ -1228,13 +1263,13 @@ const deleteDocument = (document) => {
           </button>
         </div>
 
-        <form @submit.prevent="submitDocument" class="space-y-4">
+        <form @submit.prevent="submitDocument" class="p-6 space-y-4">
           <div>
             <InputLabel for="doc_type" value="Type de document *" class="text-slate-200" />
             <select
               id="doc_type"
               v-model="documentForm.type"
-              class="mt-1 block w-full rounded-lg border-slate-700 bg-slate-950 text-slate-100 focus:border-purple-500 focus:ring-purple-500"
+              class="mt-1 block w-full rounded-lg border-slate-700 bg-slate-950 text-slate-100 focus;border-purple-500 focus:ring-purple-500"
               required
             >
               <option value="">-- Sélectionnez un type --</option>
@@ -1303,5 +1338,62 @@ const deleteDocument = (document) => {
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
+
+    <Modal :show="actionModal.show" @close="closeActionModal" max-width="lg">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+        <div class="p-6 sm:p-8 space-y-6">
+          <div class="flex items-start gap-4">
+            <div
+              v-if="currentActionConfig"
+              :class="currentActionConfig.iconClasses"
+              class="h-12 w-12 rounded-2xl flex items-center justify-center"
+            >
+              <component :is="currentActionConfig.icon" class="h-6 w-6" />
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">
+                Confirmation
+              </p>
+              <h3 class="text-xl font-semibold text-slate-50">
+                {{ currentActionConfig?.title }}
+              </h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                {{ currentActionConfig?.description }}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-3">
+            <button
+              type="button"
+              class="rounded-xl border border-slate-700 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 transition-all"
+              :disabled="actionModal.loading"
+              @click="closeActionModal"
+            >
+              Annuler
+            </button>
+            <button
+              type="button"
+              class="rounded-xl px-4 py-2 text-sm font-semibold text-white transition-all inline-flex items-center gap-2"
+              :class="currentActionConfig?.confirmClasses"
+              :disabled="actionModal.loading"
+              @click="handleConfirmAction"
+            >
+              <svg
+                v-if="actionModal.loading"
+                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+              {{ actionModal.loading ? 'Traitement...' : currentActionConfig?.confirmLabel }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Modal>
 </template>

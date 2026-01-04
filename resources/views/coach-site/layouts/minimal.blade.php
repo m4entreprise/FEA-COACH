@@ -1,5 +1,9 @@
 @extends('layouts.coach-site')
 
+@php
+    use Stevebauman\Purify\Facades\Purify;
+@endphp
+
 @section('content')
 
 {{-- Layout Minimal - Version épurée et focalisée sur le texte et les CTA --}}
@@ -113,33 +117,43 @@
             </p>
         </div>
 
-        @if(isset($plans) && $plans->count() > 0)
+        @if(isset($services) && $services->count() > 0)
             <div class="space-y-6">
-                @foreach($plans as $plan)
-                    <div class="bg-white border-2 border-gray-200 rounded-lg p-8 hover:border-primary transition-all">
+                @foreach($services as $service)
+                    <div class="relative bg-white border-2 border-gray-200 rounded-lg p-8 hover:border-primary transition-all">
+                        @if($service->is_featured)
+                            <span class="absolute top-6 right-6 inline-flex items-center gap-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold uppercase tracking-wide px-3 py-1 border border-amber-200">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5.5 3 1.5-6.5L3 8.5l6.6-.5L12 2l2.4 6 6.6.5-5 4.9 1.5 6.5z" />
+                                </svg>
+                                Populaire
+                            </span>
+                        @endif
                         <div class="flex items-center justify-between flex-wrap gap-4">
                             <div class="flex-1">
-                                <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $plan->name }}</h3>
-                                <p class="text-gray-600">{{ $plan->description }}</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $service->name }}</h3>
+                                @if($service->duration_minutes)
+                                    <p class="text-sm text-gray-500 mb-2">⏱️ {{ $service->duration_minutes }} minutes</p>
+                                @endif
+                                @if($service->description)
+                                    <div class="prose prose-sm text-gray-600 leading-relaxed text-sm [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
+                                        {!! Purify::clean($service->description) !!}
+                                    </div>
+                                @endif
                             </div>
                             <div class="flex items-center gap-6">
                                 <div class="text-right">
-                                    @if($plan->price)
-                                        <div class="text-3xl font-bold text-primary">{{ number_format($plan->price, 0, ',', ' ') }}€</div>
-                                    @else
-                                        <div class="text-xl font-semibold text-gray-900">Sur demande</div>
-                                    @endif
+                                    <div class="text-3xl font-bold text-primary">{{ number_format($service->price, 0, ',', ' ') }}€</div>
                                 </div>
-                                @if($plan->cta_url)
-                                    <a href="{{ $plan->cta_url }}" 
-                                       target="_blank"
+                                @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
+                                    <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
                                        class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                        Choisir
+                                        Payer en ligne
                                     </a>
                                 @else
                                     <a href="#contact" 
                                        class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                        Contacter
+                                        Me contacter
                                     </a>
                                 @endif
                             </div>
@@ -168,23 +182,47 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @foreach($transformations as $transformation)
+                @php
+                    $beforeUrl = $transformation->hasMedia('before') ? $transformation->getFirstMediaUrl('before') : null;
+                    $afterUrl = $transformation->hasMedia('after') ? $transformation->getFirstMediaUrl('after') : null;
+                @endphp
                 <div class="bg-white rounded-lg overflow-hidden border border-gray-200">
                     <div class="grid grid-cols-2">
-                        <div class="relative">
-                            @if($transformation->hasMedia('before'))
-                                <img src="{{ $transformation->getFirstMediaUrl('before') }}" 
-                                     alt="Avant" 
-                                     class="w-full h-48 object-cover">
+                        <div class="relative group">
+                            @if($beforeUrl)
+                                <button
+                                    type="button"
+                                    class="relative block w-full h-48 focus:outline-none cursor-zoom-in"
+                                    @click="openLightbox('{{ addslashes($beforeUrl) }}', 'Avant')"
+                                    aria-label="Voir la photo avant en grand"
+                                >
+                                    <img src="{{ $beforeUrl }}" 
+                                         alt="Avant" 
+                                         class="w-full h-48 object-cover">
+                                    <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold tracking-wide">
+                                        Cliquer pour agrandir
+                                    </span>
+                                </button>
                             @else
                                 <div class="w-full h-48 bg-gray-100"></div>
                             @endif
                             <div class="absolute bottom-2 left-2 bg-black/70 text-white text-xs font-semibold px-2 py-1 rounded">AVANT</div>
                         </div>
-                        <div class="relative">
-                            @if($transformation->hasMedia('after'))
-                                <img src="{{ $transformation->getFirstMediaUrl('after') }}" 
-                                     alt="Après" 
-                                     class="w-full h-48 object-cover">
+                        <div class="relative group">
+                            @if($afterUrl)
+                                <button
+                                    type="button"
+                                    class="relative block w-full h-48 focus:outline-none cursor-zoom-in"
+                                    @click="openLightbox('{{ addslashes($afterUrl) }}', 'Après')"
+                                    aria-label="Voir la photo après en grand"
+                                >
+                                    <img src="{{ $afterUrl }}" 
+                                         alt="Après" 
+                                         class="w-full h-48 object-cover">
+                                    <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold tracking-wide">
+                                        Cliquer pour agrandir
+                                    </span>
+                                </button>
                             @else
                                 <div class="w-full h-48 bg-gray-100"></div>
                             @endif

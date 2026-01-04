@@ -54,6 +54,12 @@ class ContactController extends Controller
             'is_read' => true,
         ]);
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
         return redirect()->route('dashboard.contact')
             ->with('success', 'Message marqué comme lu.');
     }
@@ -70,6 +76,12 @@ class ContactController extends Controller
         }
 
         $contactMessage->delete();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+            ]);
+        }
 
         return redirect()->route('dashboard.contact')
             ->with('success', 'Message supprimé avec succès.');

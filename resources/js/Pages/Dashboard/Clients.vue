@@ -6,6 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
     clients: Array,
@@ -77,19 +78,49 @@ const submitClient = () => {
     if (editingClient.value) {
         clientForm.patch(route('dashboard.clients.update', editingClient.value.id), {
             preserveScroll: true,
-            onSuccess: () => closeClientModal(),
+            onSuccess: () => {
+                toast.success('Client mis à jour', {
+                    description: `${editingClient.value.first_name} ${editingClient.value.last_name} a bien été enregistré.`,
+                });
+                closeClientModal();
+            },
+            onError: () => {
+                toast.error('Impossible de mettre à jour le client', {
+                    description: 'Vérifiez les champs requis puis réessayez.',
+                });
+            },
         });
     } else {
         clientForm.post(route('dashboard.clients.store'), {
             preserveScroll: true,
-            onSuccess: () => closeClientModal(),
+            onSuccess: () => {
+                toast.success('Client ajouté', {
+                    description: 'Votre nouveau client est disponible dans la liste.',
+                });
+                closeClientModal();
+            },
+            onError: () => {
+                toast.error('Création impossible', {
+                    description: 'Corrigez les erreurs de formulaire puis réessayez.',
+                });
+            },
         });
     }
 };
 
 const deleteClient = (client) => {
     if (confirm(`Supprimer ${client.first_name} ${client.last_name} ?`)) {
-        router.delete(route('dashboard.clients.destroy', client.id), { preserveScroll: true });
+        router.delete(route('dashboard.clients.destroy', client.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Client supprimé');
+            },
+            onError: () => {
+                toast.error('Suppression impossible', {
+                    description: 'Réessayez dans un instant.',
+                });
+            },
+        });
     }
 };
 
@@ -152,16 +183,11 @@ const formatDate = (d) => new Date(d).toLocaleDateString('fr-FR', { day: '2-digi
 </script>
 
 <template>
-    <Head title="Gestion des Clients" />
+    <Head title="Mes Clients" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                Gestion des Clients
-            </h2>
-        </template>
-
-        <div class="py-12 bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 min-h-screen">
+        <Toaster rich-colors position="top-right" />
+        <div class="py-10 md:py-12 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 min-h-screen">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <!-- Success Message -->
                 <div v-if="$page.props.flash?.success" class="mb-6 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 shadow-xl p-6 text-white transform hover:scale-[1.01] transition-all duration-300 backdrop-blur-xl border border-green-400/20">

@@ -67,7 +67,7 @@
 
     @stack('styles')
 </head>
-<body class="font-sans antialiased bg-white text-gray-900">
+<body x-data="coachSiteLightbox()" x-on:keydown.escape.window="closeLightbox()" class="font-sans antialiased bg-white text-gray-900">
     
     <!-- Navigation -->
     <nav x-data="{ mobileMenuOpen: false }" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
@@ -291,6 +291,50 @@
             </div>
         </div>
     </footer>
+
+    <!-- Image Lightbox -->
+    <div
+        x-show="lightboxOpen"
+        x-transition.opacity
+        class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm px-4 py-8"
+        style="display: none;"
+        aria-modal="true"
+        role="dialog"
+    >
+        <button
+            type="button"
+            class="absolute inset-0 w-full h-full cursor-zoom-out"
+            @click="closeLightbox"
+            aria-label="Fermer l'aperçu"
+        ></button>
+
+        <div
+            x-transition.scale
+            class="relative max-w-5xl w-full"
+        >
+            <div class="absolute -top-10 right-0 flex items-center gap-3 text-white">
+                <span x-text="lightboxLabel" class="text-sm uppercase tracking-wide font-semibold"></span>
+                <button
+                    type="button"
+                    class="p-2 rounded-full bg-white/10 hover:bg-white/20 transition"
+                    @click="closeLightbox"
+                    aria-label="Fermer"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <img
+                x-show="lightboxSrc"
+                x-transition
+                :src="lightboxSrc"
+                :alt="`Aperçu ${lightboxLabel}`"
+                class="w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl border border-white/20 bg-black"
+            >
+        </div>
+    </div>
 
     @stack('scripts')
 </body>

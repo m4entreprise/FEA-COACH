@@ -18,6 +18,12 @@ use App\Http\Controllers\Dashboard\ClientDocumentController;
 use App\Http\Controllers\Dashboard\LegalController;
 use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\Dashboard\SupportTicketController as DashboardSupportController;
+use App\Http\Controllers\Dashboard\PaymentsController;
+use App\Http\Controllers\Dashboard\ServicesController;
+use App\Http\Controllers\Dashboard\AvailabilityController;
+use App\Http\Controllers\Dashboard\BookingsController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\LemonSqueezyWebhookController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\SetupWizardController;
@@ -39,7 +45,23 @@ Route::domain('{coach_slug}.' . config('app.domain', 'localhost'))
         Route::get('/', [CoachSiteController::class, 'show'])->name('coach.site');
         Route::post('/contact', [CoachSiteController::class, 'contact'])->name('coach.contact');
         Route::get('/mentions-legales', [CoachSiteController::class, 'legal'])->name('coach.legal');
+        
+        // Direct booking checkout - MUST be inside this domain group
+        Route::get('/reserver/{serviceId}/checkout', [BookingController::class, 'showCheckoutForm'])->name('coach.booking.checkout.form');
+        Route::post('/reserver/{serviceId}/checkout', [BookingController::class, 'directCheckout'])->name('coach.booking.checkout');
     });
+
+// Fallback routes without domain constraint - for testing
+Route::middleware(['web', 'resolve.coach'])->group(function () {
+    Route::get('/reserver/{serviceId}/checkout', [BookingController::class, 'showCheckoutForm'])->name('booking.checkout.form.fallback');
+    Route::post('/reserver/{serviceId}/checkout', [BookingController::class, 'directCheckout'])->name('booking.checkout.fallback');
+});
+
+// Public booking confirmation/cancel routes
+Route::middleware('web')->group(function () {
+    Route::get('/booking/{booking}/success', [BookingController::class, 'success'])->name('booking.success');
+    Route::get('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+});
 
 // Public share links for client documents
 Route::middleware('web')
@@ -184,6 +206,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::get('/dashboard/gallery', [GalleryController::class, 'index'])->name('dashboard.gallery');
     Route::post('/dashboard/gallery', [GalleryController::class, 'store'])->name('dashboard.gallery.store');
     Route::delete('/dashboard/gallery/{transformation}', [GalleryController::class, 'destroy'])->name('dashboard.gallery.destroy');
+    Route::post('/dashboard/gallery/reorder', [GalleryController::class, 'reorder'])->name('dashboard.gallery.reorder');
     Route::post('/dashboard/gallery/preview', [GalleryController::class, 'preview'])->name('dashboard.gallery.preview');
 
     // Plans management
@@ -253,6 +276,37 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/subscription/cancel', [SubscriptionController::class, 'cancelSubscription'])->name('dashboard.subscription.cancel');
     Route::post('/dashboard/subscription/custom-domain', [SubscriptionController::class, 'checkoutCustomDomain'])->name('dashboard.subscription.custom-domain');
 
+    // Payments module (Stripe Connect)
+    Route::get('/dashboard/payments', [PaymentsController::class, 'index'])->name('dashboard.payments.index');
+    Route::post('/dashboard/payments/activate', [PaymentsController::class, 'activateModule'])->name('dashboard.payments.activate');
+    Route::get('/dashboard/payments/connect', [PaymentsController::class, 'connectStripe'])->name('dashboard.payments.connect');
+    Route::get('/dashboard/payments/stripe/return', [PaymentsController::class, 'stripeReturn'])->name('dashboard.payments.stripe.return');
+    Route::get('/dashboard/payments/stripe/refresh', [PaymentsController::class, 'stripeRefresh'])->name('dashboard.payments.stripe.refresh');
+    Route::post('/dashboard/payments/disconnect', [PaymentsController::class, 'disconnect'])->name('dashboard.payments.disconnect');
+    Route::get('/dashboard/payments/dashboard', [PaymentsController::class, 'dashboard'])->name('dashboard.payments.dashboard');
+
+    // Service types management
+    Route::get('/dashboard/services', [ServicesController::class, 'index'])->name('dashboard.services.index');
+    Route::post('/dashboard/services', [ServicesController::class, 'store'])->name('dashboard.services.store');
+    Route::patch('/dashboard/services/{service}', [ServicesController::class, 'update'])->name('dashboard.services.update');
+    Route::delete('/dashboard/services/{service}', [ServicesController::class, 'destroy'])->name('dashboard.services.destroy');
+    Route::post('/dashboard/services/reorder', [ServicesController::class, 'reorder'])->name('dashboard.services.reorder');
+
+    // Availability management
+    Route::get('/dashboard/availability', [AvailabilityController::class, 'index'])->name('dashboard.availability.index');
+    Route::post('/dashboard/availability', [AvailabilityController::class, 'store'])->name('dashboard.availability.store');
+    Route::patch('/dashboard/availability/{slot}', [AvailabilityController::class, 'update'])->name('dashboard.availability.update');
+    Route::delete('/dashboard/availability/{slot}', [AvailabilityController::class, 'destroy'])->name('dashboard.availability.destroy');
+
+    // Bookings management
+    Route::get('/dashboard/bookings', [BookingsController::class, 'index'])->name('dashboard.bookings.index');
+    Route::get('/dashboard/bookings/{booking}', [BookingsController::class, 'show'])->name('dashboard.bookings.show');
+    Route::patch('/dashboard/bookings/{booking}/notes', [BookingsController::class, 'updateNotes'])->name('dashboard.bookings.notes');
+    Route::post('/dashboard/bookings/{booking}/cancel', [BookingsController::class, 'cancel'])->name('dashboard.bookings.cancel');
+    Route::post('/dashboard/bookings/{booking}/complete', [BookingsController::class, 'markCompleted'])->name('dashboard.bookings.complete');
+    Route::post('/dashboard/bookings/{booking}/no-show', [BookingsController::class, 'markNoShow'])->name('dashboard.bookings.no-show');
+    Route::delete('/dashboard/bookings/{booking}', [BookingsController::class, 'destroy'])->name('dashboard.bookings.destroy');
+
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -273,6 +327,16 @@ require __DIR__.'/auth.php';
 
 Route::post('/webhooks/lemonsqueezy', [LemonSqueezyWebhookController::class, 'handle'])
     ->name('webhooks.lemonsqueezy')
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+
+/*
+|--------------------------------------------------------------------------
+| Stripe Webhook Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handleWebhook'])
+    ->name('webhooks.stripe')
     ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 
 /*

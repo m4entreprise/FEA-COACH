@@ -7,6 +7,7 @@ import { Head, useForm, router } from '@inertiajs/vue3';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { FileText, User, HelpCircle, Share2, MonitorPlay } from 'lucide-vue-next';
 import axios from 'axios';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   coach: Object,
@@ -45,14 +46,21 @@ const form = useForm({
   intermediate_cta_subtitle: props.coach?.intermediate_cta_subtitle || '',
   satisfaction_rate: props.coach?.satisfaction_rate || 100,
   average_rating: props.coach?.average_rating || 5.0,
-  facebook_url: props.coach?.facebook_url || '',
-  instagram_url: props.coach?.instagram_url || '',
-  twitter_url: props.coach?.twitter_url || '',
   linkedin_url: props.coach?.linkedin_url || '',
   youtube_url: props.coach?.youtube_url || '',
   tiktok_url: props.coach?.tiktok_url || '',
-  site_layout: props.coach?.site_layout || props.defaultLayout,
+  site_layout: props.coach?.site_layout || props.defaultLayout || 'classic',
 });
+
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  router.visit(dashboardBackUrl.value);
+};
 
 const heroTitleCount = computed(() => form.hero_title.length);
 const heroSubtitleCount = computed(() => form.hero_subtitle.length);
@@ -83,6 +91,16 @@ const scrollToSection = (id) => {
 const submit = () => {
   form.post(route('dashboard.content.update'), {
     preserveScroll: true,
+    onSuccess: () => {
+      toast.success('Contenu mis à jour', {
+        description: 'Vos textes sont désormais en ligne.',
+      });
+    },
+    onError: () => {
+      toast.error('Impossible de sauvegarder', {
+        description: 'Corrigez les champs requis puis réessayez.',
+      });
+    },
   });
 };
 
@@ -120,6 +138,10 @@ const uploadPhoto = () => {
       preserveScroll: true,
       onSuccess: () => {
         router.reload({ only: ['profilePhotoUrl'] });
+        toast.success('Photo envoyée');
+      },
+      onError: () => {
+        toast.error('Échec de l’envoi de la photo');
       },
     },
   );
@@ -139,6 +161,10 @@ const deletePhoto = () => {
       onSuccess: () => {
         photoPreview.value = null;
         router.reload({ only: ['profilePhotoUrl'] });
+        toast.success('Photo supprimée');
+      },
+      onError: () => {
+        toast.error('Impossible de supprimer la photo');
       },
     },
   );
@@ -221,6 +247,7 @@ onBeforeUnmount(() => {
   <Head title="Contenu du site " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
@@ -237,13 +264,14 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="flex items-center gap-3">
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 

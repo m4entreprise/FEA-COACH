@@ -1,5 +1,9 @@
 @extends('layouts.coach-site')
 
+@php
+    use Stevebauman\Purify\Facades\Purify;
+@endphp
+
 @section('content')
 
 <!-- Hero Section -->
@@ -179,32 +183,71 @@
             </p>
         </div>
 
-        @if(isset($plans) && $plans->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($plans->count(), 4) }} gap-8">
-                @foreach($plans as $plan)
-                    <div class="bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all p-8 flex flex-col">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ $plan->name }}</h3>
-                        <div class="text-4xl font-extrabold text-primary mb-4">
-                            @if($plan->price)
-                                {{ number_format($plan->price, 2, ',', ' ') }}€
+        @if(isset($services) && $services->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 4) }} gap-8">
+                @foreach($services as $service)
+                    <div class="relative bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all flex flex-col overflow-hidden">
+                        @if($service->is_featured)
+                            <span class="absolute top-6 right-6 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 shadow-lg">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5.5 3 1.5-6.5L3 8.5l6.6-.5L12 2l2.4 6 6.6.5-5 4.9 1.5 6.5z" />
+                                </svg>
+                                Populaire
+                            </span>
+                        @endif
+                        <div class="relative">
+                            @if($service->image_url)
+                                <div class="h-48 w-full overflow-hidden">
+                                    <img
+                                        src="{{ $service->image_url }}"
+                                        alt="Illustration {{ $service->name }}"
+                                        class="w-full h-full object-cover"
+                                        loading="lazy"
+                                    >
+                                </div>
                             @else
-                                <span class="text-2xl">Prix sur demande</span>
+                                <div class="h-48 w-full bg-gray-100 border border-dashed border-gray-200 flex items-center justify-center text-gray-400 text-sm">
+                                    Image à venir
+                                </div>
+                            @endif
+                            <div class="absolute inset-x-6 -bottom-8 bg-white rounded-2xl shadow-lg border border-gray-100 p-4 flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs uppercase tracking-wider text-gray-400 font-semibold">Tarif</p>
+                                    <p class="text-2xl font-extrabold text-gray-900">
+                                        {{ number_format($service->price, 2, ',', ' ') }}
+                                        <span class="text-sm text-gray-500">{{ $service->currency }}</span>
+                                    </p>
+                                </div>
+                                @if($service->duration_minutes)
+                                    <div class="text-right">
+                                        <p class="text-xs uppercase tracking-wider text-gray-400 font-semibold">Durée</p>
+                                        <p class="text-lg font-bold text-primary">⏱️ {{ $service->duration_minutes }} min</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="p-8 pt-12 flex-1 flex flex-col">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ $service->name }}</h3>
+
+                            @if($service->description)
+                                <div class="prose prose-sm text-gray-600 mb-6 flex-grow leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
+                                    {!! Purify::clean($service->description) !!}
+                                </div>
+                            @endif
+                        
+                            @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
+                                <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
+                                   class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
+                                    Payer en ligne
+                                </a>
+                            @else
+                                <a href="#contact" 
+                                   class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
+                                    Me contacter
+                                </a>
                             @endif
                         </div>
-                        <p class="text-gray-600 mb-6 flex-grow">{{ $plan->description }}</p>
-                        
-                        @if($plan->cta_url)
-                            <a href="{{ $plan->cta_url }}" 
-                               target="_blank"
-                               class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
-                                Choisir cette formule
-                            </a>
-                        @else
-                            <a href="#contact" 
-                               class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
-                                Me contacter
-                            </a>
-                        @endif
                     </div>
                 @endforeach
             </div>
@@ -231,14 +274,28 @@
         @if(isset($transformations) && $transformations->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($transformations as $transformation)
+                    @php
+                        $beforeUrl = $transformation->hasMedia('before') ? $transformation->getFirstMediaUrl('before') : null;
+                        $afterUrl = $transformation->hasMedia('after') ? $transformation->getFirstMediaUrl('after') : null;
+                    @endphp
                     <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                         <!-- Before/After Images -->
                         <div class="grid grid-cols-2">
                             <div class="relative group">
-                                @if($transformation->hasMedia('before'))
-                                    <img src="{{ $transformation->getFirstMediaUrl('before') }}" 
-                                         alt="Avant" 
-                                         class="w-full h-64 object-cover">
+                                @if($beforeUrl)
+                                    <button
+                                        type="button"
+                                        class="relative block w-full h-64 focus:outline-none cursor-zoom-in"
+                                        @click="openLightbox('{{ addslashes($beforeUrl) }}', 'Avant')"
+                                        aria-label="Voir la photo avant en grand"
+                                    >
+                                        <img src="{{ $beforeUrl }}" 
+                                             alt="Avant" 
+                                             class="w-full h-64 object-cover">
+                                        <span class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold tracking-wide">
+                                            Cliquer pour agrandir
+                                        </span>
+                                    </button>
                                 @else
                                     <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
                                         <span class="text-gray-400">Avant</span>
@@ -249,10 +306,20 @@
                                 </div>
                             </div>
                             <div class="relative group">
-                                @if($transformation->hasMedia('after'))
-                                    <img src="{{ $transformation->getFirstMediaUrl('after') }}" 
-                                         alt="Après" 
-                                         class="w-full h-64 object-cover">
+                                @if($afterUrl)
+                                    <button
+                                        type="button"
+                                        class="relative block w-full h-64 focus:outline-none cursor-zoom-in"
+                                        @click="openLightbox('{{ addslashes($afterUrl) }}', 'Après')"
+                                        aria-label="Voir la photo après en grand"
+                                    >
+                                        <img src="{{ $afterUrl }}" 
+                                             alt="Après" 
+                                             class="w-full h-64 object-cover">
+                                        <span class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold tracking-wide">
+                                            Cliquer pour agrandir
+                                        </span>
+                                    </button>
                                 @else
                                     <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
                                         <span class="text-gray-400">Après</span>

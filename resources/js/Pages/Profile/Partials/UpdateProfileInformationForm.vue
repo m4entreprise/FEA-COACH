@@ -4,6 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { toast } from 'vue-sonner';
 
 defineProps({
     mustVerifyEmail: {
@@ -35,7 +36,19 @@ const form = useForm({
         </header>
 
         <form
-            @submit.prevent="form.patch(route('profile.update'))"
+            @submit.prevent="
+                form.patch(route('profile.update'), {
+                    preserveScroll: true,
+                    onSuccess: () =>
+                        toast.success('Profil mis à jour', {
+                            description: 'Vos informations ont bien été enregistrées.',
+                        }),
+                    onError: () =>
+                        toast.error('Impossible de mettre à jour', {
+                            description: 'Vérifiez les champs requis puis réessayez.',
+                        }),
+                })
+            "
             class="mt-6 space-y-6"
         >
             <div>

@@ -5,7 +5,10 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { GripVertical, Plus, HelpCircle, Search } from 'lucide-vue-next';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
+import { Toaster, toast } from 'vue-sonner';
+import { VueDraggable } from 'vue-draggable-plus';
 
 const props = defineProps({
   faqs: Array,
@@ -20,6 +23,16 @@ const previewHtml = ref('');
 const previewLoading = ref(false);
 const previewError = ref(null);
 const isPreviewFullscreen = ref(false);
+
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  router.visit(dashboardBackUrl.value);
+};
 
 const faqsList = ref([]);
 
@@ -72,14 +85,34 @@ const submit = () => {
       route('dashboard.faq.update', { faq: editingFaq.value.id, beta: 1 }),
       {
         preserveScroll: true,
-        onSuccess: () => closeModal(),
+        onSuccess: () => {
+          closeModal();
+          toast.success('Question mise à jour', {
+            description: 'La FAQ publique reflète vos dernières modifications.',
+          });
+        },
+        onError: () => {
+          toast.error('Impossible de mettre à jour', {
+            description: 'Vérifiez les champs requis puis réessayez.',
+          });
+        },
       },
     );
   } else {
     form.order = faqsList.value.length;
     form.post(route('dashboard.faq.store'), {
       preserveScroll: true,
-      onSuccess: () => closeModal(),
+      onSuccess: () => {
+        closeModal();
+        toast.success('Question ajoutée', {
+          description: 'Votre nouvelle entrée est prête à apparaître sur le site.',
+        });
+      },
+      onError: () => {
+        toast.error('Impossible de créer la question', {
+          description: 'Corrigez les erreurs de formulaire puis réessayez.',
+        });
+      },
     });
   }
 };
@@ -95,49 +128,32 @@ const deleteFaq = (faq) => {
 
   router.delete(route('dashboard.faq.destroy', { faq: faq.id, beta: 1 }), {
     preserveScroll: true,
+    onSuccess: () => {
+      toast.success('Question supprimée');
+    },
+    onError: () => {
+      toast.error('Suppression impossible', {
+        description: 'Réessayez dans un instant.',
+      });
+    },
   });
 };
 
-const onDragStart = (event, faq) => {
-  draggingId.value = faq.id;
-  if (event.dataTransfer) {
-    event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('text/plain', String(faq.id));
-  }
+const onDragStart = (event) => {
+  const id = Number(event?.item?.dataset?.id);
+  draggingId.value = Number.isNaN(id) ? null : id;
 };
 
-const onDragEnd = () => {
+const onDragFinish = () => {
   draggingId.value = null;
+  handleReorder();
 };
 
-const onDropCard = (event, targetFaq) => {
-  event.preventDefault();
-  reorderList(draggingId.value, targetFaq?.id ?? null);
-};
-
-const onDropAfterList = (event) => {
-  event.preventDefault();
-  reorderList(draggingId.value, null);
-};
-
-const reorderList = (draggedId, targetId) => {
-  if (!draggedId || draggedId === targetId) return;
-  const updated = [...faqsList.value];
-  const fromIndex = updated.findIndex((faq) => faq.id === draggedId);
-  if (fromIndex === -1) return;
-  const [moved] = updated.splice(fromIndex, 1);
-  let toIndex =
-    targetId === null ? updated.length : updated.findIndex((faq) => faq.id === targetId);
-  if (toIndex === -1) {
-    updated.splice(fromIndex, 0, moved);
-    return;
-  }
-  updated.splice(toIndex, 0, moved);
-  faqsList.value = updated.map((faq, index) => ({
+const handleReorder = () => {
+  faqsList.value = faqsList.value.map((faq, index) => ({
     ...faq,
     order: index,
   }));
-  draggingId.value = null;
   saveOrder();
 };
 
@@ -158,9 +174,16 @@ const saveOrder = async () => {
         headers: { Accept: 'application/json' },
       },
     );
+    toast.success('Ordre mis à jour', {
+      description: 'La nouvelle hiérarchie a été enregistrée.',
+    });
   } catch (error) {
-    reorderError.value =
+    const message =
       error.response?.data?.message || 'Impossible d’enregistrer le nouvel ordre.';
+    reorderError.value = message;
+    toast.error('Échec de la synchronisation', {
+      description: message,
+    });
   } finally {
     reorderSaving.value = false;
   }
@@ -207,6 +230,7 @@ watch(isPreviewFullscreen, (active) => {
   <Head title="Gestion de la FAQ " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
@@ -223,13 +247,14 @@ watch(isPreviewFullscreen, (active) => {
       </div>
 
       <div class="flex items-center gap-3">
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 
@@ -298,26 +323,33 @@ watch(isPreviewFullscreen, (active) => {
 
         <!-- FAQ list -->
         <section class="space-y-4">
-          <div v-if="faqsList.length" class="space-y-3">
+          <VueDraggable
+            v-if="faqsList.length"
+            v-model="faqsList"
+            v-auto-animate
+            handle=".faq-drag-handle"
+            class="space-y-3"
+            ghost-class="drag-ghost"
+            chosen-class="drag-chosen"
+            :animation="220"
+            @start="onDragStart"
+            @end="onDragFinish"
+          >
             <article
               v-for="faq in faqsList"
               :key="faq.id"
+              :data-id="faq.id"
               class="rounded-2xl border bg-slate-900/80 p-5 shadow-md transition"
               :class="[
                 draggingId === faq.id
                   ? 'border-indigo-500/70 bg-slate-900'
                   : 'border-slate-800 hover:border-slate-700',
               ]"
-              draggable="true"
-              @dragstart="onDragStart($event, faq)"
-              @dragend="onDragEnd"
-              @dragover.prevent
-              @drop="onDropCard($event, faq)"
             >
               <div class="flex items-start gap-4">
                 <button
                   type="button"
-                  class="h-10 w-10 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-400 hover:text-slate-100"
+                  class="faq-drag-handle h-10 w-10 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center text-slate-400 hover:text-slate-100"
                 >
                   <GripVertical class="h-4 w-4" />
                 </button>
@@ -350,17 +382,17 @@ watch(isPreviewFullscreen, (active) => {
                   <p class="text-xs md:text-sm text-slate-300 whitespace-pre-line">
                     {{ faq.answer }}
                   </p>
-                  <div class="flex flex-wrap justify-end gap-2 text-[11px]">
+                  <div class="flex flex-wrap gap-2 pt-2 text-[11px]">
                     <button
                       type="button"
-                      class="rounded-full border border-slate-700 px-4 py-1.5 text-slate-200 hover:bg-slate-800"
+                      class="rounded-full border border-slate-700 px-3 py-1.5 text-slate-200 hover:bg-slate-800"
                       @click="openEditModal(faq)"
                     >
                       Modifier
                     </button>
                     <button
                       type="button"
-                      class="rounded-full border border-rose-500/50 bg-rose-500/10 px-4 py-1.5 text-rose-200 hover:bg-rose-500/20"
+                      class="rounded-full border border-rose-500/40 bg-rose-500/10 px-3 py-1.5 text-rose-200 hover:bg-rose-500/20"
                       @click="deleteFaq(faq)"
                     >
                       Supprimer
@@ -369,15 +401,7 @@ watch(isPreviewFullscreen, (active) => {
                 </div>
               </div>
             </article>
-
-            <div
-              class="h-10 rounded-2xl border border-dashed border-slate-700 text-center text-xs text-slate-500 flex items-center justify-center"
-              @dragover.prevent
-              @drop="onDropAfterList"
-            >
-              Déposez ici pour placer la question à la fin
-            </div>
-          </div>
+          </VueDraggable>
 
           <div
             v-else

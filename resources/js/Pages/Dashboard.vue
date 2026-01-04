@@ -7,7 +7,6 @@ import { computed, ref, onMounted } from 'vue';
 const props = defineProps({
     coach: Object,
     stats: Object,
-    recentTransformations: Array,
     isAdmin: Boolean,
     error: String,
     hasCompletedOnboarding: {

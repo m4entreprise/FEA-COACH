@@ -79,6 +79,41 @@ class GalleryController extends Controller
     }
 
     /**
+     * Reorder transformations based on drag & drop payload.
+     */
+    public function reorder(Request $request)
+    {
+        $coach = $request->user()->coach;
+
+        if (!$coach) {
+            abort(404, 'Aucun coach associé.');
+        }
+
+        $validated = $request->validate([
+            'order' => ['required', 'array'],
+            'order.*.id' => ['required', 'integer'],
+            'order.*.order' => ['required', 'integer', 'min:0'],
+        ]);
+
+        $coachTransformationIds = $coach->transformations()->pluck('id')->toArray();
+
+        $orderPayload = collect($validated['order'])
+            ->filter(fn ($item) => in_array($item['id'], $coachTransformationIds, true))
+            ->sortBy('order')
+            ->values();
+
+        foreach ($orderPayload as $index => $item) {
+            CoachTransformation::where('id', $item['id'])
+                ->where('coach_id', $coach->id)
+                ->update(['order' => $index]);
+        }
+
+        return response()->json([
+            'status' => 'ok',
+        ]);
+    }
+
+    /**
      * Provide a fullscreen preview of the public site with current transformations.
      */
     public function preview(Request $request)

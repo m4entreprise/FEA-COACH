@@ -136,6 +136,46 @@ class Coach extends Model implements HasMedia
     }
 
     /**
+     * Get the Stripe account for the coach.
+     */
+    public function stripeAccount()
+    {
+        return $this->hasOne(StripeAccount::class);
+    }
+
+    /**
+     * Get the service types for the coach.
+     */
+    public function serviceTypes(): HasMany
+    {
+        return $this->hasMany(ServiceType::class);
+    }
+
+    /**
+     * Get the availability slots for the coach.
+     */
+    public function availabilitySlots(): HasMany
+    {
+        return $this->hasMany(AvailabilitySlot::class);
+    }
+
+    /**
+     * Get the bookings for the coach.
+     */
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Get the cancellation policy for the coach.
+     */
+    public function cancellationPolicy()
+    {
+        return $this->hasOne(BookingCancellationPolicy::class);
+    }
+
+    /**
      * Get the site layout with fallback to default if invalid.
      */
     public function getSiteLayoutOrDefaultAttribute(): string

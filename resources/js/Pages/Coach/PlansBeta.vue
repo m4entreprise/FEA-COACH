@@ -5,7 +5,8 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { GripVertical, Plus, Search, CircleDollarSign } from 'lucide-vue-next';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 
 const props = defineProps({
   plans: Array,
@@ -22,6 +23,15 @@ const previewError = ref(null);
 const isPreviewFullscreen = ref(false);
 
 const plansList = ref([]);
+
+const dashboardBackUrl = computed(() => {
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  router.visit(dashboardBackUrl.value);
+};
 
 watch(
   () => props.plans,
@@ -233,13 +243,14 @@ watch(isPreviewFullscreen, (active) => {
       </div>
 
       <div class="flex items-center gap-3">
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 
@@ -310,6 +321,7 @@ watch(isPreviewFullscreen, (active) => {
         <section class="space-y-4">
           <div
             v-if="plansList.length"
+            v-auto-animate
             class="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
           >
             <article

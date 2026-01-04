@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Toaster, toast } from 'vue-sonner';
 import { useAutoAnimate } from '@formkit/auto-animate/vue';
 import Modal from '@/Components/Modal.vue';
@@ -12,6 +12,7 @@ import {
     Image as ImageIcon,
     HelpCircle,
     CreditCard,
+    Calendar,
     Scale,
     Users,
     Mail,
@@ -28,7 +29,6 @@ import {
 const props = defineProps({
     coach: Object,
     stats: Object,
-    recentTransformations: Array,
     customDomain: {
         type: Object,
         default: null,
@@ -53,6 +53,40 @@ const [contentParent] = useAutoAnimate();
 const activeCategory = ref('general');
 const sidebarOpen = ref(false);
 
+const validCategories = new Set(['general', 'site', 'business', 'account']);
+
+const readTabFromUrl = () => {
+    if (typeof window === 'undefined') return null;
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (!tab) return null;
+    return validCategories.has(tab) ? tab : null;
+};
+
+const writeTabToUrl = (tab) => {
+    if (typeof window === 'undefined') return;
+    if (!validCategories.has(tab)) return;
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', tab);
+    window.history.replaceState(window.history.state, '', url);
+};
+
+const syncTabFromUrl = () => {
+    const tab = readTabFromUrl();
+    if (tab) {
+        activeCategory.value = tab;
+        return;
+    }
+
+    if (typeof window !== 'undefined') {
+        const stored = window.sessionStorage?.getItem('coach_dashboard_tab');
+        if (stored && validCategories.has(stored)) {
+            activeCategory.value = stored;
+        }
+    }
+};
+
 const coachSiteUrl = computed(() => {
     if (!props.coach) return null;
     const slug = props.coach.slug || props.coach.subdomain;
@@ -61,6 +95,16 @@ const coachSiteUrl = computed(() => {
 });
 
 const safeStats = computed(() => props.stats || {});
+const businessOffersCount = computed(() => {
+    const stats = safeStats.value;
+    const count = stats.active_services ?? stats.active_plans ?? 0;
+    return typeof count === 'number' ? count : 0;
+});
+const businessOffersLabel = computed(() => {
+    const count = businessOffersCount.value;
+    const plural = count > 1 || count === 0;
+    return `${count} ${plural ? 'offres actives' : 'offre active'}`;
+});
 // Etat "Acheté" uniquement si un CustomDomain existe réellement pour ce coach
 const hasCustomDomainOrder = computed(() => !!props.customDomain);
 const customDomainStatus = computed(() => props.customDomain?.status ?? null);
@@ -124,6 +168,26 @@ const goCategory = (id) => {
     activeCategory.value = id;
     sidebarOpen.value = false;
 };
+
+onMounted(() => {
+    syncTabFromUrl();
+    if (typeof window !== 'undefined') {
+        window.addEventListener('popstate', syncTabFromUrl);
+    }
+});
+
+onBeforeUnmount(() => {
+    if (typeof window !== 'undefined') {
+        window.removeEventListener('popstate', syncTabFromUrl);
+    }
+});
+
+watch(activeCategory, (tab) => {
+    writeTabToUrl(tab);
+    if (typeof window !== 'undefined') {
+        window.sessionStorage?.setItem('coach_dashboard_tab', tab);
+    }
+});
 
 const buyCustomDomain = (requestedDomain = null) => {
     // Create a form and submit it (bypass Inertia for external redirects)
@@ -352,14 +416,14 @@ const logout = () => {
                     </nav>
 
                     <div class="p-4 border-t border-slate-800 text-xs text-slate-400 space-y-2">
-                        <Link
-                            :href="route('dashboard')"
+                        <button
+                            type="button"
                             class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-100 hover:border-slate-500 hover:bg-slate-800 transition-colors w-full"
-                            @click="sidebarOpen = false"
+                            @click="() => { logout(); sidebarOpen = false; }"
                         >
-                            <ArrowLeftRight class="h-3 w-3" />
-                            Dashboard classique
-                        </Link>
+                            <LogOut class="h-3.5 w-3.5" />
+                            Se déconnecter
+                        </button>
                     </div>
                 </aside>
             </div>
@@ -390,6 +454,15 @@ const logout = () => {
                         v-if="coachSiteUrl"
                         :href="coachSiteUrl"
                         target="_blank"
+                        class="inline-flex sm:hidden items-center gap-2 rounded-full bg-emerald-500/90 px-4 py-2 text-xs font-semibold text-emerald-950 shadow-lg hover:bg-emerald-400 transition-colors"
+                    >
+                        <Globe2 class="h-4 w-4" />
+                        Voir mon site
+                    </a>
+                    <a
+                        v-if="coachSiteUrl"
+                        :href="coachSiteUrl"
+                        target="_blank"
                         class="hidden sm:inline-flex items-center gap-2 rounded-full bg-emerald-500/90 px-4 py-2 text-xs font-semibold text-emerald-950 shadow-lg hover:bg-emerald-400 transition-colors"
                     >
                         <Globe2 class="h-4 w-4" />
@@ -398,7 +471,7 @@ const logout = () => {
 
                     <Link
                         :href="route('dashboard.subscription')"
-                        class="inline-flex items-center gap-2 rounded-full bg-slate-800/90 px-3 py-1.5 text-xs font-medium text-slate-100 border border-slate-600 hover:bg-slate-700"
+                        class="hidden sm:inline-flex items-center gap-2 rounded-full bg-slate-800/90 px-3 py-1.5 text-xs font-medium text-slate-100 border border-slate-600 hover:bg-slate-700"
                     >
                         <CreditCard class="h-3.5 w-3.5" />
                         Abonnement
@@ -528,18 +601,18 @@ const logout = () => {
                                     <div class="space-y-1">
                                         <p class="text-slate-400">Business</p>
                                         <p class="text-sm font-semibold">
-                                            {{ safeStats.active_plans ?? 0 }} offre(s) active(s)
+                                            {{ businessOffersLabel }}
                                         </p>
                                         <p class="text-[11px] text-slate-500">
-                                            Structurez vos offres et suivez vos clients.
+                                            Structurez vos prestations et suivez vos clients.
                                         </p>
                                         <div class="flex flex-wrap gap-2 mt-1">
                                             <Link
-                                                :href="route('dashboard.plans')"
+                                                :href="route('dashboard.services.index')"
                                                 class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-1 text-[11px] border border-slate-700 hover:bg-slate-700"
                                             >
-                                                <CreditCard class="h-3 w-3" />
-                                                Plans
+                                                <Sparkles class="h-3 w-3" />
+                                                Services
                                             </Link>
                                             <Link
                                                 :href="route('dashboard.clients.index')"
@@ -712,49 +785,6 @@ const logout = () => {
                             </div>
                         </div>
 
-                        <!-- Recent transformations -->
-                        <div
-                            v-if="recentTransformations && recentTransformations.length"
-                            class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl space-y-4"
-                        >
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <ImageIcon class="h-4 w-4 text-slate-300" />
-                                    <h3 class="text-sm font-semibold">Transformations recentes</h3>
-                                </div>
-                                <Link
-                                    :href="route('dashboard.gallery')"
-                                    class="text-[11px] text-purple-300 hover:text-purple-200 flex items-center gap-1"
-                                >
-                                    Ouvrir la galerie
-                                </Link>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                                <article
-                                    v-for="t in recentTransformations"
-                                    :key="t.id"
-                                    class="rounded-xl border border-slate-700/60 bg-slate-900/80 p-3 flex flex-col gap-2"
-                                >
-                                    <p class="text-[11px] text-slate-300 line-clamp-3">
-                                        {{ t.description }}
-                                    </p>
-                                    <div class="flex gap-2 mt-auto">
-                                        <div
-                                            v-if="t.before_url"
-                                            class="flex-1 h-16 rounded-lg bg-slate-800 overflow-hidden"
-                                        >
-                                            <img :src="t.before_url" alt="Avant" class="w-full h-full object-cover" />
-                                        </div>
-                                        <div
-                                            v-if="t.after_url"
-                                            class="flex-1 h-16 rounded-lg bg-slate-800 overflow-hidden"
-                                        >
-                                            <img :src="t.after_url" alt="Apres" class="w-full h-full object-cover" />
-                                        </div>
-                                    </div>
-                                </article>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Site vitrine -->
@@ -839,6 +869,23 @@ const logout = () => {
                                     </div>
                                 </div>
                             </Link>
+
+                            <Link
+                                :href="route('dashboard.services.index')"
+                                class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-400 flex items-center justify-center shadow-lg">
+                                        <Sparkles class="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-semibold">Mes services</h3>
+                                        <p class="text-xs text-slate-400">
+                                            Gérer vos offres et tarifs.
+                                        </p>
+                                    </div>
+                                </div>
+                            </Link>
                         </div>
                     </div>
 
@@ -858,17 +905,34 @@ const logout = () => {
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <Link
-                                :href="route('dashboard.plans')"
-                                class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-emerald-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
+                                :href="route('dashboard.payments.index')"
+                                class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-purple-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
                             >
                                 <div class="flex items-center gap-3">
-                                    <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-400 flex items-center justify-center shadow-lg">
+                                    <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
                                         <CreditCard class="h-4 w-4" />
                                     </div>
                                     <div>
-                                        <h3 class="text-sm font-semibold">Plans et offres</h3>
+                                        <h3 class="text-sm font-semibold">Paiements</h3>
                                         <p class="text-xs text-slate-400">
-                                            Creez et ajustez vos programmes de coaching.
+                                            Connexion Stripe, encaissements et suivi.
+                                        </p>
+                                    </div>
+                                </div>
+                            </Link>
+
+                            <Link
+                                :href="route('dashboard.bookings.index')"
+                                class="group rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl hover:border-blue-500/60 hover:bg-slate-900/90 transition-colors flex flex-col gap-3"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center shadow-lg">
+                                        <Calendar class="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-semibold">Mes réservations</h3>
+                                        <p class="text-xs text-slate-400">
+                                            Voir et gérer vos réservations.
                                         </p>
                                     </div>
                                 </div>

@@ -27,6 +27,7 @@ class DashboardController extends Controller
             'plans',
             'transformations',
             'faqs',
+            'serviceTypes',
             'user',
         ])->first();
 
@@ -68,6 +69,8 @@ class DashboardController extends Controller
         $stats = [
             'total_plans' => $coach->plans()->count(),
             'active_plans' => $coach->plans()->where('is_active', true)->count(),
+            'total_services' => $coach->serviceTypes()->count(),
+            'active_services' => $coach->serviceTypes()->where('is_active', true)->count(),
             'total_transformations' => $coach->transformations()->count(),
             'is_active' => $coach->is_active,
             'profile_completion' => $profileData['percentage'],
@@ -76,17 +79,6 @@ class DashboardController extends Controller
         ];
 
         // Get recent transformations (for quick view)
-        $recentTransformations = $coach->transformations()
-            ->orderBy('created_at', 'desc')
-            ->limit(3)
-            ->get()
-            ->map(fn($t) => [
-                'id' => $t->id,
-                'description' => $t->description,
-                'before_url' => $t->hasMedia('before') ? $t->getFirstMediaUrl('before') : null,
-                'after_url' => $t->hasMedia('after') ? $t->getFirstMediaUrl('after') : null,
-            ]);
-
         return Inertia::render('Coach/DashboardCoachBeta', [
             'coach' => [
                 'id' => $coach->id,
@@ -102,7 +94,6 @@ class DashboardController extends Controller
                 'custom_contact_locked_until' => $coach->custom_contact_locked_until,
             ],
             'stats' => $stats,
-            'recentTransformations' => $recentTransformations,
             'hasCompletedOnboarding' => (bool) $user->has_completed_onboarding,
             'customDomain' => $customDomain ? [
                 'domain' => $customDomain->domain,

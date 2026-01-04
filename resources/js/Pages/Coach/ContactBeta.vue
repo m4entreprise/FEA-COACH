@@ -2,10 +2,22 @@
 import { Head, router } from '@inertiajs/vue3';
 import { Mail, MailOpen, User, Phone, Trash2, Inbox } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   messages: Array,
 });
+
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  router.visit(dashboardBackUrl.value);
+};
 
 const markAsRead = (message) => {
   if (message.is_read) return;
@@ -17,6 +29,17 @@ const markAsRead = (message) => {
     }),
     {
       preserveScroll: true,
+      onSuccess: () =>
+        toast.success('Message marqué comme lu', {
+          description: `${message.name} a été archivé.`,
+        }),
+      onError: () =>
+        toast.error('Impossible de mettre à jour', {
+          description: 'Réessayez dans un instant.',
+        }),
+      headers: {
+        Accept: 'application/json',
+      },
     },
   );
 };
@@ -31,6 +54,17 @@ const deleteMessage = (message) => {
     }),
     {
       preserveScroll: true,
+      onSuccess: () =>
+        toast.success('Message supprimé', {
+          description: `${message.name} a été retiré de votre boîte.`,
+        }),
+      onError: () =>
+        toast.error('Suppression impossible', {
+          description: 'Réessayez dans un instant.',
+        }),
+      headers: {
+        Accept: 'application/json',
+      },
     },
   );
 };
@@ -40,6 +74,7 @@ const deleteMessage = (message) => {
   <Head title="Messages de contact " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
@@ -56,13 +91,14 @@ const deleteMessage = (message) => {
       </div>
 
       <div class="flex items-center gap-3">
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 
@@ -96,7 +132,7 @@ const deleteMessage = (message) => {
 
         <!-- Messages list -->
         <section class="space-y-4">
-          <div v-if="messages.length" class="space-y-3">
+          <div v-if="messages.length" class="space-y-3" v-auto-animate>
             <article
               v-for="message in messages"
               :key="message.id"

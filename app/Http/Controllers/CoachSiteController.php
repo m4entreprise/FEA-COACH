@@ -22,8 +22,11 @@ class CoachSiteController extends Controller
             'transformations' => function ($query) {
                 $query->orderBy('order');
             },
-            'plans' => function ($query) {
-                $query->where('is_active', true)->orderBy('price');
+            'serviceTypes' => function ($query) {
+                $query
+                    ->where('is_active', true)
+                    ->orderBy('order')
+                    ->orderBy('price');
             },
             'faqs' => function ($query) {
                 $query->where('is_active', true)->orderBy('order')->orderBy('created_at');
@@ -31,7 +34,7 @@ class CoachSiteController extends Controller
         ]);
 
         // Get the data as arrays for better debugging
-        $activePlans = $coach->plans;
+        $services = $coach->serviceTypes;
         $transformations = $coach->transformations;
         $faqs = $coach->faqs;
 
@@ -55,7 +58,7 @@ class CoachSiteController extends Controller
 
         return view($viewName, [
             'coach' => $coach,
-            'plans' => $activePlans,
+            'services' => $services,
             'transformations' => $transformations,
             'faqs' => $faqs,
         ]);

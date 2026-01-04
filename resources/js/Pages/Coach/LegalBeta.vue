@@ -1,9 +1,10 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref, computed, watch, onBeforeUnmount } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import { Building2, User, Briefcase, Scale, Eye, Save, Copy, AlertCircle, FileText, Sparkles, X, Send, CheckCircle } from 'lucide-vue-next';
 import axios from 'axios';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   coach: Object,
@@ -38,6 +39,16 @@ const form = useForm({
 // Preview management
 const previewHtml = ref('');
 const previewLoading = ref(false);
+
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  router.visit(dashboardBackUrl.value);
+};
 const previewError = ref(null);
 const showPreview = ref(true);
 let previewTimeoutId = null;
@@ -120,9 +131,17 @@ const submitForm = () => {
   form.post(route('dashboard.legal.update'), {
     preserveScroll: true,
     onSuccess: () => {
+      toast.success('Mentions légales mises à jour', {
+        description: 'Votre texte juridique est à jour.',
+      });
       if (showPreview.value) {
         fetchPreview();
       }
+    },
+    onError: () => {
+      toast.error('Impossible de sauvegarder', {
+        description: 'Vérifiez les champs requis puis réessayez.',
+      });
     },
   });
 };
@@ -165,7 +184,7 @@ const submitCustomRequest = async () => {
   customRequestError.value = null;
 
   try {
-    const { data } = await axios.post(
+    await axios.post(
       route('dashboard.legal.request-custom'),
       {
         message: customRequestMessage.value,
@@ -177,14 +196,21 @@ const submitCustomRequest = async () => {
     );
 
     customRequestSuccess.value = true;
+    toast.success('Demande envoyée', {
+      description: 'Un juriste vous recontactera sous peu.',
+    });
     setTimeout(() => {
       showCustomRequestModal.value = false;
       customRequestSuccess.value = false;
       customRequestMessage.value = '';
-    }, 3000);
+    }, 2500);
   } catch (error) {
-    customRequestError.value =
+    const message =
       error.response?.data?.message || 'Une erreur est survenue. Veuillez réessayer.';
+    customRequestError.value = message;
+    toast.error('Envoi impossible', {
+      description: message,
+    });
   } finally {
     customRequestLoading.value = false;
   }
@@ -195,6 +221,7 @@ const submitCustomRequest = async () => {
   <Head title="Mentions légales & CGV" />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl sticky top-0 z-50"
@@ -216,13 +243,14 @@ const submitCustomRequest = async () => {
           <Sparkles class="w-3 h-3 text-purple-400" />
           <span class="text-xs text-slate-300">{{ completionPercentage }}% complété</span>
         </div>
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 

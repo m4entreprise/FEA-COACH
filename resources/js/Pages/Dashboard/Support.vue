@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
     tickets: Array,
@@ -37,6 +38,14 @@ const submitNewTicket = () => {
         onSuccess: () => {
             createForm.reset('subject', 'category', 'message');
             mode.value = 'conversation';
+            toast.success('Ticket créé', {
+                description: 'Votre demande a été transmise au support.',
+            });
+        },
+        onError: () => {
+            toast.error('Impossible de créer le ticket', {
+                description: 'Vérifiez les champs requis puis réessayez.',
+            });
         },
     });
 };
@@ -48,6 +57,14 @@ const submitReply = () => {
         preserveScroll: true,
         onSuccess: () => {
             replyForm.reset('message');
+            toast.success('Message envoyé', {
+                description: 'Votre réponse a été transmise à l’équipe support.',
+            });
+        },
+        onError: () => {
+            toast.error('Impossible d’envoyer le message', {
+                description: 'Réessayez dans un instant.',
+            });
         },
     });
 };
@@ -57,6 +74,16 @@ const closeTicket = () => {
 
     router.post(route('dashboard.support.close', selectedTicket.value.id), {}, {
         preserveScroll: true,
+        onSuccess: () => {
+            toast.success('Ticket clôturé', {
+                description: 'La conversation est désormais archivée.',
+            });
+        },
+        onError: () => {
+            toast.error('Impossible de clôturer le ticket', {
+                description: 'Réessayez dans un instant.',
+            });
+        },
     });
 };
 </script>
@@ -65,6 +92,7 @@ const closeTicket = () => {
     <Head title="Support" />
 
     <AuthenticatedLayout>
+        <Toaster rich-colors position="top-right" />
         <template #header>
             <div class="flex items-center justify-between">
                 <div>

@@ -1,7 +1,9 @@
 <script setup>
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
-import { LifeBuoy, Plus, MessageSquare, CheckCircle2, XCircle, Send, Trash2 } from 'lucide-vue-next';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
+import { LifeBuoy, Plus, MessageSquare, CheckCircle2, Send } from 'lucide-vue-next';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   tickets: Array,
@@ -19,6 +21,16 @@ const openTickets = computed(() =>
 const closedTickets = computed(() => 
   props.tickets.filter(t => t.status === 'closed')
 );
+
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  router.visit(dashboardBackUrl.value);
+};
 
 const selectedTicket = computed(() => {
   return props.tickets.find((t) => t.id === selectedTicketId.value) || null;
@@ -54,6 +66,14 @@ const submitNewTicket = () => {
     onSuccess: () => {
       createForm.reset('subject', 'category', 'message');
       closeNewTicketModal();
+      toast.success('Ticket créé', {
+        description: 'Votre demande a été transmise au support.',
+      });
+    },
+    onError: () => {
+      toast.error('Impossible de créer le ticket', {
+        description: 'Vérifiez les champs requis puis réessayez.',
+      });
     },
   });
 };
@@ -70,6 +90,14 @@ const submitReply = () => {
       preserveScroll: true,
       onSuccess: () => {
         replyForm.reset('message');
+        toast.success('Message envoyé', {
+          description: 'Votre réponse a bien été transmise.',
+        });
+      },
+      onError: () => {
+        toast.error('Impossible d’envoyer le message', {
+          description: 'Réessayez dans un instant.',
+        });
       },
     },
   );
@@ -86,6 +114,14 @@ const closeTicket = () => {
     {},
     {
       preserveScroll: true,
+      onSuccess: () =>
+        toast.success('Ticket clôturé', {
+          description: 'La conversation est désormais archivée.',
+        }),
+      onError: () =>
+        toast.error('Clôture impossible', {
+          description: 'Réessayez dans un instant.',
+        }),
     },
   );
 };
@@ -95,6 +131,7 @@ const closeTicket = () => {
   <Head title="Support " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
@@ -111,13 +148,14 @@ const closeTicket = () => {
       </div>
 
       <div class="flex items-center gap-3">
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 
@@ -164,7 +202,7 @@ const closeTicket = () => {
 
         <!-- Tickets list -->
         <section class="space-y-4">
-          <div v-if="hasTickets" class="space-y-3">
+          <div v-if="hasTickets" class="space-y-3" v-auto-animate>
             <article
               v-for="ticket in tickets"
               :key="ticket.id"
@@ -213,7 +251,7 @@ const closeTicket = () => {
                   </div>
                   
                   <!-- Messages preview -->
-                  <div v-if="ticket.messages && ticket.messages.length" class="space-y-2">
+                  <div v-if="ticket.messages && ticket.messages.length" class="space-y-2" v-auto-animate>
                     <div
                       v-for="message in ticket.messages.slice(-2)"
                       :key="message.id"

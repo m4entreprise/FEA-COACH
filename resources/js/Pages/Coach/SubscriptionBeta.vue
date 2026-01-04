@@ -62,6 +62,16 @@ const hasSubscription = computed(() => {
   return !!props.subscription.lemonsqueezy_subscription_id;
 });
 
+const dashboardBackUrl = computed(() => {
+  if (typeof window === 'undefined') return route('dashboard');
+  const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
+  return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
+});
+
+const goBack = () => {
+  router.visit(dashboardBackUrl.value);
+};
+
 const handleSubscribe = () => {
   router.post('/dashboard/subscription/checkout');
 };
@@ -169,6 +179,40 @@ const customDomainStatusMeta = computed(() => {
       return defaults;
   }
 });
+
+const statusCopy = computed(() => {
+  if (props.subscription.is_on_trial) {
+    const daysLeft = props.subscription.trial_days_left ?? 0;
+    const plural = daysLeft > 1 ? 'jours' : 'jour';
+
+    return {
+      title: 'Abonnement actif',
+      subtitle: 'Période d\'essai active',
+      description: `Profitez encore de ${daysLeft} ${plural} d'essai avant votre premier paiement.`,
+      dateText: subscriptionEndDate.value
+        ? `${props.subscription.cancel_at_period_end ? 'Se termine le' : 'Premier paiement le'} ${subscriptionEndDate.value}`
+        : null,
+    };
+  }
+
+  if (props.subscription.status === 'active') {
+    return {
+      title: 'Abonnement actif',
+      subtitle: 'Renouvellement automatique actif',
+      description: 'Vous avez accès à toutes les fonctionnalités de la plateforme.',
+      dateText: currentPeriodEndDate.value
+        ? `${props.subscription.cancel_at_period_end ? 'Se termine le' : 'Renouvellement le'} ${currentPeriodEndDate.value}`
+        : null,
+    };
+  }
+
+  return {
+    title: 'Abonnement inactif',
+    subtitle: 'Souscription requise',
+    description: 'Souscrivez pour accéder à toutes les fonctionnalités.',
+    dateText: null,
+  };
+});
 </script>
 
 <template>
@@ -191,13 +235,14 @@ const customDomainStatusMeta = computed(() => {
       </div>
 
       <div class="flex items-center gap-3">
-        <a
-          :href="route('dashboard')"
+        <button
+          type="button"
+          @click="goBack"
           class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
         >
           <span class="text-xs">←</span>
           <span>Retour panel</span>
-        </a>
+        </button>
       </div>
     </header>
 
@@ -238,132 +283,41 @@ const customDomainStatusMeta = computed(() => {
         </section>
 
         <!-- Subscription status -->
-        <section class="space-y-4">
-          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl">
-            <div class="flex items-start gap-4 mb-5">
-              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-400 flex items-center justify-center shadow-lg flex-shrink-0">
-                <CreditCard class="h-4 w-4" />
+        <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <!-- Subscription status block -->
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col gap-5 h-full">
+            <div class="flex items-start gap-4">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                <Crown class="h-4 w-4" />
               </div>
               <div class="flex-1">
-                <div class="flex flex-wrap items-start justify-between gap-4">
-                  <div class="space-y-1">
-                    <p class="text-xs uppercase tracking-wide text-slate-500">
-                      Statut actuel
-                    </p>
-                    <h3 class="text-sm md:text-base font-semibold text-slate-50">
-                      {{ subscription.is_on_trial ? 'Période d\'essai active' : subscription.status === 'active' ? 'Abonnement actif' : 'Abonnement inactif' }}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Trial info -->
-            <div
-              v-if="subscription.is_on_trial"
-              class="rounded-xl border border-blue-500/40 bg-blue-950/40 p-4 mb-4"
-            >
-              <div class="flex items-start gap-3">
-                <Sparkles class="h-5 w-5 text-blue-300 flex-shrink-0" />
-                <div class="flex-1 space-y-2">
-                  <p class="text-sm font-semibold text-blue-100">
-                    {{ hasSubscription ? 'Période d\'essai avec abonnement actif' : 'Profitez de votre essai gratuit' }}
-                  </p>
-                  <p class="text-xs text-blue-200">
-                    <template v-if="hasSubscription">
-                      Votre abonnement est actif. Il vous reste <span class="font-bold">{{ subscription.trial_days_left }} jour{{ subscription.trial_days_left > 1 ? 's' : '' }}</span> d'essai gratuit avant le premier paiement.
-                    </template>
-                    <template v-else>
-                      Il vous reste <span class="font-bold">{{ subscription.trial_days_left }} jour{{ subscription.trial_days_left > 1 ? 's' : '' }}</span> pour tester toutes les fonctionnalités.
-                    </template>
-                  </p>
-                  <div class="flex items-center gap-2 text-xs text-blue-300">
-                    <Calendar class="h-3 w-3" />
-                    <span>{{ hasSubscription ? 'Premier paiement le' : 'Expire le' }} {{ subscriptionEndDate }}</span>
-                  </div>
-                  <div v-if="subscription.cancel_at_period_end" class="flex items-center gap-2 text-xs text-amber-300 mt-2 pt-2 border-t border-blue-500/30">
-                    <AlertCircle class="h-3 w-3" />
-                    <span>Abonnement annulé - l'accès restera actif jusqu'au {{ subscriptionEndDate }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Active subscription info -->
-            <div
-              v-else-if="subscription.status === 'active'"
-              class="rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-4 mb-4"
-            >
-              <div class="flex items-start gap-3">
-                <Check class="h-5 w-5 text-emerald-300 flex-shrink-0" />
-                <div class="flex-1 space-y-2">
-                  <p class="text-sm font-semibold text-emerald-100">
-                    Abonnement actif
-                  </p>
-                  <p class="text-xs text-emerald-200">
-                    Vous avez accès à toutes les fonctionnalités de la plateforme.
-                  </p>
-                  <div v-if="currentPeriodEndDate" class="flex items-center gap-2 text-xs text-emerald-300">
-                    <Calendar class="h-3 w-3" />
-                    <span>{{ subscription.cancel_at_period_end ? 'Se termine' : 'Renouvellement' }} le {{ currentPeriodEndDate }}</span>
-                  </div>
-                  <div v-if="subscription.cancel_at_period_end" class="flex items-center gap-2 text-xs text-amber-300 mt-2">
-                    <AlertCircle class="h-3 w-3" />
-                    <span>Annulation programmée - l'accès restera actif jusqu'à la fin de la période</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Inactive info -->
-            <div
-              v-else
-              class="rounded-xl border border-slate-700 bg-slate-950/70 p-4 mb-4"
-            >
-              <div class="flex items-start gap-3">
-                <AlertCircle class="h-5 w-5 text-slate-400 flex-shrink-0" />
-                <div class="flex-1 space-y-2">
-                  <p class="text-sm font-semibold text-slate-200">
-                    Abonnement inactif
-                  </p>
-                  <p class="text-xs text-slate-300">
-                    Souscrivez pour accéder à toutes les fonctionnalités.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Account info -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs mb-4">
-              <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
-                <p class="text-slate-400 mb-1 flex items-center gap-1">
-                  <span>Nom</span>
+                <p class="text-xs uppercase tracking-wide text-slate-500">Statut actuel</p>
+                <h3 class="text-base font-semibold text-slate-50">{{ statusCopy.title }}</h3>
+                <p class="text-sm font-semibold text-slate-200">{{ statusCopy.subtitle }}</p>
+                <p class="text-sm text-slate-300 mt-2">
+                  {{ statusCopy.description }}
                 </p>
-                <p class="text-slate-50 font-semibold">{{ user.name }}</p>
+                <div v-if="statusCopy.dateText" class="flex items-center gap-2 text-xs text-slate-400 mt-3">
+                  <Calendar class="h-3 w-3" />
+                  <span>{{ statusCopy.dateText }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
+                <p class="text-slate-400 mb-1">Nom</p>
+                <p class="font-semibold text-slate-50">{{ user.name }}</p>
               </div>
               <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
                 <p class="text-slate-400 mb-1">Email de facturation</p>
-                <p class="text-slate-50 font-semibold truncate">
-                  {{ user.email }}
-                </p>
+                <p class="font-semibold text-slate-50 truncate">{{ user.email }}</p>
               </div>
             </div>
 
-            <!-- Actions -->
-            <div class="flex flex-wrap gap-2 text-xs">
-              <!-- User has subscription with cancellation scheduled -->
+            <div class="flex flex-wrap gap-2 text-xs mt-auto">
               <button
-                v-if="hasSubscription && subscription.cancel_at_period_end"
-                type="button"
-                class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-amber-500/50 bg-amber-500/10 px-4 py-2 text-amber-200 hover:bg-amber-500/20"
-                @click="handleManageSubscription"
-              >
-                <ExternalLink class="h-3.5 w-3.5" />
-                Réactiver mon abonnement
-              </button>
-              <!-- User has active subscription (trial or paid) -->
-              <button
-                v-else-if="hasSubscription"
+                v-if="hasSubscription"
                 type="button"
                 class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-800 px-4 py-2 text-slate-200 hover:bg-slate-700"
                 @click="handleManageSubscription"
@@ -371,7 +325,6 @@ const customDomainStatusMeta = computed(() => {
                 <ExternalLink class="h-3.5 w-3.5" />
                 Gérer mon abonnement
               </button>
-              <!-- No subscription yet -->
               <button
                 v-else
                 type="button"
@@ -383,182 +336,180 @@ const customDomainStatusMeta = computed(() => {
               </button>
             </div>
           </div>
-        </section>
 
-        <!-- Pricing info -->
-        <section class="space-y-4">
-          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl">
-            <div class="flex items-start gap-4 mb-5">
-              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                <Crown class="h-4 w-4" />
+          <!-- Domain card stays on right -->
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col gap-5 h-full">
+            <div class="flex items-start gap-4">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-400 flex items-center justify-center shadow-lg flex-shrink-0">
+                <Globe class="h-4 w-4" />
               </div>
               <div class="flex-1">
-                <div class="flex flex-wrap items-start justify-between gap-4">
-                  <div class="space-y-1">
-                    <p class="text-xs uppercase tracking-wide text-slate-500">
-                      Formule
-                    </p>
-                    <h3 class="text-sm md:text-base font-semibold text-slate-50">
-                      {{ planInfo?.name || 'UNICOACH Pro' }}
-                    </h3>
+                <p class="text-xs uppercase tracking-wide text-slate-500">Abonnement</p>
+                <h3 class="text-base font-semibold text-slate-50">Nom de domaine</h3>
+                <p class="text-xs text-slate-400 mt-2">Centralisez l'achat, la configuration et le suivi de votre domaine personnalisé.</p>
+              </div>
+            </div>
+
+            <div v-if="customDomain" class="rounded-xl border border-indigo-500/40 bg-indigo-950/40 p-4">
+              <div class="flex items-start gap-3">
+                <Check class="h-5 w-5 text-indigo-300 flex-shrink-0" />
+                <div class="flex-1 space-y-2">
+                  <p class="text-sm font-semibold text-indigo-100">{{ customDomain.domain || 'Domaine configuré' }}</p>
+                  <p class="text-xs text-indigo-200">Votre site est accessible via votre nom de domaine personnalisé.</p>
+                  <div v-if="domainExpiryDate" class="flex items-center gap-2 text-xs text-indigo-300">
+                    <Calendar class="h-3 w-3" />
+                    <span>Renouvellement le {{ domainExpiryDate }}</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 p-5 text-white mb-4">
-              <div class="flex flex-wrap items-baseline justify-between gap-3 mb-3">
-                <div>
-                  <div class="flex items-baseline gap-2">
-                    <span class="text-3xl font-bold">{{ planInfo?.price || '20' }}€</span>
-                    <span class="text-sm opacity-90">{{ planInfo?.interval || 'HTVA / mois' }}</span>
-                  </div>
-                  <p v-if="planInfo?.original_price" class="text-xs opacity-80 mt-1">
-                    Prix normal : <span class="line-through">{{ planInfo.original_price }}€</span>
-                  </p>
-                </div>
-                <div
-                  v-if="planInfo?.is_fea_price"
-                  class="rounded-xl bg-white/20 backdrop-blur-sm px-3 py-2 text-right text-xs"
-                >
-                  <p class="text-emerald-200 font-semibold mb-1">Partenariat</p>
-                  <p class="font-bold">Fitness Education Academy</p>
-                </div>
-              </div>
-              <p class="text-xs opacity-90">
-                {{ planInfo?.description || 'Bénéficiez d\'une réduction permanente grâce au partenariat avec FEA.' }}
+            <div v-else class="space-y-4 text-xs text-slate-300">
+              <p class="rounded-xl border border-amber-500/40 bg-amber-500/5 text-amber-100 p-4">
+                Notre équipe vous recontactera dans les 48h ouvrables afin d'installer le nouveau nom de domaine.
               </p>
-            </div>
-
-            <div class="space-y-2 text-xs text-slate-200">
-              <p class="font-semibold text-slate-100 mb-3">Fonctionnalités incluses :</p>
-              <div class="space-y-2">
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Site web personnalisé avec votre sous-domaine</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Gestion des plans et transformations avant/après</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Formulaire de contact et gestion des prospects</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Base clients avec notes et documents</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Support prioritaire par ticket</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Mises à jour et nouvelles fonctionnalités incluses</span>
+              <div class="rounded-xl border border-slate-700/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4 space-y-3">
+                <p class="text-sm font-semibold text-slate-100">Donnez plus de professionnalisme à votre présence</p>
+                <p class="text-xs text-slate-400">
+                  Utilisez votre propre nom de domaine (exemple : <span class="text-purple-300">www.moncoaching.com</span>) au lieu de <span class="text-slate-500">*.unicoach.app</span>
+                </p>
+                <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-700/50">
+                  <div>
+                    <p class="text-xs text-slate-300 font-medium">Nom de domaine personnalisé</p>
+                    <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
+                  </div>
+                  <button
+                    type="button"
+                    @click="openDomainModal"
+                    class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-4 py-2 text-xs font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
+                  >
+                    <CreditCard class="h-3.5 w-3.5" />
+                    Acheter
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Custom Domain Section -->
-        <section class="space-y-4">
-          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl">
-            <div class="flex items-start gap-4 mb-5">
-              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-400 flex items-center justify-center shadow-lg flex-shrink-0">
+        <!-- Offer highlight row -->
+        <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <!-- UNICOACH highlight -->
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col gap-5 h-full">
+            <div class="flex items-start gap-4">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                <Crown class="h-4 w-4" />
+              </div>
+              <div class="flex-1">
+                <p class="text-xs uppercase tracking-wide text-slate-500">Abonnement</p>
+                <h3 class="text-base font-semibold text-slate-50">UNICOACH</h3>
+                <p class="text-xs text-slate-400 mt-1">Centralisez votre abonnement, vos paiements et votre accès au portail client.</p>
+              </div>
+            </div>
+
+            <div class="rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 p-5 text-white">
+              <div class="flex items-baseline gap-3">
+                <span class="text-3xl font-bold">{{ planInfo?.price || '20' }}€</span>
+                <span class="text-sm opacity-90">{{ planInfo?.interval || 'HTVA / mois' }}</span>
+              </div>
+              <p v-if="planInfo?.original_price" class="text-xs opacity-80 mt-1">
+                Prix normal : <span class="line-through">{{ planInfo.original_price }}€</span>
+              </p>
+              <p class="text-xs opacity-90 mt-3">
+                {{ planInfo?.description || 'Gardez la main sur votre essai gratuit, vos paiements et vos portails client/Stripe.' }}
+              </p>
+            </div>
+
+            <div class="space-y-3 text-sm text-slate-200">
+              <div class="flex items-start gap-2">
+                <Check class="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                <span>Essai gratuit inclus avec rappel automatique avant facturation.</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <CreditCard class="h-4 w-4 text-purple-200 flex-shrink-0 mt-0.5" />
+                <span>Portail Stripe sécurisé pour gérer vos moyens de paiement.</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <Sparkles class="h-4 w-4 text-pink-200 flex-shrink-0 mt-0.5" />
+                <span>Mises à jour continues et support humain prioritaire.</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-800">
+              <p class="text-xs text-slate-400">
+                Gardez la main sur vos paiements, votre essai gratuit et votre portail client.
+              </p>
+              <button
+                v-if="hasSubscription"
+                type="button"
+                @click="handleManageSubscription"
+                class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/15 border border-purple-400/60 px-4 py-2 text-xs font-medium text-white hover:bg-purple-500/25 hover:border-purple-300 transition-colors whitespace-nowrap"
+              >
+                <ExternalLink class="h-3.5 w-3.5" />
+                Gérer
+              </button>
+              <button
+                v-else
+                type="button"
+                @click="handleSubscribe"
+                class="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-xs font-semibold text-slate-950 shadow-lg hover:from-purple-600 hover:to-pink-600 transition-colors whitespace-nowrap"
+              >
+                <Crown class="h-3.5 w-3.5" />
+                S'abonner
+              </button>
+            </div>
+          </div>
+
+          <!-- Domain highlight -->
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl flex flex-col gap-5 h-full">
+            <div class="flex items-start gap-4">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center shadow-lg flex-shrink-0">
                 <Globe class="h-4 w-4" />
               </div>
               <div class="flex-1">
-                <div class="flex flex-wrap items-start justify-between gap-4">
-                  <div class="space-y-1">
-                    <p class="text-xs uppercase tracking-wide text-slate-500">
-                      Nom de domaine
-                    </p>
-                    <h3 class="text-sm md:text-base font-semibold text-slate-50">
-                      {{ customDomain ? 'Domaine personnalisé actif' : 'Nom de domaine personnalisé' }}
-                    </h3>
-                  </div>
-                </div>
+                <p class="text-xs uppercase tracking-wide text-slate-500">Abonnement</p>
+                <h3 class="text-base font-semibold text-slate-50">Nom de domaine</h3>
+                <p class="text-xs text-slate-400 mt-1">Centralisez l'achat, la configuration et le suivi complet de votre domaine personnalisé.</p>
               </div>
             </div>
 
-            <!-- Has custom domain -->
-            <div v-if="customDomain" class="space-y-4">
-              <div class="rounded-xl border border-indigo-500/40 bg-indigo-950/40 p-4">
-                <div class="flex items-start gap-3">
-                  <Check class="h-5 w-5 text-indigo-300 flex-shrink-0" />
-                  <div class="flex-1 space-y-2">
-                    <p class="text-sm font-semibold text-indigo-100">
-                      {{ customDomain.domain || 'Domaine configuré' }}
-                    </p>
-                    <p class="text-xs text-indigo-200">
-                      Votre site est accessible via votre nom de domaine personnalisé.
-                    </p>
-                    <div v-if="domainExpiryDate" class="flex items-center gap-2 text-xs text-indigo-300">
-                      <Calendar class="h-3 w-3" />
-                      <span>Renouvellement le {{ domainExpiryDate }}</span>
-                    </div>
-                  </div>
-                </div>
+            <div class="rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-500 p-5 text-white">
+              <div class="flex items-baseline gap-3">
+                <span class="text-3xl font-bold">65€</span>
+                <span class="text-sm opacity-90">HTVA / an</span>
               </div>
+              <p class="text-xs opacity-90 mt-3">
+                Prix fixe incluant achat du domaine, configuration DNS et renouvellement annuel par l'équipe UNICOACH.
+              </p>
+            </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
-                  <p class="text-slate-400 mb-1">Domaine</p>
-                  <p class="text-slate-50 font-semibold">{{ customDomain.domain || 'Non configuré' }}</p>
-                </div>
-                <div class="rounded-xl bg-slate-950/70 border border-slate-800 p-3">
-                  <p class="text-slate-400 mb-1">Statut</p>
-                  <p class="font-semibold" :class="customDomainStatusMeta.badgeClass">
-                    {{ customDomainStatusMeta.text }}
-                  </p>
-                </div>
+            <div class="space-y-3 text-sm text-slate-200">
+              <div class="flex items-start gap-2">
+                <Check class="h-4 w-4 text-indigo-300 flex-shrink-0 mt-0.5" />
+                <span>Installation complète (DNS, SSL, redirections, emails techniques)</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <Check class="h-4 w-4 text-indigo-300 flex-shrink-0 mt-0.5" />
+                <span>Suivi de statut en temps réel + rappel avant expiration</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <Check class="h-4 w-4 text-indigo-300 flex-shrink-0 mt-0.5" />
+                <span>Accompagnement humain : prise de contact sous 48h ouvrables</span>
               </div>
             </div>
 
-            <!-- No custom domain - Promotion -->
-            <div v-else class="space-y-4">
-              <div class="rounded-xl border border-amber-500/40 bg-amber-500/5 text-amber-100 text-xs p-4">
-                Notre équipe vous recontactera dans les 48h ouvrables afin d'installer le nouveau nom de domaine.
-              </div>
-              <div class="rounded-xl border border-slate-700/60 bg-gradient-to-br from-slate-900/40 to-slate-900/60 p-4">
-                <div class="flex items-start gap-3">
-                  <Sparkles class="h-5 w-5 text-purple-400 flex-shrink-0" />
-                  <div class="flex-1 space-y-3">
-                    <div>
-                      <p class="text-sm font-semibold text-slate-200 mb-1">
-                        Donnez plus de professionnalisme à votre présence
-                      </p>
-                      <p class="text-xs text-slate-400">
-                        Utilisez votre propre nom de domaine (exemple : <span class="text-purple-300">www.moncoaching.com</span>) au lieu de <span class="text-slate-500">*.unicoach.app</span>
-                      </p>
-                    </div>
-                    
-                    <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-700/50">
-                      <div>
-                        <p class="text-xs text-slate-300 font-medium">Nom de domaine personnalisé</p>
-                        <p class="text-[10px] text-slate-500">65€ HTVA / an</p>
-                      </div>
-                      <button
-                        type="button"
-                        @click="openDomainModal"
-                        class="inline-flex items-center gap-1.5 rounded-lg bg-purple-500/20 border border-purple-500/40 px-4 py-2 text-xs font-medium text-purple-100 hover:bg-purple-500/30 hover:border-purple-500/60 transition-colors whitespace-nowrap"
-                      >
-                        <CreditCard class="h-3.5 w-3.5" />
-                        Acheter
-                      </button>
-                      <span
-                        v-if="hasCustomDomainOrder"
-                        type="button"
-                        class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 px-4 py-2 text-xs font-semibold text-emerald-200 whitespace-nowrap"
-                      >
-                        Acheté
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-800">
+              <p class="text-xs text-slate-400">
+                Donnez plus de professionnalisme à votre présence (ex. <span class="text-purple-300">www.moncoaching.com</span>)
+              </p>
+              <button
+                type="button"
+                @click="openDomainModal"
+                class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-500/20 border border-indigo-400/50 px-4 py-2 text-xs font-medium text-indigo-100 hover:bg-indigo-500/30 hover:border-indigo-300/70 transition-colors whitespace-nowrap"
+              >
+                <CreditCard class="h-3.5 w-3.5" />
+                Acheter
+              </button>
             </div>
           </div>
         </section>

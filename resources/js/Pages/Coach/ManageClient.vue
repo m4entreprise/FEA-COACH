@@ -398,10 +398,10 @@ const openActionModal = (type, payload) => {
 };
 
 const closeActionModal = () => {
-  if (actionModal.value.loading) return;
   actionModal.value.show = false;
   actionModal.value.type = null;
   actionModal.value.payload = null;
+  actionModal.value.loading = false;
 };
 
 const handleConfirmAction = () => {
@@ -412,6 +412,7 @@ const handleConfirmAction = () => {
   const baseOptions = {
     preserveScroll: true,
     onSuccess: () => {
+      actionModal.value.loading = false;
       router.reload({ only: ['client'] });
       closeActionModal();
     },

@@ -139,6 +139,20 @@ const formatPaymentTime = (paidAt) => {
         minute: '2-digit',
     }).format(new Date(paidAt));
 };
+
+const getClientName = (booking) => {
+    if (booking.client_full_name) {
+        return booking.client_full_name;
+    }
+    const parts = [booking.client_first_name, booking.client_last_name].filter(Boolean);
+    if (parts.length) {
+        return parts.join(' ');
+    }
+    if (booking.client && booking.client.full_name) {
+        return booking.client.full_name;
+    }
+    return 'Client';
+};
 </script>
 
 <template>
@@ -291,7 +305,7 @@ const formatPaymentTime = (paidAt) => {
                             <div class="rounded-lg border border-slate-700 bg-slate-800/50 p-4">
                                 <p class="text-xs text-slate-400 mb-2">Infos client</p>
                                 <div class="space-y-2 text-sm text-slate-200">
-                                    <p class="font-semibold">{{ booking.client_name }}</p>
+                                    <p class="font-semibold">{{ getClientName(booking) }}</p>
                                     <div class="flex flex-wrap gap-3 text-slate-400">
                                         <div v-if="booking.client_email" class="flex items-center gap-1.5">
                                             <Mail class="h-3.5 w-3.5" />

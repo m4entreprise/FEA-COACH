@@ -5,6 +5,7 @@ import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { User, Lock, AlertTriangle } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { Toaster } from 'vue-sonner';
 
 const props = defineProps({
   mustVerifyEmail: {
@@ -29,6 +30,7 @@ const goBack = () => {
   <Head title="Profil " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"

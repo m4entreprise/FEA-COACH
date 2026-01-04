@@ -15,7 +15,9 @@ import {
     CheckCircle,
     XCircle,
     Trash2,
+    AlertTriangle,
 } from 'lucide-vue-next';
+import Modal from '@/Components/Modal.vue';
 
 const props = defineProps({
     bookings: Array,
@@ -135,53 +137,114 @@ const getStatusConfig = (status) => {
     return configs[status] || configs.pending;
 };
 
-const markAsCompleted = (booking) => {
-    if (confirm('Marquer cette réservation comme terminée ?')) {
-        router.post(route('dashboard.bookings.complete', booking.id), {}, {
-            preserveScroll: true,
-            onSuccess: () => {
-                toast.success('Réservation marquée comme terminée');
-            },
-            onError: () => {
-                toast.error('Erreur lors de la mise à jour');
-            },
-        });
-    }
+const actionConfigs = {
+    delete: {
+        title: 'Supprimer la réservation',
+        description: 'Cette action est définitive. Toutes les informations liées à cette réservation seront supprimées.',
+        confirmLabel: 'Supprimer définitivement',
+        successMessage: 'Réservation supprimée',
+        errorMessage: 'Erreur lors de la suppression',
+        confirmClasses: 'bg-rose-600 hover:bg-rose-500 focus-visible:ring-rose-400',
+        icon: Trash2,
+        iconClasses: 'bg-rose-500/15 text-rose-300 border border-rose-500/40',
+    },
+    cancel: {
+        title: 'Annuler la séance',
+        description: 'Informez le client que la séance est annulée. Vous pouvez préciser un motif pour le suivi.',
+        confirmLabel: 'Annuler la séance',
+        successMessage: 'Réservation annulée',
+        errorMessage: 'Erreur lors de l’annulation',
+        confirmClasses: 'bg-amber-500 hover:bg-amber-400 focus-visible:ring-amber-300 text-slate-950',
+        icon: AlertTriangle,
+        iconClasses: 'bg-amber-500/15 text-amber-300 border border-amber-500/40',
+    },
+    complete: {
+        title: 'Marquer comme terminée',
+        description: 'Confirmez que la séance a bien été réalisée. Le statut passera en “Terminé”.',
+        confirmLabel: 'Marquer terminée',
+        successMessage: 'Réservation marquée comme terminée',
+        errorMessage: 'Erreur lors de la mise à jour',
+        confirmClasses: 'bg-emerald-600 hover:bg-emerald-500 focus-visible:ring-emerald-400',
+        icon: CheckCircle,
+        iconClasses: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40',
+    },
 };
 
-const cancelBooking = (booking) => {
-    if (!confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
+const actionModal = ref({
+    show: false,
+    type: null,
+    booking: null,
+    reason: '',
+    loading: false,
+});
+
+const currentActionConfig = computed(() => {
+    if (!actionModal.value.type) {
+        return null;
+    }
+    return actionConfigs[actionModal.value.type];
+});
+
+const openActionModal = (type, booking) => {
+    actionModal.value = {
+        show: true,
+        type,
+        booking,
+        reason: '',
+        loading: false,
+    };
+};
+
+const closeActionModal = () => {
+    if (actionModal.value.loading) {
         return;
     }
 
-    const reason = window.prompt('Motif d’annulation (optionnel)') ?? '';
-
-    router.post(route('dashboard.bookings.cancel', booking.id), { reason }, {
-        preserveScroll: true,
-        onSuccess: () => {
-            toast.success('Réservation annulée');
-        },
-        onError: () => {
-            toast.error('Erreur lors de l\'annulation');
-        },
-    });
+    actionModal.value.show = false;
+    actionModal.value.type = null;
+    actionModal.value.booking = null;
+    actionModal.value.reason = '';
 };
 
-const deleteBooking = (booking) => {
-    if (!confirm('Supprimer définitivement cette réservation ?')) {
+const handleConfirmAction = () => {
+    if (!actionModal.value.booking || !actionModal.value.type) {
         return;
     }
 
-    router.delete(route('dashboard.bookings.destroy', booking.id), {
+    actionModal.value.loading = true;
+    const { booking, type } = actionModal.value;
+    const config = actionConfigs[type];
+
+    const baseOptions = {
         preserveScroll: true,
         onSuccess: () => {
-            toast.success('Réservation supprimée');
+            toast.success(config.successMessage);
+            closeActionModal();
         },
         onError: () => {
-            toast.error('Erreur lors de la suppression');
+            toast.error(config.errorMessage);
         },
-    });
+        onFinish: () => {
+            actionModal.value.loading = false;
+        },
+    };
+
+    if (type === 'delete') {
+        router.delete(route('dashboard.bookings.destroy', booking.id), baseOptions);
+    } else if (type === 'cancel') {
+        router.post(
+            route('dashboard.bookings.cancel', booking.id),
+            { reason: actionModal.value.reason?.trim() ?? '' },
+            baseOptions,
+        );
+    } else if (type === 'complete') {
+        router.post(route('dashboard.bookings.complete', booking.id), {}, baseOptions);
+    }
 };
+
+const markAsCompleted = (booking) => openActionModal('complete', booking);
+const cancelBooking = (booking) => openActionModal('cancel', booking);
+const deleteBooking = (booking) => openActionModal('delete', booking);
 
 const formatPaymentDate = (paidAt) => {
     if (!paidAt) {
@@ -436,4 +499,86 @@ const getClientName = (booking) => {
             </div>
         </main>
     </div>
+
+    <Modal :show="actionModal.show" @close="closeActionModal" max-width="lg">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-6 sm:p-8 space-y-6">
+                <div class="flex items-start gap-4">
+                    <div
+                        v-if="currentActionConfig"
+                        :class="currentActionConfig.iconClasses"
+                        class="h-12 w-12 rounded-2xl flex items-center justify-center"
+                    >
+                        <component :is="currentActionConfig.icon" class="h-6 w-6" />
+                    </div>
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">
+                            Confirmation
+                        </p>
+                        <h3 class="text-xl font-semibold text-slate-50">
+                            {{ currentActionConfig?.title }}
+                        </h3>
+                        <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                            {{ currentActionConfig?.description }}
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    v-if="actionModal.type === 'cancel'"
+                    class="space-y-2"
+                >
+                    <label class="text-sm font-medium text-slate-200">
+                        Motif d’annulation (optionnel)
+                    </label>
+                    <textarea
+                        v-model="actionModal.reason"
+                        rows="3"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-slate-500 focus:ring-slate-500"
+                        placeholder="Ex : Client indisponible, réunion urgente..."
+                    />
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-end gap-3">
+                    <button
+                        type="button"
+                        class="inline-flex items-center justify-center rounded-xl border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-slate-800 transition-colors"
+                        @click="closeActionModal"
+                    >
+                        Annuler
+                    </button>
+                    <button
+                        type="button"
+                        :class="[currentActionConfig?.confirmClasses]"
+                        class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                        @click="handleConfirmAction"
+                        :disabled="actionModal.loading"
+                    >
+                        <svg
+                            v-if="actionModal.loading"
+                            class="mr-2 h-4 w-4 animate-spin text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                class="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                stroke-width="4"
+                            />
+                            <path
+                                class="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            />
+                        </svg>
+                        {{ actionModal.loading ? 'Traitement...' : currentActionConfig?.confirmLabel }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </Modal>
 </template>

@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
     coach: Object,
@@ -20,6 +21,16 @@ const form = useForm({
 const submitForm = () => {
     form.post(route('dashboard.legal.update'), {
         preserveScroll: true,
+        onSuccess: () => {
+            toast.success('Mentions légales enregistrées', {
+                description: 'Votre texte juridique a été sauvegardé.',
+            });
+        },
+        onError: () => {
+            toast.error('Impossible de sauvegarder', {
+                description: 'Vérifiez les champs requis puis réessayez.',
+            });
+        },
     });
 };
 
@@ -37,6 +48,7 @@ const copyToClipboard = () => {
     <Head title="Mentions Légales" />
 
     <AuthenticatedLayout>
+        <Toaster rich-colors position="top-right" />
         <div class="py-12 bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 min-h-screen">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <!-- En-tête -->

@@ -1,7 +1,8 @@
 <script setup>
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
-import { LifeBuoy, Plus, MessageSquare, CheckCircle2, XCircle, Send, Trash2 } from 'lucide-vue-next';
+import { LifeBuoy, Plus, MessageSquare, CheckCircle2, Send } from 'lucide-vue-next';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   tickets: Array,
@@ -64,6 +65,14 @@ const submitNewTicket = () => {
     onSuccess: () => {
       createForm.reset('subject', 'category', 'message');
       closeNewTicketModal();
+      toast.success('Ticket créé', {
+        description: 'Votre demande a été transmise au support.',
+      });
+    },
+    onError: () => {
+      toast.error('Impossible de créer le ticket', {
+        description: 'Vérifiez les champs requis puis réessayez.',
+      });
     },
   });
 };
@@ -80,6 +89,14 @@ const submitReply = () => {
       preserveScroll: true,
       onSuccess: () => {
         replyForm.reset('message');
+        toast.success('Message envoyé', {
+          description: 'Votre réponse a bien été transmise.',
+        });
+      },
+      onError: () => {
+        toast.error('Impossible d’envoyer le message', {
+          description: 'Réessayez dans un instant.',
+        });
       },
     },
   );
@@ -96,6 +113,14 @@ const closeTicket = () => {
     {},
     {
       preserveScroll: true,
+      onSuccess: () =>
+        toast.success('Ticket clôturé', {
+          description: 'La conversation est désormais archivée.',
+        }),
+      onError: () =>
+        toast.error('Clôture impossible', {
+          description: 'Réessayez dans un instant.',
+        }),
     },
   );
 };
@@ -105,6 +130,7 @@ const closeTicket = () => {
   <Head title="Support " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"

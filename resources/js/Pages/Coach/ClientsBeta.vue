@@ -1,8 +1,8 @@
 <script setup>
-import { Head, router } from '@inertiajs/vue3';
-import { Search, UserPlus, TrendingUp, MessageSquare, Users, Calendar } from 'lucide-vue-next';
+import { Head, router, useForm } from '@inertiajs/vue3';
+import { Search, UserPlus, TrendingUp, MessageSquare, Users } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { Toaster, toast } from 'vue-sonner';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
@@ -98,6 +98,14 @@ const submitClient = () => {
     preserveScroll: true,
     onSuccess: () => {
       closeClientModal();
+      toast.success('Client ajouté', {
+        description: 'Votre nouveau client est disponible dans la liste.',
+      });
+    },
+    onError: () => {
+      toast.error('Création impossible', {
+        description: 'Corrigez les champs requis puis réessayez.',
+      });
     },
   });
 };
@@ -108,6 +116,7 @@ const submitClient = () => {
   <Head title="Mes Clients" />
 
   <div class="min-h-screen bg-slate-950 text-slate-50">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl sticky top-0 z-30"

@@ -2,6 +2,7 @@
 import { Head, router } from '@inertiajs/vue3';
 import { Mail, MailOpen, User, Phone, Trash2, Inbox } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   messages: Array,
@@ -27,6 +28,14 @@ const markAsRead = (message) => {
     }),
     {
       preserveScroll: true,
+      onSuccess: () =>
+        toast.success('Message marqué comme lu', {
+          description: `${message.name} a été archivé.`,
+        }),
+      onError: () =>
+        toast.error('Impossible de mettre à jour', {
+          description: 'Réessayez dans un instant.',
+        }),
     },
   );
 };
@@ -41,6 +50,14 @@ const deleteMessage = (message) => {
     }),
     {
       preserveScroll: true,
+      onSuccess: () =>
+        toast.success('Message supprimé', {
+          description: `${message.name} a été retiré de votre boîte.`,
+        }),
+      onError: () =>
+        toast.error('Suppression impossible', {
+          description: 'Réessayez dans un instant.',
+        }),
     },
   );
 };
@@ -50,6 +67,7 @@ const deleteMessage = (message) => {
   <Head title="Messages de contact " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"

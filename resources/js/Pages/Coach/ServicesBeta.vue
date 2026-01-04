@@ -708,7 +708,7 @@ const saveOrder = async () => {
                         </div>
                         <EditorContent
                             :editor="editor"
-                            class="tiptap-content min-h-[150px] px-3 py-3 text-xs leading-relaxed text-slate-100"
+                            class="tiptap-content min-h-[150px] px-3 py-3 text-xs leading-relaxed text-slate-100 [&_ul]:list-disc [&_ul]:pl-4 [&_li]:text-slate-200 [&_li]:leading-relaxed [&_li]:my-1"
                         />
                     </div>
                     <InputError class="mt-1 text-[11px]" :message="form.errors.description" />

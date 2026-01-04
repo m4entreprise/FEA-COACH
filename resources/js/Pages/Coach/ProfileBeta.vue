@@ -16,17 +16,11 @@ const props = defineProps({
 });
 
 const dashboardBackUrl = computed(() => {
-  if (typeof window === 'undefined') return route('dashboard');
   const tab = window.sessionStorage?.getItem('coach_dashboard_tab');
   return tab ? `${route('dashboard')}?tab=${tab}` : route('dashboard');
 });
 
 const goBack = () => {
-  if (typeof window !== 'undefined' && window.history.length > 1) {
-    window.history.back();
-    return;
-  }
-
   router.visit(dashboardBackUrl.value);
 };
 </script>

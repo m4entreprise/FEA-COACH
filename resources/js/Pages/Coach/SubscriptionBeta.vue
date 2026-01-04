@@ -69,11 +69,6 @@ const dashboardBackUrl = computed(() => {
 });
 
 const goBack = () => {
-  if (typeof window !== 'undefined' && window.history.length > 1) {
-    window.history.back();
-    return;
-  }
-
   router.visit(dashboardBackUrl.value);
 };
 

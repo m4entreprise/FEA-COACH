@@ -9,6 +9,7 @@ use App\Models\Client;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class BookingService
 {
@@ -76,6 +77,8 @@ class BookingService
                         'last_name' => $data['client_last_name'] ?? 'Invité',
                         'email' => $data['client_email'],
                         'phone' => $data['client_phone'] ?? null,
+                        'share_code' => $this->generateShareCode(),
+                        'share_token' => (string) Str::uuid(),
                     ]);
                     $clientId = $client->id;
                 }

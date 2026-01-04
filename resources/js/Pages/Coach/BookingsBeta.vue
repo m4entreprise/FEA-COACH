@@ -44,6 +44,70 @@ const filteredBookings = computed(() => {
     return props.bookings.filter(booking => booking.status === selectedFilter.value);
 });
 
+const getBookingDateTime = (booking) => {
+    if (booking.booking_date) {
+        const time = booking.start_time ?? '00:00';
+        return new Date(`${booking.booking_date}T${time}`);
+    }
+    if (booking.paid_at) {
+        return new Date(booking.paid_at);
+    }
+    if (booking.created_at) {
+        return new Date(booking.created_at);
+    }
+    return null;
+};
+
+const hoursUntilBooking = (booking) => {
+    const dt = getBookingDateTime(booking);
+    if (!dt) return Infinity;
+    return (dt.getTime() - Date.now()) / 36e5;
+};
+
+const sortedBookings = computed(() => {
+    const groups = {
+        lt24: [],
+        lt7d: [],
+        gt7d: [],
+        past: [],
+        rest: [],
+    };
+
+    const filtered = filteredBookings.value;
+
+    filtered.forEach((booking) => {
+        const dt = getBookingDateTime(booking);
+        const timestamp = dt ? dt.getTime() : (booking.created_at ? new Date(booking.created_at).getTime() : 0);
+        const hours = hoursUntilBooking(booking);
+
+        let bucket = 'rest';
+        if (Number.isFinite(hours)) {
+            if (hours < 0) {
+                bucket = 'past';
+            } else if (hours < 24) {
+                bucket = 'lt24';
+            } else if (hours < 24 * 7) {
+                bucket = 'lt7d';
+            } else {
+                bucket = 'gt7d';
+            }
+        }
+
+        groups[bucket].push({ booking, timestamp });
+    });
+
+    const sortDesc = (items) =>
+        items.sort((a, b) => b.timestamp - a.timestamp).map((item) => item.booking);
+
+    return [
+        ...sortDesc(groups.lt24),
+        ...sortDesc(groups.lt7d),
+        ...sortDesc(groups.gt7d),
+        ...sortDesc(groups.past),
+        ...sortDesc(groups.rest),
+    ];
+});
+
 const getStatusConfig = (status) => {
     const configs = {
         pending: {
@@ -262,9 +326,9 @@ const getClientName = (booking) => {
             </div>
 
             <!-- Bookings list -->
-            <div v-if="filteredBookings.length > 0" class="space-y-4">
+            <div v-if="sortedBookings.length > 0" class="space-y-4">
                 <div
-                    v-for="booking in filteredBookings"
+                    v-for="booking in sortedBookings"
                     :key="booking.id"
                     class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl"
                 >

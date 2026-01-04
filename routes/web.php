@@ -304,6 +304,7 @@ Route::middleware(['auth', 'verified', 'onboarding.completed', 'setup.completed'
     Route::post('/dashboard/bookings/{booking}/cancel', [BookingsController::class, 'cancel'])->name('dashboard.bookings.cancel');
     Route::post('/dashboard/bookings/{booking}/complete', [BookingsController::class, 'markCompleted'])->name('dashboard.bookings.complete');
     Route::post('/dashboard/bookings/{booking}/no-show', [BookingsController::class, 'markNoShow'])->name('dashboard.bookings.no-show');
+    Route::delete('/dashboard/bookings/{booking}', [BookingsController::class, 'destroy'])->name('dashboard.bookings.destroy');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

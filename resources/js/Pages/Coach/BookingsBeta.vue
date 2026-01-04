@@ -85,17 +85,37 @@ const markAsCompleted = (booking) => {
 };
 
 const cancelBooking = (booking) => {
-    if (confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
-        router.post(route('dashboard.bookings.cancel', booking.id), {}, {
-            preserveScroll: true,
-            onSuccess: () => {
-                toast.success('Réservation annulée');
-            },
-            onError: () => {
-                toast.error('Erreur lors de l\'annulation');
-            },
-        });
+    if (!confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
+        return;
     }
+
+    const reason = window.prompt('Motif d’annulation (optionnel)') ?? '';
+
+    router.post(route('dashboard.bookings.cancel', booking.id), { reason }, {
+        preserveScroll: true,
+        onSuccess: () => {
+            toast.success('Réservation annulée');
+        },
+        onError: () => {
+            toast.error('Erreur lors de l\'annulation');
+        },
+    });
+};
+
+const deleteBooking = (booking) => {
+    if (!confirm('Supprimer définitivement cette réservation ?')) {
+        return;
+    }
+
+    router.delete(route('dashboard.bookings.destroy', booking.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            toast.success('Réservation supprimée');
+        },
+        onError: () => {
+            toast.error('Erreur lors de la suppression');
+        },
+    });
 };
 
 const formatDate = (dateString) => {
@@ -304,6 +324,13 @@ const formatTime = (timeString) => {
                             >
                                 <X class="h-3.5 w-3.5" />
                                 Annuler
+                            </button>
+                            <button
+                                @click="deleteBooking(booking)"
+                                class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-slate-800 px-3 py-2 text-xs font-medium text-slate-200 border border-slate-700 hover:bg-slate-700 transition-colors"
+                            >
+                                <Trash2 class="h-3.5 w-3.5" />
+                                Supprimer
                             </button>
                         </div>
                     </div>

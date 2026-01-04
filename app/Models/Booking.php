@@ -108,9 +108,15 @@ class Booking extends Model
 
     public function canBeCancelled(): bool
     {
-        return in_array($this->status, ['pending', 'confirmed'])
-            && $this->booking_date_time
-            && $this->booking_date_time->isFuture();
+        if (!in_array($this->status, ['pending', 'confirmed'])) {
+            return false;
+        }
+
+        if (!$this->booking_date_time) {
+            return true;
+        }
+
+        return $this->booking_date_time->isFuture();
     }
 
     public function scopeUpcoming($query)

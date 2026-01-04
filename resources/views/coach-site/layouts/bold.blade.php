@@ -189,7 +189,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 3) }} gap-8">
                 @foreach($services as $service)
                     <div class="relative group">
-                        <div class="relative bg-white rounded-3xl shadow-xl border-4 border-gray-200 hover:border-primary transition-all p-10 h-full flex flex-col transform hover:scale-105">
+                        <div class="relative bg-white rounded-3xl shadow-xl border-4 border-gray-200 hover:border-primary transition-all h-full flex flex-col transform hover:scale-105">
                             @if($service->is_featured)
                                 <span class="absolute -top-4 right-6 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black uppercase tracking-wide px-4 py-1 shadow-xl">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -199,34 +199,54 @@
                                 </span>
                             @endif
 
-                            <h3 class="text-3xl font-black text-gray-900 mb-4">{{ $service->name }}</h3>
-                            
-                            <div class="mb-6">
-                                <div class="flex items-baseline">
-                                    <span class="text-6xl font-black text-primary">{{ number_format($service->price, 0, ',', ' ') }}</span>
-                                    <span class="text-2xl font-bold text-gray-600 ml-2">€</span>
-                                </div>
-                                @if($service->duration_minutes)
-                                    <p class="text-sm text-gray-500 mt-2">⏱️ {{ $service->duration_minutes }} minutes</p>
+                            <div class="mb-8 rounded-3xl overflow-hidden mx-10 mt-10 border-2 border-gray-100">
+                                @if($service->image_url)
+                                    <img
+                                        src="{{ $service->image_url }}"
+                                        alt="Illustration {{ $service->name }}"
+                                        class="w-full h-64 object-cover"
+                                        loading="lazy"
+                                    >
+                                @else
+                                    <div class="h-64 bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-sm font-semibold">
+                                        Aucune image pour ce service
+                                    </div>
                                 @endif
                             </div>
 
-                            @if($service->description)
-                                <div class="prose prose-lg text-gray-600 mb-8 flex-grow leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
-                                    {!! Purify::clean($service->description) !!}
-                                </div>
-                            @endif
+                            <div class="px-10 pb-10 flex-1 flex flex-col">
+                                <h3 class="text-3xl font-black text-gray-900 mb-4">{{ $service->name }}</h3>
                             
-                            @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
-                                <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
-                                   class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
-                                    Payer en ligne
-                                </a>
-                            @else
-                                <a href="#contact" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
-                                    Contacter
-                                </a>
-                            @endif
+                                <div class="mb-6">
+                                    <div class="flex items-baseline flex-wrap gap-2">
+                                        <span class="text-6xl font-black text-primary leading-none">
+                                            {{ number_format($service->price, 0, ',', ' ') }}
+                                        </span>
+                                        <span class="text-2xl font-bold text-gray-600">€</span>
+                                        <span class="text-sm font-semibold text-gray-400 uppercase tracking-wide">{{ $service->currency }}</span>
+                                    </div>
+                                    @if($service->duration_minutes)
+                                        <p class="text-sm text-gray-500 mt-2">⏱️ {{ $service->duration_minutes }} minutes</p>
+                                    @endif
+                                </div>
+
+                                @if($service->description)
+                                    <div class="prose prose-lg text-gray-600 mb-8 flex-grow leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
+                                        {!! Purify::clean($service->description) !!}
+                                    </div>
+                                @endif
+                                
+                                @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
+                                    <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
+                                       class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
+                                        Payer en ligne
+                                    </a>
+                                @else
+                                    <a href="#contact" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
+                                        Contacter
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 @endforeach

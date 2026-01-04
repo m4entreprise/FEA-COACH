@@ -395,6 +395,7 @@ const saveOrder = async () => {
                     <VueDraggable
                         v-if="servicesList.length"
                         v-model="servicesList"
+                        v-auto-animate
                         handle=".service-drag-handle"
                         tag="div"
                         class="grid gap-5 md:grid-cols-2 lg:grid-cols-3"

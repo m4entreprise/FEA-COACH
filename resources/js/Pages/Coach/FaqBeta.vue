@@ -326,6 +326,7 @@ watch(isPreviewFullscreen, (active) => {
           <VueDraggable
             v-if="faqsList.length"
             v-model="faqsList"
+            v-auto-animate
             handle=".faq-drag-handle"
             class="space-y-3"
             ghost-class="drag-ghost"

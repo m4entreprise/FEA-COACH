@@ -4,3 +4,115 @@
 [2026-01-04 02:50:49] local.INFO: ServicesController@store service created {"service_id":11,"image_path":"service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png","image_url":"https://m4-entreprise-1.unicoach.app/storage/service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png"} 
 [2026-01-04 02:50:49] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
 [2026-01-04 02:50:56] local.INFO: Checkout form lookup {"coach_id":8,"serviceId_param":"11","route_service_id":"11","serviceId":11,"eligible_service_ids":{"Illuminate\\Support\\Collection":[2,9]}} 
+[2026-01-04 02:51:58] local.INFO: Checkout form lookup {"coach_id":8,"serviceId_param":"11","route_service_id":"11","serviceId":11,"eligible_service_ids":{"Illuminate\\Support\\Collection":[2,9,11]}} 
+[2026-01-04 02:51:58] local.INFO: Checkout form service resolved {"coach_id":8,"service_id":11,"service_name":"ceci est le test 404","service_image_path":"service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png","service_image_url":"https://m4-entreprise-1.unicoach.app/storage/service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png","booking_enabled":true,"is_active":true} 
+[2026-01-04 02:51:58] local.INFO: Checkout form payload prepared {"coach_id":8,"service_id":11,"form_action":"https://m4-entreprise-1.unicoach.app/reserver/11/checkout","back_url":"https://m4-entreprise-1.unicoach.app/"} 
+[2026-01-04 02:53:39] local.INFO: Checkout form lookup {"coach_id":8,"serviceId_param":"10","route_service_id":"10","serviceId":10,"eligible_service_ids":{"Illuminate\\Support\\Collection":[2,9,11]}} 
+[2026-01-04 02:53:45] local.INFO: Checkout form lookup {"coach_id":8,"serviceId_param":"10","route_service_id":"10","serviceId":10,"eligible_service_ids":{"Illuminate\\Support\\Collection":[2,9,10,11]}} 
+[2026-01-04 02:53:45] local.INFO: Checkout form service resolved {"coach_id":8,"service_id":10,"service_name":"azazazaz","service_image_path":"service-images/W1ol9utyV3XPUhUxBcS2PwueTgVRavYQUlYpEqTB.png","service_image_url":"https://m4-entreprise-1.unicoach.app/storage/service-images/W1ol9utyV3XPUhUxBcS2PwueTgVRavYQUlYpEqTB.png","booking_enabled":true,"is_active":true} 
+[2026-01-04 02:53:45] local.INFO: Checkout form payload prepared {"coach_id":8,"service_id":10,"form_action":"https://m4-entreprise-1.unicoach.app/reserver/10/checkout","back_url":"https://m4-entreprise-1.unicoach.app/"} 
+[2026-01-04 02:58:14] local.INFO: Checkout form lookup {"coach_id":8,"serviceId_param":"11","route_service_id":"11","serviceId":11,"eligible_service_ids":{"Illuminate\\Support\\Collection":[2,9,10,11]}} 
+[2026-01-04 02:58:14] local.INFO: Checkout form service resolved {"coach_id":8,"service_id":11,"service_name":"ceci est le test 404","service_image_path":"service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png","service_image_url":"https://m4-entreprise-1.unicoach.app/storage/service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png","booking_enabled":true,"is_active":true} 
+[2026-01-04 02:58:14] local.INFO: Checkout form payload prepared {"coach_id":8,"service_id":11,"form_action":"https://m4-entreprise-1.unicoach.app/reserver/11/checkout","back_url":"https://m4-entreprise-1.unicoach.app/"} 
+[2026-01-04 02:58:24] local.INFO: DirectCheckout called {"coach_slug":"m4-entreprise-1","service_id":"11","request_data":{"_token":"ZlZQ8Q7rer3pjznGdC8MDouB3SRM77kfF2SxxZ7k","client_first_name":"M4","client_last_name":"Entreprise","client_email":"ask@biokin.zizi","client_phone":"0496880322","client_notes":"zazazazaz"}} 
+[2026-01-04 02:58:24] local.INFO: DirectCheckout service resolved {"coach_id":8,"service_id":11,"service_name":"ceci est le test 404","service_image_path":"service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png","service_image_url":"https://m4-entreprise-1.unicoach.app/storage/service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png","has_image":true} 
+[2026-01-04 02:58:24] local.INFO: Booking created {"booking_id":26} 
+[2026-01-04 02:58:25] local.INFO: Checkout session created {"url":"https://checkout.stripe.com/c/pay/cs_test_a1PmGJQ7BbwHT8VuacOuFV4hG4QAnbi0zF2w9wu6qrnkdspm1mcgLZd4tH#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl","booking_id":26,"service_id":11,"session_payload":{"id":"cs_test_a1PmGJQ7BbwHT8VuacOuFV4hG4QAnbi0zF2w9wu6qrnkdspm1mcgLZd4tH","object":"checkout.session","adaptive_pricing":{"enabled":true},"after_expiration":null,"allow_promotion_codes":null,"amount_subtotal":40400,"amount_total":40400,"automatic_tax":{"enabled":false,"liability":null,"provider":null,"status":null},"billing_address_collection":null,"branding_settings":{"background_color":"#ffffff","border_style":"rounded","button_color":"#0074d4","display_name":"m4-entrepr","font_family":"default","icon":null,"logo":null},"cancel_url":"https://m4-entreprise-1.unicoach.app/booking/26/cancel","client_reference_id":null,"client_secret":null,"collected_information":{"business_name":null,"individual_name":null,"shipping_details":null},"consent":null,"consent_collection":null,"created":1767495505,"currency":"eur","currency_conversion":null,"custom_fields":[],"custom_text":{"after_submit":null,"shipping_address":null,"submit":null,"terms_of_service_acceptance":null},"customer":null,"customer_account":null,"customer_creation":"if_required","customer_details":{"address":null,"business_name":null,"email":"ask@biokin.zizi","individual_name":null,"name":null,"phone":null,"tax_exempt":"none","tax_ids":null},"customer_email":"ask@biokin.zizi","discounts":[],"expires_at":1767581905,"invoice":null,"invoice_creation":{"enabled":false,"invoice_data":{"account_tax_ids":null,"custom_fields":null,"description":null,"footer":null,"issuer":null,"metadata":[],"rendering_options":null}},"livemode":false,"locale":null,"metadata":{"booking_id":"26","coach_id":"8"},"mode":"payment","origin_context":null,"payment_intent":null,"payment_link":null,"payment_method_collection":"if_required","payment_method_configuration_details":{"id":"pmc_1SlHLUCDAkmo04zy8nCJL91W","parent":"pmc_1SlGIdCBRtaNSJzwcU3vIXdc"},"payment_method_options":{"card":{"request_three_d_secure":"automatic"}},"payment_method_types":["card","bancontact","eps","ideal","klarna","link"],"payment_status":"unpaid","permissions":null,"phone_number_collection":{"enabled":false},"recovered_from":null,"saved_payment_method_options":null,"setup_intent":null,"shipping_address_collection":null,"shipping_cost":null,"shipping_options":[],"status":"open","submit_type":null,"subscription":null,"success_url":"https://m4-entreprise-1.unicoach.app/booking/26/success?session_id={CHECKOUT_SESSION_ID}","total_details":{"amount_discount":0,"amount_shipping":0,"amount_tax":0},"ui_mode":"hosted","url":"https://checkout.stripe.com/c/pay/cs_test_a1PmGJQ7BbwHT8VuacOuFV4hG4QAnbi0zF2w9wu6qrnkdspm1mcgLZd4tH#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSd2cXdsdWBEZmZqcGtxJz8nZGZmcVo0VmlNTnBGQURuaGo1MX98JyknZHVsTmB8Jz8ndW5acWB2cVowNFZGUm5gRkdXcWRLVk9%2Fcm9gZ2pOTTF2c0FoXERNUXU0aE5ibTM8NjU0YXAwYWlLQmlhfTRqVGcyMX9Kd0p3b2tBTURWVUNyfTdxbjRhTFRSNDQ2QmY9NjU1f1UwS2RGVnInKSdjd2poVmB3c2B3Jz9xd3BgKSdnZGZuYndqcGthRmppancnPycmY2NjY2NjJyknaWR8anBxUXx1YCc%2FJ3Zsa2JpYFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl","wallet_options":null}} 
+[2026-01-04 02:59:56] local.INFO: ServicesController@reorder updated services order {"coach_id":8,"services_payload":[{"id":11,"order":0},{"id":2,"order":1},{"id":9,"order":2},{"id":10,"order":3}]} 
+[2026-01-04 02:59:56] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 02:59:59] local.INFO: ServicesController@reorder updated services order {"coach_id":8,"services_payload":[{"id":11,"order":0},{"id":2,"order":1},{"id":9,"order":2},{"id":10,"order":3}]} 
+[2026-01-04 02:59:59] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:00:03] local.INFO: ServicesController@reorder updated services order {"coach_id":8,"services_payload":[{"id":2,"order":0},{"id":11,"order":1},{"id":9,"order":2},{"id":10,"order":3}]} 
+[2026-01-04 03:00:03] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:00:07] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:00:13] local.INFO: Checkout form lookup {"coach_id":8,"serviceId_param":"11","route_service_id":"11","serviceId":11,"eligible_service_ids":{"Illuminate\\Support\\Collection":[2,9,10,11]}} 
+[2026-01-04 03:00:13] local.INFO: Checkout form service resolved {"coach_id":8,"service_id":11,"service_name":"ceci est le test 404","service_image_path":"service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png","service_image_url":"https://m4-entreprise-1.unicoach.app/storage/service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png","booking_enabled":true,"is_active":true} 
+[2026-01-04 03:00:13] local.INFO: Checkout form payload prepared {"coach_id":8,"service_id":11,"form_action":"https://m4-entreprise-1.unicoach.app/reserver/11/checkout","back_url":"https://m4-entreprise-1.unicoach.app/"} 
+[2026-01-04 03:01:18] local.INFO: ServicesController@update image removed on request {"service_id":11,"old_path":"service-images/9raIeylOtX2JLwiW4BJGMcEZhRvjeUCoj2SR3G2e.png"} 
+[2026-01-04 03:01:18] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:01:18] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:04:55] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:05:27] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:05:28] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:05:36] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:05:36] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:05:40] local.INFO: Checkout form lookup {"coach_id":8,"serviceId_param":"11","route_service_id":"11","serviceId":11,"eligible_service_ids":{"Illuminate\\Support\\Collection":[2,9,10]}} 
+[2026-01-04 03:13:53] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:28:57] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:29:19] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:29:19] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:29:41] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:29:41] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:30:50] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:30:53] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:30:56] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:31:22] local.INFO: ServicesController@update completed {"service_id":3,"image_path":null,"image_url":null} 
+[2026-01-04 03:31:22] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:31:24] local.INFO: ServicesController@update completed {"service_id":4,"image_path":null,"image_url":null} 
+[2026-01-04 03:31:24] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:31:26] local.INFO: ServicesController@update completed {"service_id":5,"image_path":null,"image_url":null} 
+[2026-01-04 03:31:26] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:31:54] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:32:03] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:32:08] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:32:08] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:32:10] local.INFO: ServicesController@update completed {"service_id":4,"image_path":null,"image_url":null} 
+[2026-01-04 03:32:11] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:32:11] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:32:22] local.INFO: ServicesController@update completed {"service_id":3,"image_path":null,"image_url":null} 
+[2026-01-04 03:32:22] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:32:29] local.INFO: ServicesController@update completed {"service_id":4,"image_path":null,"image_url":null} 
+[2026-01-04 03:32:29] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:32:36] local.INFO: ServicesController@update completed {"service_id":5,"image_path":null,"image_url":null} 
+[2026-01-04 03:32:36] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:32:39] local.INFO: ServicesController@update completed {"service_id":4,"image_path":null,"image_url":null} 
+[2026-01-04 03:32:39] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:32:52] local.INFO: ServicesController@update completed {"service_id":4,"image_path":null,"image_url":null} 
+[2026-01-04 03:32:52] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:33:09] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:33:09] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:33:12] local.INFO: ServicesController@update completed {"service_id":3,"image_path":null,"image_url":null} 
+[2026-01-04 03:33:12] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:33:26] local.INFO: ServicesController@update completed {"service_id":4,"image_path":null,"image_url":null} 
+[2026-01-04 03:33:26] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:33:35] local.INFO: ServicesController@update completed {"service_id":3,"image_path":null,"image_url":null} 
+[2026-01-04 03:33:35] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:33:38] local.INFO: ServicesController@update completed {"service_id":4,"image_path":null,"image_url":null} 
+[2026-01-04 03:33:38] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:33:43] local.INFO: ServicesController@update completed {"service_id":5,"image_path":null,"image_url":null} 
+[2026-01-04 03:33:43] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:34:02] local.INFO: ServicesController@update completed {"service_id":3,"image_path":null,"image_url":null} 
+[2026-01-04 03:34:02] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:34:05] local.INFO: ServicesController@update completed {"service_id":4,"image_path":null,"image_url":null} 
+[2026-01-04 03:34:05] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:34:08] local.INFO: ServicesController@update completed {"service_id":5,"image_path":null,"image_url":null} 
+[2026-01-04 03:34:08] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:34:16] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:34:16] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:34:47] local.INFO: ServicesController@update completed {"service_id":3,"image_path":null,"image_url":null} 
+[2026-01-04 03:34:47] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:34:49] local.INFO: ServicesController@update completed {"service_id":5,"image_path":null,"image_url":null} 
+[2026-01-04 03:34:49] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:35:27] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:35:27] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:35:27] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:35:39] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:35:39] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:35:41] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:36:48] local.INFO: ServicesController@update completed {"service_id":9,"image_path":null,"image_url":null} 
+[2026-01-04 03:36:48] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:38:55] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:39:10] local.INFO: ServicesController@update completed {"service_id":11,"image_path":null,"image_url":null} 
+[2026-01-04 03:39:10] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:40:26] local.INFO: ServicesController@update completed {"service_id":2,"image_path":null,"image_url":null} 
+[2026-01-04 03:40:26] local.INFO: ServicesController@index listing services {"coach_id":8,"service_count":4} 
+[2026-01-04 03:40:29] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:40:29] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:41:02] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:41:12] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:41:33] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:41:48] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:44:58] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:45:10] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 
+[2026-01-04 03:45:22] local.INFO: ServicesController@reorder updated services order {"coach_id":9,"services_payload":[{"id":3,"order":0},{"id":4,"order":1},{"id":5,"order":2}]} 
+[2026-01-04 03:45:22] local.INFO: ServicesController@index listing services {"coach_id":9,"service_count":3} 

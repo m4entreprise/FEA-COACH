@@ -455,6 +455,15 @@ const logout = () => {
                         v-if="coachSiteUrl"
                         :href="coachSiteUrl"
                         target="_blank"
+                        class="inline-flex sm:hidden items-center gap-2 rounded-full bg-emerald-500/90 px-4 py-2 text-xs font-semibold text-emerald-950 shadow-lg hover:bg-emerald-400 transition-colors"
+                    >
+                        <Globe2 class="h-4 w-4" />
+                        Voir mon site
+                    </a>
+                    <a
+                        v-if="coachSiteUrl"
+                        :href="coachSiteUrl"
+                        target="_blank"
                         class="hidden sm:inline-flex items-center gap-2 rounded-full bg-emerald-500/90 px-4 py-2 text-xs font-semibold text-emerald-950 shadow-lg hover:bg-emerald-400 transition-colors"
                     >
                         <Globe2 class="h-4 w-4" />
@@ -463,7 +472,7 @@ const logout = () => {
 
                     <Link
                         :href="route('dashboard.subscription')"
-                        class="inline-flex items-center gap-2 rounded-full bg-slate-800/90 px-3 py-1.5 text-xs font-medium text-slate-100 border border-slate-600 hover:bg-slate-700"
+                        class="hidden sm:inline-flex items-center gap-2 rounded-full bg-slate-800/90 px-3 py-1.5 text-xs font-medium text-slate-100 border border-slate-600 hover:bg-slate-700"
                     >
                         <CreditCard class="h-3.5 w-3.5" />
                         Abonnement

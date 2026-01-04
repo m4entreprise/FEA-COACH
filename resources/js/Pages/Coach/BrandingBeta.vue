@@ -7,6 +7,7 @@ import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import { Palette, Image as ImageIcon, MonitorPlay, LayoutPanelLeft } from 'lucide-vue-next';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   coach: Object,
@@ -98,6 +99,16 @@ const submit = () => {
   form.post(route('dashboard.branding.update'), {
     forceFormData: true,
     preserveScroll: true,
+    onSuccess: () => {
+      toast.success('✨ Apparence mise à jour', {
+        description: 'Votre identité visuelle est désormais en ligne.',
+      });
+    },
+    onError: () => {
+      toast.error('Impossible de sauvegarder', {
+        description: 'Vérifiez les champs coloris / layout puis réessayez.',
+      });
+    },
   });
 };
 
@@ -183,6 +194,7 @@ onBeforeUnmount(() => {
   <Head title="Apparence & logo " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"

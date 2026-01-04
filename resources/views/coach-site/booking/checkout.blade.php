@@ -1,5 +1,9 @@
 @extends('layouts.coach-site')
 
+@php
+    use Stevebauman\Purify\Facades\Purify;
+@endphp
+
 @section('content')
 <section class="min-h-screen bg-gray-50 py-16">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -104,7 +108,11 @@
                     <div class="relative">
                         <p class="uppercase text-xs tracking-[0.25em] text-white/70 mb-4">Votre séance</p>
                         <h2 class="text-3xl font-bold mb-3">{{ $service->name }}</h2>
-                        <p class="text-white/80 leading-relaxed mb-6">{{ $service->description }}</p>
+                        @if($service->description)
+                            <div class="text-white/80 leading-relaxed mb-6 prose prose-invert max-w-none">
+                                {!! Purify::clean($service->description) !!}
+                            </div>
+                        @endif
 
                         <div class="space-y-4 mb-8">
                             <div class="flex items-center justify-between">

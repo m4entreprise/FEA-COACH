@@ -262,9 +262,15 @@ const submitClient = () => {
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                   <div class="rounded-lg bg-slate-800/50 p-3 border border-slate-700">
-                    <p class="text-[10px] uppercase text-slate-400 mb-1">Poids actuel</p>
-                    <p class="text-lg font-bold text-slate-50">
-                      {{ getLatestWeight(client) ? getLatestWeight(client) + ' kg' : '—' }}
+                    <p class="text-[10px] uppercase text-slate-400 mb-1">Achats</p>
+                    <p class="text-lg font-bold text-slate-50 flex items-center gap-2">
+                      {{ getBookingCount(client) }}
+                      <span
+                        v-if="hasRecentBooking(client)"
+                        class="text-[10px] font-semibold text-emerald-300 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/40"
+                      >
+                        Nouveau
+                      </span>
                     </p>
                   </div>
                   <div class="rounded-lg bg-slate-800/50 p-3 border border-slate-700">

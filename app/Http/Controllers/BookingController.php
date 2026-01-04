@@ -19,7 +19,7 @@ class BookingController extends Controller
         protected StripeConnectService $stripeService
     ) {}
 
-    public function showCheckoutForm(Request $request, int $serviceId)
+    public function showCheckoutForm(Request $request, $serviceId)
     {
         $coach = app(Coach::class);
 
@@ -30,7 +30,7 @@ class BookingController extends Controller
         $service = $coach->serviceTypes()
             ->where('is_active', true)
             ->where('booking_enabled', true)
-            ->findOrFail($serviceId);
+            ->findOrFail((int) $serviceId);
 
         $formAction = $request->routeIs('coach.*')
             ? route('coach.booking.checkout', [

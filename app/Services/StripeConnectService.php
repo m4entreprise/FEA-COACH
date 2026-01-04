@@ -199,7 +199,8 @@ class StripeConnectService
             $defaultDescription = 'Séance du ' . $booking->booking_date->format('d/m/Y') . ' à ' . substr($booking->start_time, 0, 5);
         }
 
-        $serviceDescription = trim((string) $booking->serviceType?->description);
+        $rawDescription = (string) $booking->serviceType?->description;
+        $serviceDescription = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags($rawDescription), ENT_QUOTES | ENT_HTML5)));
         $description = Str::limit($serviceDescription !== '' ? $serviceDescription : $defaultDescription, 200);
 
         $imageUrl = $booking->serviceType?->image_url;

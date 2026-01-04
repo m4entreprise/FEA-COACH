@@ -3,6 +3,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref } from 'vue';
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
     services: Array,
@@ -22,6 +23,7 @@ const form = useForm({
     max_advance_booking_days: 60,
     min_advance_booking_hours: 24,
 });
+const deleteForm = useForm({});
 
 const openCreateModal = () => {
     editingService.value = null;
@@ -47,16 +49,34 @@ const openEditModal = (service) => {
 const submit = () => {
     if (editingService.value) {
         form.patch(route('dashboard.services.update', editingService.value.id), {
+            preserveScroll: true,
             onSuccess: () => {
                 showModal.value = false;
                 form.reset();
+                toast.success('Service mis à jour', {
+                    description: `${editingService.value.name} est à jour sur votre vitrine.`,
+                });
+            },
+            onError: () => {
+                toast.error('Impossible de mettre à jour', {
+                    description: 'Vérifiez les champs requis puis réessayez.',
+                });
             },
         });
     } else {
         form.post(route('dashboard.services.store'), {
+            preserveScroll: true,
             onSuccess: () => {
                 showModal.value = false;
                 form.reset();
+                toast.success('Service créé', {
+                    description: 'Votre nouvelle offre est prête à être proposée.',
+                });
+            },
+            onError: () => {
+                toast.error('Création impossible', {
+                    description: 'Corrigez les erreurs de formulaire puis réessayez.',
+                });
             },
         });
     }
@@ -64,7 +84,17 @@ const submit = () => {
 
 const deleteService = (service) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce service ?')) {
-        useForm({}).delete(route('dashboard.services.destroy', service.id));
+        deleteForm.delete(route('dashboard.services.destroy', service.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Service supprimé');
+            },
+            onError: () => {
+                toast.error('Suppression impossible', {
+                    description: 'Réessayez dans un instant.',
+                });
+            },
+        });
     }
 };
 </script>
@@ -73,6 +103,7 @@ const deleteService = (service) => {
     <Head title="Mes Services" />
 
     <AuthenticatedLayout>
+        <Toaster rich-colors position="top-right" />
         <template #header>
             <div class="flex items-center justify-between">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">

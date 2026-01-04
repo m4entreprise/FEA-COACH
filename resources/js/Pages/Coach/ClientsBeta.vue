@@ -1,6 +1,6 @@
 <script setup>
 import { Head, router } from '@inertiajs/vue3';
-import { Search, UserPlus, TrendingUp, MessageSquare, Users } from 'lucide-vue-next';
+import { Search, UserPlus, TrendingUp, MessageSquare, Users, Calendar } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -66,6 +66,15 @@ const getLatestWeight = (client) => {
   if (!client.measurements || client.measurements.length === 0) return null;
   const sorted = [...client.measurements].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   return sorted[0].weight;
+};
+
+const getBookingCount = (client) => client.bookings?.length || 0;
+
+const hasRecentBooking = (client) => {
+  if (!client.bookings || client.bookings.length === 0) return false;
+  const latest = new Date(client.bookings[0].created_at);
+  const diffHours = (Date.now() - latest.getTime()) / (1000 * 60 * 60);
+  return diffHours <= 24;
 };
 
 // Client creation modal

@@ -62,11 +62,21 @@ class BookingService
             }
 
             $clientId = null;
-            if (isset($data['client_email'])) {
+            if (!empty($data['client_email'])) {
                 $client = Client::where('coach_id', $coach->id)
                     ->where('email', $data['client_email'])
                     ->first();
+
                 if ($client) {
+                    $clientId = $client->id;
+                } else {
+                    $client = Client::create([
+                        'coach_id' => $coach->id,
+                        'first_name' => $data['client_first_name'] ?? 'Client',
+                        'last_name' => $data['client_last_name'] ?? 'Invité',
+                        'email' => $data['client_email'],
+                        'phone' => $data['client_phone'] ?? null,
+                    ]);
                     $clientId = $client->id;
                 }
             }

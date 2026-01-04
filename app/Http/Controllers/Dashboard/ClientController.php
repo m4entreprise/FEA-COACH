@@ -33,6 +33,9 @@ class ClientController extends Controller
                 'documents' => fn ($query) => $query->orderBy('type')->orderByDesc('version'),
                 'messages' => fn ($query) => $query->orderBy('created_at', 'desc'),
                 'measurements' => fn ($query) => $query->orderBy('created_at', 'desc'),
+                'bookings' => fn ($query) => $query
+                    ->select('id', 'client_id', 'status', 'payment_status', 'created_at')
+                    ->orderByDesc('created_at'),
             ])
             ->orderBy('last_name')
             ->orderBy('first_name')

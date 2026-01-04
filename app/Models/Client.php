@@ -74,6 +74,11 @@ class Client extends Model
         return $this->hasMany(ClientMeasurement::class);
     }
 
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
     public function latestMeasurement()
     {
         return $this->hasOne(ClientMeasurement::class)->latestOfMany();

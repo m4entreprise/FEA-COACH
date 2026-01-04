@@ -100,7 +100,7 @@ const submit = () => {
     forceFormData: true,
     preserveScroll: true,
     onSuccess: () => {
-      toast.success('✨ Apparence mise à jour', {
+      toast.success('Apparence mise à jour', {
         description: 'Votre identité visuelle est désormais en ligne.',
       });
     },

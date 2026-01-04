@@ -7,6 +7,7 @@ import { Head, useForm, router } from '@inertiajs/vue3';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { FileText, User, HelpCircle, Share2, MonitorPlay } from 'lucide-vue-next';
 import axios from 'axios';
+import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
   coach: Object,
@@ -90,6 +91,16 @@ const scrollToSection = (id) => {
 const submit = () => {
   form.post(route('dashboard.content.update'), {
     preserveScroll: true,
+    onSuccess: () => {
+      toast.success('Contenu mis à jour', {
+        description: 'Vos textes sont désormais en ligne.',
+      });
+    },
+    onError: () => {
+      toast.error('Impossible de sauvegarder', {
+        description: 'Corrigez les champs requis puis réessayez.',
+      });
+    },
   });
 };
 
@@ -127,6 +138,10 @@ const uploadPhoto = () => {
       preserveScroll: true,
       onSuccess: () => {
         router.reload({ only: ['profilePhotoUrl'] });
+        toast.success('Photo envoyée');
+      },
+      onError: () => {
+        toast.error('Échec de l’envoi de la photo');
       },
     },
   );
@@ -146,6 +161,10 @@ const deletePhoto = () => {
       onSuccess: () => {
         photoPreview.value = null;
         router.reload({ only: ['profilePhotoUrl'] });
+        toast.success('Photo supprimée');
+      },
+      onError: () => {
+        toast.error('Impossible de supprimer la photo');
       },
     },
   );
@@ -228,6 +247,7 @@ onBeforeUnmount(() => {
   <Head title="Contenu du site " />
 
   <div class="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
       class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"

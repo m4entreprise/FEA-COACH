@@ -29,6 +29,10 @@ class ServicesController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'price' => $this->normalizePriceInput($request->input('price')),
+        ]);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -63,6 +67,10 @@ class ServicesController extends Controller
     public function update(Request $request, ServiceType $service)
     {
         $this->authorize('update', $service);
+
+        $request->merge([
+            'price' => $this->normalizePriceInput($request->input('price')),
+        ]);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -130,5 +138,19 @@ class ServicesController extends Controller
         }
 
         return back()->with('success', 'Ordre des services mis à jour');
+    }
+
+    protected function normalizePriceInput($value): ?string
+    {
+        if ($value === null || $value === '') {
+            return $value;
+        }
+
+        if (is_string($value)) {
+            $value = str_replace([' ', "\u{00A0}"], '', $value);
+            $value = str_replace(',', '.', $value);
+        }
+
+        return $value;
     }
 }

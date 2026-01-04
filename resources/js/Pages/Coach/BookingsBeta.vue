@@ -1,6 +1,7 @@
 <script setup>
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import { Toaster, toast } from 'vue-sonner';
 import {
     Users,
@@ -391,7 +392,7 @@ const getClientName = (booking) => {
             </div>
 
             <!-- Bookings list -->
-            <div v-if="sortedBookings.length > 0" class="space-y-4">
+            <div v-if="sortedBookings.length > 0" class="space-y-4" v-auto-animate>
                 <div
                     v-for="booking in sortedBookings"
                     :key="booking.id"

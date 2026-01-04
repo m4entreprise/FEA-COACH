@@ -5,6 +5,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { computed, ref, watch, onBeforeUnmount } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import { EditorContent, useEditor } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 import { Toaster, toast } from 'vue-sonner';
@@ -417,6 +418,7 @@ const saveOrder = async () => {
                 <section class="space-y-4">
                     <div
                         v-if="servicesList.length"
+                        v-auto-animate
                         class="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
                     >
                         <article

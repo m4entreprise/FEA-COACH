@@ -2,6 +2,7 @@
 import { Head, router } from '@inertiajs/vue3';
 import { Mail, MailOpen, User, Phone, Trash2, Inbox } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
@@ -36,6 +37,9 @@ const markAsRead = (message) => {
         toast.error('Impossible de mettre à jour', {
           description: 'Réessayez dans un instant.',
         }),
+      headers: {
+        Accept: 'application/json',
+      },
     },
   );
 };
@@ -58,6 +62,9 @@ const deleteMessage = (message) => {
         toast.error('Suppression impossible', {
           description: 'Réessayez dans un instant.',
         }),
+      headers: {
+        Accept: 'application/json',
+      },
     },
   );
 };
@@ -125,7 +132,7 @@ const deleteMessage = (message) => {
 
         <!-- Messages list -->
         <section class="space-y-4">
-          <div v-if="messages.length" class="space-y-3">
+          <div v-if="messages.length" class="space-y-3" v-auto-animate>
             <article
               v-for="message in messages"
               :key="message.id"

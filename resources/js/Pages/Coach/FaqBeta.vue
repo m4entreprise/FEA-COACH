@@ -6,6 +6,7 @@ import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { GripVertical, Plus, HelpCircle, Search } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
@@ -346,7 +347,7 @@ watch(isPreviewFullscreen, (active) => {
 
         <!-- FAQ list -->
         <section class="space-y-4">
-          <div v-if="faqsList.length" class="space-y-3">
+          <div v-if="faqsList.length" class="space-y-3" v-auto-animate>
             <article
               v-for="faq in faqsList"
               :key="faq.id"

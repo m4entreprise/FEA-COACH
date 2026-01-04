@@ -3,6 +3,7 @@ import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { Search, Plus, Camera } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import { Toaster, toast } from 'vue-sonner';
 
 const props = defineProps({
@@ -202,6 +203,7 @@ watch(isPreviewFullscreen, (active) => {
         <section class="space-y-4">
           <div
             v-if="transformations && transformations.length"
+            v-auto-animate
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             <article

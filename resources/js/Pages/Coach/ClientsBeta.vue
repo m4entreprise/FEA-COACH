@@ -2,6 +2,7 @@
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { Search, UserPlus, TrendingUp, MessageSquare, Users } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import { Toaster, toast } from 'vue-sonner';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -236,6 +237,7 @@ const submitClient = () => {
         <section>
           <div
             v-if="filteredClients && filteredClients.length"
+            v-auto-animate
             class="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
           >
             <article

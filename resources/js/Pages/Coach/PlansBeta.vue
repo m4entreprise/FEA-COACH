@@ -6,6 +6,7 @@ import { Head, useForm, router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { GripVertical, Plus, Search, CircleDollarSign } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 
 const props = defineProps({
   plans: Array,
@@ -320,6 +321,7 @@ watch(isPreviewFullscreen, (active) => {
         <section class="space-y-4">
           <div
             v-if="plansList.length"
+            v-auto-animate
             class="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
           >
             <article

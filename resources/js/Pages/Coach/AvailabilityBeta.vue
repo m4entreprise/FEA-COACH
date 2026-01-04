@@ -1,6 +1,7 @@
 <script setup>
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import { toast } from 'vue-sonner';
 import Modal from '@/Components/Modal.vue';
 import {
@@ -156,7 +157,7 @@ const getDayLabel = (dayValue) => {
             </div>
 
             <!-- Calendar view -->
-            <div class="space-y-4">
+            <div class="space-y-4" v-auto-animate>
                 <div
                     v-for="day in daysOfWeek"
                     :key="day.value"
@@ -169,7 +170,7 @@ const getDayLabel = (dayValue) => {
                         </span>
                     </div>
 
-                    <div v-if="groupedSlots[day.value]?.length > 0" class="space-y-3">
+                    <div v-if="groupedSlots[day.value]?.length > 0" class="space-y-3" v-auto-animate>
                         <div
                             v-for="slot in groupedSlots[day.value]"
                             :key="slot.id"

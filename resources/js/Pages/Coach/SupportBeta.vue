@@ -1,6 +1,7 @@
 <script setup>
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import { LifeBuoy, Plus, MessageSquare, CheckCircle2, Send } from 'lucide-vue-next';
 import { Toaster, toast } from 'vue-sonner';
 
@@ -201,7 +202,7 @@ const closeTicket = () => {
 
         <!-- Tickets list -->
         <section class="space-y-4">
-          <div v-if="hasTickets" class="space-y-3">
+          <div v-if="hasTickets" class="space-y-3" v-auto-animate>
             <article
               v-for="ticket in tickets"
               :key="ticket.id"
@@ -250,7 +251,7 @@ const closeTicket = () => {
                   </div>
                   
                   <!-- Messages preview -->
-                  <div v-if="ticket.messages && ticket.messages.length" class="space-y-2">
+                  <div v-if="ticket.messages && ticket.messages.length" class="space-y-2" v-auto-animate>
                     <div
                       v-for="message in ticket.messages.slice(-2)"
                       :key="message.id"

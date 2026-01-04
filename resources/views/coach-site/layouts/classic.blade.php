@@ -182,7 +182,15 @@
         @if(isset($services) && $services->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 4) }} gap-8">
                 @foreach($services as $service)
-                    <div class="bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all p-8 flex flex-col">
+                    <div class="relative bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all p-8 flex flex-col overflow-hidden">
+                        @if($service->booking_enabled)
+                            <span class="absolute top-6 right-6 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 shadow-lg">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5.5 3 1.5-6.5L3 8.5l6.6-.5L12 2l2.4 6 6.6.5-5 4.9 1.5 6.5z" />
+                                </svg>
+                                Populaire
+                            </span>
+                        @endif
                         <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ $service->name }}</h3>
                         <div class="text-4xl font-extrabold text-primary mb-4">
                             {{ number_format($service->price, 2, ',', ' ') }}€
@@ -192,20 +200,10 @@
                         @endif
                         <p class="text-gray-600 mb-6 flex-grow">{{ $service->description }}</p>
                         
-                        @if($service->booking_enabled && $coach->user->has_payments_module)
-                            <form action="{{ route('coach.booking.checkout', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="client_email" value="booking@temp.com">
-                                <button type="submit" class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
-                                    Réserver en ligne
-                                </button>
-                            </form>
-                        @else
-                            <a href="#contact" 
-                               class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
-                                Me contacter
-                            </a>
-                        @endif
+                        <a href="#contact" 
+                           class="block w-full text-center px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-all">
+                            Me contacter
+                        </a>
                     </div>
                 @endforeach
             </div>

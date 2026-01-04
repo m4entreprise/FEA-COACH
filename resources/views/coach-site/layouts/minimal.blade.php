@@ -116,7 +116,15 @@
         @if(isset($services) && $services->count() > 0)
             <div class="space-y-6">
                 @foreach($services as $service)
-                    <div class="bg-white border-2 border-gray-200 rounded-lg p-8 hover:border-primary transition-all">
+                    <div class="relative bg-white border-2 border-gray-200 rounded-lg p-8 hover:border-primary transition-all">
+                        @if($service->booking_enabled)
+                            <span class="absolute top-6 right-6 inline-flex items-center gap-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold uppercase tracking-wide px-3 py-1 border border-amber-200">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5.5 3 1.5-6.5L3 8.5l6.6-.5L12 2l2.4 6 6.6.5-5 4.9 1.5 6.5z" />
+                                </svg>
+                                Populaire
+                            </span>
+                        @endif
                         <div class="flex items-center justify-between flex-wrap gap-4">
                             <div class="flex-1">
                                 <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $service->name }}</h3>
@@ -129,20 +137,10 @@
                                 <div class="text-right">
                                     <div class="text-3xl font-bold text-primary">{{ number_format($service->price, 0, ',', ' ') }}€</div>
                                 </div>
-                                @if($service->booking_enabled && $coach->user->has_payments_module)
-                                    <form action="{{ route('coach.booking.checkout', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        <input type="hidden" name="client_email" value="booking@temp.com">
-                                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                            Réserver
-                                        </button>
-                                    </form>
-                                @else
-                                    <a href="#contact" 
-                                       class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                        Contacter
-                                    </a>
-                                @endif
+                                <a href="#contact" 
+                                   class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
+                                    Contacter
+                                </a>
                             </div>
                         </div>
                     </div>

@@ -59,7 +59,7 @@ const form = useForm({
     price: '',
     currency: 'EUR',
     is_active: true,
-    booking_enabled: true,
+    booking_enabled: false,
     max_advance_booking_days: 60,
     min_advance_booking_hours: 24,
     order: 0,
@@ -72,7 +72,7 @@ const openCreateModal = () => {
     form.duration_minutes = 60;
     form.currency = 'EUR';
     form.is_active = true;
-    form.booking_enabled = true;
+    form.booking_enabled = false;
     form.max_advance_booking_days = 60;
     form.min_advance_booking_hours = 24;
     form.order = servicesList.value.length;
@@ -87,7 +87,7 @@ const openEditModal = (service) => {
     form.price = service.price ?? '';
     form.currency = service.currency || 'EUR';
     form.is_active = service.is_active;
-    form.booking_enabled = service.booking_enabled ?? true;
+    form.booking_enabled = service.booking_enabled ?? false;
     form.max_advance_booking_days = service.max_advance_booking_days ?? 60;
     form.min_advance_booking_hours = service.min_advance_booking_hours ?? 24;
     form.order = service.order ?? 0;
@@ -314,9 +314,17 @@ const saveOrder = async () => {
                                             <p class="text-xs uppercase tracking-wide text-slate-500">
                                                 Service
                                             </p>
-                                            <h3 class="text-sm font-semibold text-slate-50">
-                                                {{ service.name }}
-                                            </h3>
+                                            <div class="flex items-center flex-wrap gap-2">
+                                                <h3 class="text-sm font-semibold text-slate-50">
+                                                    {{ service.name }}
+                                                </h3>
+                                                <span
+                                                    v-if="service.booking_enabled"
+                                                    class="inline-flex items-center rounded-full border border-amber-400/50 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-200"
+                                                >
+                                                    Offre mise en avant
+                                                </span>
+                                            </div>
                                         </div>
                                         <div class="flex flex-col items-end gap-1 text-right">
                                             <span
@@ -349,11 +357,11 @@ const saveOrder = async () => {
                                             class="text-[11px] px-2 py-0.5 rounded-full border"
                                             :class="
                                                 service.booking_enabled
-                                                    ? 'border-cyan-500/40 bg-cyan-500/10 text-cyan-100'
+                                                    ? 'border-amber-400/50 bg-amber-500/10 text-amber-100'
                                                     : 'border-slate-700 bg-slate-800 text-slate-300'
                                             "
                                         >
-                                            {{ service.booking_enabled ? 'Réservable en ligne' : 'Manuel uniquement' }}
+                                            {{ service.booking_enabled ? 'Offre mise en avant' : 'Offre standard' }}
                                         </span>
                                     </div>
                                     <p
@@ -575,7 +583,7 @@ const saveOrder = async () => {
                             type="checkbox"
                             class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-emerald-500 focus:ring-emerald-500"
                         />
-                        Réservation en ligne activée
+                        Mettre cette offre en avant
                     </label>
                 </div>
 

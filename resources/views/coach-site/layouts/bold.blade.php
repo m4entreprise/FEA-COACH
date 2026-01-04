@@ -181,13 +181,16 @@
 
         @if(isset($services) && $services->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 3) }} gap-8">
-                @foreach($services as $index => $service)
+                @foreach($services as $service)
                     <div class="relative group">
-                        <div class="bg-white rounded-3xl shadow-xl border-4 {{ $index === 0 ? 'border-primary scale-105' : 'border-gray-200' }} hover:border-primary transition-all p-10 h-full flex flex-col transform hover:scale-105">
-                            @if($index === 0)
-                                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-6 py-2 rounded-full text-sm font-bold uppercase shadow-lg">
+                        <div class="relative bg-white rounded-3xl shadow-xl border-4 border-gray-200 hover:border-primary transition-all p-10 h-full flex flex-col transform hover:scale-105">
+                            @if($service->booking_enabled)
+                                <span class="absolute -top-4 right-6 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black uppercase tracking-wide px-4 py-1 shadow-xl">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5.5 3 1.5-6.5L3 8.5l6.6-.5L12 2l2.4 6 6.6.5-5 4.9 1.5 6.5z" />
+                                    </svg>
                                     Populaire
-                                </div>
+                                </span>
                             @endif
 
                             <h3 class="text-3xl font-black text-gray-900 mb-4">{{ $service->name }}</h3>
@@ -204,19 +207,9 @@
 
                             <p class="text-lg text-gray-600 mb-8 flex-grow">{{ $service->description }}</p>
                             
-                            @if($service->booking_enabled && $coach->user->has_payments_module)
-                                <form action="{{ route('coach.booking.checkout', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="client_email" value="booking@temp.com">
-                                    <button type="submit" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
-                                        Réserver
-                                    </button>
-                                </form>
-                            @else
-                                <a href="#contact" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
-                                    Contacter
-                                </a>
-                            @endif
+                            <a href="#contact" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
+                                Contacter
+                            </a>
                         </div>
                     </div>
                 @endforeach

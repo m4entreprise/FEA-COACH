@@ -300,8 +300,8 @@ const formatTime = (timeString) => {
                                             </a>
                                         </div>
                                     </div>
-                                    <p v-if="booking.notes" class="text-xs text-slate-400 mt-2 italic">
-                                        Note : {{ booking.notes }}
+                                    <p v-if="booking.client_notes" class="text-xs text-slate-400 mt-2 italic">
+                                        Note : {{ booking.client_notes }}
                                     </p>
                                 </div>
                             </div>

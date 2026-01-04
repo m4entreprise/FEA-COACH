@@ -53,6 +53,16 @@ class BookingController extends Controller
 
         $service = $serviceQuery->findOrFail($serviceIdInt);
 
+        Log::info('Checkout form service resolved', [
+            'coach_id' => $coach->id,
+            'service_id' => $service->id,
+            'service_name' => $service->name,
+            'service_image_path' => $service->image_path ?? null,
+            'service_image_url' => $service->image_url ?? null,
+            'booking_enabled' => $service->booking_enabled,
+            'is_active' => $service->is_active,
+        ]);
+
         $formAction = $request->routeIs('coach.*')
             ? route('coach.booking.checkout', [
                 'coach_slug' => $coach->slug,
@@ -62,12 +72,21 @@ class BookingController extends Controller
                 'serviceId' => $service->id,
             ]);
 
-        return view('coach-site.booking.checkout', [
+        $payload = [
             'coach' => $coach,
             'service' => $service,
             'formAction' => $formAction,
             'backUrl' => url()->previous(),
+        ];
+
+        Log::info('Checkout form payload prepared', [
+            'coach_id' => $coach->id,
+            'service_id' => $service->id,
+            'form_action' => $formAction,
+            'back_url' => $payload['backUrl'],
         ]);
+
+        return view('coach-site.booking.checkout', $payload);
     }
 
     public function directCheckout(Request $request)
@@ -89,6 +108,15 @@ class BookingController extends Controller
             ->where('is_active', true)
             ->where('booking_enabled', true)
             ->findOrFail($serviceId);
+
+        Log::info('DirectCheckout service resolved', [
+            'coach_id' => $coach->id,
+            'service_id' => $service->id,
+            'service_name' => $service->name,
+            'service_image_path' => $service->image_path ?? null,
+            'service_image_url' => $service->image_url ?? null,
+            'has_image' => !empty($service->image_path),
+        ]);
         
         $validated = $request->validate([
             'client_first_name' => 'required|string|max:100',
@@ -114,7 +142,12 @@ class BookingController extends Controller
 
             $checkoutSession = $this->stripeService->createCheckoutSession($booking);
 
-            Log::info('Checkout session created', ['url' => $checkoutSession['url']]);
+            Log::info('Checkout session created', [
+                'url' => $checkoutSession['url'] ?? null,
+                'booking_id' => $booking->id,
+                'service_id' => $service->id,
+                'session_payload' => $checkoutSession,
+            ]);
 
             return redirect($checkoutSession['url']);
         } catch (\Exception $e) {

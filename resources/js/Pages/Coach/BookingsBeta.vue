@@ -291,7 +291,7 @@ const getClientName = (booking) => {
     <Toaster rich-colors theme="dark" position="top-right" close-button />
     <!-- Top bar -->
     <header
-        class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl"
+        class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl gap-4"
     >
         <div class="flex items-center gap-3">
             <div class="flex flex-col">
@@ -300,17 +300,17 @@ const getClientName = (booking) => {
                     <span>Mes réservations</span>
                 </h1>
             </div>
+        </div>
 
-            <div class="flex items-center gap-3">
-                <button
-                    type="button"
-                    @click="goBack"
-                    class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
-                >
-                    <span class="text-xs">←</span>
-                    <span>Retour panel</span>
-                </button>
-            </div>
+        <div class="flex items-center justify-end flex-1">
+            <button
+                type="button"
+                @click="goBack"
+                class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-800"
+            >
+                <span class="text-xs">←</span>
+                <span>Retour panel</span>
+            </button>
         </div>
     </header>
 

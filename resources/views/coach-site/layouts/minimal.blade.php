@@ -135,9 +135,11 @@
                                 @if($service->duration_minutes)
                                     <p class="text-sm text-gray-500 mb-2">⏱️ {{ $service->duration_minutes }} minutes</p>
                                 @endif
-                                <div class="text-gray-600 leading-relaxed text-sm">
-                                    {!! Purify::clean($service->description) !!}
-                                </div>
+                                @if($service->description)
+                                    <div class="prose prose-sm text-gray-600 leading-relaxed text-sm [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
+                                        {!! Purify::clean($service->description) !!}
+                                    </div>
+                                @endif
                             </div>
                             <div class="flex items-center gap-6">
                                 <div class="text-right">

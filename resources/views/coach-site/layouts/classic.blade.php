@@ -202,9 +202,11 @@
                         @if($service->duration_minutes)
                             <p class="text-sm text-gray-500 mb-2">⏱️ {{ $service->duration_minutes }} minutes</p>
                         @endif
-                        <div class="text-gray-600 mb-6 flex-grow leading-relaxed text-sm">
-                            {!! Purify::clean($service->description) !!}
-                        </div>
+                        @if($service->description)
+                            <div class="prose prose-sm text-gray-600 mb-6 flex-grow leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
+                                {!! Purify::clean($service->description) !!}
+                            </div>
+                        @endif
                         
                         @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
                             <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"

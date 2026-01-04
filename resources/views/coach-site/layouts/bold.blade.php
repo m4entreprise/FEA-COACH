@@ -211,9 +211,11 @@
                                 @endif
                             </div>
 
-                            <div class="text-lg text-gray-600 mb-8 flex-grow leading-relaxed">
-                                {!! Purify::clean($service->description) !!}
-                            </div>
+                            @if($service->description)
+                                <div class="prose prose-lg text-gray-600 mb-8 flex-grow leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
+                                    {!! Purify::clean($service->description) !!}
+                                </div>
+                            @endif
                             
                             @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
                                 <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"

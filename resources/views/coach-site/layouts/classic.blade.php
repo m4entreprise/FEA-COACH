@@ -122,32 +122,26 @@
         <!-- Method Steps -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-primary">
+                    1.
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">1. {{ $coach->method_step1_title ?? 'Évaluation' }}</h3>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">{{ $coach->method_step1_title ?? 'Évaluation' }}</h3>
                 <p class="text-gray-600">{{ $coach->method_step1_description ?? 'Bilan complet de votre condition physique et définition de vos objectifs personnalisés.' }}</p>
             </div>
 
             <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-primary">
+                    2.
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">2. {{ $coach->method_step2_title ?? 'Programme' }}</h3>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">{{ $coach->method_step2_title ?? 'Programme' }}</h3>
                 <p class="text-gray-600">{{ $coach->method_step2_description ?? 'Plan d\'entraînement sur mesure adapté à votre niveau et vos disponibilités.' }}</p>
             </div>
 
             <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
-                    </svg>
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-primary">
+                    3.
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">3. {{ $coach->method_step3_title ?? 'Suivi' }}</h3>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">{{ $coach->method_step3_title ?? 'Suivi' }}</h3>
                 <p class="text-gray-600">{{ $coach->method_step3_description ?? 'Accompagnement régulier et ajustements constants pour garantir vos progrès.' }}</p>
             </div>
         </div>

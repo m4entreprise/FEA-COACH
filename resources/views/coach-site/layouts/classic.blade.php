@@ -513,7 +513,7 @@
 
                 <div class="space-y-3">
                     <div class="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-white/70">
-                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white">
+                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white text-sm font-semibold leading-none tracking-normal">
                             1
                         </span>
                         <span>Vos coordonnées</span>
@@ -610,7 +610,7 @@
 
                 <div class="space-y-3">
                     <div class="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-white/70">
-                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white">
+                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white text-sm font-semibold leading-none tracking-normal">
                             2
                         </span>
                         <span>Votre message</span>

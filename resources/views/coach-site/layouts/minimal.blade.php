@@ -367,7 +367,7 @@
                 <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur px-8 py-10 space-y-6">
                     <div class="flex items-center gap-3">
                         <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10">
-                            <x-lucide-chat-bubble-oval-ellipsis class="w-5 h-5" />
+                            <x-lucide-message-circle class="w-5 h-5" />
                         </span>
                         <div>
                             <p class="text-xs uppercase tracking-[0.35em] text-white/60">Discutons</p>

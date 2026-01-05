@@ -389,7 +389,7 @@
                         </button>
                         <div x-show="openFaq === {{ $index + 1 }}" 
                              x-transition
-                             class="px-6 pb-4 text-gray-600"
+                             class="px-6 pb-4 pt-4 text-gray-600"
                              style="display: none;">
                             {!! nl2br(e($faq->answer)) !!}
                         </div>

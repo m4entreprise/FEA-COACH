@@ -384,28 +384,20 @@
 
 <!-- Contact Section - Bold -->
 <section id="contact" class="py-32 relative overflow-hidden text-white" style="background: linear-gradient(135deg, {{ $coach->color_primary ?? '#3B82F6' }} 0%, {{ $coach->color_secondary ?? '#10B981' }} 100%);">
-    @php
-        $contactEmail = optional($coach->user)->email;
-        $oldMessageLength = strlen(old('message', ''));
-    @endphp
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-white rounded-full blur-3xl"></div>
     </div>
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" x-data="{ submitted: false, successMessage: '', loading: false }">
-        <div class="text-center mb-16 space-y-6">
-            <div class="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/10 border border-white/20 text-xs tracking-[0.35em] font-bold uppercase">
-                <span class="inline-block h-2 w-2 rounded-full bg-emerald-300 animate-pulse"></span>
+        <div class="text-center mb-12">
+            <div class="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full font-bold uppercase text-sm tracking-wide mb-6">
                 Contact
             </div>
-            <div>
-                <p class="text-sm uppercase tracking-[0.3em] text-white/70 mb-2">Prise de contact premium</p>
-                <h2 class="text-4xl sm:text-5xl md:text-6xl font-black leading-tight">
-                    {{ $coach->final_cta_title ?? 'Prêt à commencer ?' }}
-                </h2>
-            </div>
-            <p class="text-xl sm:text-2xl text-white/90 font-semibold max-w-3xl mx-auto">
+            <h2 class="text-5xl md:text-6xl font-black mb-6">
+                {{ $coach->final_cta_title ?? 'Prêt à commencer ?' }}
+            </h2>
+            <p class="text-2xl text-white/90 font-semibold">
                 {{ $coach->final_cta_subtitle ?? 'Contactez-moi maintenant' }}
             </p>
         </div>
@@ -443,177 +435,41 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="rounded-3xl border border-white/20 bg-white/5 p-8 lg:p-10 shadow-2xl shadow-black/20">
-                <p class="text-xs uppercase tracking-[0.35em] text-white/60">Pourquoi vous lancer ?</p>
-                <h3 class="text-3xl font-black mt-4 mb-8">Un plan d’action taillé pour vous</h3>
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-2xl p-10" x-show="!submitted" x-transition>
+            <form method="POST" action="/contact" class="grid grid-cols-1 md:grid-cols-2 gap-6" @submit.prevent="loading = true; fetch('/contact', { method: 'POST', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify({ name: $refs.name.value, email: $refs.email.value, phone: $refs.phone.value, message: $refs.message.value }) }).then(async (response) => { if (!response.ok) throw new Error('Request failed'); const data = await response.json(); successMessage = data.message || ''; submitted = true; }).catch(() => { loading = false; }).finally(() => { loading = false; });">
+                @csrf
 
-                <div class="space-y-5">
-                    <div class="flex gap-4">
-                        <div class="h-10 w-10 rounded-2xl bg-white/15 flex items-center justify-center font-black text-lg">1</div>
-                        <div>
-                            <p class="font-semibold text-lg">Diagnostic express</p>
-                            <p class="text-white/70 text-sm">On débriefe vos objectifs, contraintes et antécédents pour poser des bases solides.</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="h-10 w-10 rounded-2xl bg-white/15 flex items-center justify-center font-black text-lg">2</div>
-                        <div>
-                            <p class="font-semibold text-lg">Roadmap claire</p>
-                            <p class="text-white/70 text-sm">Recevez une proposition d’accompagnement 100% personnalisée.</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="h-10 w-10 rounded-2xl bg-white/15 flex items-center justify-center font-black text-lg">3</div>
-                        <div>
-                            <p class="font-semibold text-lg">Suivi réactif</p>
-                            <p class="text-white/70 text-sm">Visio, présentiel ou hybride : on s’adapte à votre rythme.</p>
-                        </div>
-                    </div>
+                <div class="md:col-span-1">
+                    <label for="name" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Nom *</label>
+                    <input type="text" id="name" name="name" x-ref="name" required value="{{ old('name') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="Votre nom">
                 </div>
 
-                <div class="mt-8 border-t border-white/20 pt-8 space-y-4 text-sm text-white/80">
-                    <div class="flex items-center gap-3">
-                        <span class="inline-flex items-center justify-center rounded-full bg-white/15 px-3 py-1 text-xs uppercase tracking-widest">Réponse</span>
-                        <span>24h ouvrées max</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="inline-flex items-center justify-center rounded-full bg-white/15 px-3 py-1 text-xs uppercase tracking-widest">Session</span>
-                        <span>15 min découverte offerte</span>
-                    </div>
-                    @if($contactEmail)
-                        <a href="mailto:{{ $contactEmail }}" class="inline-flex items-center gap-2 font-semibold text-white hover:text-white/80 transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l9 6 9-6" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 8v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8" />
-                            </svg>
-                            {{ $contactEmail }}
-                        </a>
-                    @endif
+                <div class="md:col-span-1">
+                    <label for="email" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Email *</label>
+                    <input type="email" id="email" name="email" x-ref="email" required value="{{ old('email') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="vous@example.com">
                 </div>
-            </div>
 
-            <div class="lg:col-span-2">
-                <div class="bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-2xl p-8 lg:p-12" x-show="!submitted" x-transition>
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
-                        <div>
-                            <p class="text-xs uppercase tracking-[0.4em] text-white/70">Formulaire</p>
-                            <h3 class="text-3xl font-semibold">Décrivez votre projet</h3>
-                        </div>
-                        <div class="flex items-center gap-3 text-xs sm:text-sm text-white/70">
-                            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-white/25 font-black">1</span>
-                            <span>Vos infos</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-white/25 font-black">2</span>
-                            <span>Proposition personnalisée</span>
-                        </div>
-                    </div>
-
-                    <form
-                        method="POST"
-                        action="/contact"
-                        class="grid grid-cols-1 md:grid-cols-2 gap-6"
-                        @submit.prevent="
-                            loading = true;
-                            fetch('/contact', {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    name: $refs.name.value,
-                                    email: $refs.email.value,
-                                    phone: $refs.phone.value,
-                                    message: $refs.message.value,
-                                }),
-                            })
-                                .then(async (response) => {
-                                    if (!response.ok) throw new Error('Request failed');
-                                    const data = await response.json();
-                                    successMessage = data.message || '';
-                                    submitted = true;
-                                })
-                                .catch(() => {
-                                    loading = false;
-                                })
-                                .finally(() => {
-                                    loading = false;
-                                });
-                        "
-                    >
-                        @csrf
-
-                        <div class="md:col-span-1">
-                            <label for="name" class="block text-sm font-bold text-white mb-3 uppercase tracking-wide">Nom complet *</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-4 flex items-center text-white/60">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    </svg>
-                                </span>
-                                <input type="text" id="name" name="name" x-ref="name" required value="{{ old('name') }}" class="block w-full rounded-2xl border-white/20 bg-white/10 px-12 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-2 focus:ring-white" placeholder="Votre nom">
-                            </div>
-                        </div>
-
-                        <div class="md:col-span-1">
-                            <label for="email" class="block text-sm font-bold text-white mb-3 uppercase tracking-wide">Email *</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-4 flex items-center text-white/60">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                    </svg>
-                                </span>
-                                <input type="email" id="email" name="email" x-ref="email" required value="{{ old('email') }}" class="block w-full rounded-2xl border-white/20 bg-white/10 px-12 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-2 focus:ring-white" placeholder="vous@example.com">
-                            </div>
-                        </div>
-
-                        <div class="md:col-span-1">
-                            <label for="phone" class="block text-sm font-bold text-white mb-3 uppercase tracking-wide">Téléphone</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-4 flex items-center text-white/60">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h2l3.6 7.59a1 1 0 00.9.57H17a1 1 0 011 .78l1 4a1 1 0 01-.97 1.22H6.21a1 1 0 01-.98-.8L4 5z"/>
-                                    </svg>
-                                </span>
-                                <input type="text" id="phone" name="phone" x-ref="phone" value="{{ old('phone') }}" class="block w-full rounded-2xl border-white/20 bg-white/10 px-12 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-2 focus:ring-white" placeholder="+33 6 12 34 56 78">
-                            </div>
-                        </div>
-
-                        <div class="md:col-span-2" x-data="{ chars: {{ $oldMessageLength }} }">
-                            <label for="message" class="block text-sm font-bold text-white mb-3 uppercase tracking-wide">Message *</label>
-                            <div class="relative">
-                                <textarea id="message" name="message" x-ref="message" rows="5" maxlength="1000" required class="block w-full rounded-2xl border-white/20 bg-white/10 px-6 py-4 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-2 focus:ring-white" placeholder="Vos objectifs, votre niveau, vos disponibilités..." @input="chars = $event.target.value.length">{{ old('message') }}</textarea>
-                                <span class="absolute bottom-3 right-4 text-xs font-semibold text-white/70" x-text="chars + '/1000'"></span>
-                            </div>
-                            <p class="mt-2 text-xs text-white/80">Plus vous êtes précis(e), plus ma proposition sera ciblée.</p>
-                        </div>
-
-                        <div class="md:col-span-2 flex flex-col gap-4">
-                            <button type="submit" :disabled="loading" class="inline-flex items-center justify-center gap-3 px-12 py-4 bg-white text-primary text-lg font-black rounded-full hover:-translate-y-0.5 hover:bg-gray-100 transition-all disabled:opacity-50 shadow-2xl shadow-black/20">
-                                <span x-show="!loading">Envoyer mon message</span>
-                                <span x-show="loading">Envoi en cours...</span>
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                                </svg>
-                            </button>
-                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-white/70">
-                                <p class="flex items-center gap-2">
-                                    <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-[10px]">⚡</span>
-                                    Réponse garantie sous 24-48h ouvrées
-                                </p>
-                                <p class="flex items-center gap-2">
-                                    <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-[10px]">🔒</span>
-                                    Données confidentielles & sécurisées
-                                </p>
-                            </div>
-                        </div>
-                    </form>
+                <div class="md:col-span-1">
+                    <label for="phone" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Téléphone</label>
+                    <input type="text" id="phone" name="phone" x-ref="phone" value="{{ old('phone') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="+33 6...">
                 </div>
-            </div>
+
+                <div class="md:col-span-2">
+                    <label for="message" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Message *</label>
+                    <textarea id="message" name="message" x-ref="message" rows="4" required class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="Vos objectifs...">{{ old('message') }}</textarea>
+                </div>
+
+                <div class="md:col-span-2 flex items-center justify-between pt-4">
+                    <p class="text-sm text-white/70">Réponse sous 24-48h</p>
+                    <button type="submit" :disabled="loading" class="inline-flex items-center px-10 py-4 bg-white text-primary text-lg font-black rounded-full hover:bg-gray-100 transition-all disabled:opacity-50 shadow-xl">
+                        <span x-show="!loading">Envoyer</span>
+                        <span x-show="loading">Envoi...</span>
+                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </section>

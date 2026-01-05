@@ -242,6 +242,33 @@
         .bold-results-delay-2 { transition-delay: 0.22s; }
         .bold-results-delay-3 { transition-delay: 0.36s; }
 
+        .bold-faq-section {
+            opacity: 0;
+            transform: translateY(120px);
+            transition: opacity 1.1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-faq-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bold-faq-header,
+        .bold-faq-item {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 0.95s ease, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-faq-section.is-visible .bold-faq-header,
+        .bold-faq-section.is-visible .bold-faq-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bold-faq-delay-1 { transition-delay: 0.08s; }
+        .bold-faq-delay-2 { transition-delay: 0.2s; }
+
         @media (prefers-reduced-motion: reduce) {
             .bold-hero-background,
             .bold-hero-fade,
@@ -265,7 +292,10 @@
             .bold-results-section,
             .bold-results-header,
             .bold-results-card,
-            .bold-results-cta {
+            .bold-results-cta,
+            .bold-faq-section,
+            .bold-faq-header,
+            .bold-faq-item {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -633,9 +663,9 @@
 
 <!-- FAQ Section - Bold -->
 @if($faqs && $faqs->count() > 0)
-<section id="faq" class="py-32 bg-gray-50">
+<section id="faq" class="py-32 bg-gray-50 bold-faq-section">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-20">
+        <div class="text-center mb-20 bold-faq-header bold-faq-delay-1">
             <div class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary font-bold uppercase text-sm tracking-wide mb-6">
                 FAQ
             </div>
@@ -649,7 +679,7 @@
 
         <div x-data="{ openFaq: null }" class="space-y-4">
             @foreach($faqs as $index => $faq)
-                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all bold-faq-item" style="transition-delay: {{ 0.18 + ($loop->index * 0.08) }}s;">
                     <button @click="openFaq = openFaq === {{ $index + 1 }} ? null : {{ $index + 1 }}" class="w-full text-left px-8 py-6 flex justify-between items-center hover:bg-gray-50 transition-colors">
                         <span class="font-black text-xl text-gray-900 pr-8">{{ $faq->question }}</span>
                         <svg class="w-6 h-6 text-primary transition-transform flex-shrink-0" :class="{ 'transform rotate-180': openFaq === {{ $index + 1 }} }" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
@@ -769,7 +799,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.bold-about-section, .bold-method-section, .bold-pricing-section, .bold-results-section');
+            const animatedSections = document.querySelectorAll('.bold-about-section, .bold-method-section, .bold-pricing-section, .bold-results-section, .bold-faq-section');
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
             if (!animatedSections.length) {

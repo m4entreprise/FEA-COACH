@@ -121,7 +121,7 @@
                 @foreach($services as $service)
                     <div class="relative rounded-2xl border border-gray-200 bg-white px-6 sm:px-8 pt-10 sm:pt-12 pb-6 sm:pb-8 transition hover:border-gray-900/30">
                         @if($service->is_featured)
-                            <span class="absolute top-6 right-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+                            <span class="absolute -top-4 sm:-top-5 right-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white shadow-lg shadow-primary/30 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
                                 <x-lucide-star class="w-3.5 h-3.5" />
                                 Populaire
                             </span>

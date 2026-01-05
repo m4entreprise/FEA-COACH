@@ -10,18 +10,52 @@
 {{-- Layout Minimal - Version épurée et focalisée sur le texte et les CTA --}}
 
 <!-- Hero Section - Minimal -->
-<section id="accueil" class="relative py-32 bg-gradient-to-b from-white to-gray-50">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            {{ $coach->hero_title ?? 'Transformez votre corps, transformez votre vie' }}
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-600 mb-10 max-w-2xl mx-auto">
-            {{ $coach->hero_subtitle ?? 'Coaching sportif personnalisé pour atteindre vos objectifs' }}
-        </p>
-        <a href="#tarifs" class="inline-flex items-center px-10 py-4 bg-primary text-white text-lg font-semibold rounded-full hover:bg-primary-dark transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
-            {{ $coach->cta_text ?? 'Commencer maintenant' }}
-            <x-lucide-arrow-right class="ml-2 w-5 h-5" />
-        </a>
+<section id="accueil" class="relative overflow-hidden py-28 bg-white">
+    <div class="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100"></div>
+    <div class="absolute -top-32 -right-10 w-72 h-72 rounded-full bg-primary/10 blur-3xl"></div>
+    <div class="absolute top-24 -left-16 w-64 h-64 rounded-full bg-primary/5 blur-2xl"></div>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] items-center">
+            <div>
+                <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">Coach minimaliste</p>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
+                    {{ $coach->hero_title ?? 'Transformez votre corps, transformez votre vie' }}
+                </h1>
+                <p class="text-xl text-gray-600 mb-10 max-w-2xl">
+                    {{ $coach->hero_subtitle ?? 'Coaching sportif personnalisé pour atteindre vos objectifs' }}
+                </p>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                    <a href="#tarifs" class="inline-flex items-center justify-center px-10 py-4 bg-primary text-white text-lg font-semibold rounded-full hover:bg-primary-dark transition-all shadow-lg hover:shadow-xl">
+                        {{ $coach->cta_text ?? 'Commencer maintenant' }}
+                        <x-lucide-arrow-right class="ml-2 w-5 h-5" />
+                    </a>
+                    <a href="#a-propos" class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition">
+                        Voir la méthode
+                        <x-lucide-arrow-up-right class="w-4 h-4" />
+                    </a>
+                </div>
+            </div>
+            <div class="bg-white/90 border border-gray-200 rounded-3xl p-6 shadow-sm space-y-6">
+                <p class="text-sm uppercase tracking-[0.35em] text-gray-500">Repères</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-4xl font-bold text-gray-900">{{ isset($transformations) ? $transformations->count() : 0 }}+</p>
+                        <p class="text-sm text-gray-500">clients suivis</p>
+                    </div>
+                    <div>
+                        <p class="text-4xl font-bold text-gray-900">{{ $coach->satisfaction_rate ?? 100 }}%</p>
+                        <p class="text-sm text-gray-500">satisfaction</p>
+                    </div>
+                    <div>
+                        <p class="text-4xl font-bold text-gray-900">{{ $coach->average_rating ?? 5.0 }}★</p>
+                        <p class="text-sm text-gray-500">note moyenne</p>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        <p>Programmes épurés, focus sur l’essentiel.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 

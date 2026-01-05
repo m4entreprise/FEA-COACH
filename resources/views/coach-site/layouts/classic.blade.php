@@ -80,10 +80,30 @@
             animation: heroPulse 2.4s ease infinite;
         }
 
+        .about-animate {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .about-animate-left {
+            transform: translateX(-80px);
+        }
+
+        .about-animate-right {
+            transform: translateX(80px);
+        }
+
+        .about-animate.is-visible {
+            opacity: 1;
+            transform: translateX(0) translateY(0);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .hero-background-animate,
             .hero-fade-seq,
-            .hero-cta-animated::after {
+            .hero-cta-animated::after,
+            .about-animate {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -134,12 +154,45 @@
     </div>
 </section>
 
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const aboutElements = document.querySelectorAll('.about-animate');
+
+            if (!aboutElements.length) {
+                return;
+            }
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+                aboutElements.forEach((el) => el.classList.add('is-visible'));
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -10% 0px',
+                threshold: 0.2,
+            });
+
+            aboutElements.forEach((el) => observer.observe(el));
+        });
+    </script>
+@endpush
+
 <!-- About Section -->
 <section id="a-propos" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <!-- Image -->
-            <div class="relative">
+            <div class="relative about-animate about-animate-left">
                 @if($coach->hasMedia('profile'))
                     <div class="relative rounded-2xl overflow-hidden shadow-2xl">
                         <img src="{{ $coach->getFirstMediaUrl('profile') }}" 
@@ -157,7 +210,7 @@
             </div>
 
             <!-- Content -->
-            <div>
+            <div class="about-animate about-animate-right">
                 <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
                     À propos de {{ $coach->name }}
                 </h2>

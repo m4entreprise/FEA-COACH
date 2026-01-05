@@ -292,7 +292,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($transformations as $transformation)
-                <div class="group relative">
+                <div class="relative">
                     <div class="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
                         <div class="grid grid-cols-2 relative">
                             <div class="relative overflow-hidden">

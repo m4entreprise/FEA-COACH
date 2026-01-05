@@ -200,6 +200,39 @@
             transform: translateY(0) scale(1);
         }
 
+        .results-section-animate {
+            opacity: 0;
+            transform: translateY(70px);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+        }
+
+        .results-section-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .results-seq {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .results-section-animate.is-visible .results-seq {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .results-card-animate {
+            opacity: 0;
+            transform: translateY(50px) scale(0.97);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
+        }
+
+        .results-section-animate.is-visible .results-card-animate {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .hero-background-animate,
             .hero-fade-seq,
@@ -211,7 +244,10 @@
             .cta-seq,
             .pricing-section-animate,
             .pricing-seq,
-            .pricing-card-animate {
+            .pricing-card-animate,
+            .results-section-animate,
+            .results-seq,
+            .results-card-animate {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -316,7 +352,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSelectors = ['.about-animate', '.method-section-animate', '.cta-section-animate', '.pricing-section-animate'];
+            const animatedSelectors = ['.about-animate', '.method-section-animate', '.cta-section-animate', '.pricing-section-animate', '.results-section-animate'];
             const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
 
             if (!animatedElements.length) {
@@ -532,13 +568,13 @@
 </section>
 
 <!-- Results/Transformations Section -->
-<section id="resultats" class="py-20 bg-gray-50">
+<section id="resultats" class="py-20 bg-gray-50 results-section-animate">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 results-seq">
                 {{ $coach->transformations_title ?? 'Leurs transformations' }}
             </h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto results-seq">
                 {{ $coach->transformations_subtitle ?? 'Des résultats réels de personnes comme vous' }}
             </p>
         </div>
@@ -550,7 +586,8 @@
                         $beforeUrl = $transformation->hasMedia('before') ? $transformation->getFirstMediaUrl('before') : null;
                         $afterUrl = $transformation->hasMedia('after') ? $transformation->getFirstMediaUrl('after') : null;
                     @endphp
-                    <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow results-card-animate"
+                         style="transition-delay: {{ number_format(0.2 + ($loop->index * 0.08), 2) }}s;">
                         <!-- Before/After Images -->
                         <div class="grid grid-cols-2">
                             <div class="relative group">
@@ -614,13 +651,13 @@
                 @endforeach
             </div>
         @else
-            <div class="text-center py-12">
+            <div class="text-center py-12 results-seq">
                 <p class="text-gray-600">Les transformations seront bientôt disponibles.</p>
             </div>
         @endif
 
         <!-- CTA -->
-        <div class="text-center mt-12">
+        <div class="text-center mt-12 results-seq" style="transition-delay: 0.35s;">
             <p class="text-xl text-gray-900 mb-6 font-semibold">Prêt à obtenir les mêmes résultats ?</p>
             <a href="#tarifs" class="inline-flex items-center px-8 py-4 bg-primary text-white text-lg font-bold rounded-lg hover:bg-primary-dark transition-all shadow-xl">
                 {{ $coach->cta_text ?? 'Commencer maintenant' }}

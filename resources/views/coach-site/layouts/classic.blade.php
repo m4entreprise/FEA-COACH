@@ -32,9 +32,7 @@
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="#tarifs" class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white text-lg font-bold rounded-lg hover:bg-primary-dark transition-all shadow-xl hover:shadow-2xl transform hover:scale-105">
                 {{ $coach->cta_text ?? 'Commencer maintenant' }}
-                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                </svg>
+                <x-lucide-arrow-right class="ml-2 w-5 h-5" />
             </a>
             <a href="#a-propos" class="inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white text-lg font-bold rounded-lg hover:bg-white/20 transition-all border-2 border-white/30">
                 En savoir plus
@@ -44,9 +42,7 @@
 
     <!-- Scroll Indicator -->
     <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-20">
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-        </svg>
+        <x-lucide-chevrons-down class="w-6 h-6 text-white" />
     </div>
 </section>
 
@@ -137,9 +133,7 @@
                     </div>
                     <p class="text-gray-600 leading-relaxed">{{ $coach->method_step1_description ?? 'Bilan complet de votre condition physique et définition de vos objectifs personnalisés.' }}</p>
                     <div class="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
+                        <x-lucide-badge-check class="w-4 h-4" />
                         Diagnostic précis
                     </div>
                 </div>
@@ -157,9 +151,7 @@
                     </div>
                     <p class="text-gray-600 leading-relaxed">{{ $coach->method_step2_description ?? 'Plan d\'entraînement sur mesure adapté à votre niveau et vos disponibilités.' }}</p>
                     <div class="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
+                        <x-lucide-route class="w-4 h-4" />
                         Feuille de route claire
                     </div>
                 </div>
@@ -176,9 +168,7 @@
                     </div>
                     <p class="text-gray-600 leading-relaxed">{{ $coach->method_step3_description ?? 'Accompagnement régulier et ajustements constants pour garantir vos progrès.' }}</p>
                     <div class="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4"/>
-                        </svg>
+                        <x-lucide-refresh-cw class="w-4 h-4" />
                         Ajustements continus
                     </div>
                 </div>
@@ -198,9 +188,7 @@
         </p>
         <a href="#tarifs" class="inline-flex items-center justify-center px-8 py-4 bg-white text-lg font-bold rounded-lg hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105" style="color: {{ $coach->color_primary ?? '#3B82F6' }};">
             {{ $coach->cta_text ?? 'Commencer maintenant' }}
-            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
+            <x-lucide-arrow-right class="ml-2 w-5 h-5" />
         </a>
     </div>
 </section>
@@ -223,9 +211,7 @@
                     <div class="relative bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all flex flex-col overflow-hidden">
                         @if($service->is_featured)
                             <span class="absolute top-6 right-6 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 shadow-lg">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5.5 3 1.5-6.5L3 8.5l6.6-.5L12 2l2.4 6 6.6.5-5 4.9 1.5 6.5z" />
-                                </svg>
+                                <x-lucide-star class="w-3.5 h-3.5" />
                                 Populaire
                             </span>
                         @endif
@@ -386,9 +372,7 @@
             <p class="text-xl text-gray-900 mb-6 font-semibold">Prêt à obtenir les mêmes résultats ?</p>
             <a href="#tarifs" class="inline-flex items-center px-8 py-4 bg-primary text-white text-lg font-bold rounded-lg hover:bg-primary-dark transition-all shadow-xl">
                 {{ $coach->cta_text ?? 'Commencer maintenant' }}
-                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                </svg>
+                <x-lucide-arrow-right class="ml-2 w-5 h-5" />
             </a>
         </div>
     </div>
@@ -414,11 +398,8 @@
                         <button @click="openFaq = openFaq === {{ $index + 1 }} ? null : {{ $index + 1 }}" 
                                 class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
                             <span class="font-semibold text-gray-900">{{ $faq->question }}</span>
-                            <svg class="w-5 h-5 text-gray-500 transition-transform" 
-                                 :class="{ 'transform rotate-180': openFaq === {{ $index + 1 }} }"
-                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
+                            <x-lucide-chevron-down class="w-5 h-5 text-gray-500 transition-transform" 
+                                 :class="{ 'transform rotate-180': openFaq === {{ $index + 1 }} }" />
                         </button>
                         <div x-show="openFaq === {{ $index + 1 }}" 
                              x-transition
@@ -431,9 +412,7 @@
             </div>
         @else
             <div class="text-center py-12">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <x-lucide-circle-help class="mx-auto h-12 w-12 text-gray-400" />
                 <p class="mt-4 text-gray-600">Aucune question fréquente pour le moment.</p>
             </div>
         @endif
@@ -464,9 +443,7 @@
                 x-show="!submitted"
             >
                 <div class="flex items-center">
-                    <svg class="h-5 w-5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
+                    <x-lucide-badge-check class="h-5 w-5 text-emerald-200" />
                     <span class="ml-3 text-emerald-50">{{ session('success') }}</span>
                 </div>
             </div>
@@ -475,9 +452,7 @@
         @if ($errors->any())
             <div class="mb-6 rounded-lg bg-white/10 border border-red-300/40 px-4 py-3 text-sm" x-show="!submitted">
                 <div class="flex items-start">
-                    <svg class="h-5 w-5 text-red-200 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14M12 4a8 8 0 100 16 8 8 0 000-16z" />
-                    </svg>
+                    <x-lucide-alert-triangle class="h-5 w-5 text-red-200 mt-0.5" />
                     <ul class="ml-3 space-y-1 text-red-50">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -494,9 +469,7 @@
             x-transition
         >
             <div class="flex items-start">
-                <svg class="h-6 w-6 text-emerald-200 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
+                <x-lucide-badge-check class="h-6 w-6 text-emerald-200 mt-0.5" />
                 <div class="ml-3">
                     <p class="font-semibold text-emerald-50">Message envoyé avec succès</p>
                     <p class="mt-1 text-emerald-100" x-text="successMessage || 'Votre message a bien été envoyé. Le coach vous répondra au plus vite.'"></p>
@@ -557,9 +530,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="space-y-2">
                                 <label for="name" class="flex items-center text-sm font-semibold text-white/90 gap-2">
-                                    <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 11a3 3 0 10-6 0 3 3 0 006 0z"/>
-                                    </svg>
+                                    <x-lucide-user class="w-4 h-4 text-white/70" />
                                     Nom complet *
                                 </label>
                                 <div class="relative">
@@ -575,10 +546,7 @@
                                         placeholder="Votre nom complet"
                                     >
                                     <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l-9-5 9-5 9 5-9 5z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z" />
-                                        </svg>
+                                        <x-lucide-id-card class="w-5 h-5" />
                                     </span>
                                 </div>
                                 <p class="text-xs text-white/60">Utilisez votre prénom et nom pour une réponse personnalisée.</p>
@@ -586,9 +554,7 @@
 
                             <div class="space-y-2">
                                 <label for="email" class="flex items-center text-sm font-semibold text-white/90 gap-2">
-                                    <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0l-3 3m3-3l-3-3m-5 9h10a2 2 0 002-2V8a2 2 0 00-2-2H7a2 2 0 00-2 2v6a4 4 0 004 4z" />
-                                    </svg>
+                                    <x-lucide-mail class="w-4 h-4 text-white/70" />
                                     Email *
                                 </label>
                                 <div class="relative">
@@ -604,9 +570,7 @@
                                         placeholder="vous@example.com"
                                     >
                                     <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v6a2 2 0 002 2z"/>
-                                        </svg>
+                                        <x-lucide-inbox class="w-5 h-5" />
                                     </span>
                                 </div>
                                 <p class="text-xs text-white/60">Votre email restera confidentiel, il sert uniquement à la prise de contact.</p>
@@ -615,9 +579,7 @@
                             <div class="sm:col-span-2 space-y-2">
                                 <div class="flex items-center justify-between">
                                     <label for="phone" class="flex items-center text-sm font-semibold text-white/90 gap-2">
-                                        <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h2l2 5-2 2a16.001 16.001 0 006 6l2-2 5 2v2a2 2 0 01-2 2A18 18 0 013 7a2 2 0 012-2z"/>
-                                        </svg>
+                                        <x-lucide-phone class="w-4 h-4 text-white/70" />
                                         Téléphone
                                     </label>
                                     <span class="text-xs text-white/60">Optionnel</span>
@@ -634,9 +596,7 @@
                                         placeholder="+33 6 12 34 56 78"
                                     >
                                     <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 7h20M2 12h20M2 17h20"/>
-                                        </svg>
+                                        <x-lucide-phone-call class="w-5 h-5" />
                                     </span>
                                 </div>
                                 <p class="text-xs text-white/60">Indiquez un numéro joignable pour un échange plus rapide.</p>
@@ -667,15 +627,11 @@
                         >{{ old('message') }}</textarea>
                         <div class="flex flex-wrap gap-3 text-[11px] uppercase tracking-wide text-white/70">
                             <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1">
-                                <svg class="w-3.5 h-3.5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v6a2 2 0 002 2z"/>
-                                </svg>
+                                <x-lucide-mail-check class="w-3.5 h-3.5 text-white/70" />
                                 Réponse sous 24h
                             </span>
                             <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1">
-                                <svg class="w-3.5 h-3.5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.343-3 3 0 1.533 1.148 2.79 2.637 2.972a1 1 0 01.867.993V16m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
+                                <x-lucide-sparkles class="w-3.5 h-3.5 text-white/70" />
                                 Session découverte offerte
                             </span>
                         </div>
@@ -694,9 +650,7 @@
                     >
                         <span x-show="!loading">Envoyer mon message</span>
                         <span x-show="loading">Envoi en cours...</span>
-                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                        </svg>
+                        <x-lucide-send class="ml-2 w-5 h-5" />
                     </button>
                     <p class="text-xs text-white/70 sm:text-right">
                         Réponse généralement sous 24 à 48h.

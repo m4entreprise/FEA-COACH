@@ -26,7 +26,7 @@ const connectStripe = () => {
 };
 
 const openStripeDashboard = () => {
-    window.location.href = route('dashboard.payments.dashboard');
+    window.open(route('dashboard.payments.dashboard'), '_blank', 'noopener');
 };
 
 const safeStripeAccount = computed(() => props.stripeAccount || { connected: false });

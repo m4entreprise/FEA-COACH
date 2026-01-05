@@ -185,70 +185,49 @@
 <!-- Transformations Section - Minimal -->
 @if(isset($transformations) && $transformations->count() > 0)
 <section id="resultats" class="py-20 bg-gray-50">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">
-            {{ $coach->transformations_title ?? 'Résultats' }}
-        </h2>
-        <p class="text-xl text-gray-600 mb-12">
-            {{ $coach->transformations_subtitle ?? 'Des transformations réelles' }}
-        </p>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">Résultats</p>
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">
+                {{ $coach->transformations_title ?? 'Leurs transformations' }}
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                {{ $coach->transformations_subtitle ?? 'Des résultats concrets et mesurables' }}
+            </p>
+        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid gap-6 md:grid-cols-2">
             @foreach($transformations as $transformation)
                 @php
                     $beforeUrl = $transformation->hasMedia('before') ? $transformation->getFirstMediaUrl('before') : null;
                     $afterUrl = $transformation->hasMedia('after') ? $transformation->getFirstMediaUrl('after') : null;
                 @endphp
-                <div class="bg-white rounded-lg overflow-hidden border border-gray-200">
+                <div class="border border-gray-200 rounded-3xl overflow-hidden bg-white">
                     <div class="grid grid-cols-2">
-                        <div class="relative group">
+                        <div class="relative">
                             @if($beforeUrl)
-                                <button
-                                    type="button"
-                                    class="relative block w-full h-48 focus:outline-none cursor-zoom-in"
-                                    @click="openLightbox('{{ addslashes($beforeUrl) }}', 'Avant')"
-                                    aria-label="Voir la photo avant en grand"
-                                >
-                                    <img src="{{ $beforeUrl }}" 
-                                         alt="Avant" 
-                                         class="w-full h-48 object-cover">
-                                    <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold tracking-wide">
-                                        Cliquer pour agrandir
-                                    </span>
-                                </button>
+                                <img src="{{ $beforeUrl }}" alt="Avant" class="w-full h-48 object-cover">
                             @else
                                 <div class="w-full h-48 bg-gray-100"></div>
                             @endif
-                            <div class="absolute bottom-2 left-2 bg-black/70 text-white text-xs font-semibold px-2 py-1 rounded">AVANT</div>
+                            <span class="absolute top-4 left-4 text-xs font-semibold uppercase tracking-[0.4em] text-white">AVANT</span>
                         </div>
-                        <div class="relative group">
+                        <div class="relative">
                             @if($afterUrl)
-                                <button
-                                    type="button"
-                                    class="relative block w-full h-48 focus:outline-none cursor-zoom-in"
-                                    @click="openLightbox('{{ addslashes($afterUrl) }}', 'Après')"
-                                    aria-label="Voir la photo après en grand"
-                                >
-                                    <img src="{{ $afterUrl }}" 
-                                         alt="Après" 
-                                         class="w-full h-48 object-cover">
-                                    <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold tracking-wide">
-                                        Cliquer pour agrandir
-                                    </span>
-                                </button>
+                                <img src="{{ $afterUrl }}" alt="Après" class="w-full h-48 object-cover">
                             @else
                                 <div class="w-full h-48 bg-gray-100"></div>
                             @endif
-                            <div class="absolute bottom-2 right-2 bg-primary text-white text-xs font-semibold px-2 py-1 rounded">APRÈS</div>
+                            <span class="absolute top-4 right-4 text-xs font-semibold uppercase tracking-[0.4em] text-white">APRÈS</span>
                         </div>
                     </div>
                     @if($transformation->title || $transformation->description)
-                        <div class="p-4 text-left">
+                        <div class="p-6 space-y-2">
                             @if($transformation->title)
-                                <h3 class="font-semibold text-gray-900">{{ $transformation->title }}</h3>
+                                <h3 class="text-xl font-semibold text-gray-900">{{ $transformation->title }}</h3>
                             @endif
                             @if($transformation->description)
-                                <p class="text-sm text-gray-600 mt-1">{{ $transformation->description }}</p>
+                                <p class="text-sm text-gray-600">{{ $transformation->description }}</p>
                             @endif
                         </div>
                     @endif

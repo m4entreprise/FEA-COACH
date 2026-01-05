@@ -484,7 +484,7 @@
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
                 <div class="lg:col-span-5 space-y-4">
-                    <p class="text-xs uppercase tracking-[0.4em] text-white/60">Ignite Coach</p>
+                    <p class="text-xs uppercase tracking-[0.4em] text-white/60">Coaching sportif</p>
                     <h3 class="text-3xl font-black leading-tight">
                         {{ $coach->name }} — Coaching haute intensité
                     </h3>

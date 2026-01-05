@@ -424,7 +424,7 @@
                                 x-ref="name"
                                 required
                                 value="{{ old('name') }}"
-                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none"
+                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
                                 placeholder="Votre nom"
                             >
                         </div>
@@ -442,7 +442,7 @@
                                 required
                                 autocomplete="tel"
                                 value="{{ old('phone') }}"
-                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none"
+                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
                                 placeholder="+32 4 12 34 56 78"
                             >
                         </div>
@@ -460,7 +460,7 @@
                             x-ref="email"
                             required
                             value="{{ old('email') }}"
-                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none"
+                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
                             placeholder="vous@example.com"
                         >
                     </div>
@@ -476,7 +476,7 @@
                             x-ref="message"
                             rows="5"
                             required
-                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none"
+                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
                             placeholder="Parlez-moi de vos objectifs..."
                         >{{ old('message') }}</textarea>
                     </div>

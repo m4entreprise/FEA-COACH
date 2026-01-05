@@ -553,6 +553,30 @@
                             </div>
 
                             <div class="space-y-2">
+                                <label for="phone" class="flex items-center text-sm font-semibold text-white/90 gap-2">
+                                    <x-lucide-phone class="w-4 h-4 text-white/70" />
+                                    Téléphone *
+                                </label>
+                                <div class="relative">
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        x-ref="phone"
+                                        required
+                                        autocomplete="tel"
+                                        value="{{ old('phone') }}"
+                                        class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-white placeholder-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
+                                        placeholder="+33 6 12 34 56 78"
+                                    >
+                                    <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
+                                        <x-lucide-phone-call class="w-5 h-5" />
+                                    </span>
+                                </div>
+                                <p class="text-xs text-white/60">Indiquez un numéro joignable afin que le coach puisse vous rappeler rapidement.</p>
+                            </div>
+
+                            <div class="sm:col-span-2 space-y-2">
                                 <label for="email" class="flex items-center text-sm font-semibold text-white/90 gap-2">
                                     <x-lucide-mail class="w-4 h-4 text-white/70" />
                                     Email *
@@ -574,32 +598,6 @@
                                     </span>
                                 </div>
                                 <p class="text-xs text-white/60">Votre email restera confidentiel, il sert uniquement à la prise de contact.</p>
-                            </div>
-
-                            <div class="sm:col-span-2 space-y-2">
-                                <div class="flex items-center justify-between">
-                                    <label for="phone" class="flex items-center text-sm font-semibold text-white/90 gap-2">
-                                        <x-lucide-phone class="w-4 h-4 text-white/70" />
-                                        Téléphone
-                                    </label>
-                                    <span class="text-xs text-white/60">Optionnel</span>
-                                </div>
-                                <div class="relative">
-                                    <input
-                                        type="tel"
-                                        id="phone"
-                                        name="phone"
-                                        x-ref="phone"
-                                        autocomplete="tel"
-                                        value="{{ old('phone') }}"
-                                        class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-white placeholder-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
-                                        placeholder="+33 6 12 34 56 78"
-                                    >
-                                    <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
-                                        <x-lucide-phone-call class="w-5 h-5" />
-                                    </span>
-                                </div>
-                                <p class="text-xs text-white/60">Indiquez un numéro joignable pour un échange plus rapide.</p>
                             </div>
                         </div>
                     </div>

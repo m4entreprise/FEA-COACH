@@ -331,6 +331,7 @@
         x-data="{ submitted: false, successMessage: '', loading: false }"
     >
         <div class="text-center mb-10">
+            <p class="text-xs font-semibold tracking-[0.45em] text-gray-400 uppercase mb-4">Contact</p>
             <h2 class="text-4xl font-bold text-white mb-4">
                 {{ $coach->final_cta_title ?? 'Prêt à commencer ?' }}
             </h2>

@@ -80,66 +80,10 @@
             animation: heroPulse 2.4s ease infinite;
         }
 
-        @keyframes aboutImageReveal {
-            0% {
-                opacity: 0;
-                transform: translateY(40px) scale(0.96) rotate(-2deg);
-                filter: blur(4px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1) rotate(0);
-                filter: blur(0);
-            }
-        }
-
-        @keyframes aboutTextFade {
-            0% {
-                opacity: 0;
-                transform: translateY(35px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .about-image-reveal {
-            opacity: 0;
-            animation: aboutImageReveal 1s ease forwards;
-        }
-
-        .about-text-fade {
-            opacity: 0;
-            animation: aboutTextFade 0.85s ease forwards;
-            animation-delay: 0.2s;
-        }
-
-        .about-stat-animate {
-            opacity: 0;
-            transform: translateY(25px);
-            animation: aboutTextFade 0.75s ease forwards;
-        }
-
-        .about-stat-animate.delay-1 {
-            animation-delay: 0.35s;
-        }
-
-        .about-stat-animate.delay-2 {
-            animation-delay: 0.5s;
-        }
-
-        .about-stat-animate.delay-3 {
-            animation-delay: 0.65s;
-        }
-
         @media (prefers-reduced-motion: reduce) {
             .hero-background-animate,
             .hero-fade-seq,
-            .hero-cta-animated::after,
-            .about-image-reveal,
-            .about-text-fade,
-            .about-stat-animate {
+            .hero-cta-animated::after {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -195,7 +139,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <!-- Image -->
-            <div class="relative about-image-reveal">
+            <div class="relative">
                 @if($coach->hasMedia('profile'))
                     <div class="relative rounded-2xl overflow-hidden shadow-2xl">
                         <img src="{{ $coach->getFirstMediaUrl('profile') }}" 
@@ -213,7 +157,7 @@
             </div>
 
             <!-- Content -->
-            <div class="about-text-fade">
+            <div>
                 <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
                     À propos de {{ $coach->name }}
                 </h2>
@@ -223,15 +167,15 @@
 
                 <!-- Stats -->
                 <div class="grid grid-cols-3 gap-6 mt-8">
-                    <div class="text-center about-stat-animate delay-1">
+                    <div class="text-center">
                         <div class="text-3xl font-bold text-primary mb-1">{{ isset($transformations) ? $transformations->count() : 0 }}+</div>
                         <div class="text-sm text-gray-600">Transformations</div>
                     </div>
-                    <div class="text-center about-stat-animate delay-2">
+                    <div class="text-center">
                         <div class="text-3xl font-bold text-primary mb-1">{{ $coach->satisfaction_rate ?? 100 }}%</div>
                         <div class="text-sm text-gray-600">Satisfaits</div>
                     </div>
-                    <div class="text-center about-stat-animate delay-3">
+                    <div class="text-center">
                         <div class="text-3xl font-bold text-primary mb-1">{{ $coach->average_rating ?? 5.0 }} ★</div>
                         <div class="text-sm text-gray-600">Note moyenne</div>
                     </div>

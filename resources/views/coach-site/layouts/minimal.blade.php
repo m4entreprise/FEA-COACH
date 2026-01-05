@@ -836,10 +836,10 @@
 @endsection
 
 @section('coach-site-footer')
-    <footer class="bg-white border-t border-gray-200 text-gray-900">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
-            <div class="flex flex-col lg:flex-row gap-10">
-                <div class="flex-1 space-y-3">
+    <footer class="bg-white border-t border-gray-200 text-gray-900 minimal-footer-section">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10 minimal-footer-block" style="transition-delay: 0.1s;">
+            <div class="flex flex-col lg:flex-row gap-10 minimal-footer-block" style="transition-delay: 0.2s;">
+                <div class="flex-1 space-y-3 minimal-footer-block" style="transition-delay: 0.28s;">
                     <p class="text-xs font-semibold tracking-[0.35em] text-gray-500 uppercase">Coaching Sportif</p>
                     <h3 class="text-2xl font-semibold">{{ $coach->name }}</h3>
                     <p class="text-gray-600 leading-relaxed">
@@ -866,7 +866,7 @@
                     @endif
                 </div>
 
-                <div class="grid flex-1 grid-cols-1 sm:grid-cols-2 gap-8">
+                <div class="grid flex-1 grid-cols-1 sm:grid-cols-2 gap-8 minimal-footer-block" style="transition-delay: 0.36s;">
                     <div>
                         <p class="text-xs font-semibold tracking-[0.35em] text-gray-500 uppercase mb-4">Navigation</p>
                         <ul class="space-y-3 text-sm text-gray-600">
@@ -888,7 +888,7 @@
                         </ul>
                     </div>
 
-                    <div class="space-y-3">
+                    <div class="space-y-3 minimal-footer-block" style="transition-delay: 0.44s;">
                         <p class="text-xs font-semibold tracking-[0.35em] text-gray-500 uppercase">Contact rapide</p>
                         <div class="rounded-2xl border border-gray-100 bg-gray-50 p-5 space-y-4 text-sm text-gray-600">
                             <div>
@@ -924,7 +924,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-col gap-4 border-t border-gray-200 pt-6 text-sm text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex flex-col gap-4 border-t border-gray-200 pt-6 text-sm text-gray-500 sm:flex-row sm:items-center sm:justify-between minimal-footer-block" style="transition-delay: 0.52s;">
                 <p>&copy; {{ date('Y') }} {{ $coach->name }} — Tous droits réservés.</p>
                 <p class="text-xs uppercase tracking-widest text-gray-400">
                     Propulsé par <a href="https://unicoach.app" target="_blank" class="font-semibold text-gray-600 hover:text-primary transition-colors">UNICOACH</a>

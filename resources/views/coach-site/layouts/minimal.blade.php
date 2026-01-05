@@ -442,7 +442,7 @@
                                 required
                                 autocomplete="tel"
                                 value="{{ old('phone') }}"
-                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/40 focus:ring-offset-0"
+                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-0 focus:outline-none"
                                 placeholder="+32 4 12 34 56 78"
                             >
                         </div>
@@ -460,7 +460,7 @@
                             x-ref="email"
                             required
                             value="{{ old('email') }}"
-                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/40 focus:ring-offset-0"
+                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-0 focus:outline-none"
                             placeholder="vous@example.com"
                         >
                     </div>
@@ -476,7 +476,7 @@
                             x-ref="message"
                             rows="5"
                             required
-                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/40 focus:ring-offset-0"
+                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-0 focus:outline-none"
                             placeholder="Parlez-moi de vos objectifs..."
                         >{{ old('message') }}</textarea>
                     </div>

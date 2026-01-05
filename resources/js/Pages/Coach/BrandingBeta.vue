@@ -147,10 +147,10 @@ const disablePreviewAnimations = (html) => {
   }
 
   const css =
-    '<style data-disable-preview-animations>*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}</style>';
+    '<style data-disable-preview-animations>html[data-preview-mode] *,html[data-preview-mode] *::before,html[data-preview-mode] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}html[data-preview-mode] [class]{opacity:1!important;transform:none!important;filter:none!important}</style>';
 
   const script =
-    '<script data-disable-preview-animations>(function(){const originalMatchMedia=window.matchMedia?window.matchMedia.bind(window):null;window.matchMedia=function(query){if(typeof query==="string"&&query.includes("prefers-reduced-motion")){return{matches:true,media:query,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}};}return originalMatchMedia?originalMatchMedia(query):{matches:false,media:query,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}};};})();<\/script>';
+    '<script data-disable-preview-animations>(function(){document.documentElement.setAttribute("data-preview-mode","true");const originalMatchMedia=window.matchMedia?window.matchMedia.bind(window):null;window.matchMedia=function(query){if(typeof query==="string"&&query.includes("prefers-reduced-motion")){return{matches:true,media:query,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}};}return originalMatchMedia?originalMatchMedia(query):{matches:false,media:query,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}};};const PreviewObserver=function(callback){this._callback=callback;};PreviewObserver.prototype.observe=function(element){this._callback([{isIntersecting:true,target:element}],this);};PreviewObserver.prototype.unobserve=function(){};PreviewObserver.prototype.disconnect=function(){};window.IntersectionObserver=PreviewObserver;})();<\/script>';
 
   const injection = `${css}${script}`;
 

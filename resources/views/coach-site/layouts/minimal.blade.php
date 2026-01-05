@@ -206,19 +206,39 @@
                     <div class="grid grid-cols-2">
                         <div class="relative">
                             @if($beforeUrl)
-                                <img src="{{ $beforeUrl }}" alt="Avant" class="w-full h-48 object-cover">
+                                <button type="button"
+                                        class="block w-full h-48 focus:outline-none"
+                                        @click="openLightbox('{{ addslashes($beforeUrl) }}', 'Avant')"
+                                        aria-label="Voir la photo avant en grand">
+                                    <img src="{{ $beforeUrl }}" alt="Avant" class="w-full h-48 object-cover">
+                                    <span class="absolute inset-0 bg-gradient-to-br from-black/50 via-black/10 to-transparent opacity-0 hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold tracking-wide">
+                                        Agrandir
+                                    </span>
+                                </button>
                             @else
                                 <div class="w-full h-48 bg-gray-100"></div>
                             @endif
-                            <span class="absolute top-4 left-4 text-xs font-semibold uppercase tracking-[0.4em] text-white">AVANT</span>
+                            <span class="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/60 backdrop-blur px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.35em] text-white">
+                                AVANT
+                            </span>
                         </div>
                         <div class="relative">
                             @if($afterUrl)
-                                <img src="{{ $afterUrl }}" alt="Après" class="w-full h-48 object-cover">
+                                <button type="button"
+                                        class="block w-full h-48 focus:outline-none"
+                                        @click="openLightbox('{{ addslashes($afterUrl) }}', 'Après')"
+                                        aria-label="Voir la photo après en grand">
+                                    <img src="{{ $afterUrl }}" alt="Après" class="w-full h-48 object-cover">
+                                    <span class="absolute inset-0 bg-gradient-to-bl from-black/50 via-black/10 to-transparent opacity-0 hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold tracking-wide">
+                                        Agrandir
+                                    </span>
+                                </button>
                             @else
                                 <div class="w-full h-48 bg-gray-100"></div>
                             @endif
-                            <span class="absolute top-4 right-4 text-xs font-semibold uppercase tracking-[0.4em] text-white">APRÈS</span>
+                            <span class="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-black/60 backdrop-blur px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.35em] text-white">
+                                APRÈS
+                            </span>
                         </div>
                     </div>
                     @if($transformation->title || $transformation->description)

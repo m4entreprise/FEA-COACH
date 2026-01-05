@@ -209,24 +209,9 @@
 
                                 <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-black/80"></div>
 
-                                <div class="absolute inset-0 px-10 py-8 flex flex-col justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.4em]">
-                                            Formule
-                                        </span>
-                                        @if($service->is_featured)
-                                            <span class="inline-flex items-center gap-2 rounded-full bg-primary text-slate-950 text-xs font-black uppercase tracking-[0.4em] px-4 py-1.5">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                Impact
-                                            </span>
-                                        @endif
-                                    </div>
-
+                                <div class="absolute inset-0 px-10 py-8 flex flex-col justify-end">
                                     <div class="flex flex-wrap items-end justify-between gap-6">
                                         <div>
-                                            <p class="text-sm uppercase tracking-[0.4em] text-white/70 mb-2">Programme</p>
                                             <h3 class="text-4xl md:text-5xl font-black leading-tight">{{ $service->name }}</h3>
                                         </div>
                                         <div class="text-right">
@@ -264,17 +249,6 @@
                                         Coaching immersif avec plan d’action visuel, corrections techniques et suivi serré pour des progrès tangibles.
                                     </p>
                                 @endif
-
-                                <div class="flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">
-                                    <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-1.5">
-                                        <span class="w-2 h-2 rounded-full bg-primary"></span>
-                                        Suivi premium
-                                    </span>
-                                    <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-1.5">
-                                        <span class="w-2 h-2 rounded-full bg-secondary"></span>
-                                        Plan visuel
-                                    </span>
-                                </div>
 
                                 <div class="mt-auto pt-4">
                                     @if(optional($coach->user)->has_payments_module && $service->booking_enabled)

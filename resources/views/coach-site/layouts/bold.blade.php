@@ -386,7 +386,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
-                    <div x-show="openFaq === {{ $index + 1 }}" x-transition class="px-8 pb-6 text-lg text-gray-600 border-t border-gray-100" style="display: none;">
+                    <div x-show="openFaq === {{ $index + 1 }}" x-transition class="px-8 pt-6 pb-6 text-lg text-gray-600 border-t border-gray-100 space-y-4" style="display: none;">
                         {!! nl2br(e($faq->answer)) !!}
                     </div>
                 </div>

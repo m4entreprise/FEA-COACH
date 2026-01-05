@@ -98,13 +98,53 @@
             transform: translateY(0);
         }
 
+        .minimal-method-section {
+            opacity: 0;
+            transform: translateY(70px);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+        }
+
+        .minimal-method-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .minimal-method-header {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .minimal-method-cards {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .minimal-method-card {
+            opacity: 0;
+            transform: translateY(45px) scale(0.96);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
+        }
+
+        .minimal-method-section.is-visible .minimal-method-header,
+        .minimal-method-section.is-visible .minimal-method-cards,
+        .minimal-method-section.is-visible .minimal-method-card {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .minimal-hero-background,
             .minimal-hero-fade,
             .minimal-hero-card,
             .minimal-about-section,
             .minimal-about-seq,
-            .minimal-about-card {
+            .minimal-about-card,
+            .minimal-method-section,
+            .minimal-method-header,
+            .minimal-method-cards,
+            .minimal-method-card {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -196,9 +236,9 @@
 </section>
 
 <!-- Method Section - Minimal -->
-<section id="methode" class="py-20 bg-gray-50">
+<section id="methode" class="py-20 bg-gray-50 minimal-method-section">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12 minimal-method-header" style="transition-delay: 0.1s;">
             <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">Processus</p>
             <h2 class="text-4xl font-bold text-gray-900 mb-4">
                 {{ $coach->method_title ?? 'Ma méthode' }}
@@ -209,12 +249,12 @@
         </div>
 
         @if($coach->method_text)
-            <div class="text-base sm:text-lg text-gray-600 leading-relaxed bg-white rounded-2xl border border-gray-200 px-6 py-5 mb-12 shadow-sm">
+            <div class="text-base sm:text-lg text-gray-600 leading-relaxed bg-white rounded-2xl border border-gray-200 px-6 py-5 mb-12 shadow-sm minimal-method-header" style="transition-delay: 0.2s;">
                 {!! nl2br(e($coach->method_text)) !!}
             </div>
         @endif
 
-        <div class="grid gap-6 md:grid-cols-3">
+        <div class="grid gap-6 md:grid-cols-3 minimal-method-cards" style="transition-delay: 0.25s;">
             @foreach ([
                 [
                     'number' => '01',
@@ -235,7 +275,7 @@
                     'icon' => 'refresh-ccw',
                 ],
             ] as $step)
-                <div class="relative overflow-hidden rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+                <div class="relative overflow-hidden rounded-3xl border border-gray-200 bg-white p-6 shadow-sm minimal-method-card" style="transition-delay: {{ number_format(0.35 + ($loop->index * 0.12), 2) }}s;">
                     <span class="absolute top-6 right-6 text-4xl font-bold text-gray-100">{{ $step['number'] }}</span>
                     <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-gray-400">
                         Étape {{ $step['number'] }}
@@ -631,24 +671,24 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const aboutSection = document.querySelector('.minimal-about-section');
+            const animatedSections = document.querySelectorAll('.minimal-about-section, .minimal-method-section');
 
-            if (!aboutSection) {
+            if (!animatedSections.length) {
                 return;
             }
 
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const reveal = () => aboutSection.classList.add('is-visible');
+            const reveal = (el) => el.classList.add('is-visible');
 
             if (reduceMotion || typeof IntersectionObserver === 'undefined') {
-                reveal();
+                animatedSections.forEach(reveal);
                 return;
             }
 
             const observer = new IntersectionObserver((entries, obs) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        reveal();
+                        reveal(entry.target);
                         obs.unobserve(entry.target);
                     }
                 });
@@ -657,7 +697,7 @@
                 threshold: 0.25,
             });
 
-            observer.observe(aboutSection);
+            animatedSections.forEach((section) => observer.observe(section));
         });
     </script>
 @endpush

@@ -180,6 +180,38 @@
         .bold-method-delay-3 { transition-delay: 0.32s; }
         .bold-method-delay-4 { transition-delay: 0.46s; }
 
+        .bold-pricing-section {
+            opacity: 0;
+            transform: translateY(120px);
+            transition: opacity 1.1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-pricing-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bold-pricing-header,
+        .bold-pricing-description,
+        .bold-pricing-card,
+        .bold-pricing-empty {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-pricing-section.is-visible .bold-pricing-header,
+        .bold-pricing-section.is-visible .bold-pricing-description,
+        .bold-pricing-section.is-visible .bold-pricing-card,
+        .bold-pricing-section.is-visible .bold-pricing-empty {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bold-pricing-delay-1 { transition-delay: 0.08s; }
+        .bold-pricing-delay-2 { transition-delay: 0.2s; }
+        .bold-pricing-delay-3 { transition-delay: 0.32s; }
+
         @media (prefers-reduced-motion: reduce) {
             .bold-hero-background,
             .bold-hero-fade,
@@ -194,7 +226,12 @@
             .bold-method-section,
             .bold-method-header,
             .bold-method-description,
-            .bold-method-card {
+            .bold-method-card,
+            .bold-pricing-section,
+            .bold-pricing-header,
+            .bold-pricing-description,
+            .bold-pricing-card,
+            .bold-pricing-empty {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -371,16 +408,16 @@
 </section>
 
 <!-- Pricing Section - Bold -->
-<section id="tarifs" class="py-32 bg-gray-50">
+<section id="tarifs" class="py-32 bg-gray-50 bold-pricing-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-20">
+        <div class="text-center mb-20 bold-pricing-header bold-pricing-delay-1">
             <div class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary font-bold uppercase text-sm tracking-wide mb-6">
                 Formules
             </div>
             <h2 class="text-5xl md:text-6xl font-black text-gray-900 mb-6">
                 {{ $coach->pricing_title ?? 'Mes formules' }}
             </h2>
-            <p class="text-2xl text-gray-600 max-w-3xl mx-auto font-semibold">
+            <p class="text-2xl text-gray-600 max-w-3xl mx-auto font-semibold bold-pricing-description bold-pricing-delay-2">
                 {{ $coach->pricing_subtitle ?? 'Choisissez votre formule' }}
             </p>
         </div>
@@ -388,7 +425,7 @@
         @if(isset($services) && $services->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 3) }} gap-12">
                 @foreach($services as $service)
-                    <div class="relative group h-full">
+                    <div class="relative group h-full bold-pricing-card" style="transition-delay: {{ 0.25 + ($loop->index * 0.12) }}s;">
                         <div class="absolute inset-0 rounded-[48px] bg-gradient-to-br from-primary/50 via-secondary/40 to-primary/30 opacity-0 group-hover:opacity-100 blur-3xl transition duration-500"></div>
 
                         <div class="relative flex h-full flex-col overflow-hidden rounded-[40px] border border-white/5 shadow-[0_45px_90px_-45px_rgba(15,23,42,0.65)] bg-slate-950 text-white">
@@ -466,7 +503,7 @@
                 @endforeach
             </div>
         @else
-            <div class="text-center py-12">
+            <div class="text-center py-12 bold-pricing-empty bold-pricing-delay-3">
                 <p class="text-xl text-gray-600">Les formules seront bientôt disponibles.</p>
             </div>
         @endif
@@ -698,7 +735,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.bold-about-section, .bold-method-section');
+            const animatedSections = document.querySelectorAll('.bold-about-section, .bold-method-section, .bold-pricing-section');
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
             if (!animatedSections.length) {

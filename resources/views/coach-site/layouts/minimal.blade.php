@@ -150,7 +150,7 @@
                                 </div>
                             </div>
                             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                                <p class="text-sm text-gray-500">Plan clair, suivi minimaliste, résultats mesurables.</p>
+                                <p class="text-sm text-gray-500">Plan clair, suivi optimisé, résultats mesurables.</p>
                                 @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
                                     <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
                                        class="inline-flex items-center justify-center gap-2 rounded-full border border-gray-900 px-6 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-900 hover:text-white transition-all">

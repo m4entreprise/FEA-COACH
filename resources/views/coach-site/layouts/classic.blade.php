@@ -409,15 +409,23 @@
 
 <!-- Contact/CTA Section -->
 <section id="contact" class="py-20 text-white" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});">
+    @php
+        $contactEmail = optional($coach->user)->email;
+        $oldMessageLength = strlen(old('message', ''));
+    @endphp
     <div
         class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"
         x-data="{ submitted: false, successMessage: '', loading: false }"
     >
-        <div class="mb-10 text-center">
-            <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-white">
+        <div class="mb-12 text-center space-y-4">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs uppercase tracking-[0.3em] text-white/70">
+                <span class="inline-block h-2 w-2 rounded-full bg-emerald-300 animate-pulse"></span>
+                Contact
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white leading-tight">
                 {{ $coach->final_cta_title ?? 'Prêt à commencer votre transformation ?' }}
             </h2>
-            <p class="text-lg sm:text-xl mb-4 text-white/90">
+            <p class="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto">
                 {{ $coach->final_cta_subtitle ?? 'Ne laissez pas vos objectifs être de simples rêves. Agissez maintenant !' }}
             </p>
             <p class="text-sm text-white/80">
@@ -425,167 +433,281 @@
             </p>
         </div>
 
-        @if (session('success'))
+        <div class="space-y-6">
+            @if (session('success'))
+                <div
+                    class="rounded-2xl bg-white/10 border border-white/20 px-4 py-3 text-sm"
+                    x-show="!submitted"
+                >
+                    <div class="flex items-center">
+                        <svg class="h-5 w-5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span class="ml-3 text-emerald-50">{{ session('success') }}</span>
+                    </div>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="rounded-2xl bg-white/10 border border-red-300/40 px-4 py-3 text-sm" x-show="!submitted">
+                    <div class="flex items-start">
+                        <svg class="h-5 w-5 text-red-200 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14M12 4a8 8 0 100 16 8 8 0 000-16z" />
+                        </svg>
+                        <ul class="ml-3 space-y-1 text-red-50">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Message de succès en AJAX (remplace le formulaire après envoi) -->
             <div
-                class="mb-6 rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-sm"
-                x-show="!submitted"
+                class="rounded-2xl bg-white/10 border border-emerald-300/60 px-4 py-4 text-sm sm:text-base"
+                x-show="submitted"
+                x-transition
             >
-                <div class="flex items-center">
-                    <svg class="h-5 w-5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-start">
+                    <svg class="h-6 w-6 text-emerald-200 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span class="ml-3 text-emerald-50">{{ session('success') }}</span>
+                    <div class="ml-3">
+                        <p class="font-semibold text-emerald-50">Message envoyé avec succès</p>
+                        <p class="mt-1 text-emerald-100" x-text="successMessage || 'Votre message a bien été envoyé. Le coach vous répondra au plus vite.'"></p>
+                    </div>
                 </div>
             </div>
-        @endif
 
-        @if ($errors->any())
-            <div class="mb-6 rounded-lg bg-white/10 border border-red-300/40 px-4 py-3 text-sm" x-show="!submitted">
-                <div class="flex items-start">
-                    <svg class="h-5 w-5 text-red-200 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14M12 4a8 8 0 100 16 8 8 0 000-16z" />
-                    </svg>
-                    <ul class="ml-3 space-y-1 text-red-50">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        @endif
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="rounded-3xl border border-white/20 bg-white/5 p-6 sm:p-8 shadow-2xl shadow-black/10">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.3em] text-white/70">Accès direct</p>
+                            <p class="text-lg font-semibold text-white">Parlons de vos objectifs</p>
+                        </div>
+                    </div>
 
-        <!-- Message de succès en AJAX (remplace le formulaire après envoi) -->
-        <div
-            class="mb-6 rounded-2xl bg-white/10 border border-emerald-300/60 px-4 py-4 text-sm sm:text-base"
-            x-show="submitted"
-            x-transition
-        >
-            <div class="flex items-start">
-                <svg class="h-6 w-6 text-emerald-200 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <div class="ml-3">
-                    <p class="font-semibold text-emerald-50">Message envoyé avec succès</p>
-                    <p class="mt-1 text-emerald-100" x-text="successMessage || 'Votre message a bien été envoyé. Le coach vous répondra au plus vite.'"></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8" x-show="!submitted" x-transition>
-            <form
-                method="POST"
-                action="/contact"
-                class="grid grid-cols-1 md:grid-cols-2 gap-6"
-                @submit.prevent="
-                    loading = true;
-                    fetch('/contact', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            name: $refs.name.value,
-                            email: $refs.email.value,
-                            phone: $refs.phone.value,
-                            message: $refs.message.value,
-                        }),
-                    })
-                        .then(async (response) => {
-                            if (!response.ok) {
-                                throw new Error('Request failed');
-                            }
-                            const data = await response.json();
-                            successMessage = data.message || '';
-                            submitted = true;
-                        })
-                        .catch(() => {
-                            // En cas d'erreur, garder le fallback : le coach sera contacté via la soumission classique
-                            loading = false;
-                        })
-                        .finally(() => {
-                            loading = false;
-                        });
-                "
-            >
-                @csrf
-
-                <div class="md:col-span-1">
-                    <label for="name" class="block text-sm font-medium text-white mb-1">Nom complet *</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        x-ref="name"
-                        required
-                        value="{{ old('name') }}"
-                        class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
-                        placeholder="Votre nom"
-                    >
-                </div>
-
-                <div class="md:col-span-1">
-                    <label for="email" class="block text-sm font-medium text-white mb-1">Email *</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        x-ref="email"
-                        required
-                        value="{{ old('email') }}"
-                        class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
-                        placeholder="vous@example.com"
-                    >
-                </div>
-
-                <div class="md:col-span-1">
-                    <label for="phone" class="block text-sm font-medium text-white mb-1">Téléphone (optionnel)</label>
-                    <input
-                        type="text"
-                        id="phone"
-                        name="phone"
-                        x-ref="phone"
-                        value="{{ old('phone') }}"
-                        class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
-                        placeholder="+33 ..."
-                    >
-                </div>
-
-                <div class="md:col-span-2">
-                    <label for="message" class="block text-sm font-medium text-white mb-1">Message *</label>
-                    <textarea
-                        id="message"
-                        name="message"
-                        x-ref="message"
-                        rows="4"
-                        required
-                        class="mt-1 block w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/70"
-                        placeholder="Parlez de vos objectifs, de votre niveau actuel, de vos disponibilités..."
-                    >{{ old('message') }}</textarea>
-                    <p class="mt-2 text-xs text-white/70">
-                        En envoyant ce message, vous serez recontacté(e) par le coach pour discuter de votre situation et des prochaines étapes.
+                    <p class="text-white/80 text-sm leading-relaxed">
+                        Partagez vos ambitions, votre niveau et vos disponibilités. Je reviens vers vous avec une proposition personnalisée.
                     </p>
+
+                    <div class="mt-6 space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="mt-0.5 h-8 w-8 rounded-full bg-white/15 flex items-center justify-center text-sm font-bold">1</div>
+                            <div>
+                                <p class="font-semibold">Réponse rapide</p>
+                                <p class="text-white/70 text-sm">Retour sous 24h (hors week-end)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="mt-0.5 h-8 w-8 rounded-full bg-white/15 flex items-center justify-center text-sm font-bold">2</div>
+                            <div>
+                                <p class="font-semibold">Session découverte</p>
+                                <p class="text-white/70 text-sm">15 min offertes pour définir le plan d’action</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="mt-0.5 h-8 w-8 rounded-full bg-white/15 flex items-center justify-center text-sm font-bold">3</div>
+                            <div>
+                                <p class="font-semibold">Accompagnement flexible</p>
+                                <p class="text-white/70 text-sm">Visio, présentiel ou suivi hybride</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 border-t border-white/15 pt-6 space-y-4">
+                        <p class="text-xs uppercase tracking-[0.3em] text-white/60">Canaux</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-full bg-white/15 text-sm text-white/80">WhatsApp</span>
+                            <span class="px-3 py-1 rounded-full bg-white/15 text-sm text-white/80">Visio</span>
+                            <span class="px-3 py-1 rounded-full bg-white/15 text-sm text-white/80">Présentiel</span>
+                        </div>
+                        @if($contactEmail)
+                            <a href="mailto:{{ $contactEmail }}" class="inline-flex items-center text-sm font-semibold text-white hover:text-white/80 transition">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l9 6 9-6" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 8v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8" />
+                                </svg>
+                                {{ $contactEmail }}
+                            </a>
+                        @endif
+                    </div>
                 </div>
 
-                <div class="md:col-span-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-2">
-                    <button
-                        type="submit"
-                        class="inline-flex items-center justify-center px-8 py-3 bg-white text-sm sm:text-base font-bold rounded-lg shadow-lg hover:bg-gray-100 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-                        style="color: {{ $coach->color_primary ?? '#3B82F6' }};"
-                        :disabled="loading"
-                    >
-                        <span x-show="!loading">Envoyer mon message</span>
-                        <span x-show="loading">Envoi en cours...</span>
-                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                        </svg>
-                    </button>
-                    <p class="text-xs text-white/70 sm:text-right">
-                        Réponse généralement sous 24 à 48h.
-                    </p>
+                <div class="lg:col-span-2">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-3xl shadow-2xl shadow-black/20 p-6 sm:p-10" x-show="!submitted" x-transition>
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.3em] text-white/70">Formulaire</p>
+                                <h3 class="text-2xl font-semibold">Décrivez votre projet</h3>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-white/70">
+                                <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/30 font-semibold">1</span>
+                                <span>Vos informations</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                                <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/30 font-semibold">2</span>
+                                <span>Plan d’action</span>
+                            </div>
+                        </div>
+
+                        <form
+                            method="POST"
+                            action="/contact"
+                            class="grid grid-cols-1 md:grid-cols-2 gap-6"
+                            @submit.prevent="
+                                loading = true;
+                                fetch('/contact', {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        name: $refs.name.value,
+                                        email: $refs.email.value,
+                                        phone: $refs.phone.value,
+                                        message: $refs.message.value,
+                                    }),
+                                })
+                                    .then(async (response) => {
+                                        if (!response.ok) {
+                                            throw new Error('Request failed');
+                                        }
+                                        const data = await response.json();
+                                        successMessage = data.message || '';
+                                        submitted = true;
+                                    })
+                                    .catch(() => {
+                                        loading = false;
+                                    })
+                                    .finally(() => {
+                                        loading = false;
+                                    });
+                            "
+                        >
+                            @csrf
+
+                            <div class="md:col-span-1">
+                                <label for="name" class="block text-sm font-semibold text-white mb-2">Nom complet *</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-3 flex items-center text-white/60">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                    </span>
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        x-ref="name"
+                                        required
+                                        value="{{ old('name') }}"
+                                        class="block w-full rounded-2xl border border-white/15 bg-white/5 px-11 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/60"
+                                        placeholder="Votre nom"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="md:col-span-1">
+                                <label for="email" class="block text-sm font-semibold text-white mb-2">Email *</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-3 flex items-center text-white/60">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                        </svg>
+                                    </span>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        x-ref="email"
+                                        required
+                                        value="{{ old('email') }}"
+                                        class="block w-full rounded-2xl border border-white/15 bg-white/5 px-11 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/60"
+                                        placeholder="vous@example.com"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="md:col-span-1">
+                                <label for="phone" class="block text-sm font-semibold text-white mb-2">Téléphone (optionnel)</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-3 flex items-center text-white/60">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h2l3.6 7.59a1 1 0 00.9.57H17a1 1 0 011 .78l1 4a1 1 0 01-.97 1.22H6.21a1 1 0 01-.98-.8L4 5z"/>
+                                        </svg>
+                                    </span>
+                                    <input
+                                        type="text"
+                                        id="phone"
+                                        name="phone"
+                                        x-ref="phone"
+                                        value="{{ old('phone') }}"
+                                        class="block w-full rounded-2xl border border-white/15 bg-white/5 px-11 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/60"
+                                        placeholder="+33 ..."
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="md:col-span-2" x-data="{ chars: {{ $oldMessageLength }} }">
+                                <label for="message" class="block text-sm font-semibold text-white mb-2">Message *</label>
+                                <div class="relative">
+                                    <textarea
+                                        id="message"
+                                        name="message"
+                                        x-ref="message"
+                                        rows="5"
+                                        maxlength="1000"
+                                        required
+                                        class="block w-full rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/60"
+                                        placeholder="Parlez de vos objectifs, de votre niveau actuel, de vos disponibilités..."
+                                        @input="chars = $event.target.value.length"
+                                    >{{ old('message') }}</textarea>
+                                    <span class="absolute bottom-3 right-4 text-xs text-white/60" x-text="chars + '/1000'"></span>
+                                </div>
+                                <p class="mt-2 text-xs text-white/70">
+                                    En envoyant ce message, vous serez recontacté(e) par le coach pour discuter de votre situation et des prochaines étapes.
+                                </p>
+                            </div>
+
+                            <div class="md:col-span-2 flex flex-col gap-4 mt-4">
+                                <button
+                                    type="submit"
+                                    class="inline-flex items-center justify-center gap-3 rounded-2xl bg-white px-8 py-3 text-base sm:text-lg font-semibold text-gray-900 shadow-xl shadow-black/10 transition hover:-translate-y-0.5 hover:bg-gray-100 disabled:opacity-60 disabled:cursor-not-allowed"
+                                    style="color: {{ $coach->color_primary ?? '#3B82F6' }};"
+                                    :disabled="loading"
+                                >
+                                    <span x-show="!loading">Envoyer mon message</span>
+                                    <span x-show="loading">Envoi en cours...</span>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                                    </svg>
+                                </button>
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-white/70">
+                                    <p class="flex items-center gap-2">
+                                        <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-[10px]">✓</span>
+                                        Réponse généralement sous 24 à 48h
+                                    </p>
+                                    <p class="flex items-center gap-2">
+                                        <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-[10px]">🔒</span>
+                                        Vos informations restent confidentielles
+                                    </p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </section>

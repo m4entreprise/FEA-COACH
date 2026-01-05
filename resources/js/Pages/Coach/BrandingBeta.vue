@@ -729,19 +729,19 @@ onBeforeUnmount(() => {
 
 @keyframes fullscreenGlow {
   0% {
-    transform: scale(0.92);
-    opacity: 0.35;
-    filter: blur(6px);
+    transform: scale(0.96);
+    opacity: 0.25;
+    filter: blur(5px);
   }
   45% {
-    transform: scale(1.08);
-    opacity: 0.85;
+    transform: scale(1.04);
+    opacity: 0.7;
     filter: blur(0);
   }
   100% {
-    transform: scale(0.92);
-    opacity: 0.35;
-    filter: blur(6px);
+    transform: scale(0.96);
+    opacity: 0.25;
+    filter: blur(5px);
   }
 }
 
@@ -756,7 +756,7 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: -4px;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(129, 140, 248, 0.45), rgba(15, 23, 42, 0));
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.28), rgba(15, 23, 42, 0));
   z-index: -1;
   animation: fullscreenGlow 2.8s ease-in-out infinite;
   pointer-events: none;

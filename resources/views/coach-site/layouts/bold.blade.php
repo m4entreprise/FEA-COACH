@@ -836,33 +836,53 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.bold-about-section, .bold-method-section, .bold-pricing-section, .bold-results-section, .bold-faq-section, .bold-contact-section');
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        (function () {
+            const initAnimations = () => {
+                const animatedSelectors = [
+                    '.bold-about-section',
+                    '.bold-method-section',
+                    '.bold-pricing-section',
+                    '.bold-results-section',
+                    '.bold-faq-section',
+                    '.bold-contact-section'
+                ];
 
-            if (!animatedSections.length) {
-                return;
+                const animatedSections = document.querySelectorAll(animatedSelectors.join(', '));
+                const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+                if (!animatedSections.length) {
+                    return;
+                }
+
+                if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
+                    animatedSections.forEach((section) => section.classList.add('is-visible'));
+                    return;
+                }
+
+                const observer = new IntersectionObserver(
+                    (entries, obs) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('is-visible');
+                                obs.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    {
+                        rootMargin: '0px 0px -10% 0px',
+                        threshold: 0.1,
+                    }
+                );
+
+                animatedSections.forEach((section) => observer.observe(section));
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initAnimations);
+            } else {
+                initAnimations();
             }
-
-            if (prefersReducedMotion) {
-                animatedSections.forEach((section) => section.classList.add('is-visible'));
-                return;
-            }
-
-            const observer = new IntersectionObserver(
-                (entries, obs) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
-                            obs.unobserve(entry.target);
-                        }
-                    });
-                },
-                { threshold: 0.2 }
-            );
-
-            animatedSections.forEach((section) => observer.observe(section));
-        });
+        })();
     </script>
 @endpush
 

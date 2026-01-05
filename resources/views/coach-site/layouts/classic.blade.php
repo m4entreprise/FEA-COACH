@@ -447,45 +447,54 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const animatedSelectors = [
-                '.about-animate',
-                '.method-section-animate',
-                '.cta-section-animate',
-                '.pricing-section-animate',
-                '.results-section-animate',
-                '.faq-section-animate',
-                '.contact-section-animate',
-                '.footer-section-animate'
-            ];
-            const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
+        (function () {
+            const initAnimations = () => {
+                const animatedSelectors = [
+                    '.about-animate',
+                    '.method-section-animate',
+                    '.cta-section-animate',
+                    '.pricing-section-animate',
+                    '.results-section-animate',
+                    '.faq-section-animate',
+                    '.contact-section-animate',
+                    '.footer-section-animate'
+                ];
 
-            if (!animatedElements.length) {
-                return;
-            }
+                const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
 
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const reveal = (el) => el.classList.add('is-visible');
+                if (!animatedElements.length) {
+                    return;
+                }
 
-            if (reduceMotion || typeof IntersectionObserver === 'undefined') {
-                animatedElements.forEach(reveal);
-                return;
-            }
+                const reveal = (el) => el.classList.add('is-visible');
+                const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        reveal(entry.target);
-                        obs.unobserve(entry.target);
-                    }
+                if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+                    animatedElements.forEach(reveal);
+                    return;
+                }
+
+                const observer = new IntersectionObserver((entries, obs) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            reveal(entry.target);
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    rootMargin: '0px 0px -10% 0px',
+                    threshold: 0.1,
                 });
-            }, {
-                rootMargin: '0px 0px -10% 0px',
-                threshold: 0.25,
-            });
 
-            animatedElements.forEach((el) => observer.observe(el));
-        });
+                animatedElements.forEach((el) => observer.observe(el));
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initAnimations);
+            } else {
+                initAnimations();
+            }
+        })();
     </script>
 @endpush
 

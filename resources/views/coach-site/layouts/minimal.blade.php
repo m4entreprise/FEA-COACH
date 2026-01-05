@@ -159,7 +159,7 @@
         @if(isset($services) && $services->count() > 0)
             <div class="space-y-8">
                 @foreach($services as $service)
-                    <div class="relative overflow-hidden rounded-3xl border border-gray-200 bg-white/90 px-6 sm:px-8 pt-10 sm:pt-12 pb-6 sm:pb-8 shadow-sm transition hover:-translate-y-0.5 hover:border-gray-900/20">
+                    <div class="relative rounded-3xl border border-gray-200 bg-white/90 px-6 sm:px-8 pt-10 sm:pt-12 pb-6 sm:pb-8 shadow-sm transition hover:-translate-y-0.5 hover:border-gray-900/20">
                         <span class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary/60 via-primary/30 to-transparent"></span>
                         @if($service->is_featured)
                             <span class="absolute -top-4 sm:-top-5 right-4 sm:right-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white shadow-lg shadow-primary/30 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary z-10">

@@ -69,10 +69,42 @@
             animation-delay: 0.6s;
         }
 
+        .minimal-about-section {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+        }
+
+        .minimal-about-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .minimal-about-seq {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
+        }
+
+        .minimal-about-card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
+        }
+
+        .minimal-about-section.is-visible .minimal-about-seq,
+        .minimal-about-section.is-visible .minimal-about-card {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .minimal-hero-background,
             .minimal-hero-fade,
-            .minimal-hero-card {
+            .minimal-hero-card,
+            .minimal-about-section,
+            .minimal-about-seq,
+            .minimal-about-card {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -137,27 +169,27 @@
 </section>
 
 <!-- About Section - Minimal -->
-<section id="a-propos" class="py-20 bg-white">
+<section id="a-propos" class="py-20 bg-white minimal-about-section">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">À propos</p>
-        <h2 class="text-4xl font-bold text-gray-900 mb-6">
+        <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4 minimal-about-seq" style="transition-delay: 0.1s;">À propos</p>
+        <h2 class="text-4xl font-bold text-gray-900 mb-6 minimal-about-seq" style="transition-delay: 0.18s;">
             {{ $coach->name }}
         </h2>
-        <div class="text-lg text-gray-600 leading-relaxed space-y-4 mb-12 max-w-3xl mx-auto">
+        <div class="text-lg text-gray-600 leading-relaxed space-y-4 mb-12 max-w-3xl mx-auto minimal-about-seq" style="transition-delay: 0.28s;">
             {!! nl2br(e($coach->about_text ?? 'Coach sportif certifié avec plusieurs années d\'expérience dans l\'accompagnement personnalisé.')) !!}
         </div>
-        <div class="grid gap-6 sm:grid-cols-3">
-            <div class="border border-gray-200 rounded-2xl p-6">
+        <div class="grid gap-6 sm:grid-cols-3 minimal-about-seq" style="transition-delay: 0.36s;">
+            <div class="border border-gray-200 rounded-2xl p-6 minimal-about-card" style="transition-delay: 0.42s;">
                 <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Clients suivis</p>
                 <p class="text-4xl font-bold text-gray-900">{{ isset($transformations) ? $transformations->count() : 0 }}+</p>
             </div>
-            <div class="border border-gray-200 rounded-2xl p-6">
+            <div class="border border-gray-200 rounded-2xl p-6 minimal-about-card" style="transition-delay: 0.5s;">
                 <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Satisfaction</p>
                 <p class="text-4xl font-bold text-gray-900">{{ $coach->satisfaction_rate ?? 100 }}%</p>
             </div>
-            <div class="border border-gray-200 rounded-2xl p-6">
+            <div class="border border-gray-200 rounded-2xl p-6 minimal-about-card" style="transition-delay: 0.58s;">
                 <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Note moyenne</p>
-                <p class="text-4xl font-bold text-gray-900">{{ $coach->average_rating ?? 5.0 }}★</p>
+                <p class="text-4xl font-bold text-gray-900">{{ $coach->average_rating ?? 5.0 }} ★</p>
             </div>
         </div>
     </div>
@@ -595,6 +627,40 @@
         </div>
     </div>
 </section>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const aboutSection = document.querySelector('.minimal-about-section');
+
+            if (!aboutSection) {
+                return;
+            }
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const reveal = () => aboutSection.classList.add('is-visible');
+
+            if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+                reveal();
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        reveal();
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -15% 0px',
+                threshold: 0.25,
+            });
+
+            observer.observe(aboutSection);
+        });
+    </script>
+@endpush
 
 @endsection
 

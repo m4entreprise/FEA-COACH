@@ -451,7 +451,7 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
             <div class="flex flex-col lg:flex-row gap-10">
                 <div class="flex-1 space-y-3">
-                    <p class="text-xs font-semibold tracking-[0.35em] text-gray-500 uppercase">Ignite Coach</p>
+                    <p class="text-xs font-semibold tracking-[0.35em] text-gray-500 uppercase">Coaching Sportif</p>
                     <h3 class="text-2xl font-semibold">{{ $coach->name }}</h3>
                     <p class="text-gray-600 leading-relaxed">
                         {{ $coach->about_text ? Str::limit(strip_tags($coach->about_text), 160) : 'Coaching minimaliste, focalisé sur la progression constante et la clarté des objectifs.' }}

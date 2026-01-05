@@ -601,9 +601,9 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
                 <div class="lg:col-span-5 space-y-6">
                     <div class="space-y-3">
-                        <p class="text-sm uppercase tracking-[0.3em] text-white/70">Ignite Coach</p>
+                        <p class="text-sm uppercase tracking-[0.3em] text-white/70">Coaching sportif</p>
                         <h3 class="text-3xl font-extrabold leading-tight">
-                            {{ $coach->name }} — Coaching premium & résultats durables
+                            {{ $coach->name }}
                         </h3>
                     </div>
                     <p class="text-white/70 leading-relaxed">

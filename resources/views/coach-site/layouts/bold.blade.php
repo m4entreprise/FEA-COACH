@@ -486,7 +486,7 @@
                 <div class="lg:col-span-5 space-y-4">
                     <p class="text-xs uppercase tracking-[0.4em] text-white/60">Coaching sportif</p>
                     <h3 class="text-3xl font-black leading-tight">
-                        {{ $coach->name }} — Coaching haute intensité
+                        {{ $coach->name }}
                     </h3>
                     <p class="text-white/70 leading-relaxed">
                         {{ $coach->about_text ? Str::limit(strip_tags($coach->about_text), 200) : 'Programmes d’élite, mindset puissant, résultats spectaculaires.' }}

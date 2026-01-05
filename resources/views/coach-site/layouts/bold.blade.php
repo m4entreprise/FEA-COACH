@@ -83,35 +83,20 @@
         }
 
         .bold-about-section {
-            opacity: 0;
-            transform: translateY(70px);
-            transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.1s ease;
-        }
-
-        .bold-about-section.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .bold-about-image,
-        .bold-about-content {
-            opacity: 0;
-            transform: translateY(60px);
-            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+            animation: boldHeroFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.1s;
         }
 
         .bold-about-image {
-            transition-delay: 0.15s;
+            opacity: 0;
+            animation: boldHeroFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.25s;
         }
 
         .bold-about-content {
-            transition-delay: 0.3s;
-        }
-
-        .bold-about-section.is-visible .bold-about-image,
-        .bold-about-section.is-visible .bold-about-content {
-            opacity: 1;
-            transform: translateY(0);
+            opacity: 0;
+            animation: boldHeroFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.35s;
         }
 
         @media (prefers-reduced-motion: reduce) {

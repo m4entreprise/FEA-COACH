@@ -58,6 +58,9 @@ watch(
     { immediate: true },
 );
 
+const DEFAULT_MIN_ADVANCE_HOURS = 24;
+const DEFAULT_MAX_ADVANCE_DAYS = 30;
+
 const form = useForm({
     name: '',
     description: '',
@@ -67,8 +70,8 @@ const form = useForm({
     is_active: true,
     booking_enabled: true,
     is_featured: false,
-    max_advance_booking_days: 60,
-    min_advance_booking_hours: 24,
+    max_advance_booking_days: DEFAULT_MAX_ADVANCE_DAYS,
+    min_advance_booking_hours: DEFAULT_MIN_ADVANCE_HOURS,
     order: 0,
     image: null,
     remove_image: false,
@@ -131,8 +134,8 @@ const openCreateModal = () => {
     form.is_active = true;
     form.booking_enabled = true;
     form.is_featured = false;
-    form.max_advance_booking_days = 60;
-    form.min_advance_booking_hours = 24;
+    form.max_advance_booking_days = DEFAULT_MAX_ADVANCE_DAYS;
+    form.min_advance_booking_hours = DEFAULT_MIN_ADVANCE_HOURS;
     form.order = servicesList.value.length;
     form.image = null;
     form.remove_image = false;
@@ -155,8 +158,8 @@ const openEditModal = (service) => {
     form.is_active = service.is_active;
     form.booking_enabled = service.booking_enabled ?? true;
     form.is_featured = service.is_featured ?? false;
-    form.max_advance_booking_days = service.max_advance_booking_days ?? 60;
-    form.min_advance_booking_hours = service.min_advance_booking_hours ?? 24;
+    form.max_advance_booking_days = service.max_advance_booking_days ?? DEFAULT_MAX_ADVANCE_DAYS;
+    form.min_advance_booking_hours = service.min_advance_booking_hours ?? DEFAULT_MIN_ADVANCE_HOURS;
     form.order = service.order ?? 0;
     form.image = null;
     form.remove_image = false;
@@ -189,6 +192,9 @@ const resetTransform = () => {
 };
 
 const submit = () => {
+    form.min_advance_booking_hours = DEFAULT_MIN_ADVANCE_HOURS;
+    form.max_advance_booking_days = DEFAULT_MAX_ADVANCE_DAYS;
+
     if (editingService.value) {
         form.transform((data) => ({
             ...data,
@@ -579,7 +585,7 @@ const saveOrder = async () => {
                     <p class="text-xs uppercase tracking-wide text-slate-500">
                         {{ editingService ? 'Modifier' : 'Nouveau service' }}
                     </p>
-                    <h2 class="text-sm font-semibold">
+                    <h2 class="text-sm font-semibold text-slate-100">
                         {{ editingService ? 'Modifier le service' : 'Créer un service' }}
                     </h2>
                 </div>
@@ -720,41 +726,6 @@ const saveOrder = async () => {
                         />
                     </div>
                     <InputError class="mt-1 text-[11px]" :message="form.errors.description" />
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <InputLabel
-                            for="service_min_advance"
-                            value="Délai minimum (heures)"
-                            class="text-xs text-slate-200"
-                        />
-                        <TextInput
-                            id="service_min_advance"
-                            name="min_advance_booking_hours"
-                            v-model="form.min_advance_booking_hours"
-                            type="number"
-                            min="0"
-                            class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                        />
-                        <InputError class="mt-1 text-[11px]" :message="form.errors.min_advance_booking_hours" />
-                    </div>
-                    <div>
-                        <InputLabel
-                            for="service_max_advance"
-                            value="Réservable jusqu’à (jours)"
-                            class="text-xs text-slate-200"
-                        />
-                        <TextInput
-                            id="service_max_advance"
-                            name="max_advance_booking_days"
-                            v-model="form.max_advance_booking_days"
-                            type="number"
-                            min="1"
-                            class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                        />
-                        <InputError class="mt-1 text-[11px]" :message="form.errors.max_advance_booking_days" />
-                    </div>
                 </div>
 
                 <div class="space-y-2">

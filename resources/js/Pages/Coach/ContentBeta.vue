@@ -191,24 +191,6 @@ const hasPreviewRequirements = computed(() => {
   return Boolean(form.hero_title?.trim() && form.cta_text?.trim());
 });
 
-const disablePreviewAnimations = (html) => {
-  if (!html || html.includes('data-disable-preview-animations')) {
-    return html;
-  }
-
-  const css =
-    '<style data-disable-preview-animations>html[data-preview-mode] *,html[data-preview-mode] *::before,html[data-preview-mode] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}html[data-preview-mode] [class]{opacity:1!important;transform:none!important;filter:none!important}</style>';
-
-  const script =
-    '<script data-disable-preview-animations>(function(){document.documentElement.setAttribute("data-preview-mode","true");const originalMatchMedia=window.matchMedia?window.matchMedia.bind(window):null;window.matchMedia=function(query){if(typeof query==="string"&&query.includes("prefers-reduced-motion")){return{matches:true,media:query,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}};}return originalMatchMedia?originalMatchMedia(query):{matches:false,media:query,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}};};})();<\/script>';
-
-  const injection = `${css}${script}`;
-
-  return html.includes('</head>')
-    ? html.replace('</head>', `${injection}</head>`)
-    : `${injection}${html}`;
-};
-
 const fetchPreview = async () => {
   if (!hasPreviewRequirements.value) {
     previewHtml.value = '';
@@ -230,7 +212,7 @@ const fetchPreview = async () => {
       },
     );
 
-    previewHtml.value = disablePreviewAnimations(data.html);
+    previewHtml.value = data.html;
   } catch (error) {
     previewError.value =
       error.response?.data?.message || 'Impossible de générer l’aperçu pour le moment.';
@@ -1131,7 +1113,7 @@ onBeforeUnmount(() => {
                     v-show="hasPreviewRequirements && previewHtml"
                     :key="form.site_layout + previewHtml"
                     class="w-full h-[34rem] bg-white overflow-x-hidden"
-                    sandbox="allow-same-origin allow-forms allow-scripts"
+                    sandbox="allow-same-origin allow-forms"
                     :srcdoc="previewHtml"
                   ></iframe>
                 </div>
@@ -1184,7 +1166,7 @@ onBeforeUnmount(() => {
               <iframe
                 v-show="hasPreviewRequirements && previewHtml"
                 class="w-full h-full rounded-2xl bg-white shadow-2xl overflow-x-hidden"
-                sandbox="allow-same-origin allow-forms allow-scripts"
+                sandbox="allow-same-origin allow-forms"
                 :srcdoc="previewHtml"
               ></iframe>
               <div

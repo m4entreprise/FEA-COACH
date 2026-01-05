@@ -141,24 +141,6 @@ const hasPreviewRequirements = computed(() => {
   return colorRegex.test(form.color_primary) && colorRegex.test(form.color_secondary) && Boolean(form.site_layout);
 });
 
-const disablePreviewAnimations = (html) => {
-  if (!html || html.includes('data-disable-preview-animations')) {
-    return html;
-  }
-
-  const css =
-    '<style data-disable-preview-animations>html[data-preview-mode] *,html[data-preview-mode] *::before,html[data-preview-mode] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}html[data-preview-mode] [class]{opacity:1!important;transform:none!important;filter:none!important}</style>';
-
-  const script =
-    '<script data-disable-preview-animations>(function(){document.documentElement.setAttribute("data-preview-mode","true");const originalMatchMedia=window.matchMedia?window.matchMedia.bind(window):null;window.matchMedia=function(query){if(typeof query==="string"&&query.includes("prefers-reduced-motion")){return{matches:true,media:query,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}};}return originalMatchMedia?originalMatchMedia(query):{matches:false,media:query,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}};};const PreviewObserver=function(callback){this._callback=callback;};PreviewObserver.prototype.observe=function(element){this._callback([{isIntersecting:true,target:element}],this);};PreviewObserver.prototype.unobserve=function(){};PreviewObserver.prototype.disconnect=function(){};window.IntersectionObserver=PreviewObserver;})();<\/script>';
-
-  const injection = `${css}${script}`;
-
-  return html.includes('</head>')
-    ? html.replace('</head>', `${injection}</head>`)
-    : `${injection}${html}`;
-};
-
 const fetchPreview = async () => {
   if (!hasPreviewRequirements.value) {
     previewHtml.value = '';
@@ -184,7 +166,7 @@ const fetchPreview = async () => {
       },
     );
 
-    previewHtml.value = disablePreviewAnimations(data.html);
+    previewHtml.value = data.html;
   } catch (error) {
     previewError.value =
       error.response?.data?.message || "Impossible de générer l’aperçu pour le moment.";
@@ -646,7 +628,7 @@ onBeforeUnmount(() => {
                     v-show="hasPreviewRequirements && previewHtml"
                     :key="form.site_layout + previewHtml"
                     class="w-full h-[34rem] bg-white overflow-x-hidden"
-                    sandbox="allow-same-origin allow-forms allow-scripts"
+                    sandbox="allow-same-origin allow-forms"
                     :srcdoc="previewHtml"
                   ></iframe>
                 </div>
@@ -699,7 +681,7 @@ onBeforeUnmount(() => {
               <iframe
                 v-show="hasPreviewRequirements && previewHtml"
                 class="w-full h-full rounded-2xl bg-white shadow-2xl overflow-x-hidden"
-                sandbox="allow-same-origin allow-forms allow-scripts"
+                sandbox="allow-same-origin allow-forms"
                 :srcdoc="previewHtml"
               ></iframe>
               <div

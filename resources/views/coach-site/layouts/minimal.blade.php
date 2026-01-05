@@ -412,60 +412,74 @@
             >
                 @csrf
 
-                <div>
-                    <label for="name" class="block text-sm font-semibold text-gray-900 mb-2">Nom complet *</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        x-ref="name"
-                        required
-                        value="{{ old('name') }}"
-                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                        placeholder="Votre nom"
-                    >
+                <div class="grid gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="name" class="block text-sm font-semibold text-gray-900 mb-2">Nom complet *</label>
+                        <div class="relative">
+                            <x-lucide-user class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                x-ref="name"
+                                required
+                                value="{{ old('name') }}"
+                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-primary"
+                                placeholder="Votre nom"
+                            >
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">Téléphone *</label>
+                        <div class="relative">
+                            <x-lucide-phone-call class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                x-ref="phone"
+                                required
+                                autocomplete="tel"
+                                value="{{ old('phone') }}"
+                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-primary"
+                                placeholder="+32 4 12 34 56 78"
+                            >
+                        </div>
+                    </div>
                 </div>
 
                 <div>
                     <label for="email" class="block text-sm font-semibold text-gray-900 mb-2">Email *</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        x-ref="email"
-                        required
-                        value="{{ old('email') }}"
-                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                        placeholder="vous@example.com"
-                    >
-                </div>
-
-                <div>
-                    <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">Téléphone *</label>
-                    <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        x-ref="phone"
-                        required
-                        autocomplete="tel"
-                        value="{{ old('phone') }}"
-                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                        placeholder="+32 4 12 34 56 78"
-                    >
+                    <div class="relative">
+                        <x-lucide-mail class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            x-ref="email"
+                            required
+                            value="{{ old('email') }}"
+                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-primary"
+                            placeholder="vous@example.com"
+                        >
+                    </div>
                 </div>
 
                 <div>
                     <label for="message" class="block text-sm font-semibold text-gray-900 mb-2">Message *</label>
-                    <textarea
-                        id="message"
-                        name="message"
-                        x-ref="message"
-                        rows="5"
-                        required
-                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                        placeholder="Parlez-moi de vos objectifs..."
-                    >{{ old('message') }}</textarea>
+                    <div class="relative">
+                        <x-lucide-message-circle class="absolute left-4 top-5 h-5 w-5 text-gray-400" />
+                        <textarea
+                            id="message"
+                            name="message"
+                            x-ref="message"
+                            rows="5"
+                            required
+                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-primary"
+                            placeholder="Parlez-moi de vos objectifs..."
+                        >{{ old('message') }}</textarea>
+                    </div>
                 </div>
 
                 <div class="flex items-center justify-between pt-4">

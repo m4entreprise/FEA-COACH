@@ -264,7 +264,7 @@
                     </button>
                     <div x-show="openFaq === {{ $index + 1 }}" 
                          x-transition
-                         class="px-6 pb-4 text-gray-600 border-t border-gray-100"
+                         class="px-6 pt-4 pb-5 text-gray-600 border-t border-gray-100 leading-relaxed"
                          style="display: none;">
                         {!! nl2br(e($faq->answer)) !!}
                     </div>
@@ -392,12 +392,14 @@
                 </div>
 
                 <div>
-                    <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">Téléphone</label>
+                    <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">Téléphone *</label>
                     <input
-                        type="text"
+                        type="tel"
                         id="phone"
                         name="phone"
                         x-ref="phone"
+                        required
+                        autocomplete="tel"
                         value="{{ old('phone') }}"
                         class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
                         placeholder="+33 6 12 34 56 78"

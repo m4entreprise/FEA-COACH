@@ -163,6 +163,35 @@
             transform: translateY(0) scale(1);
         }
 
+        .minimal-results-section {
+            opacity: 0;
+            transform: translateY(70px);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+        }
+
+        .minimal-results-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .minimal-results-header {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .minimal-results-card {
+            opacity: 0;
+            transform: translateY(50px) scale(0.97);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
+        }
+
+        .minimal-results-section.is-visible .minimal-results-header,
+        .minimal-results-section.is-visible .minimal-results-card {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .minimal-hero-background,
             .minimal-hero-fade,
@@ -176,7 +205,10 @@
             .minimal-method-card,
             .minimal-pricing-section,
             .minimal-pricing-header,
-            .minimal-pricing-card {
+            .minimal-pricing-card,
+            .minimal-results-section,
+            .minimal-results-header,
+            .minimal-results-card {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;

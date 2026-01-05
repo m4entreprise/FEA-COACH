@@ -554,7 +554,7 @@ onBeforeUnmount(() => {
                 </div>
                 <button
                   type="button"
-                  class="text-xs uppercase tracking-wide text-slate-400 hover:text-white transition"
+                  class="text-xs uppercase tracking-wide text-slate-400 hover:text-white transition fullscreen-pulse"
                   @click="togglePreviewFullscreen"
                 >
                   {{ isPreviewFullscreen ? 'Fermer' : 'Plein écran' }}
@@ -725,5 +725,25 @@ onBeforeUnmount(() => {
 
 .animate-breathe {
   animation: breathe 2.2s ease-in-out infinite;
+}
+
+@keyframes fullscreenPulse {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 0 rgba(129, 140, 248, 0);
+  }
+  40% {
+    transform: scale(1.05);
+    text-shadow: 0 0 12px rgba(99, 102, 241, 0.55);
+  }
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 0 rgba(129, 140, 248, 0);
+  }
+}
+
+.fullscreen-pulse {
+  animation: fullscreenPulse 3s ease-in-out infinite;
+  letter-spacing: 0.15em;
 }
 </style>

@@ -199,9 +199,13 @@ const disablePreviewAnimations = (html) => {
   const css =
     '<style data-disable-preview-animations>*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}</style>';
 
+  const script = `<script data-disable-preview-animations>(function(){const originalMatchMedia=window.matchMedia?window.matchMedia.bind(window):null;window.matchMedia=function(query){if(typeof query==="string"&&query.includes("prefers-reduced-motion")){return{matches:true,media:query,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}};}return originalMatchMedia?originalMatchMedia(query):{matches:false,media:query,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}};};})();</script>`;
+
+  const injection = `${css}${script}`;
+
   return html.includes('</head>')
-    ? html.replace('</head>', `${css}</head>`)
-    : `${css}${html}`;
+    ? html.replace('</head>', `${injection}</head>`)
+    : `${injection}${html}`;
 };
 
 const fetchPreview = async () => {

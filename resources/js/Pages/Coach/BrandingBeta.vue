@@ -44,6 +44,16 @@ const heroPreview = ref(
 const hasLogo = computed(() => Boolean(logoPreview.value));
 const hasHero = computed(() => Boolean(heroPreview.value));
 
+const gradientPreviewStyle = computed(() => {
+  const fallbackPrimary = '#3B82F6';
+  const fallbackSecondary = '#10B981';
+  const primary = colorRegex.test(form.color_primary) ? form.color_primary : fallbackPrimary;
+  const secondary = colorRegex.test(form.color_secondary) ? form.color_secondary : fallbackSecondary;
+  return {
+    backgroundImage: `linear-gradient(90deg, ${primary}, ${secondary})`,
+  };
+});
+
 const coachSiteUrl = computed(() => {
   if (!props.coach) return null;
   const slug = props.coach.slug || props.coach.subdomain;
@@ -332,10 +342,6 @@ onBeforeUnmount(() => {
                         placeholder="#3B82F6"
                       />
                     </div>
-                    <div
-                      class="h-8 rounded-lg border border-slate-800"
-                      :style="{ backgroundColor: form.color_primary }"
-                    ></div>
                     <InputError
                       class="text-xs"
                       :message="form.errors.color_primary"
@@ -363,15 +369,37 @@ onBeforeUnmount(() => {
                         placeholder="#10B981"
                       />
                     </div>
-                    <div
-                      class="h-8 rounded-lg border border-slate-800"
-                      :style="{ backgroundColor: form.color_secondary }"
-                    ></div>
                     <InputError
                       class="text-xs"
                       :message="form.errors.color_secondary"
                     />
                   </div>
+
+                  <div class="md:col-span-2 hidden md:flex flex-col gap-2">
+                    <div class="flex items-center justify-between text-[11px] text-slate-400">
+                      <span>Aperçu du gradient</span>
+                      <span class="font-mono text-slate-300">
+                        {{ form.color_primary }} → {{ form.color_secondary }}
+                      </span>
+                    </div>
+                    <div
+                      class="h-10 rounded-xl border border-slate-800 shadow-inner"
+                      :style="gradientPreviewStyle"
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="md:hidden space-y-2">
+                  <div class="flex items-center justify-between text-[11px] text-slate-400">
+                    <span>Gradient des couleurs</span>
+                    <span class="font-mono text-slate-300">
+                      {{ form.color_primary }} → {{ form.color_secondary }}
+                    </span>
+                  </div>
+                  <div
+                    class="h-10 rounded-xl border border-slate-800 shadow-inner"
+                    :style="gradientPreviewStyle"
+                  ></div>
                 </div>
               </div>
 

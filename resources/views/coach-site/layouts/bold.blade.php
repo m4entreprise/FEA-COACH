@@ -108,12 +108,54 @@
             animation-delay: 0.95s;
         }
 
+        .bold-about-section {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: opacity 1.1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-about-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bold-about-visual,
+        .bold-about-heading,
+        .bold-about-text,
+        .bold-about-cta {
+            opacity: 0;
+            transform: translateY(55px);
+            transition: opacity 0.95s ease, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-about-visual {
+            transform: translateY(40px) scale(0.95);
+        }
+
+        .bold-about-section.is-visible .bold-about-visual,
+        .bold-about-section.is-visible .bold-about-heading,
+        .bold-about-section.is-visible .bold-about-text,
+        .bold-about-section.is-visible .bold-about-cta {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .bold-about-delay-1 { transition-delay: 0.05s; }
+        .bold-about-delay-2 { transition-delay: 0.18s; }
+        .bold-about-delay-3 { transition-delay: 0.32s; }
+        .bold-about-delay-4 { transition-delay: 0.45s; }
+
         @media (prefers-reduced-motion: reduce) {
             .bold-hero-background,
             .bold-hero-fade,
             .bold-hero-stats,
             .bold-hero-stat-card,
-            .bold-hero-cta {
+            .bold-hero-cta,
+            .bold-about-section,
+            .bold-about-visual,
+            .bold-about-heading,
+            .bold-about-text,
+            .bold-about-cta {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -190,12 +232,12 @@
 </section>
 
 <!-- About Section - Bold -->
-<section id="a-propos" class="py-32 bg-white relative overflow-hidden">
+<section id="a-propos" class="py-32 bg-white relative overflow-hidden bold-about-section">
     <div class="absolute top-0 right-0 w-1/3 h-full opacity-5" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});"></div>
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div class="relative">
+            <div class="relative bold-about-visual bold-about-delay-1">
                 @if($coach->hasMedia('profile'))
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
                         <img src="{{ $coach->getFirstMediaUrl('profile') }}" alt="{{ $coach->name }}" class="w-full h-auto object-cover aspect-square">
@@ -211,7 +253,7 @@
                 <div class="absolute -bottom-8 -right-8 w-40 h-40 bg-primary rounded-full opacity-20 blur-3xl"></div>
             </div>
 
-            <div>
+            <div class="bold-about-heading bold-about-delay-2">
                 <div class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary font-bold uppercase text-sm tracking-wide mb-6 mx-auto lg:mx-0">
                     Votre coach
                 </div>
@@ -220,11 +262,11 @@
                     {{ $coach->name }}
                 </h2>
                 
-                <div class="text-xl text-gray-700 leading-relaxed space-y-4 mb-8">
+                <div class="text-xl text-gray-700 leading-relaxed space-y-4 mb-8 bold-about-text bold-about-delay-3">
                     {!! nl2br(e($coach->about_text ?? 'Coach sportif certifié avec plusieurs années d\'expérience.')) !!}
                 </div>
 
-                <a href="#contact" class="inline-flex items-center px-8 py-4 bg-primary text-white text-lg font-bold rounded-full hover:bg-primary-dark transition-all shadow-lg">
+                <a href="#contact" class="inline-flex items-center px-8 py-4 bg-primary text-white text-lg font-bold rounded-full hover:bg-primary-dark transition-all shadow-lg bold-about-cta bold-about-delay-4">
                     Me contacter
                     <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -613,6 +655,38 @@
 </section>
 
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.bold-about-section');
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            if (!sections.length) {
+                return;
+            }
+
+            if (prefersReducedMotion) {
+                sections.forEach((section) => section.classList.add('is-visible'));
+                return;
+            }
+
+            const observer = new IntersectionObserver(
+                (entries, obs) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                },
+                { threshold: 0.2 }
+            );
+
+            sections.forEach((section) => observer.observe(section));
+        });
+    </script>
+@endpush
 
 @section('coach-site-footer')
     <footer class="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">

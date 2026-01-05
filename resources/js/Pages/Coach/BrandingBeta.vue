@@ -141,6 +141,19 @@ const hasPreviewRequirements = computed(() => {
   return colorRegex.test(form.color_primary) && colorRegex.test(form.color_secondary) && Boolean(form.site_layout);
 });
 
+const disablePreviewAnimations = (html) => {
+  if (!html || html.includes('data-disable-preview-animations')) {
+    return html;
+  }
+
+  const css =
+    '<style data-disable-preview-animations>*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}</style>';
+
+  return html.includes('</head>')
+    ? html.replace('</head>', `${css}</head>`)
+    : `${css}${html}`;
+};
+
 const fetchPreview = async () => {
   if (!hasPreviewRequirements.value) {
     previewHtml.value = '';
@@ -166,7 +179,7 @@ const fetchPreview = async () => {
       },
     );
 
-    previewHtml.value = data.html;
+    previewHtml.value = disablePreviewAnimations(data.html);
   } catch (error) {
     previewError.value =
       error.response?.data?.message || "Impossible de générer l’aperçu pour le moment.";

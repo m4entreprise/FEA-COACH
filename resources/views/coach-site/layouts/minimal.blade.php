@@ -325,176 +325,255 @@
 @endif
 
 <!-- Contact Section -->
-<section id="contact" class="py-20 bg-gray-900 text-white">
+<section id="contact" class="relative py-24 bg-gray-900 text-white overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800"></div>
+    <div class="absolute -top-24 -right-10 w-72 h-72 bg-primary/20 blur-3xl rounded-full"></div>
+    <div class="absolute -bottom-16 -left-20 w-72 h-72 bg-secondary/20 blur-3xl rounded-full"></div>
+
     <div
-        class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8"
+        class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"
         x-data="{ submitted: false, successMessage: '', loading: false }"
     >
-        <div class="text-center mb-10">
-            <h2 class="text-4xl font-bold text-white mb-4">
+        <div class="text-center space-y-4 mb-14">
+            <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.4em] text-white/60">
+                <span class="h-px w-8 bg-white/30"></span>
+                Contact
+                <span class="h-px w-8 bg-white/30"></span>
+            </span>
+            <h2 class="text-4xl sm:text-5xl font-bold text-white">
                 {{ $coach->final_cta_title ?? 'Prêt à commencer ?' }}
             </h2>
-            <p class="text-xl text-gray-600">
+            <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto">
                 {{ $coach->final_cta_subtitle ?? 'Contactez-moi pour discuter de vos objectifs' }}
             </p>
+            <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-400">
+                <span class="inline-flex items-center gap-2">
+                    <x-lucide-flashlight class="w-4 h-4" />
+                    Réponse sous 24h
+                </span>
+                <span class="inline-flex items-center gap-2">
+                    <x-lucide-shield-check class="w-4 h-4" />
+                    Échange confidentiel
+                </span>
+                <span class="inline-flex items-center gap-2">
+                    <x-lucide-heart class="w-4 h-4" />
+                    Coaching 100% personnalisé
+                </span>
+            </div>
         </div>
 
-        @if (session('success'))
-            <div class="mb-6 rounded-lg bg-green-50 border border-green-200 px-4 py-3" x-show="!submitted">
-                <div class="flex items-center text-green-800">
-                    <x-lucide-badge-check class="h-5 w-5 mr-2" />
-                    <span>{{ session('success') }}</span>
-                </div>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="mb-6 rounded-lg bg-red-50 border border-red-200 px-4 py-3" x-show="!submitted">
-                <div class="flex items-start gap-3 text-red-800">
-                    <x-lucide-alert-triangle class="h-5 w-5 flex-shrink-0 mt-0.5" />
-                    <ul class="space-y-1">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
+        <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] items-start">
+            <div class="space-y-6">
+                <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur px-8 py-10 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10">
+                            <x-lucide-chat-bubble-oval-ellipsis class="w-5 h-5" />
+                        </span>
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.35em] text-white/60">Discutons</p>
+                            <h3 class="text-2xl font-semibold">Un point de départ simple</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed">
+                        Décrivez vos besoins, contraintes et objectifs. Je reviens vers vous avec une proposition précise
+                        et un plan de travail adapté à votre rythme.
+                    </p>
+                    <ul class="space-y-3 text-gray-200 text-sm">
+                        @foreach ([
+                            'Analyse personnalisée de votre situation et de vos objectifs prioritaires',
+                            'Retour avec plan d’action concret (disponibilité, méthode, budget)',
+                            'Coaching premium, sans engagement jusqu’à validation de la proposition',
+                        ] as $item)
+                            <li class="flex items-start gap-3">
+                                <x-lucide-check-circle class="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                                <span>{{ $item }}</span>
+                            </li>
                         @endforeach
                     </ul>
                 </div>
-            </div>
-        @endif
 
-        <div
-            class="mb-6 rounded-lg bg-green-50 border border-green-200 px-4 py-4"
-            x-show="submitted"
-            x-transition
-        >
-            <div class="flex items-center text-green-800">
-                <x-lucide-badge-check class="h-6 w-6 mr-3" />
-                <div>
-                    <p class="font-semibold">Message envoyé !</p>
-                    <p class="text-sm" x-text="successMessage || 'Vous serez contacté rapidement.'"></p>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-1">
+                        <p class="text-xs uppercase tracking-[0.35em] text-white/60">Contact direct</p>
+                        <p class="text-lg font-semibold">{{ $coach->contact_email ?? $coach->user->email }}</p>
+                        <p class="text-sm text-gray-400">Email prioritaire pour les échanges clients.</p>
+                    </div>
+                    <div class="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-1">
+                        <p class="text-xs uppercase tracking-[0.35em] text-white/60">Disponibilités</p>
+                        <p class="text-lg font-semibold">Lun - Ven • 9h → 19h</p>
+                        <p class="text-sm text-gray-400">Créneaux express possibles le samedi sur demande.</p>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl border border-white/10 bg-gradient-to-br from-primary/30 via-primary/20 to-transparent p-6">
+                    <p class="text-sm uppercase tracking-[0.35em] text-white/70 mb-2">À savoir</p>
+                    <p class="text-base text-white/90">
+                        Pour réserver directement une séance ou un audit, utilisez les formules actives dans la section
+                        <a href="#tarifs" class="font-semibold underline decoration-white/40 hover:decoration-primary">Tarifs</a>.
+                    </p>
                 </div>
             </div>
-        </div>
 
-        <div class="bg-white rounded-lg border border-gray-200 p-8 transform-gpu" x-show="!submitted" x-transition>
-            <form
-                method="POST"
-                action="/contact"
-                class="space-y-6"
-                @submit.prevent="
-                    loading = true;
-                    fetch('/contact', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            name: $refs.name.value,
-                            email: $refs.email.value,
-                            phone: $refs.phone.value,
-                            message: $refs.message.value,
-                        }),
-                    })
-                        .then(async (response) => {
-                            if (!response.ok) throw new Error('Request failed');
-                            const data = await response.json();
-                            successMessage = data.message || '';
-                            submitted = true;
-                        })
-                        .catch(() => {
-                            loading = false;
-                        })
-                        .finally(() => {
-                            loading = false;
-                        });
-                "
-            >
-                @csrf
-
-                <div class="grid gap-6 sm:grid-cols-2">
-                    <div>
-                        <label for="name" class="block text-sm font-semibold text-gray-900 mb-2">Nom complet *</label>
-                        <div class="relative">
-                            <x-lucide-user class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <input
-                                type="text"
-                                id="name"
-                                name="name"
-                                x-ref="name"
-                                required
-                                value="{{ old('name') }}"
-                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
-                                placeholder="Votre nom"
-                            >
+            <div class="space-y-6">
+                @if (session('success'))
+                    <div class="rounded-2xl bg-green-50 border border-green-200 px-5 py-4 text-green-800" x-show="!submitted">
+                        <div class="flex items-center gap-2">
+                            <x-lucide-badge-check class="h-5 w-5" />
+                            <span>{{ session('success') }}</span>
                         </div>
                     </div>
+                @endif
 
-                    <div>
-                        <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">Téléphone *</label>
-                        <div class="relative">
-                            <x-lucide-phone-call class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <input
-                                type="tel"
-                                id="phone"
-                                name="phone"
-                                x-ref="phone"
-                                required
-                                autocomplete="tel"
-                                value="{{ old('phone') }}"
-                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
-                                placeholder="+32 4 12 34 56 78"
-                            >
+                @if ($errors->any())
+                    <div class="rounded-2xl bg-red-50 border border-red-200 px-5 py-4 text-red-800" x-show="!submitted">
+                        <div class="flex items-start gap-3">
+                            <x-lucide-alert-triangle class="h-5 w-5 flex-shrink-0 mt-0.5" />
+                            <ul class="space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @endif
+
+                <div
+                    class="rounded-2xl bg-green-50 border border-green-200 px-5 py-5"
+                    x-show="submitted"
+                    x-transition
+                >
+                    <div class="flex items-center text-green-800">
+                        <x-lucide-badge-check class="h-6 w-6 mr-3" />
+                        <div>
+                            <p class="font-semibold">Message envoyé !</p>
+                            <p class="text-sm" x-text="successMessage || 'Vous serez contacté rapidement.'"></p>
                         </div>
                     </div>
                 </div>
 
-                <div>
-                    <label for="email" class="block text-sm font-semibold text-gray-900 mb-2">Email *</label>
-                    <div class="relative">
-                        <x-lucide-mail class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            x-ref="email"
-                            required
-                            value="{{ old('email') }}"
-                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
-                            placeholder="vous@example.com"
-                        >
-                    </div>
-                </div>
-
-                <div>
-                    <label for="message" class="block text-sm font-semibold text-gray-900 mb-2">Message *</label>
-                    <div class="relative">
-                        <x-lucide-message-circle class="absolute left-4 top-5 h-5 w-5 text-gray-400" />
-                        <textarea
-                            id="message"
-                            name="message"
-                            x-ref="message"
-                            rows="5"
-                            required
-                            class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
-                            placeholder="Parlez-moi de vos objectifs..."
-                        >{{ old('message') }}</textarea>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between pt-4">
-                    <p class="text-sm text-gray-500">Réponse sous 24-48h</p>
-                    <button
-                        type="submit"
-                        :disabled="loading"
-                        class="inline-flex items-center px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all disabled:opacity-50 shadow-lg hover:shadow-xl"
+                <div class="bg-white rounded-3xl border border-gray-200 p-8 shadow-2xl shadow-primary/5" x-show="!submitted" x-transition>
+                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-[0.35em] mb-4">Formulaire</p>
+                    <form
+                        method="POST"
+                        action="/contact"
+                        class="space-y-6"
+                        @submit.prevent="
+                            loading = true;
+                            fetch('/contact', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    name: $refs.name.value,
+                                    email: $refs.email.value,
+                                    phone: $refs.phone.value,
+                                    message: $refs.message.value,
+                                }),
+                            })
+                                .then(async (response) => {
+                                    if (!response.ok) throw new Error('Request failed');
+                                    const data = await response.json();
+                                    successMessage = data.message || '';
+                                    submitted = true;
+                                })
+                                .catch(() => {
+                                    loading = false;
+                                })
+                                .finally(() => {
+                                    loading = false;
+                                });
+                        "
                     >
-                        <span x-show="!loading">Envoyer</span>
-                        <span x-show="loading">Envoi...</span>
-                        <x-lucide-arrow-up-right class="ml-2 w-5 h-5" />
-                    </button>
+                        @csrf
+
+                        <div class="grid gap-6 sm:grid-cols-2">
+                            <div>
+                                <label for="name" class="block text-sm font-semibold text-gray-900 mb-2">Nom complet *</label>
+                                <div class="relative">
+                                    <x-lucide-user class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        x-ref="name"
+                                        required
+                                        value="{{ old('name') }}"
+                                        class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
+                                        placeholder="Votre nom"
+                                    >
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">Téléphone *</label>
+                                <div class="relative">
+                                    <x-lucide-phone-call class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        x-ref="phone"
+                                        required
+                                        autocomplete="tel"
+                                        value="{{ old('phone') }}"
+                                        class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
+                                        placeholder="+32 4 12 34 56 78"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-semibold text-gray-900 mb-2">Email *</label>
+                            <div class="relative">
+                                <x-lucide-mail class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    x-ref="email"
+                                    required
+                                    value="{{ old('email') }}"
+                                    class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
+                                    placeholder="vous@example.com"
+                                >
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-sm font-semibold text-gray-900 mb-2">Message *</label>
+                            <div class="relative">
+                                <x-lucide-message-circle class="absolute left-4 top-5 h-5 w-5 text-gray-400" />
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    x-ref="message"
+                                    rows="5"
+                                    required
+                                    class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary !focus:ring-0 !focus:outline-none text-gray-900"
+                                    placeholder="Parlez-moi de vos objectifs..."
+                                >{{ old('message') }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4">
+                            <p class="text-sm text-gray-500">Réponse sous 24-48h</p>
+                            <button
+                                type="submit"
+                                :disabled="loading"
+                                class="inline-flex items-center px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all disabled:opacity-50 shadow-lg hover:shadow-xl"
+                            >
+                                <span x-show="!loading">Envoyer</span>
+                                <span x-show="loading">Envoi...</span>
+                                <x-lucide-arrow-up-right class="ml-2 w-5 h-5" />
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </section>

@@ -15,132 +15,28 @@
             <img src="{{ $coach->getFirstMediaUrl('hero') }}" 
                  alt="Hero" 
                  class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/30"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50"></div>
         </div>
     @else
         <div class="absolute inset-0 z-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"></div>
     @endif
 
-    @php
-        $transformationsCount = isset($transformations) ? $transformations->count() : 0;
-    @endphp
-
     <!-- Content -->
-    <div class="relative z-10 w-full">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid lg:grid-cols-2 gap-12 items-center text-white">
-                <div class="space-y-10">
-                    <div class="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-white/70 backdrop-blur">
-                        <span class="h-2.5 w-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
-                        <span class="tracking-[0.3em]">
-                            {{ Str::upper($coach->method_title ?? 'Ma méthode de coaching') }}
-                        </span>
-                    </div>
-
-                    <div class="space-y-6">
-                        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight text-white drop-shadow-xl">
-                            {{ $coach->hero_title ?? 'Transformez votre corps, transformez votre vie' }}
-                        </h1>
-                        <p class="text-lg sm:text-xl md:text-2xl text-white/80 max-w-2xl">
-                            {{ $coach->hero_subtitle ?? 'Coaching sportif personnalisé pour atteindre vos objectifs' }}
-                        </p>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="#tarifs" class="inline-flex items-center justify-center px-8 py-4 bg-white text-gray-900 text-lg font-semibold rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_25px_70px_rgba(0,0,0,0.4)] transition-all">
-                            {{ $coach->cta_text ?? 'Commencer maintenant' }}
-                            <x-lucide-arrow-right class="ml-3 w-5 h-5" />
-                        </a>
-                        <a href="#a-propos" class="inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur text-white text-lg font-semibold rounded-2xl border border-white/30 hover:bg-white/20 transition-all">
-                            En savoir plus
-                        </a>
-                    </div>
-
-                    <div class="flex flex-wrap gap-6">
-                        <div class="flex items-center gap-4">
-                            <div class="rounded-2xl bg-white/10 p-4 border border-white/15 backdrop-blur">
-                                <x-lucide-activity class="w-6 h-6 text-emerald-300" />
-                            </div>
-                            <div>
-                                <p class="text-3xl font-bold">{{ $transformationsCount }}+</p>
-                                <p class="text-sm uppercase tracking-wide text-white/70">
-                                    {{ $coach->transformations_title ?? 'Leurs transformations' }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="rounded-2xl bg-white/10 p-4 border border-white/15 backdrop-blur">
-                                <x-lucide-smile class="w-6 h-6 text-amber-300" />
-                            </div>
-                            <div>
-                                <p class="text-3xl font-bold">{{ $coach->satisfaction_rate ?? 100 }}%</p>
-                                <p class="text-sm uppercase tracking-wide text-white/70">Satisfaits</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="rounded-2xl bg-white/10 p-4 border border-white/15 backdrop-blur">
-                                <x-lucide-star class="w-6 h-6 text-yellow-300" />
-                            </div>
-                            <div>
-                                <p class="text-3xl font-bold">{{ $coach->average_rating ?? 5.0 }} ★</p>
-                                <p class="text-sm uppercase tracking-wide text-white/70">Note moyenne</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative">
-                    <div class="absolute -inset-10 rounded-[40px] bg-gradient-to-br from-white/15 via-white/5 to-transparent blur-3xl opacity-70"></div>
-                    <div class="relative rounded-[32px] border border-white/20 bg-white/5 backdrop-blur-2xl shadow-[0_25px_120px_rgba(0,0,0,0.45)] p-8 lg:p-10 space-y-8">
-                        <div class="flex items-center gap-4">
-                            <div class="h-20 w-20 rounded-3xl overflow-hidden border-2 border-white/60 shadow-lg">
-                                @if($coach->hasMedia('profile'))
-                                    <img src="{{ $coach->getFirstMediaUrl('profile') }}" alt="{{ $coach->name }}" class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-3xl font-bold text-white">
-                                        {{ substr($coach->name, 0, 1) }}
-                                    </div>
-                                @endif
-                            </div>
-                            <div>
-                                <p class="text-xs uppercase tracking-[0.4em] text-white/60">{{ Str::upper($coach->hero_subtitle ?? 'Coaching sportif personnalisé pour atteindre vos objectifs') }}</p>
-                                <p class="text-3xl font-bold">{{ $coach->name }}</p>
-                                <p class="text-white/70 text-sm">
-                                    {{ $coach->intermediate_cta_title ?? 'Prêt à transformer votre corps et votre vie ?' }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="rounded-2xl border border-white/15 bg-white/5 p-4">
-                                <p class="text-xs uppercase tracking-[0.35em] text-white/60">
-                                    {{ Str::upper($coach->pricing_title ?? 'Mes formules de coaching') }}
-                                </p>
-                                <p class="mt-3 text-white/90 leading-relaxed text-sm">
-                                    {!! nl2br(e(Str::limit($coach->pricing_subtitle ?? 'Choisissez la formule qui correspond le mieux à vos objectifs', 110))) !!}
-                                </p>
-                            </div>
-                            <div class="rounded-2xl border border-white/15 bg-white/5 p-4">
-                                <p class="text-xs uppercase tracking-[0.35em] text-white/60">
-                                    {{ Str::upper($coach->final_cta_title ?? 'Prêt à commencer votre transformation ?') }}
-                                </p>
-                                <p class="mt-3 text-white/90 leading-relaxed text-sm">
-                                    {!! nl2br(e(Str::limit($coach->final_cta_subtitle ?? 'Ne laissez pas vos objectifs être de simples rêves. Agissez maintenant !', 110))) !!}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-transparent p-6">
-                            <p class="text-xs uppercase tracking-[0.35em] text-white/60 mb-3">
-                                {{ Str::upper($coach->method_title ?? 'Ma méthode de coaching') }}
-                            </p>
-                            <p class="text-white/90 leading-relaxed text-sm">
-                                {!! nl2br(e(Str::limit($coach->method_text ?? ($coach->method_subtitle ?? ''), 160))) !!}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
+            {{ $coach->hero_title ?? 'Transformez votre corps, transformez votre vie' }}
+        </h1>
+        <p class="text-xl sm:text-2xl md:text-3xl mb-8 text-gray-200 max-w-3xl mx-auto">
+            {{ $coach->hero_subtitle ?? 'Coaching sportif personnalisé pour atteindre vos objectifs' }}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="#tarifs" class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white text-lg font-bold rounded-lg hover:bg-primary-dark transition-all shadow-xl hover:shadow-2xl transform hover:scale-105">
+                {{ $coach->cta_text ?? 'Commencer maintenant' }}
+                <x-lucide-arrow-right class="ml-2 w-5 h-5" />
+            </a>
+            <a href="#a-propos" class="inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white text-lg font-bold rounded-lg hover:bg-white/20 transition-all border-2 border-white/30">
+                En savoir plus
+            </a>
         </div>
     </div>
 

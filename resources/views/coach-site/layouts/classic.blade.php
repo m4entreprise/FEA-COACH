@@ -471,11 +471,13 @@
             </div>
         </div>
 
-        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 border border-white/20" x-show="!submitted" x-transition>
+        <div class="relative overflow-hidden bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 border border-white/20" x-show="!submitted" x-transition>
+            <div class="pointer-events-none absolute -top-12 -right-6 w-48 h-48 rounded-full bg-white/10 blur-3xl"></div>
+            <div class="pointer-events-none absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-gradient-to-tr from-white/5 via-transparent to-white/10 blur-2xl"></div>
             <form
                 method="POST"
                 action="/contact"
-                class="space-y-8"
+                class="relative space-y-8"
                 @submit.prevent="
                     loading = true;
                     fetch('/contact', {
@@ -511,123 +513,143 @@
             >
                 @csrf
 
-                <div class="space-y-3">
-                    <div class="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-white/70">
-                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white text-sm font-semibold leading-none tracking-normal">
-                            1
-                        </span>
-                        <span>Vos coordonnées</span>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="space-y-2">
-                            <label for="name" class="flex items-center text-sm font-semibold text-white/90 gap-2">
-                                <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 11a3 3 0 10-6 0 3 3 0 006 0z"/>
-                                </svg>
-                                Nom complet *
-                            </label>
-                            <div class="relative">
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    x-ref="name"
-                                    required
-                                    autocomplete="name"
-                                    value="{{ old('name') }}"
-                                    class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-white placeholder-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
-                                    placeholder="Votre nom complet"
-                                >
-                                <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l-9-5 9-5 9 5-9 5z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z" />
-                                    </svg>
-                                </span>
-                            </div>
-                            <p class="text-xs text-white/60">Utilisez votre prénom et nom pour une réponse personnalisée.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-8">
+                    <div class="space-y-5">
+                        <div class="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/70">
+                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white text-sm leading-none tracking-normal">
+                                1
+                            </span>
+                            <span>Vos coordonnées</span>
                         </div>
-
-                        <div class="space-y-2">
-                            <label for="email" class="flex items-center text-sm font-semibold text-white/90 gap-2">
-                                <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0l-3 3m3-3l-3-3m-5 9h10a2 2 0 002-2V8a2 2 0 00-2-2H7a2 2 0 00-2 2v6a4 4 0 004 4z" />
-                                </svg>
-                                Email *
-                            </label>
-                            <div class="relative">
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    x-ref="email"
-                                    required
-                                    autocomplete="email"
-                                    value="{{ old('email') }}"
-                                    class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-white placeholder-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
-                                    placeholder="vous@example.com"
-                                >
-                                <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v6a2 2 0 002 2z"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            <p class="text-xs text-white/60">Votre email restera confidentiel, il sert uniquement à la prise de contact.</p>
-                        </div>
-
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                                <label for="phone" class="flex items-center text-sm font-semibold text-white/90 gap-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label for="name" class="flex items-center text-sm font-semibold text-white/90 gap-2">
                                     <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h2l2 5-2 2a16.001 16.001 0 006 6l2-2 5 2v2a2 2 0 01-2 2A18 18 0 013 7a2 2 0 012-2z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 11a3 3 0 10-6 0 3 3 0 006 0z"/>
                                     </svg>
-                                    Téléphone
+                                    Nom complet *
                                 </label>
-                                <span class="text-xs text-white/60">Optionnel</span>
+                                <div class="relative">
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        x-ref="name"
+                                        required
+                                        autocomplete="name"
+                                        value="{{ old('name') }}"
+                                        class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-white placeholder-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
+                                        placeholder="Votre nom complet"
+                                    >
+                                    <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l-9-5 9-5 9 5-9 5z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                <p class="text-xs text-white/60">Utilisez votre prénom et nom pour une réponse personnalisée.</p>
                             </div>
-                            <div class="relative">
-                                <input
-                                    type="tel"
-                                    id="phone"
-                                    name="phone"
-                                    x-ref="phone"
-                                    autocomplete="tel"
-                                    value="{{ old('phone') }}"
-                                    class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-white placeholder-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
-                                    placeholder="+33 6 12 34 56 78"
-                                >
-                                <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 7h20M2 12h20M2 17h20"/>
+
+                            <div class="space-y-2">
+                                <label for="email" class="flex items-center text-sm font-semibold text-white/90 gap-2">
+                                    <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0l-3 3m3-3l-3-3m-5 9h10a2 2 0 002-2V8a2 2 0 00-2-2H7a2 2 0 00-2 2v6a4 4 0 004 4z" />
                                     </svg>
-                                </span>
+                                    Email *
+                                </label>
+                                <div class="relative">
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        x-ref="email"
+                                        required
+                                        autocomplete="email"
+                                        value="{{ old('email') }}"
+                                        class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-white placeholder-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
+                                        placeholder="vous@example.com"
+                                    >
+                                    <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <p class="text-xs text-white/60">Votre email restera confidentiel, il sert uniquement à la prise de contact.</p>
                             </div>
-                            <p class="text-xs text-white/60">Indiquez un numéro joignable pour un échange plus rapide.</p>
+
+                            <div class="sm:col-span-2 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <label for="phone" class="flex items-center text-sm font-semibold text-white/90 gap-2">
+                                        <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h2l2 5-2 2a16.001 16.001 0 006 6l2-2 5 2v2a2 2 0 01-2 2A18 18 0 013 7a2 2 0 012-2z"/>
+                                        </svg>
+                                        Téléphone
+                                    </label>
+                                    <span class="text-xs text-white/60">Optionnel</span>
+                                </div>
+                                <div class="relative">
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        x-ref="phone"
+                                        autocomplete="tel"
+                                        value="{{ old('phone') }}"
+                                        class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-white placeholder-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
+                                        placeholder="+33 6 12 34 56 78"
+                                    >
+                                    <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 7h20M2 12h20M2 17h20"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <p class="text-xs text-white/60">Indiquez un numéro joignable pour un échange plus rapide.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="space-y-3">
-                    <div class="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-white/70">
-                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white text-sm font-semibold leading-none tracking-normal">
-                            2
-                        </span>
-                        <span>Votre message</span>
+                    <div class="hidden lg:flex items-stretch justify-center">
+                        <span class="w-px bg-gradient-to-b from-white/10 via-white/40 to-white/10"></span>
                     </div>
-                    <label for="message" class="sr-only">Message</label>
-                    <textarea
-                        id="message"
-                        name="message"
-                        x-ref="message"
-                        rows="5"
-                        required
-                        class="w-full rounded-2xl border border-white/25 bg-white/10 px-4 py-4 text-base text-white placeholder-white/60 shadow-[0_20px_45px_rgba(0,0,0,0.25)] focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
-                        placeholder="Parlez de vos objectifs, de votre niveau actuel, de vos disponibilités..."
-                    >{{ old('message') }}</textarea>
-                    <p class="text-xs text-white/70">
-                        En envoyant ce message, vous serez recontacté(e) par le coach pour discuter de votre situation et des prochaines étapes.
-                    </p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/70">
+                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white text-sm leading-none tracking-normal">
+                                2
+                            </span>
+                            <span>Votre message</span>
+                        </div>
+                        <label for="message" class="sr-only">Message</label>
+                        <textarea
+                            id="message"
+                            name="message"
+                            x-ref="message"
+                            rows="6"
+                            required
+                            class="w-full rounded-2xl border border-white/25 bg-white/10 px-4 py-4 text-base text-white placeholder-white/60 shadow-[0_20px_45px_rgba(0,0,0,0.25)] focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
+                            placeholder="Parlez de vos objectifs, de votre niveau actuel, de vos disponibilités..."
+                        >{{ old('message') }}</textarea>
+                        <div class="flex flex-wrap gap-3 text-[11px] uppercase tracking-wide text-white/70">
+                            <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1">
+                                <svg class="w-3.5 h-3.5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+                                </svg>
+                                Réponse sous 24h
+                            </span>
+                            <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1">
+                                <svg class="w-3.5 h-3.5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.343-3 3 0 1.533 1.148 2.79 2.637 2.972a1 1 0 01.867.993V16m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Session découverte offerte
+                            </span>
+                        </div>
+                        <p class="text-xs text-white/70">
+                            En envoyant ce message, vous serez recontacté(e) par le coach pour discuter de votre situation et des prochaines étapes.
+                        </p>
+                    </div>
                 </div>
 
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

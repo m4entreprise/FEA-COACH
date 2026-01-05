@@ -661,7 +661,7 @@
                             </a>
                             <hr class="border-white/10">
                             <p class="text-sm text-white/60">Réservations</p>
-                            <a href="#tarifs" class="inline-flex items-center justify-center rounded-full border border-white/20 px-4 py-2 text-sm font-semibold hover:bg-white hover:text-gray-900 transition-all">
+                            <a href="#tarifs" class="inline-flex items-center justify-center rounded-2xl border border-white/20 px-4 py-2 text-sm font-semibold hover:bg-white hover:text-gray-900 transition-all">
                                 {{ $coach->cta_text ?? 'Je réserve ma séance' }}
                             </a>
                         </div>

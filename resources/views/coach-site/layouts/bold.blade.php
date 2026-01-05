@@ -7,6 +7,40 @@
 
 @push('styles')
     <style>
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedSections = document.querySelectorAll('.bold-hero-section, .bold-about-section');
+
+            if (!animatedSections.length) {
+                return;
+            }
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const reveal = (el) => el.classList.add('is-visible');
+
+            if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+                animatedSections.forEach(reveal);
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        reveal(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -10% 0px',
+                threshold: 0.2,
+            });
+
+            animatedSections.forEach((section) => observer.observe(section));
+        });
+
+        .bold-hero-stage {
+            opacity: 0;
+        }
+
         @keyframes boldHeroBackground {
             0% {
                 opacity: 0;
@@ -43,12 +77,15 @@
             }
         }
 
-        .bold-hero-background {
+        .bold-hero-section.is-visible .bold-hero-background {
             animation: boldHeroBackground 1.6s ease forwards;
         }
 
         .bold-hero-fade {
             opacity: 0;
+        }
+
+        .bold-hero-section.is-visible .bold-hero-fade {
             animation: boldHeroFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
@@ -70,6 +107,9 @@
 
         .bold-hero-cta {
             position: relative;
+        }
+
+        .bold-hero-section.is-visible .bold-hero-cta {
             animation: boldHeroFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             animation-delay: 0.75s;
         }
@@ -83,18 +123,28 @@
         }
 
         .bold-about-section {
-            animation: boldHeroFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 0.1s;
+            opacity: 0;
         }
 
         .bold-about-image {
             opacity: 0;
-            animation: boldHeroFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 0.25s;
         }
 
         .bold-about-content {
             opacity: 0;
+        }
+
+        .bold-about-section.is-visible {
+            animation: boldHeroFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.1s;
+        }
+
+        .bold-about-section.is-visible .bold-about-image {
+            animation: boldHeroFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.25s;
+        }
+
+        .bold-about-section.is-visible .bold-about-content {
             animation: boldHeroFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             animation-delay: 0.35s;
         }
@@ -121,7 +171,7 @@
 {{-- Layout Bold/Impact - Version très visuelle avec de grosses sections hero --}}
 
 <!-- Hero Section - Bold/Impact -->
-<section id="accueil" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+<section id="accueil" class="relative min-h-screen flex items-center justify-center overflow-hidden bold-hero-section bold-hero-stage">
     @if($coach->hasMedia('hero'))
         <div class="absolute inset-0 z-0 bold-hero-background">
             <img src="{{ $coach->getFirstMediaUrl('hero') }}" alt="Hero" class="w-full h-full object-cover scale-110 bold-hero-background">

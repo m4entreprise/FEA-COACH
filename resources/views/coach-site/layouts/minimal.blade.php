@@ -117,40 +117,51 @@
         </div>
 
         @if(isset($services) && $services->count() > 0)
-            <div class="space-y-6">
+            <div class="space-y-8">
                 @foreach($services as $service)
-                    <div class="relative bg-white border-2 border-gray-200 rounded-lg p-8 hover:border-primary transition-all">
+                    <div class="relative rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 transition hover:border-gray-900/30">
                         @if($service->is_featured)
-                            <span class="absolute top-6 right-6 inline-flex items-center gap-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold uppercase tracking-wide px-3 py-1 border border-amber-200">
+                            <span class="absolute top-6 right-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
                                 <x-lucide-star class="w-3.5 h-3.5" />
                                 Populaire
                             </span>
                         @endif
-                        <div class="flex items-center justify-between flex-wrap gap-4">
-                            <div class="flex-1">
-                                <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $service->name }}</h3>
-                                @if($service->duration_minutes)
-                                    <p class="text-sm text-gray-500 mb-2">⏱️ {{ $service->duration_minutes }} minutes</p>
-                                @endif
-                                @if($service->description)
-                                    <div class="prose prose-sm text-gray-600 leading-relaxed text-sm [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
-                                        {!! Purify::clean($service->description) !!}
+                        <div class="flex flex-col gap-6">
+                            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                                <div class="space-y-3 lg:max-w-xl">
+                                    <div class="flex items-center gap-3">
+                                        <h3 class="text-2xl font-semibold text-gray-900">{{ $service->name }}</h3>
+                                        @if($service->duration_minutes)
+                                            <span class="inline-flex items-center gap-1 rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-600">
+                                                <x-lucide-clock-3 class="w-4 h-4 text-gray-500" />
+                                                {{ $service->duration_minutes }} min
+                                            </span>
+                                        @endif
                                     </div>
-                                @endif
-                            </div>
-                            <div class="flex items-center gap-6">
-                                <div class="text-right">
-                                    <div class="text-3xl font-bold text-primary">{{ number_format($service->price, 0, ',', ' ') }}€</div>
+                                    @if($service->description)
+                                        <div class="text-gray-600 text-base leading-relaxed space-y-2">
+                                            {!! Purify::clean($service->description) !!}
+                                        </div>
+                                    @endif
                                 </div>
+                                <div class="text-left lg:text-right">
+                                    <p class="text-sm uppercase tracking-widest text-gray-500 mb-1">Investissement</p>
+                                    <div class="text-4xl font-bold text-gray-900">{{ number_format($service->price, 0, ',', ' ') }}€</div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <p class="text-sm text-gray-500">Plan clair, suivi minimaliste, résultats mesurables.</p>
                                 @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
                                     <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
-                                       class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                        Payer en ligne
+                                       class="inline-flex items-center justify-center gap-2 rounded-full border border-gray-900 px-6 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-900 hover:text-white transition-all">
+                                        <span>Payer en ligne</span>
+                                        <x-lucide-arrow-up-right class="w-4 h-4" />
                                     </a>
                                 @else
-                                    <a href="#contact" 
-                                       class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all whitespace-nowrap">
-                                        Me contacter
+                                    <a href="#contact"
+                                       class="inline-flex items-center justify-center gap-2 rounded-full border border-gray-900 px-6 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-900 hover:text-white transition-all">
+                                        <span>Me contacter</span>
+                                        <x-lucide-arrow-up-right class="w-4 h-4" />
                                     </a>
                                 @endif
                             </div>

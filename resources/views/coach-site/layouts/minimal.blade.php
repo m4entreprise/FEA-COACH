@@ -105,7 +105,7 @@
 </section>
 
 <!-- Pricing Section - Minimal -->
-<section id="tarifs" class="py-20 bg-white">
+<section id="tarifs" class="py-20 bg-white overflow-hidden">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
             <h2 class="text-4xl font-bold text-gray-900 mb-4">
@@ -121,7 +121,7 @@
                 @foreach($services as $service)
                     <div class="relative rounded-2xl border border-gray-200 bg-white px-6 sm:px-8 pt-10 sm:pt-12 pb-6 sm:pb-8 transition hover:border-gray-900/30">
                         @if($service->is_featured)
-                            <span class="absolute -top-4 sm:-top-5 right-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white shadow-lg shadow-primary/30 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
+                            <span class="absolute -top-4 sm:-top-5 right-4 sm:right-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white shadow-lg shadow-primary/30 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
                                 <x-lucide-star class="w-3.5 h-3.5" />
                                 Populaire
                             </span>
@@ -150,7 +150,7 @@
                                 </div>
                             </div>
                             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                                <p class="text-sm text-gray-500">Plan clair, suivi optimisé, résultats mesurables.</p>
+                                <p class="text-sm text-gray-500">Plan clair, suivi minimaliste, résultats mesurables.</p>
                                 @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
                                     <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
                                        class="inline-flex items-center justify-center gap-2 rounded-full border border-gray-900 px-6 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-900 hover:text-white transition-all">

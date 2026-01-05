@@ -55,50 +55,59 @@
 
 <!-- Method Section - Minimal -->
 <section id="methode" class="py-20 bg-gray-50">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">
-            {{ $coach->method_title ?? 'Ma méthode' }}
-        </h2>
-        <p class="text-xl text-gray-600 mb-12">
-            {{ $coach->method_subtitle ?? 'Une approche simple et efficace' }}
-        </p>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">Processus</p>
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">
+                {{ $coach->method_title ?? 'Ma méthode' }}
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                {{ $coach->method_subtitle ?? 'Une approche simple et efficace' }}
+            </p>
+        </div>
 
         @if($coach->method_text)
-            <div class="text-lg text-gray-600 leading-relaxed mb-12">
+            <div class="text-base sm:text-lg text-gray-600 leading-relaxed bg-white rounded-2xl border border-gray-200 px-6 py-5 mb-12 shadow-sm">
                 {!! nl2br(e($coach->method_text)) !!}
             </div>
         @endif
 
-        <!-- Method Steps - Minimal -->
-        <div class="space-y-8">
-            <div class="bg-white rounded-lg p-8 text-left border border-gray-200">
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">1</div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $coach->method_step1_title ?? 'Évaluation' }}</h3>
-                        <p class="text-gray-600">{{ $coach->method_step1_description ?? 'Bilan complet de votre condition physique et définition de vos objectifs.' }}</p>
+        <div class="relative">
+            <div class="hidden sm:block absolute top-0 bottom-0 left-1/2 w-px bg-gradient-to-b from-transparent via-gray-200 to-transparent"></div>
+            <div class="grid gap-8 sm:gap-12">
+                @foreach ([
+                    [
+                        'number' => '1',
+                        'label' => $coach->method_step1_title ?? 'Évaluation',
+                        'description' => $coach->method_step1_description ?? 'Bilan complet de votre condition physique et définition de vos objectifs.',
+                    ],
+                    [
+                        'number' => '2',
+                        'label' => $coach->method_step2_title ?? 'Programme',
+                        'description' => $coach->method_step2_description ?? 'Plan d\'entraînement sur mesure adapté à votre niveau.',
+                    ],
+                    [
+                        'number' => '3',
+                        'label' => $coach->method_step3_title ?? 'Suivi',
+                        'description' => $coach->method_step3_description ?? 'Accompagnement régulier pour garantir vos progrès.',
+                    ],
+                ] as $index => $step)
+                    <div class="relative sm:flex sm:items-center sm:gap-8">
+                        <div class="hidden sm:block w-1/2 text-right pr-8">
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 text-sm font-semibold text-gray-600">{{ $step['number'] }}</span>
+                        </div>
+                        <div class="flex-1 bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                            <div class="flex items-center gap-4 mb-3">
+                                <span class="sm:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 text-sm font-semibold text-gray-600">{{ $step['number'] }}</span>
+                                <div>
+                                    <p class="text-xs uppercase tracking-[0.35em] text-gray-500">Étape {{ $step['number'] }}</p>
+                                    <h3 class="text-xl font-semibold text-gray-900 mt-1">{{ $step['label'] }}</h3>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 leading-relaxed">{{ $step['description'] }}</p>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg p-8 text-left border border-gray-200">
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">2</div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $coach->method_step2_title ?? 'Programme' }}</h3>
-                        <p class="text-gray-600">{{ $coach->method_step2_description ?? 'Plan d\'entraînement sur mesure adapté à votre niveau.' }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg p-8 text-left border border-gray-200">
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">3</div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $coach->method_step3_title ?? 'Suivi' }}</h3>
-                        <p class="text-gray-600">{{ $coach->method_step3_description ?? 'Accompagnement régulier pour garantir vos progrès.' }}</p>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

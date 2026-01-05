@@ -133,13 +133,59 @@
             transition-delay: 0.55s;
         }
 
+        .cta-animate {
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(80px) scale(0.96);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+        }
+
+        .cta-animate::before {
+            content: '';
+            position: absolute;
+            inset: 20%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent 70%);
+            opacity: 0;
+            transform: scale(0.6);
+            transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .cta-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .cta-animate.is-visible::before {
+            opacity: 0.85;
+            transform: scale(1.1);
+        }
+
+        .cta-button-pulse {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button-pulse::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            opacity: 0;
+            animation: heroPulse 2.8s ease infinite;
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .hero-background-animate,
             .hero-fade-seq,
             .hero-cta-animated::after,
             .about-animate,
             .method-section-animate,
-            .method-step-animate {
+            .method-step-animate,
+            .cta-animate,
+            .cta-button-pulse::after {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -241,41 +287,6 @@
     </div>
 </section>
 
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const animatedSelectors = ['.about-animate', '.method-section-animate'];
-            const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
-
-            if (!animatedElements.length) {
-                return;
-            }
-
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const reveal = (el) => el.classList.add('is-visible');
-
-            if (reduceMotion || typeof IntersectionObserver === 'undefined') {
-                animatedElements.forEach(reveal);
-                return;
-            }
-
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        reveal(entry.target);
-                        obs.unobserve(entry.target);
-                    }
-                });
-            }, {
-                rootMargin: '0px 0px -10% 0px',
-                threshold: 0.25,
-            });
-
-            animatedElements.forEach((el) => observer.observe(el));
-        });
-    </script>
-@endpush
-
 <!-- Method Section -->
 <section id="methode" class="py-20 bg-gray-50 method-section-animate">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -357,20 +368,55 @@
 </section>
 
 <!-- CTA Section -->
-<section class="py-20 text-white" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<section class="py-20 text-white cta-animate" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <h2 class="text-3xl sm:text-4xl font-bold mb-6">
             {{ $coach->intermediate_cta_title ?? 'Prêt à transformer votre corps et votre vie ?' }}
         </h2>
         <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             {{ $coach->intermediate_cta_subtitle ?? 'Ne restez pas seul face à vos objectifs. Bénéficiez d\'un accompagnement personnalisé qui vous mènera au succès.' }}
         </p>
-        <a href="#tarifs" class="inline-flex items-center justify-center px-8 py-4 bg-white text-lg font-bold rounded-lg hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105" style="color: {{ $coach->color_primary ?? '#3B82F6' }};">
+        <a href="#tarifs" class="inline-flex items-center justify-center px-8 py-4 bg-white text-lg font-bold rounded-lg hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 cta-button-pulse" style="color: {{ $coach->color_primary ?? '#3B82F6' }};">
             {{ $coach->cta_text ?? 'Commencer maintenant' }}
             <x-lucide-arrow-right class="ml-2 w-5 h-5" />
         </a>
     </div>
 </section>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedSelectors = ['.about-animate', '.method-section-animate', '.cta-animate'];
+            const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
+
+            if (!animatedElements.length) {
+                return;
+            }
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const reveal = (el) => el.classList.add('is-visible');
+
+            if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+                animatedElements.forEach(reveal);
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        reveal(entry.target);
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -10% 0px',
+                threshold: 0.25,
+            });
+
+            animatedElements.forEach((el) => observer.observe(el));
+        });
+    </script>
+@endpush
 
 <!-- Pricing Section -->
 <section id="tarifs" class="py-20 bg-white">

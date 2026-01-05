@@ -398,8 +398,8 @@
                         <button @click="openFaq = openFaq === {{ $index + 1 }} ? null : {{ $index + 1 }}" 
                                 class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
                             <span class="font-semibold text-gray-900">{{ $faq->question }}</span>
-                            <x-lucide-chevron-down class="w-5 h-5 text-gray-500 transition-transform" 
-                                 :class="{ 'transform rotate-180': openFaq === {{ $index + 1 }} }" />
+                            <x-lucide-chevron-down class="w-5 h-5 text-gray-500 transition-transform"
+                                x-bind:class="{ 'transform rotate-180': openFaq === {{ $index + 1 }} }" />
                         </button>
                         <div x-show="openFaq === {{ $index + 1 }}" 
                              x-transition

@@ -82,8 +82,8 @@
         $contactPhone = $coach->user->phone_contact ?? null;
     @endphp
 
-    <div class="relative min-h-screen overflow-hidden">
-        <div class="absolute inset-0 bg-slate-950">
+    <div class="relative min-h-screen">
+        <div class="absolute inset-0 bg-slate-950 overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-950 to-black"></div>
             <div class="absolute -top-32 -right-20 w-[500px] h-[500px] rounded-full mix-blend-screen blur-[180px]" style="background: radial-gradient(circle, {{ $primary }}40, transparent 65%);"></div>
             <div class="absolute top-32 -left-10 w-[420px] h-[420px] rounded-full mix-blend-screen blur-[140px]" style="background: radial-gradient(circle, {{ $secondary }}35, transparent 70%);"></div>

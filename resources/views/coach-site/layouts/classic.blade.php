@@ -255,7 +255,7 @@
                                 @if($service->duration_minutes)
                                     <div class="text-right">
                                         <p class="text-xs uppercase tracking-wider text-gray-400 font-semibold">Durée</p>
-                                        <p class="text-lg font-bold text-primary">⏱️ {{ $service->duration_minutes }} min</p>
+                                        <p class="text-lg font-bold text-primary">{{ $service->duration_minutes }} min</p>
                                     </div>
                                 @endif
                             </div>

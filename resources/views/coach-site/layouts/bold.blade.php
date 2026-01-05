@@ -210,18 +210,13 @@
                                 <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-black/80"></div>
 
                                 <div class="absolute inset-0 px-10 py-8 flex flex-col justify-end">
-                                    <div class="flex flex-wrap items-end justify-between gap-6">
-                                        <div>
-                                            <h3 class="text-4xl md:text-5xl font-black leading-tight">{{ $service->name }}</h3>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="text-xs uppercase tracking-[0.4em] text-white/60 mb-1">Investissement</p>
-                                            <div class="flex items-baseline gap-2 justify-end">
-                                                <span class="text-6xl font-black">{{ number_format($service->price, 0, ',', ' ') }}</span>
-                                                <div class="flex flex-col items-start text-white/70">
-                                                    <span class="text-lg font-semibold">€</span>
-                                                    <span class="text-[11px] font-semibold tracking-[0.4em] uppercase">{{ $service->currency }}</span>
-                                                </div>
+                                    <div class="text-right">
+                                        <p class="text-xs uppercase tracking-[0.4em] text-white/60 mb-1">Investissement</p>
+                                        <div class="flex items-baseline gap-2 justify-end">
+                                            <span class="text-6xl font-black">{{ number_format($service->price, 0, ',', ' ') }}</span>
+                                            <div class="flex flex-col items-start text-white/70">
+                                                <span class="text-lg font-semibold">€</span>
+                                                <span class="text-[11px] font-semibold tracking-[0.4em] uppercase">{{ $service->currency }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -229,6 +224,10 @@
                             </div>
 
                             <div class="flex flex-col flex-1 gap-8 p-10 bg-white text-slate-900">
+                                <h3 class="text-4xl font-black text-slate-900 leading-tight">
+                                    {{ $service->name }}
+                                </h3>
+
                                 @if($service->duration_minutes)
                                     <div class="inline-flex items-center gap-3 text-sm font-semibold tracking-wide text-slate-500 uppercase">
                                         <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">

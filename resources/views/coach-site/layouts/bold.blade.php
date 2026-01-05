@@ -459,13 +459,13 @@
                 </div>
 
                 <div class="md:col-span-1">
-                    <label for="email" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Email *</label>
-                    <input type="email" id="email" name="email" x-ref="email" required value="{{ old('email') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="vous@example.com">
+                    <label for="phone" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Téléphone *</label>
+                    <input type="tel" id="phone" name="phone" x-ref="phone" required value="{{ old('phone') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="+32 4 12 34 56 78">
                 </div>
 
-                <div class="md:col-span-1">
-                    <label for="phone" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Téléphone</label>
-                    <input type="text" id="phone" name="phone" x-ref="phone" value="{{ old('phone') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="+33 6...">
+                <div class="md:col-span-2">
+                    <label for="email" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Email</label>
+                    <input type="email" id="email" name="email" x-ref="email" value="{{ old('email') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="vous@example.com">
                 </div>
 
                 <div class="md:col-span-2">

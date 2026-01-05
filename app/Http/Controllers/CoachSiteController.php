@@ -73,15 +73,15 @@ class CoachSiteController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:50'],
+            'phone' => ['required', 'string', 'max:50'],
+            'email' => ['nullable', 'email', 'max:255'],
             'message' => ['required', 'string', 'max:2000'],
         ]);
 
         $coach->contactMessages()->create([
             'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'phone' => $validated['phone'],
             'message' => $validated['message'],
         ]);
 

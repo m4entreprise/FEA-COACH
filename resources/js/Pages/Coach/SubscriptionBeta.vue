@@ -145,35 +145,40 @@ const customDomainStatus = computed(() => props.customDomain?.status ?? null);
 const customDomainStatusMeta = computed(() => {
   const status = customDomainStatus.value;
   const defaults = {
+    label: 'En traitement',
     text: 'Acheté - en attente d’installation',
     textClass: 'text-emerald-300',
-    badgeClass: 'text-emerald-400',
+    badgeClass: 'border border-emerald-400/40 bg-emerald-500/15 text-emerald-200',
   };
 
   switch (status) {
     case 'pending':
       return {
-        text: 'En attente - achat en cours',
+        label: 'En attente',
+        text: 'Commande en cours de traitement par UNICOACH.',
         textClass: 'text-amber-300',
-        badgeClass: 'text-amber-300',
+        badgeClass: 'border border-amber-400/40 bg-amber-500/15 text-amber-200',
       };
     case 'active':
       return {
-        text: 'Actif',
+        label: 'Actif',
+        text: 'Votre domaine est configuré et opérationnel.',
         textClass: 'text-emerald-300',
-        badgeClass: 'text-emerald-400',
+        badgeClass: 'border border-emerald-400/60 bg-emerald-500/15 text-emerald-100',
       };
     case 'expired':
       return {
-        text: 'Le nom de domaine a expiré',
+        label: 'Expiré',
+        text: 'Renouvelez votre domaine pour conserver vos redirections.',
         textClass: 'text-rose-300',
-        badgeClass: 'text-rose-400',
+        badgeClass: 'border border-rose-400/60 bg-rose-500/10 text-rose-200',
       };
     case 'cancelled':
       return {
-        text: 'Commande annulée',
+        label: 'Annulé',
+        text: 'La commande de domaine a été annulée.',
         textClass: 'text-slate-300',
-        badgeClass: 'text-slate-400',
+        badgeClass: 'border border-slate-600 bg-slate-800 text-slate-200',
       };
     default:
       return defaults;
@@ -271,6 +276,24 @@ const statusCopy = computed(() => {
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-breathe"></span>
               <span>Abonnement {{ subscription.status === 'active' ? 'actif' : subscription.is_on_trial ? 'en période d\'essai' : 'inactif' }}</span>
             </div>
+
+            <div
+              v-if="hasCustomDomainOrder"
+              class="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-2 text-xs"
+            >
+              <div class="flex items-center justify-between gap-3">
+                <p class="text-slate-400 font-medium">Statut du domaine</p>
+                <span
+                  class="inline-flex items-center rounded-full px-2.5 py-0.5 font-semibold text-[11px]"
+                  :class="customDomainStatusMeta.badgeClass"
+                >
+                  {{ customDomainStatusMeta.label }}
+                </span>
+              </div>
+              <p :class="['text-slate-300', customDomainStatusMeta.textClass]">
+                {{ customDomainStatusMeta.text }}
+              </p>
+            </div>
             <div class="flex items-center gap-2">
               <span
                 class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold"
@@ -301,6 +324,15 @@ const statusCopy = computed(() => {
                   <Calendar class="h-3 w-3" />
                   <span>{{ statusCopy.dateText }}</span>
                 </div>
+              </div>
+              <div class="flex items-center gap-3 text-xs">
+                <span
+                  class="inline-flex items-center rounded-full px-2.5 py-0.5 font-semibold"
+                  :class="customDomainStatusMeta.badgeClass"
+                >
+                  {{ customDomainStatusMeta.label }}
+                </span>
+                <p :class="customDomainStatusMeta.textClass">{{ customDomainStatusMeta.text }}</p>
               </div>
             </div>
 
@@ -350,7 +382,7 @@ const statusCopy = computed(() => {
               </div>
             </div>
 
-            <div v-if="customDomain" class="rounded-xl border border-indigo-500/40 bg-indigo-950/40 p-4">
+            <div v-if="customDomain" class="rounded-xl border border-indigo-500/40 bg-indigo-950/40 p-4 space-y-3">
               <div class="flex items-start gap-3">
                 <Check class="h-5 w-5 text-indigo-300 flex-shrink-0" />
                 <div class="flex-1 space-y-2">
@@ -505,10 +537,14 @@ const statusCopy = computed(() => {
               <button
                 type="button"
                 @click="openDomainModal"
-                class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-500/20 border border-indigo-400/50 px-4 py-2 text-xs font-medium text-indigo-100 hover:bg-indigo-500/30 hover:border-indigo-300/70 transition-colors whitespace-nowrap"
+                :disabled="hasCustomDomainOrder"
+                class="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-medium transition-colors whitespace-nowrap"
+                :class="hasCustomDomainOrder
+                  ? 'border border-slate-700 bg-slate-800/70 text-slate-400 cursor-not-allowed'
+                  : 'bg-indigo-500/20 border border-indigo-400/50 text-indigo-100 hover:bg-indigo-500/30 hover:border-indigo-300/70'"
               >
                 <CreditCard class="h-3.5 w-3.5" />
-                Acheter
+                {{ hasCustomDomainOrder ? 'Acheté' : 'Acheter' }}
               </button>
             </div>
           </div>

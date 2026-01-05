@@ -163,35 +163,6 @@
             transform: translateY(0) scale(1);
         }
 
-        .minimal-results-section {
-            opacity: 0;
-            transform: translateY(70px);
-            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
-        }
-
-        .minimal-results-section.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .minimal-results-header {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
-        }
-
-        .minimal-results-card {
-            opacity: 0;
-            transform: translateY(45px) scale(0.97);
-            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
-        }
-
-        .minimal-results-section.is-visible .minimal-results-header,
-        .minimal-results-section.is-visible .minimal-results-card {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
         @media (prefers-reduced-motion: reduce) {
             .minimal-hero-background,
             .minimal-hero-fade,
@@ -205,10 +176,7 @@
             .minimal-method-card,
             .minimal-pricing-section,
             .minimal-pricing-header,
-            .minimal-pricing-card,
-            .minimal-results-section,
-            .minimal-results-header,
-            .minimal-results-card {
+            .minimal-pricing-card {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -434,9 +402,9 @@
 
 <!-- Transformations Section - Minimal -->
 @if(isset($transformations) && $transformations->count() > 0)
-<section id="resultats" class="py-20 bg-gray-50 minimal-results-section">
+<section id="resultats" class="py-20 bg-gray-50">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 minimal-results-header" style="transition-delay: 0.1s;">
+        <div class="text-center mb-12">
             <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">Résultats</p>
             <h2 class="text-4xl font-bold text-gray-900 mb-4">
                 {{ $coach->transformations_title ?? 'Leurs transformations' }}
@@ -452,7 +420,7 @@
                     $beforeUrl = $transformation->hasMedia('before') ? $transformation->getFirstMediaUrl('before') : null;
                     $afterUrl = $transformation->hasMedia('after') ? $transformation->getFirstMediaUrl('after') : null;
                 @endphp
-                <div class="border border-gray-200 rounded-3xl overflow-hidden bg-white minimal-results-card" style="transition-delay: {{ number_format(0.2 + ($loop->index * 0.1), 2) }}s;">
+                <div class="border border-gray-200 rounded-3xl overflow-hidden bg-white">
                     <div class="grid grid-cols-2">
                         <div class="relative">
                             @if($beforeUrl)

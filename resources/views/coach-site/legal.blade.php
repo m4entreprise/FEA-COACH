@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -37,7 +38,42 @@
         .legal-content blockquote { border-left: 4px solid rgba(124,58,237,0.4); padding-left: 1rem; color: #475569; font-style: italic; }
     </style>
 </head>
-<body class="bg-slate-950 text-white antialiased">
+<body class="bg-slate-950 text-white antialiased" x-data="legalNavigation()" x-init="init()">
+    <script>
+        function legalNavigation() {
+            return {
+                activeSection: 'cgv',
+                observer: null,
+                init() {
+                    this.observeSections();
+                },
+                observeSections() {
+                    const sections = ['cgv', 'privacy'];
+                    const options = { rootMargin: '-40% 0px -40% 0px' };
+                    this.observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                this.activeSection = entry.target.id;
+                            }
+                        });
+                    }, options);
+                    sections.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            this.observer.observe(el);
+                        }
+                    });
+                },
+                scrollTo(id) {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                        this.activeSection = id;
+                    }
+                }
+            }
+        }
+    </script>
     @php
         $primary = $coach->color_primary ?? '#7c3aed';
         $secondary = $coach->color_secondary ?? '#ec4899';
@@ -119,15 +155,15 @@
                                 </li>
                             </ul>
                             <div class="mt-6 rounded-2xl bg-white/5 p-4 text-xs text-white/70 leading-relaxed border border-white/10">
-                                <p>Document mis à jour automatiquement selon les informations validées par le coach.</p>
+                                <p>Document automatiquement synchronisé avec les informations légales en vigueur.</p>
                             </div>
                         </div>
 
                         @if(!empty($legalHtml))
-                            <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 space-y-5">
+                            <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 space-y-5 sticky top-8">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white/60">Navigation rapide</p>
                                 <div class="space-y-4">
-                                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4 transition" x-bind:class="activeSection === 'cgv' ? 'border-white/40 bg-white/10 shadow-lg shadow-black/30' : ''">
                                         <div class="flex items-center gap-3 mb-2">
                                             <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10 text-sm font-semibold">01</span>
                                             <div>
@@ -136,13 +172,13 @@
                                             </div>
                                         </div>
                                         <p class="text-white/60 text-sm mb-3">Services proposés, obligations mutuelles, paiement, annulation.</p>
-                                        <a href="#cgv" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90">
+                                        <button @click="scrollTo('cgv')" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90">
                                             <x-lucide-file-text class="w-4 h-4" />
                                             Consulter la section
                                             <x-lucide-arrow-up-right class="w-4 h-4 text-white/60" />
-                                        </a>
+                                        </button>
                                     </div>
-                                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4 transition" x-bind:class="activeSection === 'privacy' ? 'border-white/40 bg-white/10 shadow-lg shadow-black/30' : ''">
                                         <div class="flex items-center gap-3 mb-2">
                                             <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10 text-sm font-semibold">02</span>
                                             <div>
@@ -151,11 +187,11 @@
                                             </div>
                                         </div>
                                         <p class="text-white/60 text-sm mb-3">Données collectées, finalités, droits RGPD et sécurité appliquée.</p>
-                                        <a href="#privacy" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90">
+                                        <button @click="scrollTo('privacy')" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90">
                                             <x-lucide-lock class="w-4 h-4" />
                                             Consulter la section
                                             <x-lucide-arrow-up-right class="w-4 h-4 text-white/60" />
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

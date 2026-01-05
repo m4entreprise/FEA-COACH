@@ -5,6 +5,124 @@
     use Stevebauman\Purify\Facades\Purify;
 @endphp
 
+@push('styles')
+    <style>
+        @keyframes boldHeroBackground {
+            0% {
+                opacity: 0;
+                transform: scale(1.08);
+                filter: blur(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes boldHeroFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes boldHeroStatsPop {
+            0% {
+                opacity: 0;
+                transform: translateY(60px) scale(0.92);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes boldHeroCtaReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(55px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .bold-hero-background {
+            opacity: 0;
+            animation: boldHeroBackground 1.6s ease forwards;
+        }
+
+        .bold-hero-fade {
+            opacity: 0;
+            animation: boldHeroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .bold-hero-delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .bold-hero-delay-2 {
+            animation-delay: 0.25s;
+        }
+
+        .bold-hero-delay-3 {
+            animation-delay: 0.4s;
+        }
+
+        .bold-hero-delay-4 {
+            animation-delay: 0.55s;
+        }
+
+        .bold-hero-stats {
+            opacity: 0;
+            animation: boldHeroFadeUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.5s;
+        }
+
+        .bold-hero-stat-card {
+            opacity: 0;
+            animation: boldHeroStatsPop 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .bold-hero-stat-card:nth-child(1) {
+            animation-delay: 0.6s;
+        }
+
+        .bold-hero-stat-card:nth-child(2) {
+            animation-delay: 0.75s;
+        }
+
+        .bold-hero-stat-card:nth-child(3) {
+            animation-delay: 0.9s;
+        }
+
+        .bold-hero-cta {
+            opacity: 0;
+            animation: boldHeroCtaReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.95s;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bold-hero-background,
+            .bold-hero-fade,
+            .bold-hero-stats,
+            .bold-hero-stat-card,
+            .bold-hero-cta {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
 
 {{-- Layout Bold/Impact - Version très visuelle avec de grosses sections hero --}}
@@ -12,50 +130,50 @@
 <!-- Hero Section - Bold/Impact -->
 <section id="accueil" class="relative min-h-screen flex items-center justify-center overflow-hidden">
     @if($coach->hasMedia('hero'))
-        <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 z-0 bold-hero-background">
             <img src="{{ $coach->getFirstMediaUrl('hero') }}" alt="Hero" class="w-full h-full object-cover scale-110">
-            <div class="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-secondary/80"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-secondary/80 bold-hero-background" style="animation-delay: 0.05s;"></div>
         </div>
     @else
-        <div class="absolute inset-0 z-0 bg-gradient-to-br from-primary via-primary-dark to-secondary"></div>
+        <div class="absolute inset-0 z-0 bg-gradient-to-br from-primary via-primary-dark to-secondary bold-hero-background"></div>
     @endif
 
-    <div class="absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/40 via-slate-950/65 to-slate-950/80"></div>
+    <div class="absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/40 via-slate-950/65 to-slate-950/80 bold-hero-background" style="animation-delay: 0.1s;"></div>
 
     <div class="absolute inset-0 z-0 opacity-10">
-        <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl bold-hero-background" style="animation-delay: 0.2s;"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl bold-hero-background" style="animation-delay: 0.3s;"></div>
     </div>
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center text-white">
-        <div class="mb-8 inline-block px-6 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold uppercase tracking-wide">
+        <div class="mb-8 inline-block px-6 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold uppercase tracking-wide bold-hero-fade bold-hero-delay-1">
             {{ $coach->name }}
         </div>
         
-        <h1 class="text-6xl sm:text-7xl md:text-8xl font-black mb-8 leading-none">
+        <h1 class="text-6xl sm:text-7xl md:text-8xl font-black mb-8 leading-none bold-hero-fade bold-hero-delay-2">
             {{ $coach->hero_title ?? 'Transformez votre corps, transformez votre vie' }}
         </h1>
         
-        <p class="text-2xl sm:text-3xl md:text-4xl mb-12 text-white/90 font-bold max-w-4xl mx-auto">
+        <p class="text-2xl sm:text-3xl md:text-4xl mb-12 text-white/90 font-bold max-w-4xl mx-auto bold-hero-fade bold-hero-delay-3">
             {{ $coach->hero_subtitle ?? 'Coaching sportif personnalisé' }}
         </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-3xl mx-auto mb-12">
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-3xl mx-auto mb-12 bold-hero-stats">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center bold-hero-stat-card">
                 <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ isset($transformations) ? $transformations->count() : 0 }}+</div>
                 <div class="text-xs sm:text-sm uppercase tracking-wider">Clients</div>
             </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center bold-hero-stat-card">
                 <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ $coach->satisfaction_rate ?? 100 }}%</div>
                 <div class="text-xs sm:text-sm uppercase tracking-wider">Satisfaction</div>
             </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center bold-hero-stat-card">
                 <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ $coach->average_rating ?? 5.0 }}</div>
                 <div class="text-xs sm:text-sm uppercase tracking-wider">Note</div>
             </div>
         </div>
 
-        <a href="#tarifs" class="inline-flex items-center px-12 py-5 bg-white text-primary text-xl font-black rounded-full hover:bg-gray-100 transition-all shadow-2xl transform hover:scale-110">
+        <a href="#tarifs" class="inline-flex items-center px-12 py-5 bg-white text-primary text-xl font-black rounded-full hover:bg-gray-100 transition-all shadow-2xl transform hover:scale-110 bold-hero-cta">
             {{ $coach->cta_text ?? 'Commencer maintenant' }}
             <svg class="ml-3 w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"/>

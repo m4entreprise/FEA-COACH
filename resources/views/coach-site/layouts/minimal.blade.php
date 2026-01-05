@@ -424,7 +424,7 @@
                                 x-ref="name"
                                 required
                                 value="{{ old('name') }}"
-                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/40 focus:ring-offset-0"
+                                class="block w-full rounded-lg border-gray-300 bg-white pl-12 shadow-sm focus:border-primary focus:ring-0 focus:outline-none"
                                 placeholder="Votre nom"
                             >
                         </div>

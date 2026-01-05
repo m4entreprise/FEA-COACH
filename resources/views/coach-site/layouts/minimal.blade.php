@@ -413,64 +413,47 @@
             >
                 @csrf
 
-                <div class="grid gap-6 sm:grid-cols-2">
-                    <div>
-                        <label for="name" class="block text-sm font-semibold text-gray-900 mb-2">Nom complet *</label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            x-ref="name"
-                            required
-                            value="{{ old('name') }}"
-                            class="block w-full rounded-xl border-gray-200 bg-gray-50 focus:border-gray-900 focus:ring-gray-900/20"
-                            placeholder="Votre nom"
-                        >
-                    </div>
-
-                    <div>
-                        <label for="email" class="block text-sm font-semibold text-gray-900 mb-2">Email *</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            x-ref="email"
-                            required
-                            value="{{ old('email') }}"
-                            class="block w-full rounded-xl border-gray-200 bg-gray-50 focus:border-gray-900 focus:ring-gray-900/20"
-                            placeholder="vous@example.com"
-                        >
-                    </div>
+                <div>
+                    <label for="name" class="block text-sm font-semibold text-gray-900 mb-2">Nom complet *</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        x-ref="name"
+                        required
+                        value="{{ old('name') }}"
+                        class="block w-full rounded-xl border-gray-200 bg-gray-50 focus:border-gray-900 focus:ring-gray-900/20"
+                        placeholder="Votre nom"
+                    >
                 </div>
 
-                <div class="grid gap-6 sm:grid-cols-2">
-                    <div>
-                        <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">Téléphone *</label>
-                        <input
-                            type="tel"
-                            id="phone"
-                            name="phone"
-                            x-ref="phone"
-                            required
-                            autocomplete="tel"
-                            value="{{ old('phone') }}"
-                            class="block w-full rounded-xl border-gray-200 bg-gray-50 focus:border-gray-900 focus:ring-gray-900/20"
-                            placeholder="+32 4 12 34 56 78"
-                        >
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-900 mb-2">Préférence</label>
-                        <div class="grid grid-cols-2 gap-2 text-sm">
-                            <label class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-gray-600">
-                                <input type="radio" name="contact_pref" class="text-primary focus:ring-primary">
-                                Appel
-                            </label>
-                            <label class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-gray-600">
-                                <input type="radio" name="contact_pref" class="text-primary focus:ring-primary">
-                                Email
-                            </label>
-                        </div>
-                    </div>
+                <div>
+                    <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">Téléphone *</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        x-ref="phone"
+                        required
+                        autocomplete="tel"
+                        value="{{ old('phone') }}"
+                        class="block w-full rounded-xl border-gray-200 bg-gray-50 focus:border-gray-900 focus:ring-gray-900/20"
+                        placeholder="+32 4 12 34 56 78"
+                    >
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-semibold text-gray-900 mb-2">Email *</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        x-ref="email"
+                        required
+                        value="{{ old('email') }}"
+                        class="block w-full rounded-xl border-gray-200 bg-gray-50 focus:border-gray-900 focus:ring-gray-900/20"
+                        placeholder="vous@example.com"
+                    >
                 </div>
 
                 <div>

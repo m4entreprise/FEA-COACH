@@ -266,6 +266,39 @@
             transform: translateY(0);
         }
 
+        .contact-section-animate {
+            opacity: 0;
+            transform: translateY(70px);
+            transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.1s ease;
+        }
+
+        .contact-section-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .contact-seq {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .contact-section-animate.is-visible .contact-seq {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .contact-card-animate {
+            opacity: 0;
+            transform: translateY(50px) scale(0.98);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .contact-section-animate.is-visible .contact-card-animate {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .hero-background-animate,
             .hero-fade-seq,
@@ -283,7 +316,10 @@
             .results-card-animate,
             .faq-section-animate,
             .faq-seq,
-            .faq-item-animate {
+            .faq-item-animate,
+            .contact-section-animate,
+            .contact-seq,
+            .contact-card-animate {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -388,7 +424,15 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSelectors = ['.about-animate', '.method-section-animate', '.cta-section-animate', '.pricing-section-animate', '.results-section-animate', '.faq-section-animate'];
+            const animatedSelectors = [
+                '.about-animate',
+                '.method-section-animate',
+                '.cta-section-animate',
+                '.pricing-section-animate',
+                '.results-section-animate',
+                '.faq-section-animate',
+                '.contact-section-animate'
+            ];
             const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
 
             if (!animatedElements.length) {
@@ -745,27 +789,28 @@
 </section>
 
 <!-- Contact/CTA Section -->
-<section id="contact" class="py-20 text-white" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});">
+<section id="contact" class="py-20 text-white contact-section-animate" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});">
     <div
-        class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"
+        class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 contact-seq"
         x-data="{ submitted: false, successMessage: '', loading: false }"
     >
-        <div class="mb-10 text-center">
-            <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-white">
+        <div class="mb-10 text-center space-y-4">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-white contact-seq" style="transition-delay: 0.12s;">
                 {{ $coach->final_cta_title ?? 'Prêt à commencer votre transformation ?' }}
             </h2>
-            <p class="text-lg sm:text-xl mb-4 text-white/90">
+            <p class="text-lg sm:text-xl mb-4 text-white/90 contact-seq" style="transition-delay: 0.22s;">
                 {{ $coach->final_cta_subtitle ?? 'Ne laissez pas vos objectifs être de simples rêves. Agissez maintenant !' }}
             </p>
-            <p class="text-sm text-white/80">
+            <p class="text-sm text-white/80 contact-seq" style="transition-delay: 0.32s;">
                 Remplissez le formulaire ci-dessous, le coach recevra votre message directement dans son tableau de bord.
             </p>
         </div>
 
         @if (session('success'))
             <div
-                class="mb-6 rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-sm"
+                class="mb-6 rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-sm contact-seq"
                 x-show="!submitted"
+                style="transition-delay: 0.25s;"
             >
                 <div class="flex items-center">
                     <x-lucide-badge-check class="h-5 w-5 text-emerald-200" />
@@ -775,7 +820,7 @@
         @endif
 
         @if ($errors->any())
-            <div class="mb-6 rounded-lg bg-white/10 border border-red-300/40 px-4 py-3 text-sm" x-show="!submitted">
+            <div class="mb-6 rounded-lg bg-white/10 border border-red-300/40 px-4 py-3 text-sm contact-seq" x-show="!submitted" style="transition-delay: 0.3s;">
                 <div class="flex items-start">
                     <x-lucide-alert-triangle class="h-5 w-5 text-red-200 mt-0.5" />
                     <ul class="ml-3 space-y-1 text-red-50">
@@ -789,9 +834,10 @@
 
         <!-- Message de succès en AJAX (remplace le formulaire après envoi) -->
         <div
-            class="mb-6 rounded-2xl bg-white/10 border border-emerald-300/60 px-4 py-4 text-sm sm:text-base"
+            class="mb-6 rounded-2xl bg-white/10 border border-emerald-300/60 px-4 py-4 text-sm sm:text-base contact-card-animate"
             x-show="submitted"
             x-transition
+            style="transition-delay: 0.35s;"
         >
             <div class="flex items-start">
                 <x-lucide-badge-check class="h-6 w-6 text-emerald-200 mt-0.5" />
@@ -802,7 +848,10 @@
             </div>
         </div>
 
-        <div class="relative overflow-hidden bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 border border-white/20" x-show="!submitted" x-transition>
+        <div class="relative overflow-hidden bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 border border-white/20 contact-card-animate"
+             x-show="!submitted"
+             x-transition
+             style="transition-delay: 0.4s;">
             <div class="pointer-events-none absolute -top-12 -right-6 w-48 h-48 rounded-full bg-white/10 blur-3xl"></div>
             <div class="pointer-events-none absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-gradient-to-tr from-white/5 via-transparent to-white/10 blur-2xl"></div>
             <form

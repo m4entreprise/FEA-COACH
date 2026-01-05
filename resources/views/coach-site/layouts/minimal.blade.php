@@ -434,9 +434,9 @@
 
 <!-- Transformations Section - Minimal -->
 @if(isset($transformations) && $transformations->count() > 0)
-<section id="resultats" class="py-20 bg-gray-50">
+<section id="resultats" class="py-20 bg-gray-50 minimal-results-section">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12 minimal-results-header" style="transition-delay: 0.12s;">
             <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">Résultats</p>
             <h2 class="text-4xl font-bold text-gray-900 mb-4">
                 {{ $coach->transformations_title ?? 'Leurs transformations' }}
@@ -452,7 +452,8 @@
                     $beforeUrl = $transformation->hasMedia('before') ? $transformation->getFirstMediaUrl('before') : null;
                     $afterUrl = $transformation->hasMedia('after') ? $transformation->getFirstMediaUrl('after') : null;
                 @endphp
-                <div class="border border-gray-200 rounded-3xl overflow-hidden bg-white">
+                <div class="border border-gray-200 rounded-3xl overflow-hidden bg-white minimal-results-card"
+                     style="transition-delay: {{ number_format(0.2 + ($loop->index * 0.1), 2) }}s;">
                     <div class="grid grid-cols-2">
                         <div class="relative">
                             @if($beforeUrl)
@@ -736,7 +737,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.minimal-about-section, .minimal-method-section, .minimal-pricing-section');
+            const animatedSections = document.querySelectorAll('.minimal-about-section, .minimal-method-section, .minimal-pricing-section, .minimal-results-section');
 
             if (!animatedSections.length) {
                 return;

@@ -567,7 +567,7 @@
                                         autocomplete="tel"
                                         value="{{ old('phone') }}"
                                         class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-white placeholder-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
-                                        placeholder="+33 6 12 34 56 78"
+                                        placeholder="+32 4 12 34 56 78"
                                     >
                                     <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
                                         <x-lucide-phone-call class="w-5 h-5" />

@@ -212,6 +212,36 @@
         .bold-pricing-delay-2 { transition-delay: 0.2s; }
         .bold-pricing-delay-3 { transition-delay: 0.32s; }
 
+        .bold-results-section {
+            opacity: 0;
+            transform: translateY(120px);
+            transition: opacity 1.1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-results-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bold-results-header,
+        .bold-results-card,
+        .bold-results-cta {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-results-section.is-visible .bold-results-header,
+        .bold-results-section.is-visible .bold-results-card,
+        .bold-results-section.is-visible .bold-results-cta {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bold-results-delay-1 { transition-delay: 0.08s; }
+        .bold-results-delay-2 { transition-delay: 0.22s; }
+        .bold-results-delay-3 { transition-delay: 0.36s; }
+
         @media (prefers-reduced-motion: reduce) {
             .bold-hero-background,
             .bold-hero-fade,
@@ -231,7 +261,11 @@
             .bold-pricing-header,
             .bold-pricing-description,
             .bold-pricing-card,
-            .bold-pricing-empty {
+            .bold-pricing-empty,
+            .bold-results-section,
+            .bold-results-header,
+            .bold-results-card,
+            .bold-results-cta {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -512,9 +546,9 @@
 
 <!-- Transformations Section - Bold -->
 @if(isset($transformations) && $transformations->count() > 0)
-<section id="resultats" class="py-32 bg-white">
+<section id="resultats" class="py-32 bg-white bold-results-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-20">
+        <div class="text-center mb-20 bold-results-header bold-results-delay-1">
             <div class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary font-bold uppercase text-sm tracking-wide mb-6">
                 Résultats
             </div>
@@ -528,7 +562,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($transformations as $transformation)
-                <div class="relative">
+                <div class="relative bold-results-card" style="transition-delay: {{ 0.25 + ($loop->index * 0.1) }}s;">
                     <div class="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
                         <div class="grid grid-cols-2 relative">
                             <div class="relative overflow-hidden">
@@ -584,7 +618,7 @@
             @endforeach
         </div>
 
-        <div class="text-center mt-16">
+        <div class="text-center mt-16 bold-results-cta bold-results-delay-3">
             <p class="text-2xl text-gray-900 mb-8 font-black">Prêt pour votre transformation ?</p>
             <a href="#tarifs" class="inline-flex items-center px-12 py-5 bg-primary text-white text-xl font-black rounded-full hover:bg-primary-dark transition-all shadow-2xl transform hover:scale-110">
                 {{ $coach->cta_text ?? 'Commencer' }}
@@ -735,7 +769,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.bold-about-section, .bold-method-section, .bold-pricing-section');
+            const animatedSections = document.querySelectorAll('.bold-about-section, .bold-method-section, .bold-pricing-section, .bold-results-section');
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
             if (!animatedSections.length) {

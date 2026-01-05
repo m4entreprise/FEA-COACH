@@ -145,6 +145,41 @@
         .bold-about-delay-3 { transition-delay: 0.32s; }
         .bold-about-delay-4 { transition-delay: 0.45s; }
 
+        .bold-method-section {
+            opacity: 0;
+            transform: translateY(120px);
+            transition: opacity 1.1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-method-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bold-method-header,
+        .bold-method-description,
+        .bold-method-card {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-method-description {
+            transform: translateY(60px) scale(0.96);
+        }
+
+        .bold-method-section.is-visible .bold-method-header,
+        .bold-method-section.is-visible .bold-method-description,
+        .bold-method-section.is-visible .bold-method-card {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .bold-method-delay-1 { transition-delay: 0.05s; }
+        .bold-method-delay-2 { transition-delay: 0.18s; }
+        .bold-method-delay-3 { transition-delay: 0.32s; }
+        .bold-method-delay-4 { transition-delay: 0.46s; }
+
         @media (prefers-reduced-motion: reduce) {
             .bold-hero-background,
             .bold-hero-fade,
@@ -155,7 +190,11 @@
             .bold-about-visual,
             .bold-about-heading,
             .bold-about-text,
-            .bold-about-cta {
+            .bold-about-cta,
+            .bold-method-section,
+            .bold-method-header,
+            .bold-method-description,
+            .bold-method-card {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -278,14 +317,14 @@
 </section>
 
 <!-- Method Section - Bold -->
-<section id="methode" class="py-32 relative overflow-hidden" style="background: linear-gradient(135deg, {{ $coach->color_primary ?? '#3B82F6' }} 0%, {{ $coach->color_secondary ?? '#10B981' }} 100%);">
+<section id="methode" class="py-32 relative overflow-hidden bold-method-section" style="background: linear-gradient(135deg, {{ $coach->color_primary ?? '#3B82F6' }} 0%, {{ $coach->color_secondary ?? '#10B981' }} 100%);">
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-white rounded-full blur-3xl"></div>
         <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white rounded-full blur-3xl"></div>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="text-center mb-20 text-white">
+        <div class="text-center mb-20 text-white bold-method-header bold-method-delay-1">
             <div class="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full font-bold uppercase text-sm tracking-wide mb-6">
                 Ma méthode
             </div>
@@ -298,13 +337,13 @@
         </div>
 
         @if($coach->method_text)
-            <div class="text-xl text-white/90 leading-relaxed text-center max-w-4xl mx-auto mb-16">
+            <div class="text-xl text-white/90 leading-relaxed text-center max-w-4xl mx-auto mb-16 bold-method-description bold-method-delay-2">
                 {!! nl2br(e($coach->method_text)) !!}
             </div>
         @endif
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10 border-2 border-white/20 hover:border-white/40 transition-all transform hover:scale-105">
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10 border-2 border-white/20 hover:border-white/40 transition-all transform hover:scale-105 bold-method-card bold-method-delay-2">
                 <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-8 shadow-xl">
                     <span class="text-4xl font-black text-primary">1</span>
                 </div>
@@ -312,7 +351,7 @@
                 <p class="text-lg text-white/80">{{ $coach->method_step1_description ?? 'Bilan complet' }}</p>
             </div>
 
-            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10 border-2 border-white/20 hover:border-white/40 transition-all transform hover:scale-105">
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10 border-2 border-white/20 hover:border-white/40 transition-all transform hover:scale-105 bold-method-card bold-method-delay-3">
                 <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-8 shadow-xl">
                     <span class="text-4xl font-black text-primary">2</span>
                 </div>
@@ -320,7 +359,7 @@
                 <p class="text-lg text-white/80">{{ $coach->method_step2_description ?? 'Plan sur mesure' }}</p>
             </div>
 
-            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10 border-2 border-white/20 hover:border-white/40 transition-all transform hover:scale-105">
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10 border-2 border-white/20 hover:border-white/40 transition-all transform hover:scale-105 bold-method-card bold-method-delay-4">
                 <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-8 shadow-xl">
                     <span class="text-4xl font-black text-primary">3</span>
                 </div>
@@ -659,15 +698,15 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('.bold-about-section');
+            const animatedSections = document.querySelectorAll('.bold-about-section, .bold-method-section');
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            if (!sections.length) {
+            if (!animatedSections.length) {
                 return;
             }
 
             if (prefersReducedMotion) {
-                sections.forEach((section) => section.classList.add('is-visible'));
+                animatedSections.forEach((section) => section.classList.add('is-visible'));
                 return;
             }
 
@@ -683,7 +722,7 @@
                 { threshold: 0.2 }
             );
 
-            sections.forEach((section) => observer.observe(section));
+            animatedSections.forEach((section) => observer.observe(section));
         });
     </script>
 @endpush

@@ -299,7 +299,7 @@
                                 @if($transformation->hasMedia('before'))
                                     <button
                                         type="button"
-                                        class="block w-full h-72 focus:outline-none cursor-zoom-in"
+                                        class="group block w-full h-72 focus:outline-none cursor-zoom-in"
                                         @click="openLightbox('{{ addslashes($transformation->getFirstMediaUrl('before')) }}', 'Avant')"
                                         aria-label="Voir la photo avant en grand"
                                     >
@@ -319,7 +319,7 @@
                                 @if($transformation->hasMedia('after'))
                                     <button
                                         type="button"
-                                        class="block w-full h-72 focus:outline-none cursor-zoom-in"
+                                        class="group block w-full h-72 focus:outline-none cursor-zoom-in"
                                         @click="openLightbox('{{ addslashes($transformation->getFirstMediaUrl('after')) }}', 'Après')"
                                         aria-label="Voir la photo après en grand"
                                     >

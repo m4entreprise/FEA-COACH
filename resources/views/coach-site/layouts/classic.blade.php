@@ -99,11 +99,47 @@
             transform: translateX(0) translateY(0);
         }
 
+        .method-section-animate {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+        }
+
+        .method-section-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .method-step-animate {
+            opacity: 0;
+            transform: translateY(60px) scale(0.96);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
+        }
+
+        .method-section-animate.is-visible .method-step-animate {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .method-step-animate:nth-child(1) {
+            transition-delay: 0.15s;
+        }
+
+        .method-step-animate:nth-child(2) {
+            transition-delay: 0.35s;
+        }
+
+        .method-step-animate:nth-child(3) {
+            transition-delay: 0.55s;
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .hero-background-animate,
             .hero-fade-seq,
             .hero-cta-animated::after,
-            .about-animate {
+            .about-animate,
+            .method-section-animate,
+            .method-step-animate {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -153,39 +189,6 @@
         <x-lucide-chevrons-down class="w-6 h-6 text-white" />
     </div>
 </section>
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const aboutElements = document.querySelectorAll('.about-animate');
-
-            if (!aboutElements.length) {
-                return;
-            }
-
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            if (reduceMotion || typeof IntersectionObserver === 'undefined') {
-                aboutElements.forEach((el) => el.classList.add('is-visible'));
-                return;
-            }
-
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        obs.unobserve(entry.target);
-                    }
-                });
-            }, {
-                rootMargin: '0px 0px -10% 0px',
-                threshold: 0.2,
-            });
-
-            aboutElements.forEach((el) => observer.observe(el));
-        });
-    </script>
-@endpush
 
 <!-- About Section -->
 <section id="a-propos" class="py-20 bg-white">
@@ -238,8 +241,43 @@
     </div>
 </section>
 
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedSelectors = ['.about-animate', '.method-section-animate'];
+            const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
+
+            if (!animatedElements.length) {
+                return;
+            }
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const reveal = (el) => el.classList.add('is-visible');
+
+            if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+                animatedElements.forEach(reveal);
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        reveal(entry.target);
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -10% 0px',
+                threshold: 0.25,
+            });
+
+            animatedElements.forEach((el) => observer.observe(el));
+        });
+    </script>
+@endpush
+
 <!-- Method Section -->
-<section id="methode" class="py-20 bg-gray-50">
+<section id="methode" class="py-20 bg-gray-50 method-section-animate">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
             <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -261,7 +299,7 @@
             <div class="pointer-events-none absolute inset-0 mx-auto max-w-5xl rounded-3xl bg-gradient-to-r from-primary/10 via-white to-secondary/10 blur-3xl opacity-70"></div>
 
             <div class="relative grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="relative bg-white/90 border border-gray-100 rounded-2xl p-8 shadow-lg shadow-gray-200/60 backdrop-blur-sm transition-transform hover:-translate-y-1">
+                <div class="relative bg-white/90 border border-gray-100 rounded-2xl p-8 shadow-lg shadow-gray-200/60 backdrop-blur-sm transition-transform hover:-translate-y-1 method-step-animate">
                     <span class="hidden md:block absolute top-12 -right-6 w-12 h-px bg-gradient-to-r from-primary/40 to-transparent"></span>
                     <div class="flex items-center gap-4 mb-6">
                         <div class="h-14 w-14 rounded-2xl bg-primary/10 text-primary text-2xl font-bold flex items-center justify-center">
@@ -279,7 +317,7 @@
                     </div>
                 </div>
 
-                <div class="relative bg-white/90 border border-gray-100 rounded-2xl p-8 shadow-lg shadow-gray-200/60 backdrop-blur-sm transition-transform hover:-translate-y-1">
+                <div class="relative bg-white/90 border border-gray-100 rounded-2xl p-8 shadow-lg shadow-gray-200/60 backdrop-blur-sm transition-transform hover:-translate-y-1 method-step-animate">
                     <span class="hidden md:block absolute top-12 -right-6 w-12 h-px bg-gradient-to-r from-primary/40 to-transparent"></span>
                     <div class="flex items-center gap-4 mb-6">
                         <div class="h-14 w-14 rounded-2xl bg-primary/10 text-primary text-2xl font-bold flex items-center justify-center">
@@ -297,7 +335,7 @@
                     </div>
                 </div>
 
-                <div class="relative bg-white/90 border border-gray-100 rounded-2xl p-8 shadow-lg shadow-gray-200/60 backdrop-blur-sm transition-transform hover:-translate-y-1">
+                <div class="relative bg-white/90 border border-gray-100 rounded-2xl p-8 shadow-lg shadow-gray-200/60 backdrop-blur-sm transition-transform hover:-translate-y-1 method-step-animate">
                     <div class="flex items-center gap-4 mb-6">
                         <div class="h-14 w-14 rounded-2xl bg-primary/10 text-primary text-2xl font-bold flex items-center justify-center">
                             3

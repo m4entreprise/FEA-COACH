@@ -5,203 +5,42 @@
     use Stevebauman\Purify\Facades\Purify;
 @endphp
 
-@push('styles')
-    <style>
-        document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.bold-hero-section, .bold-about-section');
-
-            if (!animatedSections.length) {
-                return;
-            }
-
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const reveal = (el) => el.classList.add('is-visible');
-
-            if (reduceMotion || typeof IntersectionObserver === 'undefined') {
-                animatedSections.forEach(reveal);
-                return;
-            }
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        reveal(entry.target);
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                rootMargin: '0px 0px -10% 0px',
-                threshold: 0.2,
-            });
-
-            animatedSections.forEach((section) => observer.observe(section));
-        });
-
-        .bold-hero-stage {
-            opacity: 0;
-        }
-
-        @keyframes boldHeroBackground {
-            0% {
-                opacity: 0;
-                transform: scale(1.1);
-                filter: blur(10px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-                filter: blur(0);
-            }
-        }
-
-        @keyframes boldHeroFade {
-            0% {
-                opacity: 0;
-                transform: translateY(60px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes boldHeroPulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.25);
-            }
-            70% {
-                box-shadow: 0 0 0 40px rgba(255, 255, 255, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-            }
-        }
-
-        .bold-hero-section.is-visible .bold-hero-background {
-            animation: boldHeroBackground 1.6s ease forwards;
-        }
-
-        .bold-hero-fade {
-            opacity: 0;
-        }
-
-        .bold-hero-section.is-visible .bold-hero-fade {
-            animation: boldHeroFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .bold-hero-delay-1 {
-            animation-delay: 0.15s;
-        }
-
-        .bold-hero-delay-2 {
-            animation-delay: 0.3s;
-        }
-
-        .bold-hero-delay-3 {
-            animation-delay: 0.45s;
-        }
-
-        .bold-hero-delay-4 {
-            animation-delay: 0.6s;
-        }
-
-        .bold-hero-cta {
-            position: relative;
-        }
-
-        .bold-hero-section.is-visible .bold-hero-cta {
-            animation: boldHeroFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 0.75s;
-        }
-
-        .bold-hero-cta::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            animation: boldHeroPulse 2.6s ease infinite;
-        }
-
-        .bold-about-section {
-            opacity: 0;
-        }
-
-        .bold-about-image {
-            opacity: 0;
-        }
-
-        .bold-about-content {
-            opacity: 0;
-        }
-
-        .bold-about-section.is-visible {
-            animation: boldHeroFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 0.1s;
-        }
-
-        .bold-about-section.is-visible .bold-about-image {
-            animation: boldHeroFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 0.25s;
-        }
-
-        .bold-about-section.is-visible .bold-about-content {
-            animation: boldHeroFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 0.35s;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .bold-hero-background,
-            .bold-hero-fade,
-            .bold-hero-cta,
-            .bold-hero-cta::after,
-            .bold-about-section,
-            .bold-about-image,
-            .bold-about-content {
-                animation: none !important;
-                opacity: 1 !important;
-                transform: none !important;
-                filter: none !important;
-            }
-        }
-    </style>
-@endpush
-
 @section('content')
 
 {{-- Layout Bold/Impact - Version très visuelle avec de grosses sections hero --}}
 
 <!-- Hero Section - Bold/Impact -->
-<section id="accueil" class="relative min-h-screen flex items-center justify-center overflow-hidden bold-hero-section bold-hero-stage">
+<section id="accueil" class="relative min-h-screen flex items-center justify-center overflow-hidden">
     @if($coach->hasMedia('hero'))
-        <div class="absolute inset-0 z-0 bold-hero-background">
-            <img src="{{ $coach->getFirstMediaUrl('hero') }}" alt="Hero" class="w-full h-full object-cover scale-110 bold-hero-background">
-            <div class="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-secondary/80 bold-hero-background" style="animation-delay: 0.1s;"></div>
+        <div class="absolute inset-0 z-0">
+            <img src="{{ $coach->getFirstMediaUrl('hero') }}" alt="Hero" class="w-full h-full object-cover scale-110">
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-secondary/80"></div>
         </div>
     @else
-        <div class="absolute inset-0 z-0 bg-gradient-to-br from-primary via-primary-dark to-secondary bold-hero-background"></div>
+        <div class="absolute inset-0 z-0 bg-gradient-to-br from-primary via-primary-dark to-secondary"></div>
     @endif
 
-    <div class="absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/40 via-slate-950/65 to-slate-950/80 bold-hero-background" style="animation-delay: 0.15s;"></div>
+    <div class="absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/40 via-slate-950/65 to-slate-950/80"></div>
 
-    <div class="absolute inset-0 z-0 opacity-10 bold-hero-background" style="animation-delay: 0.2s;">
+    <div class="absolute inset-0 z-0 opacity-10">
         <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
     </div>
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center text-white">
-        <div class="mb-8 inline-block px-6 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold uppercase tracking-wide bold-hero-fade bold-hero-delay-1">
+        <div class="mb-8 inline-block px-6 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold uppercase tracking-wide">
             {{ $coach->name }}
         </div>
         
-        <h1 class="text-6xl sm:text-7xl md:text-8xl font-black mb-8 leading-none bold-hero-fade bold-hero-delay-2">
+        <h1 class="text-6xl sm:text-7xl md:text-8xl font-black mb-8 leading-none">
             {{ $coach->hero_title ?? 'Transformez votre corps, transformez votre vie' }}
         </h1>
         
-        <p class="text-2xl sm:text-3xl md:text-4xl mb-12 text-white/90 font-bold max-w-4xl mx-auto bold-hero-fade bold-hero-delay-3">
+        <p class="text-2xl sm:text-3xl md:text-4xl mb-12 text-white/90 font-bold max-w-4xl mx-auto">
             {{ $coach->hero_subtitle ?? 'Coaching sportif personnalisé' }}
         </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-3xl mx-auto mb-12 bold-hero-fade bold-hero-delay-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-3xl mx-auto mb-12">
             <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center">
                 <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ isset($transformations) ? $transformations->count() : 0 }}+</div>
                 <div class="text-xs sm:text-sm uppercase tracking-wider">Clients</div>
@@ -216,7 +55,7 @@
             </div>
         </div>
 
-        <a href="#tarifs" class="inline-flex items-center px-12 py-5 bg-white text-primary text-xl font-black rounded-full hover:bg-gray-100 transition-all shadow-2xl transform hover:scale-110 bold-hero-cta">
+        <a href="#tarifs" class="inline-flex items-center px-12 py-5 bg-white text-primary text-xl font-black rounded-full hover:bg-gray-100 transition-all shadow-2xl transform hover:scale-110">
             {{ $coach->cta_text ?? 'Commencer maintenant' }}
             <svg class="ml-3 w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -233,12 +72,12 @@
 </section>
 
 <!-- About Section - Bold -->
-<section id="a-propos" class="py-32 bg-white relative overflow-hidden bold-about-section">
+<section id="a-propos" class="py-32 bg-white relative overflow-hidden">
     <div class="absolute top-0 right-0 w-1/3 h-full opacity-5" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});"></div>
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div class="relative bold-about-image">
+            <div class="relative">
                 @if($coach->hasMedia('profile'))
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
                         <img src="{{ $coach->getFirstMediaUrl('profile') }}" alt="{{ $coach->name }}" class="w-full h-auto object-cover aspect-square">
@@ -254,7 +93,7 @@
                 <div class="absolute -bottom-8 -right-8 w-40 h-40 bg-primary rounded-full opacity-20 blur-3xl"></div>
             </div>
 
-            <div class="bold-about-content">
+            <div>
                 <div class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary font-bold uppercase text-sm tracking-wide mb-6 mx-auto lg:mx-0">
                     Votre coach
                 </div>

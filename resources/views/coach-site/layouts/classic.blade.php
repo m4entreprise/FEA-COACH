@@ -5,36 +5,124 @@
     use Stevebauman\Purify\Facades\Purify;
 @endphp
 
+@push('styles')
+    <style>
+        @keyframes heroBackgroundReveal {
+            0% {
+                opacity: 0;
+                transform: scale(1.08);
+                filter: blur(6px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes heroFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes heroPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.25);
+            }
+            70% {
+                box-shadow: 0 0 0 12px rgba(255, 255, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+
+        .hero-background-animate {
+            animation: heroBackgroundReveal 1.4s ease forwards;
+        }
+
+        .hero-fade-seq {
+            opacity: 0;
+            transform: translateY(40px);
+            animation: heroFadeUp 0.9s ease forwards;
+        }
+
+        .hero-fade-seq.delay-1 {
+            animation-delay: 0.15s;
+        }
+
+        .hero-fade-seq.delay-2 {
+            animation-delay: 0.35s;
+        }
+
+        .hero-fade-seq.delay-3 {
+            animation-delay: 0.5s;
+        }
+
+        .hero-cta-animated {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-cta-animated::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            animation: heroPulse 2.4s ease infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-background-animate,
+            .hero-fade-seq,
+            .hero-cta-animated::after {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
 
 <!-- Hero Section -->
 <section id="accueil" class="relative min-h-screen flex items-center justify-center overflow-hidden">
     <!-- Background Image -->
     @if($coach->hasMedia('hero'))
-        <div class="absolute inset-0 z-0">
-            <img src="{{ $coach->getFirstMediaUrl('hero') }}" 
-                 alt="Hero" 
-                 class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50"></div>
+        <div class="absolute inset-0 z-0 hero-background-animate">
+            <img src="{{ $coach->getFirstMediaUrl('hero') }}"
+                 alt="Hero"
+                 class="w-full h-full object-cover hero-background-animate">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 hero-background-animate"></div>
         </div>
     @else
-        <div class="absolute inset-0 z-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"></div>
+        <div class="absolute inset-0 z-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 hero-background-animate"></div>
     @endif
 
     <!-- Content -->
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight hero-fade-seq">
             {{ $coach->hero_title ?? 'Transformez votre corps, transformez votre vie' }}
         </h1>
-        <p class="text-xl sm:text-2xl md:text-3xl mb-8 text-gray-200 max-w-3xl mx-auto">
+        <p class="text-xl sm:text-2xl md:text-3xl mb-8 text-gray-200 max-w-3xl mx-auto hero-fade-seq delay-1">
             {{ $coach->hero_subtitle ?? 'Coaching sportif personnalisé pour atteindre vos objectifs' }}
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#tarifs" class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white text-lg font-bold rounded-lg hover:bg-primary-dark transition-all shadow-xl hover:shadow-2xl transform hover:scale-105">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center hero-fade-seq delay-2">
+            <a href="#tarifs" class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white text-lg font-bold rounded-lg hover:bg-primary-dark transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 hero-cta-animated">
                 {{ $coach->cta_text ?? 'Commencer maintenant' }}
                 <x-lucide-arrow-right class="ml-2 w-5 h-5" />
             </a>
-            <a href="#a-propos" class="inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white text-lg font-bold rounded-lg hover:bg-white/20 transition-all border-2 border-white/30">
+            <a href="#a-propos" class="inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white text-lg font-bold rounded-lg hover:bg-white/20 transition-all border-2 border-white/30 hero-cta-animated">
                 En savoir plus
             </a>
         </div>

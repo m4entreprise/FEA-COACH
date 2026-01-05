@@ -73,7 +73,26 @@
     @hasSection('coach-site-nav')
         @yield('coach-site-nav')
     @else
-        <nav x-data="{ mobileMenuOpen: false }" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+        @php
+            $navLinks = [
+                ['label' => 'Accueil', 'href' => '#accueil'],
+                ['label' => 'À propos', 'href' => '#a-propos'],
+                ['label' => 'Ma méthode', 'href' => '#methode'],
+                ['label' => 'Tarifs', 'href' => '#tarifs'],
+                ['label' => 'Résultats', 'href' => '#resultats'],
+                ['label' => 'Contact', 'href' => '#contact'],
+            ];
+        @endphp
+        <nav
+            x-data="{ mobileMenuOpen: false, scrolled: false }"
+            x-init="
+                const onScroll = () => scrolled = window.scrollY > 40;
+                window.addEventListener('scroll', onScroll);
+                onScroll();
+            "
+            :class="scrolled ? 'bg-white/95 shadow-lg border-b border-white/30' : 'bg-white/70 shadow-sm border-b border-white/10'"
+            class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl transition-all duration-300"
+        >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <!-- Logo -->
@@ -83,22 +102,32 @@
                         @else
                             <img src="{{ asset('images/unicoach-logo.svg') }}" alt="UNICOACH" class="h-10 w-auto">
                         @endif
+                        <div class="hidden md:flex flex-col ml-3 text-xs uppercase tracking-[0.4em] text-gray-400">
+                            <span class="text-gray-900 font-semibold">{{ $coach->name }}</span>
+                            <span class="text-primary tracking-[0.3em]">Coaching</span>
+                        </div>
                     </div>
 
                     <!-- Desktop Navigation -->
-                    <div class="hidden md:flex space-x-8">
-                        <a href="#accueil" class="text-gray-700 hover:text-primary transition-colors font-medium">Accueil</a>
-                        <a href="#a-propos" class="text-gray-700 hover:text-primary transition-colors font-medium">À propos</a>
-                        <a href="#methode" class="text-gray-700 hover:text-primary transition-colors font-medium">Ma méthode</a>
-                        <a href="#tarifs" class="text-gray-700 hover:text-primary transition-colors font-medium">Tarifs</a>
-                        <a href="#resultats" class="text-gray-700 hover:text-primary transition-colors font-medium">Résultats</a>
-                        <a href="#contact" class="text-gray-700 hover:text-primary transition-colors font-medium">Contact</a>
+                    <div class="hidden md:flex items-center space-x-6">
+                        @foreach($navLinks as $link)
+                            <a
+                                href="{{ $link['href'] }}"
+                                class="group relative text-gray-700 hover:text-primary transition-colors font-medium"
+                            >
+                                {{ $link['label'] }}
+                                <span class="absolute left-0 -bottom-1 h-0.5 w-full bg-gradient-to-r from-primary to-secondary scale-x-0 group-hover:scale-x-100 origin-left transition-transform"></span>
+                            </a>
+                        @endforeach
                     </div>
 
                     <!-- CTA Button -->
                     <div class="hidden md:block">
-                        <a href="#tarifs" class="inline-flex items-center px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-all shadow-md hover:shadow-lg">
+                        <a href="#tarifs" class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-full transition-all shadow-md hover:shadow-2xl hover:-translate-y-0.5">
                             {{ $coach->cta_text ?? 'Commencer' }}
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
                         </a>
                     </div>
 
@@ -123,12 +152,15 @@
                  class="md:hidden border-t border-gray-200 bg-white"
                  style="display: none;">
                 <div class="px-2 pt-2 pb-3 space-y-1">
-                    <a href="#accueil" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Accueil</a>
-                    <a href="#a-propos" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">À propos</a>
-                    <a href="#methode" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Ma méthode</a>
-                    <a href="#tarifs" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Tarifs</a>
-                    <a href="#resultats" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Résultats</a>
-                    <a href="#contact" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Contact</a>
+                    @foreach($navLinks as $link)
+                        <a
+                            href="{{ $link['href'] }}"
+                            @click="mobileMenuOpen = false"
+                            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50"
+                        >
+                            {{ $link['label'] }}
+                        </a>
+                    @endforeach
                     <div class="pt-2">
                         <a href="#tarifs" class="block w-full text-center px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-all">
                             {{ $coach->cta_text ?? 'Commencer' }}

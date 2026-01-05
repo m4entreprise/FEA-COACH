@@ -134,6 +134,35 @@
             transform: translateY(0) scale(1);
         }
 
+        .minimal-pricing-section {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+        }
+
+        .minimal-pricing-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .minimal-pricing-header {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .minimal-pricing-card {
+            opacity: 0;
+            transform: translateY(50px) scale(0.97);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
+        }
+
+        .minimal-pricing-section.is-visible .minimal-pricing-header,
+        .minimal-pricing-section.is-visible .minimal-pricing-card {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .minimal-hero-background,
             .minimal-hero-fade,
@@ -144,7 +173,10 @@
             .minimal-method-section,
             .minimal-method-header,
             .minimal-method-cards,
-            .minimal-method-card {
+            .minimal-method-card,
+            .minimal-pricing-section,
+            .minimal-pricing-header,
+            .minimal-pricing-card {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -293,9 +325,9 @@
 </section>
 
 <!-- Pricing Section - Minimal -->
-<section id="tarifs" class="py-20 bg-white overflow-hidden">
+<section id="tarifs" class="py-20 bg-white overflow-hidden minimal-pricing-section">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
+        <div class="text-center mb-16 minimal-pricing-header" style="transition-delay: 0.12s;">
             <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">Formules</p>
             <h2 class="text-4xl font-bold text-gray-900 mb-3">
                 {{ $coach->pricing_title ?? 'Mes formules de coaching' }}
@@ -308,7 +340,8 @@
         @if(isset($services) && $services->count() > 0)
             <div class="space-y-8">
                 @foreach($services as $service)
-                    <div class="relative rounded-3xl border border-gray-200 bg-white/90 px-6 sm:px-8 pt-10 sm:pt-12 pb-6 sm:pb-8 shadow-sm transition hover:-translate-y-0.5 hover:border-gray-900/20">
+                    <div class="relative rounded-3xl border border-gray-200 bg-white/90 px-6 sm:px-8 pt-10 sm:pt-12 pb-6 sm:pb-8 shadow-sm transition hover:-translate-y-0.5 hover:border-gray-900/20 minimal-pricing-card"
+                         style="transition-delay: {{ number_format(0.2 + ($loop->index * 0.12), 2) }}s;">
                         <span class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary/60 via-primary/30 to-transparent"></span>
                         @if($service->is_featured)
                             <span class="absolute -top-4 sm:-top-5 right-4 sm:right-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white shadow-lg shadow-primary/30 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary z-10">
@@ -360,7 +393,7 @@
                 @endforeach
             </div>
         @else
-            <div class="text-center py-12">
+            <div class="text-center py-12 minimal-pricing-header" style="transition-delay: 0.25s;">
                 <p class="text-gray-500">Les formules seront bientôt disponibles.</p>
             </div>
         @endif
@@ -671,7 +704,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.minimal-about-section, .minimal-method-section');
+            const animatedSections = document.querySelectorAll('.minimal-about-section, .minimal-method-section, .minimal-pricing-section');
 
             if (!animatedSections.length) {
                 return;

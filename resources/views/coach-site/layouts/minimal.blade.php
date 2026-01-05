@@ -20,9 +20,7 @@
         </p>
         <a href="#tarifs" class="inline-flex items-center px-10 py-4 bg-primary text-white text-lg font-semibold rounded-full hover:bg-primary-dark transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
             {{ $coach->cta_text ?? 'Commencer maintenant' }}
-            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
+            <x-lucide-arrow-right class="ml-2 w-5 h-5" />
         </a>
     </div>
 </section>
@@ -124,9 +122,7 @@
                     <div class="relative bg-white border-2 border-gray-200 rounded-lg p-8 hover:border-primary transition-all">
                         @if($service->is_featured)
                             <span class="absolute top-6 right-6 inline-flex items-center gap-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold uppercase tracking-wide px-3 py-1 border border-amber-200">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5.5 3 1.5-6.5L3 8.5l6.6-.5L12 2l2.4 6 6.6.5-5 4.9 1.5 6.5z" />
-                                </svg>
+                                <x-lucide-star class="w-3.5 h-3.5" />
                                 Populaire
                             </span>
                         @endif
@@ -263,11 +259,8 @@
                     <button @click="openFaq = openFaq === {{ $index + 1 }} ? null : {{ $index + 1 }}" 
                             class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
                         <span class="font-semibold text-gray-900">{{ $faq->question }}</span>
-                        <svg class="w-5 h-5 text-gray-500 transition-transform flex-shrink-0 ml-4" 
-                             :class="{ 'transform rotate-180': openFaq === {{ $index + 1 }} }"
-                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
+                        <x-lucide-chevron-down class="w-5 h-5 text-gray-500 transition-transform flex-shrink-0 ml-4"
+                            x-bind:class="{ 'transform rotate-180': openFaq === {{ $index + 1 }} }" />
                     </button>
                     <div x-show="openFaq === {{ $index + 1 }}" 
                          x-transition
@@ -300,9 +293,7 @@
         @if (session('success'))
             <div class="mb-6 rounded-lg bg-green-50 border border-green-200 px-4 py-3" x-show="!submitted">
                 <div class="flex items-center text-green-800">
-                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
+                    <x-lucide-badge-check class="h-5 w-5 mr-2" />
                     <span>{{ session('success') }}</span>
                 </div>
             </div>
@@ -310,11 +301,14 @@
 
         @if ($errors->any())
             <div class="mb-6 rounded-lg bg-red-50 border border-red-200 px-4 py-3" x-show="!submitted">
-                <ul class="text-red-800 space-y-1">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                <div class="flex items-start gap-3 text-red-800">
+                    <x-lucide-alert-triangle class="h-5 w-5 flex-shrink-0 mt-0.5" />
+                    <ul class="space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
         @endif
 
@@ -324,9 +318,7 @@
             x-transition
         >
             <div class="flex items-center text-green-800">
-                <svg class="h-6 w-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
+                <x-lucide-badge-check class="h-6 w-6 mr-3" />
                 <div>
                     <p class="font-semibold">Message envoyé !</p>
                     <p class="text-sm" x-text="successMessage || 'Vous serez contacté rapidement.'"></p>
@@ -434,9 +426,7 @@
                     >
                         <span x-show="!loading">Envoyer</span>
                         <span x-show="loading">Envoi...</span>
-                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                        </svg>
+                        <x-lucide-arrow-up-right class="ml-2 w-5 h-5" />
                     </button>
                 </div>
             </form>

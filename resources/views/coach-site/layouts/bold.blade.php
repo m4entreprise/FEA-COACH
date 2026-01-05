@@ -269,6 +269,39 @@
         .bold-faq-delay-1 { transition-delay: 0.08s; }
         .bold-faq-delay-2 { transition-delay: 0.2s; }
 
+        .bold-contact-section {
+            opacity: 0;
+            transform: translateY(120px);
+            transition: opacity 1.1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-contact-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bold-contact-header,
+        .bold-contact-alert,
+        .bold-contact-success,
+        .bold-contact-form {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bold-contact-section.is-visible .bold-contact-header,
+        .bold-contact-section.is-visible .bold-contact-alert,
+        .bold-contact-section.is-visible .bold-contact-success,
+        .bold-contact-section.is-visible .bold-contact-form {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bold-contact-delay-1 { transition-delay: 0.08s; }
+        .bold-contact-delay-2 { transition-delay: 0.2s; }
+        .bold-contact-delay-3 { transition-delay: 0.32s; }
+        .bold-contact-delay-4 { transition-delay: 0.44s; }
+
         @media (prefers-reduced-motion: reduce) {
             .bold-hero-background,
             .bold-hero-fade,
@@ -295,7 +328,12 @@
             .bold-results-cta,
             .bold-faq-section,
             .bold-faq-header,
-            .bold-faq-item {
+            .bold-faq-item,
+            .bold-contact-section,
+            .bold-contact-header,
+            .bold-contact-alert,
+            .bold-contact-success,
+            .bold-contact-form {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -697,14 +735,14 @@
 @endif
 
 <!-- Contact Section - Bold -->
-<section id="contact" class="py-32 relative overflow-hidden text-white" style="background: linear-gradient(135deg, {{ $coach->color_primary ?? '#3B82F6' }} 0%, {{ $coach->color_secondary ?? '#10B981' }} 100%);">
+<section id="contact" class="py-32 relative overflow-hidden text-white bold-contact-section" style="background: linear-gradient(135deg, {{ $coach->color_primary ?? '#3B82F6' }} 0%, {{ $coach->color_secondary ?? '#10B981' }} 100%);">
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-white rounded-full blur-3xl"></div>
     </div>
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" x-data="{ submitted: false, successMessage: '', loading: false }">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12 bold-contact-header bold-contact-delay-1">
             <div class="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full font-bold uppercase text-sm tracking-wide mb-6">
                 Contact
             </div>
@@ -717,7 +755,7 @@
         </div>
 
         @if (session('success'))
-            <div class="mb-6 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 px-6 py-4" x-show="!submitted">
+            <div class="mb-6 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 px-6 py-4 bold-contact-alert bold-contact-delay-2" x-show="!submitted">
                 <div class="flex items-center gap-3">
                     <x-lucide-badge-check class="h-6 w-6 text-white" />
                     <span class="font-semibold">{{ session('success') }}</span>
@@ -726,7 +764,7 @@
         @endif
 
         @if ($errors->any())
-            <div class="mb-6 rounded-2xl bg-red-500/20 backdrop-blur-sm border border-red-300/40 px-6 py-4" x-show="!submitted">
+            <div class="mb-6 rounded-2xl bg-red-500/20 backdrop-blur-sm border border-red-300/40 px-6 py-4 bold-contact-alert bold-contact-delay-3" x-show="!submitted">
                 <ul class="space-y-1">
                     @foreach ($errors->all() as $error)
                         <li class="font-semibold">{{ $error }}</li>
@@ -735,7 +773,7 @@
             </div>
         @endif
 
-        <div class="mb-6 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 px-6 py-5" x-show="submitted" x-transition>
+        <div class="mb-6 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 px-6 py-5 bold-contact-success bold-contact-delay-2" x-show="submitted" x-transition>
             <div class="flex items-start gap-3">
                 <x-lucide-badge-check class="h-7 w-7 text-white mt-0.5" />
                 <div>
@@ -745,7 +783,7 @@
             </div>
         </div>
 
-        <div class="bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-2xl p-10" x-show="!submitted" x-transition>
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl border-2 border-white/20 shadow-2xl p-10 bold-contact-form bold-contact-delay-4" x-show="!submitted" x-transition>
             <form method="POST" action="/contact" class="grid grid-cols-1 md:grid-cols-2 gap-6" @submit.prevent="loading = true; fetch('/contact', { method: 'POST', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify({ name: $refs.name.value, email: $refs.email.value, phone: $refs.phone.value, message: $refs.message.value }) }).then(async (response) => { if (!response.ok) throw new Error('Request failed'); const data = await response.json(); successMessage = data.message || ''; submitted = true; }).catch(() => { loading = false; }).finally(() => { loading = false; });">
                 @csrf
 
@@ -799,7 +837,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.bold-about-section, .bold-method-section, .bold-pricing-section, .bold-results-section, .bold-faq-section');
+            const animatedSections = document.querySelectorAll('.bold-about-section, .bold-method-section, .bold-pricing-section, .bold-results-section, .bold-faq-section, .bold-contact-section');
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
             if (!animatedSections.length) {

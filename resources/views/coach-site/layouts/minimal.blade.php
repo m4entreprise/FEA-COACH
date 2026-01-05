@@ -221,6 +221,35 @@
             transform: translateY(0);
         }
 
+        .minimal-contact-section {
+            opacity: 0;
+            transform: translateY(70px);
+            transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.1s ease;
+        }
+
+        .minimal-contact-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .minimal-contact-header {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .minimal-contact-card {
+            opacity: 0;
+            transform: translateY(45px) scale(0.97);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .minimal-contact-section.is-visible .minimal-contact-header,
+        .minimal-contact-section.is-visible .minimal-contact-card {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .minimal-hero-background,
             .minimal-hero-fade,
@@ -240,7 +269,10 @@
             .minimal-results-card,
             .minimal-faq-section,
             .minimal-faq-header,
-            .minimal-faq-item {
+            .minimal-faq-item,
+            .minimal-contact-section,
+            .minimal-contact-header,
+            .minimal-contact-card {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -591,12 +623,12 @@
 @endif
 
 <!-- Contact Section -->
-<section id="contact" class="py-20 bg-gray-900 text-white">
+<section id="contact" class="py-20 bg-gray-900 text-white minimal-contact-section">
     <div
         class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8"
         x-data="{ submitted: false, successMessage: '', loading: false }"
     >
-        <div class="text-center mb-10">
+        <div class="text-center mb-10 minimal-contact-header" style="transition-delay: 0.12s;">
             <p class="text-xs font-semibold tracking-[0.45em] text-gray-400 uppercase mb-4">Contact</p>
             <h2 class="text-4xl font-bold text-white mb-4">
                 {{ $coach->final_cta_title ?? 'Prêt à commencer ?' }}
@@ -607,7 +639,7 @@
         </div>
 
         @if (session('success'))
-            <div class="mb-6 rounded-lg bg-green-50 border border-green-200 px-4 py-3" x-show="!submitted">
+            <div class="mb-6 rounded-lg bg-green-50 border border-green-200 px-4 py-3 minimal-contact-card" x-show="!submitted" style="transition-delay: 0.22s;">
                 <div class="flex items-center text-green-800">
                     <x-lucide-badge-check class="h-5 w-5 mr-2" />
                     <span>{{ session('success') }}</span>
@@ -616,7 +648,7 @@
         @endif
 
         @if ($errors->any())
-            <div class="mb-6 rounded-lg bg-red-50 border border-red-200 px-4 py-3" x-show="!submitted">
+            <div class="mb-6 rounded-lg bg-red-50 border border-red-200 px-4 py-3 minimal-contact-card" x-show="!submitted" style="transition-delay: 0.27s;">
                 <div class="flex items-start gap-3 text-red-800">
                     <x-lucide-alert-triangle class="h-5 w-5 flex-shrink-0 mt-0.5" />
                     <ul class="space-y-1">
@@ -629,9 +661,10 @@
         @endif
 
         <div
-            class="mb-6 rounded-lg bg-green-50 border border-green-200 px-4 py-4"
+            class="mb-6 rounded-lg bg-green-50 border border-green-200 px-4 py-4 minimal-contact-card"
             x-show="submitted"
             x-transition
+            style="transition-delay: 0.32s;"
         >
             <div class="flex items-center text-green-800">
                 <x-lucide-badge-check class="h-6 w-6 mr-3" />
@@ -642,7 +675,7 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-lg border border-gray-200 p-8 transform-gpu" x-show="!submitted" x-transition>
+        <div class="bg-white rounded-lg border border-gray-200 p-8 transform-gpu minimal-contact-card" x-show="!submitted" x-transition style="transition-delay: 0.38s;">
             <form
                 method="POST"
                 action="/contact"
@@ -769,7 +802,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.minimal-about-section, .minimal-method-section, .minimal-pricing-section, .minimal-results-section, .minimal-faq-section');
+            const animatedSections = document.querySelectorAll('.minimal-about-section, .minimal-method-section, .minimal-pricing-section, .minimal-results-section, .minimal-faq-section, .minimal-contact-section');
 
             if (!animatedSections.length) {
                 return;

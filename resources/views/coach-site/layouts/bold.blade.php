@@ -418,10 +418,8 @@
 
         @if (session('success'))
             <div class="mb-6 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 px-6 py-4" x-show="!submitted">
-                <div class="flex items-center">
-                    <svg class="h-6 w-6 text-white mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
+                <div class="flex items-center gap-3">
+                    <x-lucide-badge-check class="h-6 w-6 text-white" />
                     <span class="font-semibold">{{ session('success') }}</span>
                 </div>
             </div>
@@ -438,10 +436,8 @@
         @endif
 
         <div class="mb-6 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 px-6 py-5" x-show="submitted" x-transition>
-            <div class="flex items-start">
-                <svg class="h-7 w-7 text-white mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
+            <div class="flex items-start gap-3">
+                <x-lucide-badge-check class="h-7 w-7 text-white mt-0.5" />
                 <div>
                     <p class="font-black text-lg">Message envoyé !</p>
                     <p class="mt-1" x-text="successMessage || 'Vous serez contacté rapidement.'"></p>
@@ -455,22 +451,34 @@
 
                 <div class="md:col-span-1">
                     <label for="name" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Nom *</label>
-                    <input type="text" id="name" name="name" x-ref="name" required value="{{ old('name') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="Votre nom">
+                    <div class="relative">
+                        <x-lucide-user class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                        <input type="text" id="name" name="name" x-ref="name" required value="{{ old('name') }}" class="block w-full rounded-lg border-white/20 bg-white/20 pl-12 pr-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="Votre nom">
+                    </div>
                 </div>
 
                 <div class="md:col-span-1">
                     <label for="phone" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Téléphone *</label>
-                    <input type="tel" id="phone" name="phone" x-ref="phone" required value="{{ old('phone') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="+32 4 12 34 56 78">
+                    <div class="relative">
+                        <x-lucide-phone-call class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                        <input type="tel" id="phone" name="phone" x-ref="phone" required value="{{ old('phone') }}" class="block w-full rounded-lg border-white/20 bg-white/20 pl-12 pr-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="+32 4 12 34 56 78">
+                    </div>
                 </div>
 
                 <div class="md:col-span-2">
                     <label for="email" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Email *</label>
-                    <input type="email" id="email" name="email" x-ref="email" value="{{ old('email') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="vous@example.com">
+                    <div class="relative">
+                        <x-lucide-mail class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                        <input type="email" id="email" name="email" x-ref="email" value="{{ old('email') }}" class="block w-full rounded-lg border-white/20 bg-white/20 pl-12 pr-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="vous@example.com">
+                    </div>
                 </div>
 
                 <div class="md:col-span-2">
                     <label for="message" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Message *</label>
-                    <textarea id="message" name="message" x-ref="message" rows="4" required class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="Vos objectifs...">{{ old('message') }}</textarea>
+                    <div class="relative">
+                        <x-lucide-message-circle class="absolute left-4 top-5 h-5 w-5 text-white/60" />
+                        <textarea id="message" name="message" x-ref="message" rows="4" required class="block w-full rounded-lg border-white/20 bg-white/20 pl-12 pr-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="Vos objectifs...">{{ old('message') }}</textarea>
+                    </div>
                 </div>
 
                 <div class="md:col-span-2 flex items-center justify-between pt-4">
@@ -478,9 +486,7 @@
                     <button type="submit" :disabled="loading" class="inline-flex items-center px-10 py-4 bg-white text-primary text-lg font-black rounded-full hover:bg-gray-100 transition-all disabled:opacity-50 shadow-xl">
                         <span x-show="!loading">Envoyer</span>
                         <span x-show="loading">Envoi...</span>
-                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                        </svg>
+                        <x-lucide-arrow-up-right class="ml-2 w-5 h-5" />
                     </button>
                 </div>
             </form>

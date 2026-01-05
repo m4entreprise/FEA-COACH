@@ -331,11 +331,10 @@
         x-data="{ submitted: false, successMessage: '', loading: false }"
     >
         <div class="text-center mb-10">
-            <p class="text-xs font-semibold uppercase tracking-[0.45em] text-white/60 mb-4">Contact</p>
             <h2 class="text-4xl font-bold text-white mb-4">
                 {{ $coach->final_cta_title ?? 'Prêt à commencer ?' }}
             </h2>
-            <p class="text-xl text-white/70 max-w-2xl mx-auto">
+            <p class="text-xl text-gray-600">
                 {{ $coach->final_cta_subtitle ?? 'Contactez-moi pour discuter de vos objectifs' }}
             </p>
         </div>
@@ -376,7 +375,7 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-3xl border border-gray-100 p-8 shadow-lg shadow-black/20" x-show="!submitted" x-transition>
+        <div class="bg-white rounded-lg border border-gray-200 p-8" x-show="!submitted" x-transition>
             <form
                 method="POST"
                 action="/contact"
@@ -415,70 +414,58 @@
 
                 <div>
                     <label for="name" class="block text-sm font-semibold text-gray-900 mb-2">Nom complet *</label>
-                    <div class="relative">
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            x-ref="name"
-                            required
-                            value="{{ old('name') }}"
-                            class="block w-full rounded-xl border-gray-200 bg-gray-50 focus:border-gray-900 focus:ring-gray-900/20 pl-10"
-                            placeholder="Votre nom"
-                        >
-                        <x-lucide-user class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    </div>
-                </div>
-
-                <div>
-                    <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">Téléphone *</label>
-                    <div class="relative">
-                        <input
-                            type="tel"
-                            id="phone"
-                            name="phone"
-                            x-ref="phone"
-                            required
-                            autocomplete="tel"
-                            value="{{ old('phone') }}"
-                            class="block w-full rounded-xl border-gray-200 bg-gray-50 focus:border-gray-900 focus:ring-gray-900/20 pl-10"
-                            placeholder="+32 4 12 34 56 78"
-                        >
-                        <x-lucide-phone class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    </div>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        x-ref="name"
+                        required
+                        value="{{ old('name') }}"
+                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        placeholder="Votre nom"
+                    >
                 </div>
 
                 <div>
                     <label for="email" class="block text-sm font-semibold text-gray-900 mb-2">Email *</label>
-                    <div class="relative">
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            x-ref="email"
-                            required
-                            value="{{ old('email') }}"
-                            class="block w-full rounded-xl border-gray-200 bg-gray-50 focus:border-gray-900 focus:ring-gray-900/20 pl-10"
-                            placeholder="vous@example.com"
-                        >
-                        <x-lucide-mail class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    </div>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        x-ref="email"
+                        required
+                        value="{{ old('email') }}"
+                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        placeholder="vous@example.com"
+                    >
+                </div>
+
+                <div>
+                    <label for="phone" class="block text-sm font-semibold text-gray-900 mb-2">Téléphone *</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        x-ref="phone"
+                        required
+                        autocomplete="tel"
+                        value="{{ old('phone') }}"
+                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        placeholder="+32 4 12 34 56 78"
+                    >
                 </div>
 
                 <div>
                     <label for="message" class="block text-sm font-semibold text-gray-900 mb-2">Message *</label>
-                    <div class="relative">
-                        <textarea
-                            id="message"
-                            name="message"
-                            x-ref="message"
-                            rows="5"
-                            required
-                            class="block w-full rounded-xl border-gray-200 bg-gray-50 focus:border-gray-900 focus:ring-gray-900/20 pl-10"
-                            placeholder="Parlez-moi de vos objectifs..."
-                        >{{ old('message') }}</textarea>
-                        <x-lucide-edit-3 class="absolute left-3 top-4 w-4 h-4 text-gray-400" />
-                    </div>
+                    <textarea
+                        id="message"
+                        name="message"
+                        x-ref="message"
+                        rows="5"
+                        required
+                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        placeholder="Parlez-moi de vos objectifs..."
+                    >{{ old('message') }}</textarea>
                 </div>
 
                 <div class="flex items-center justify-between pt-4">
@@ -486,7 +473,7 @@
                     <button
                         type="submit"
                         :disabled="loading"
-                        class="inline-flex items-center px-8 py-3 bg-gray-900 text-white font-semibold rounded-full hover:bg-black transition-all disabled:opacity-50 shadow-lg hover:shadow-xl"
+                        class="inline-flex items-center px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-all disabled:opacity-50 shadow-lg hover:shadow-xl"
                     >
                         <span x-show="!loading">Envoyer</span>
                         <span x-show="loading">Envoi...</span>

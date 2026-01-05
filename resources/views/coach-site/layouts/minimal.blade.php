@@ -402,7 +402,7 @@
                         autocomplete="tel"
                         value="{{ old('phone') }}"
                         class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                        placeholder="+33 6 12 34 56 78"
+                        placeholder="+32 4 12 34 56 78"
                     >
                 </div>
 

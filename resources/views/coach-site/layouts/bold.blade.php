@@ -464,7 +464,7 @@
                 </div>
 
                 <div class="md:col-span-2">
-                    <label for="email" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Email</label>
+                    <label for="email" class="block text-sm font-bold text-white mb-2 uppercase tracking-wide">Email *</label>
                     <input type="email" id="email" name="email" x-ref="email" value="{{ old('email') }}" class="block w-full rounded-lg border-white/20 bg-white/20 px-4 py-3 text-white placeholder-white/60 shadow-sm focus:border-white focus:ring-white" placeholder="vous@example.com">
                 </div>
 

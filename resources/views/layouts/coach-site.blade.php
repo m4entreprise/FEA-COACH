@@ -123,7 +123,7 @@
 
                     <!-- CTA Button -->
                     <div class="hidden md:block">
-                        <a href="#tarifs" class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-full transition-all shadow-md hover:shadow-2xl hover:-translate-y-0.5">
+                        <a href="#tarifs" class="inline-flex items-center gap-2 px-6 py-2.5 bg-white text-primary font-semibold rounded-full transition-all shadow-md hover:shadow-2xl hover:-translate-y-0.5 border border-primary/20">
                             {{ $coach->cta_text ?? 'Commencer' }}
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>

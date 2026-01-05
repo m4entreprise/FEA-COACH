@@ -119,27 +119,45 @@
                                 </li>
                             </ul>
                             <div class="mt-6 rounded-2xl bg-white/5 p-4 text-xs text-white/70 leading-relaxed border border-white/10">
-                                <p>Les informations ci-dessous sont fournies à titre informatif et peuvent être amenées à évoluer en fonction de la réglementation en vigueur.</p>
+                                <p>Document mis à jour automatiquement selon les informations validées par le coach.</p>
                             </div>
                         </div>
 
                         @if(!empty($legalHtml))
-                            <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 space-y-3">
+                            <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 space-y-5">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white/60">Navigation rapide</p>
-                                <a href="#cgv" class="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-sm font-medium hover:border-white/20 transition">
-                                    <span class="inline-flex items-center gap-2">
-                                        <x-lucide-file-text class="w-4 h-4 text-white/60" />
-                                        CGV & obligations
-                                    </span>
-                                    <x-lucide-arrow-up-right class="w-4 h-4 text-white/40" />
-                                </a>
-                                <a href="#privacy" class="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-sm font-medium hover:border-white/20 transition">
-                                    <span class="inline-flex items-center gap-2">
-                                        <x-lucide-lock class="w-4 h-4 text-white/60" />
-                                        Politique de confidentialité
-                                    </span>
-                                    <x-lucide-arrow-up-right class="w-4 h-4 text-white/40" />
-                                </a>
+                                <div class="space-y-4">
+                                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10 text-sm font-semibold">01</span>
+                                            <div>
+                                                <p class="text-[11px] uppercase tracking-[0.3em] text-white/50">Cadre contractuel</p>
+                                                <h3 class="text-base font-semibold">Conditions Générales de Vente</h3>
+                                            </div>
+                                        </div>
+                                        <p class="text-white/60 text-sm mb-3">Services proposés, obligations mutuelles, paiement, annulation.</p>
+                                        <a href="#cgv" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90">
+                                            <x-lucide-file-text class="w-4 h-4" />
+                                            Consulter la section
+                                            <x-lucide-arrow-up-right class="w-4 h-4 text-white/60" />
+                                        </a>
+                                    </div>
+                                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10 text-sm font-semibold">02</span>
+                                            <div>
+                                                <p class="text-[11px] uppercase tracking-[0.3em] text-white/50">Données & vie privée</p>
+                                                <h3 class="text-base font-semibold">Politique de confidentialité</h3>
+                                            </div>
+                                        </div>
+                                        <p class="text-white/60 text-sm mb-3">Données collectées, finalités, droits RGPD et sécurité appliquée.</p>
+                                        <a href="#privacy" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90">
+                                            <x-lucide-lock class="w-4 h-4" />
+                                            Consulter la section
+                                            <x-lucide-arrow-up-right class="w-4 h-4 text-white/60" />
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         @endif
                     </aside>

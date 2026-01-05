@@ -512,7 +512,7 @@
                             <div>
                                 <p class="text-xs uppercase tracking-wide text-gray-500">Réserver</p>
                                 <a href="#tarifs" class="inline-flex items-center justify-center rounded-full border border-gray-900 px-4 py-2 text-sm font-semibold hover:bg-gray-900 hover:text-white transition-all">
-                                    {{ $coach->cta_text ?? 'Réserver une séance' }}
+                                    Je me lance !
                                 </a>
                             </div>
                         </div>

@@ -542,7 +542,7 @@
                                         required
                                         autocomplete="name"
                                         value="{{ old('name') }}"
-                                        class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-white placeholder-white/50 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
+                                        class="peer block w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 pl-11 text-gray-900 placeholder-white/70 shadow-[0_10px_25px_rgba(0,0,0,0.15)] backdrop-blur focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
                                         placeholder="Votre nom complet"
                                     >
                                     <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/50">
@@ -620,7 +620,7 @@
                             x-ref="message"
                             rows="6"
                             required
-                            class="w-full rounded-2xl border border-white/25 bg-white/10 px-4 py-4 text-base text-white placeholder-white/60 shadow-[0_20px_45px_rgba(0,0,0,0.25)] focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
+                            class="w-full rounded-2xl border border-white/25 bg-white/10 px-4 py-4 text-base text-gray-900 placeholder-white/70 shadow-[0_20px_45px_rgba(0,0,0,0.25)] focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/80"
                             placeholder="Parlez de vos objectifs, de votre niveau actuel, de vos disponibilités..."
                         >{{ old('message') }}</textarea>
                         <div class="flex flex-wrap gap-3 text-[11px] uppercase tracking-wide text-white/70">

@@ -17,7 +17,7 @@
     <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] items-center">
             <div>
-                <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">Coach minimaliste</p>
+                <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">Coaching sportif</p>
                 <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
                     {{ $coach->hero_title ?? 'Transformez votre corps, transformez votre vie' }}
                 </h1>

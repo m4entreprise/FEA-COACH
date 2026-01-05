@@ -192,6 +192,35 @@
             transform: translateY(0) scale(1);
         }
 
+        .minimal-faq-section {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+        }
+
+        .minimal-faq-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .minimal-faq-header {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .minimal-faq-item {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
+        }
+
+        .minimal-faq-section.is-visible .minimal-faq-header,
+        .minimal-faq-section.is-visible .minimal-faq-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .minimal-hero-background,
             .minimal-hero-fade,
@@ -208,7 +237,10 @@
             .minimal-pricing-card,
             .minimal-results-section,
             .minimal-results-header,
-            .minimal-results-card {
+            .minimal-results-card,
+            .minimal-faq-section,
+            .minimal-faq-header,
+            .minimal-faq-item {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -511,9 +543,9 @@
 
 <!-- FAQ Section - Minimal -->
 @if($faqs && $faqs->count() > 0)
-<section id="faq" class="py-20 bg-white">
+<section id="faq" class="py-20 bg-white minimal-faq-section">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12 minimal-faq-header" style="transition-delay: 0.1s;">
             <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">FAQ</p>
             <h2 class="text-4xl font-bold text-gray-900 mb-3">
                 Questions fréquentes
@@ -525,7 +557,7 @@
 
         <div x-data="{ openFaq: null }" class="space-y-4">
             @foreach($faqs as $index => $faq)
-                <div class="rounded-2xl border border-gray-200 bg-white/80 shadow-sm transition hover:border-gray-300">
+                <div class="rounded-2xl border border-gray-200 bg-white/80 shadow-sm transition hover:border-gray-300 minimal-faq-item" style="transition-delay: {{ number_format(0.2 + ($loop->index * 0.08), 2) }}s;">
                     <button
                         @click="openFaq = openFaq === {{ $index + 1 }} ? null : {{ $index + 1 }}"
                         class="w-full px-6 py-5 text-left flex items-center justify-between gap-4"
@@ -737,7 +769,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.minimal-about-section, .minimal-method-section, .minimal-pricing-section, .minimal-results-section');
+            const animatedSections = document.querySelectorAll('.minimal-about-section, .minimal-method-section, .minimal-pricing-section, .minimal-results-section, .minimal-faq-section');
 
             if (!animatedSections.length) {
                 return;

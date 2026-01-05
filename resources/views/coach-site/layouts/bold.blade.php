@@ -187,64 +187,77 @@
         </div>
 
         @if(isset($services) && $services->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 3) }} gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 3) }} gap-10">
                 @foreach($services as $service)
-                    <div class="relative group">
-                        <div class="relative bg-white rounded-3xl shadow-xl border-4 border-gray-200 hover:border-primary transition-all h-full flex flex-col transform hover:scale-105">
+                    <div class="relative group h-full">
+                        <div class="absolute -inset-[1px] rounded-[34px] bg-gradient-to-br from-primary/50 via-secondary/40 to-primary/20 opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
+
+                        <div class="relative h-full flex flex-col rounded-[32px] bg-white shadow-[0_35px_60px_-25px_rgba(15,23,42,0.35)] border border-gray-100 overflow-hidden p-8">
                             @if($service->is_featured)
-                                <span class="absolute -top-4 right-6 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black uppercase tracking-wide px-4 py-1 shadow-xl">
+                                <div class="absolute top-6 right-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black uppercase tracking-wide shadow-lg">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5.5 3 1.5-6.5L3 8.5l6.6-.5L12 2l2.4 6 6.6.5-5 4.9 1.5 6.5z" />
                                     </svg>
                                     Populaire
-                                </span>
+                                </div>
                             @endif
 
-                            <div class="mb-8 rounded-3xl overflow-hidden mx-10 mt-10 border-2 border-gray-100">
-                                @if($service->image_url)
-                                    <img
-                                        src="{{ $service->image_url }}"
-                                        alt="Illustration {{ $service->name }}"
-                                        class="w-full h-64 object-cover"
-                                        loading="lazy"
-                                    >
-                                @else
-                                    <div class="h-64 bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-sm font-semibold">
-                                        Aucune image pour ce service
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary/10 text-primary font-black text-xl">
+                                    {{ Str::upper(Str::limit($service->name, 1, '')) }}
+                                </span>
+                                <div>
+                                    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-gray-400">Formule</p>
+                                    <h3 class="text-3xl font-black text-gray-900 leading-tight">{{ $service->name }}</h3>
+                                </div>
+                            </div>
+
+                            <div class="mb-8">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-5xl md:text-6xl font-black text-gray-900 leading-none">
+                                        {{ number_format($service->price, 0, ',', ' ') }}
+                                    </span>
+                                    <div class="flex flex-col">
+                                        <span class="text-lg font-semibold text-gray-500 uppercase tracking-wide">€</span>
+                                        <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-[0.3em]">{{ $service->currency }}</span>
                                     </div>
+                                </div>
+                                @if($service->duration_minutes)
+                                    <p class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-gray-500">
+                                        <span class="w-2 h-2 rounded-full bg-primary"></span>
+                                        {{ $service->duration_minutes }} minutes de session
+                                    </p>
                                 @endif
                             </div>
 
-                            <div class="px-10 pb-10 flex-1 flex flex-col">
-                                <h3 class="text-3xl font-black text-gray-900 mb-4">{{ $service->name }}</h3>
-                            
-                                <div class="mb-6">
-                                    <div class="flex items-baseline flex-wrap gap-2">
-                                        <span class="text-6xl font-black text-primary leading-none">
-                                            {{ number_format($service->price, 0, ',', ' ') }}
-                                        </span>
-                                        <span class="text-2xl font-bold text-gray-600">€</span>
-                                        <span class="text-sm font-semibold text-gray-400 uppercase tracking-wide">{{ $service->currency }}</span>
-                                    </div>
-                                    @if($service->duration_minutes)
-                                        <p class="text-sm text-gray-500 mt-2">⏱️ {{ $service->duration_minutes }} minutes</p>
-                                    @endif
+                            @if($service->image_url)
+                                <div class="mb-8 rounded-2xl overflow-hidden border border-gray-100">
+                                    <img
+                                        src="{{ $service->image_url }}"
+                                        alt="Illustration {{ $service->name }}"
+                                        class="w-full h-48 object-cover transition duration-500 group-hover:scale-105"
+                                        loading="lazy"
+                                    >
                                 </div>
+                            @endif
 
-                                @if($service->description)
-                                    <div class="prose prose-lg text-gray-600 mb-8 flex-grow leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
-                                        {!! Purify::clean($service->description) !!}
-                                    </div>
-                                @endif
-                                
+                            @if($service->description)
+                                <div class="prose prose-lg text-gray-600 mb-8 flex-1 leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li]:my-1">
+                                    {!! Purify::clean($service->description) !!}
+                                </div>
+                            @else
+                                <p class="text-gray-500 text-base mb-8 flex-1">Une formule sur mesure pensée pour accélérer vos résultats et garder un suivi rapproché.</p>
+                            @endif
+                            
+                            <div class="mt-auto">
                                 @if(optional($coach->user)->has_payments_module && $service->booking_enabled)
                                     <a href="{{ route('coach.booking.checkout.form', ['coach_slug' => $coach->slug, 'serviceId' => $service->id]) }}"
-                                       class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
-                                        Payer en ligne
+                                       class="block w-full text-center px-8 py-4 rounded-full bg-gray-900 text-white text-lg font-black tracking-wide hover:bg-gray-800 transition-all">
+                                        Réserver en ligne
                                     </a>
                                 @else
-                                    <a href="#contact" class="block w-full text-center px-8 py-4 bg-primary text-white text-lg font-black rounded-full hover:bg-primary-dark transition-all shadow-lg">
-                                        Contacter
+                                    <a href="#contact" class="block w-full text-center px-8 py-4 rounded-full bg-primary text-white text-lg font-black tracking-wide hover:bg-primary-dark transition-all">
+                                        Parler avec moi
                                     </a>
                                 @endif
                             </div>

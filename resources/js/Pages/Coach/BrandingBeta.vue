@@ -727,23 +727,38 @@ onBeforeUnmount(() => {
   animation: breathe 2.2s ease-in-out infinite;
 }
 
-@keyframes fullscreenPulse {
+@keyframes fullscreenGlow {
   0% {
-    transform: scale(1);
-    text-shadow: 0 0 0 rgba(129, 140, 248, 0);
+    transform: scale(0.92);
+    opacity: 0.35;
+    filter: blur(6px);
   }
-  40% {
-    transform: scale(1.05);
-    text-shadow: 0 0 12px rgba(99, 102, 241, 0.55);
+  45% {
+    transform: scale(1.08);
+    opacity: 0.85;
+    filter: blur(0);
   }
   100% {
-    transform: scale(1);
-    text-shadow: 0 0 0 rgba(129, 140, 248, 0);
+    transform: scale(0.92);
+    opacity: 0.35;
+    filter: blur(6px);
   }
 }
 
 .fullscreen-pulse {
-  animation: fullscreenPulse 3s ease-in-out infinite;
-  letter-spacing: 0.15em;
+  position: relative;
+  z-index: 0;
+  overflow: visible;
+}
+
+.fullscreen-pulse::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.45), rgba(15, 23, 42, 0));
+  z-index: -1;
+  animation: fullscreenGlow 2.8s ease-in-out infinite;
+  pointer-events: none;
 }
 </style>

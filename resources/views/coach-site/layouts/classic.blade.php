@@ -167,6 +167,39 @@
             transform: translateY(0);
         }
 
+        .pricing-section-animate {
+            opacity: 0;
+            transform: translateY(70px);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+        }
+
+        .pricing-section-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pricing-seq {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+        }
+
+        .pricing-section-animate.is-visible .pricing-seq {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pricing-card-animate {
+            opacity: 0;
+            transform: translateY(50px) scale(0.97);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
+        }
+
+        .pricing-section-animate.is-visible .pricing-card-animate {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .hero-background-animate,
             .hero-fade-seq,
@@ -175,7 +208,10 @@
             .method-section-animate,
             .method-step-animate,
             .cta-section-animate,
-            .cta-seq {
+            .cta-seq,
+            .pricing-section-animate,
+            .pricing-seq,
+            .pricing-card-animate {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -280,7 +316,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSelectors = ['.about-animate', '.method-section-animate', '.cta-section-animate'];
+            const animatedSelectors = ['.about-animate', '.method-section-animate', '.cta-section-animate', '.pricing-section-animate'];
             const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
 
             if (!animatedElements.length) {
@@ -409,13 +445,13 @@
 </section>
 
 <!-- Pricing Section -->
-<section id="tarifs" class="py-20 bg-white">
+<section id="tarifs" class="py-20 bg-white pricing-section-animate">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+        <div class="text-center mb-16 space-y-4">
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 pricing-seq">
                 {{ $coach->pricing_title ?? 'Mes formules de coaching' }}
             </h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto pricing-seq">
                 {{ $coach->pricing_subtitle ?? 'Choisissez la formule qui correspond le mieux à vos objectifs' }}
             </p>
         </div>
@@ -423,7 +459,8 @@
         @if(isset($services) && $services->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ min($services->count(), 4) }} gap-8">
                 @foreach($services as $service)
-                    <div class="relative bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all flex flex-col overflow-hidden">
+                    <div class="relative bg-white rounded-2xl shadow-xl border-2 border-gray-100 hover:border-primary transition-all flex flex-col overflow-hidden pricing-card-animate"
+                         style="transition-delay: {{ number_format(0.15 + ($loop->index * 0.1), 2) }}s;">
                         @if($service->is_featured)
                             <span class="absolute top-6 right-6 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 shadow-lg">
                                 <x-lucide-star class="w-3.5 h-3.5" />
@@ -487,7 +524,7 @@
                 @endforeach
             </div>
         @else
-            <div class="text-center py-12">
+            <div class="text-center py-12 pricing-seq">
                 <p class="text-gray-600">Les formules de coaching seront bientôt disponibles.</p>
             </div>
         @endif

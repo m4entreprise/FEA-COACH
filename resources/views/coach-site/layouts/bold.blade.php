@@ -193,7 +193,7 @@
                         <div class="absolute inset-0 rounded-[48px] bg-gradient-to-br from-primary/50 via-secondary/40 to-primary/30 opacity-0 group-hover:opacity-100 blur-3xl transition duration-500"></div>
 
                         <div class="relative flex h-full flex-col overflow-hidden rounded-[40px] border border-white/5 shadow-[0_45px_90px_-45px_rgba(15,23,42,0.65)] bg-slate-950 text-white">
-                            <div class="relative h-80">
+                            <div class="relative h-80 overflow-hidden">
                                 @if($service->image_url)
                                     <img
                                         src="{{ $service->image_url }}"

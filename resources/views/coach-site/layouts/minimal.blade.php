@@ -295,27 +295,44 @@
 <!-- FAQ Section - Minimal -->
 @if($faqs && $faqs->count() > 0)
 <section id="faq" class="py-20 bg-white">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-900 mb-4">
+            <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">FAQ</p>
+            <h2 class="text-4xl font-bold text-gray-900 mb-3">
                 Questions fréquentes
             </h2>
+            <p class="text-base text-gray-500 max-w-2xl mx-auto">
+                Les réponses essentielles pour comprendre mon approche avant de franchir le pas.
+            </p>
         </div>
 
-        <div x-data="{ openFaq: null }" class="space-y-3">
+        <div x-data="{ openFaq: null }" class="space-y-4">
             @foreach($faqs as $index => $faq)
-                <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <button @click="openFaq = openFaq === {{ $index + 1 }} ? null : {{ $index + 1 }}" 
-                            class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
-                        <span class="font-semibold text-gray-900">{{ $faq->question }}</span>
-                        <x-lucide-chevron-down class="w-5 h-5 text-gray-500 transition-transform flex-shrink-0 ml-4"
-                            x-bind:class="{ 'transform rotate-180': openFaq === {{ $index + 1 }} }" />
+                <div class="rounded-2xl border border-gray-200 bg-white/80 shadow-sm transition hover:border-gray-300">
+                    <button
+                        @click="openFaq = openFaq === {{ $index + 1 }} ? null : {{ $index + 1 }}"
+                        class="w-full px-6 py-5 text-left flex items-center justify-between gap-4"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600">
+                                <x-lucide-help-circle class="w-5 h-5" />
+                            </div>
+                            <span class="font-semibold text-gray-900 leading-snug">{{ $faq->question }}</span>
+                        </div>
+                        <x-lucide-chevron-down
+                            class="w-5 h-5 text-gray-500 transition duration-200 flex-shrink-0"
+                            x-bind:class="{ 'transform rotate-180': openFaq === {{ $index + 1 }} }"
+                        />
                     </button>
-                    <div x-show="openFaq === {{ $index + 1 }}" 
-                         x-transition
-                         class="px-6 pt-4 pb-5 text-gray-600 border-t border-gray-100 leading-relaxed"
-                         style="display: none;">
-                        {!! nl2br(e($faq->answer)) !!}
+                    <div
+                        x-show="openFaq === {{ $index + 1 }}"
+                        x-transition
+                        class="px-6 pb-6 text-gray-600 leading-relaxed"
+                        style="display: none;"
+                    >
+                        <div class="pl-13 border-l-2 border-gray-100">
+                            {!! nl2br(e($faq->answer)) !!}
+                        </div>
                     </div>
                 </div>
             @endforeach

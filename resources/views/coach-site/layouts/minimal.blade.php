@@ -27,36 +27,26 @@
 
 <!-- About Section - Minimal -->
 <section id="a-propos" class="py-20 bg-white">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-            <div>
-                <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">À propos</p>
-                <h2 class="text-4xl font-bold text-gray-900 mb-6">
-                    {{ $coach->name }}
-                </h2>
-                <div class="text-lg text-gray-600 leading-relaxed space-y-4">
-                    {!! nl2br(e($coach->about_text ?? 'Coach sportif certifié avec plusieurs années d\'expérience dans l\'accompagnement personnalisé.')) !!}
-                </div>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="text-xs font-semibold tracking-[0.45em] text-gray-500 uppercase mb-4">À propos</p>
+        <h2 class="text-4xl font-bold text-gray-900 mb-6">
+            {{ $coach->name }}
+        </h2>
+        <div class="text-lg text-gray-600 leading-relaxed space-y-4 mb-12 max-w-3xl mx-auto">
+            {!! nl2br(e($coach->about_text ?? 'Coach sportif certifié avec plusieurs années d\'expérience dans l\'accompagnement personnalisé.')) !!}
+        </div>
+        <div class="grid gap-6 sm:grid-cols-3">
+            <div class="border border-gray-200 rounded-2xl p-6">
+                <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Clients suivis</p>
+                <p class="text-4xl font-bold text-gray-900">{{ isset($transformations) ? $transformations->count() : 0 }}+</p>
             </div>
-            <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6 space-y-4">
-                <p class="text-xs font-semibold tracking-[0.35em] text-gray-500 uppercase">Repères</p>
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-500 uppercase tracking-wide">Clients suivis</span>
-                        <span class="text-3xl font-bold text-gray-900">{{ isset($transformations) ? $transformations->count() : 0 }}+</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-500 uppercase tracking-wide">Satisfaction</span>
-                        <span class="text-3xl font-bold text-gray-900">{{ $coach->satisfaction_rate ?? 100 }}%</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-500 uppercase tracking-wide">Note moyenne</span>
-                        <span class="text-3xl font-bold text-gray-900">{{ $coach->average_rating ?? 5.0 }}★</span>
-                    </div>
-                </div>
-                <div class="pt-4 border-t border-gray-200 text-sm text-gray-500">
-                    <p>Des accompagnements épurés, centrés sur la progression mesurable et le ressenti.</p>
-                </div>
+            <div class="border border-gray-200 rounded-2xl p-6">
+                <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Satisfaction</p>
+                <p class="text-4xl font-bold text-gray-900">{{ $coach->satisfaction_rate ?? 100 }}%</p>
+            </div>
+            <div class="border border-gray-200 rounded-2xl p-6">
+                <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Note moyenne</p>
+                <p class="text-4xl font-bold text-gray-900">{{ $coach->average_rating ?? 5.0 }}★</p>
             </div>
         </div>
     </div>

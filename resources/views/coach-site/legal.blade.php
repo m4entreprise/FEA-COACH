@@ -92,18 +92,9 @@
         <div class="relative z-10">
             <header class="px-4 sm:px-6 lg:px-8 pt-10 pb-6">
                 <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                    <div class="flex items-center gap-4">
-                        <div class="h-16 w-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-                            @if($coach->getFirstMediaUrl('logo'))
-                                <img src="{{ $coach->getFirstMediaUrl('logo') }}" alt="Logo {{ $coach->name }}" class="h-full w-full object-contain p-2">
-                            @else
-                                <span class="text-2xl font-bold">{{ Str::substr($coach->name, 0, 2) }}</span>
-                            @endif
-                        </div>
-                        <div>
-                            <p class="text-sm uppercase tracking-[0.35em] text-white/60 mb-1">Mentions légales</p>
-                            <h1 class="text-3xl sm:text-4xl font-semibold">{{ $coach->name }}</h1>
-                        </div>
+                    <div>
+                        <p class="text-sm uppercase tracking-[0.35em] text-white/60 mb-1">Mentions légales</p>
+                        <h1 class="text-3xl sm:text-4xl font-semibold">{{ $coach->name }}</h1>
                     </div>
                     <div class="flex flex-wrap gap-3">
                         <a href="/" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2 text-sm font-medium text-white hover:bg-white/10 transition">

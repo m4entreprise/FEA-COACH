@@ -233,6 +233,39 @@
             transform: translateY(0) scale(1);
         }
 
+        .faq-section-animate {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+        }
+
+        .faq-section-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .faq-seq {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease;
+        }
+
+        .faq-section-animate.is-visible .faq-seq {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .faq-item-animate {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+        }
+
+        .faq-section-animate.is-visible .faq-item-animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .hero-background-animate,
             .hero-fade-seq,
@@ -247,7 +280,10 @@
             .pricing-card-animate,
             .results-section-animate,
             .results-seq,
-            .results-card-animate {
+            .results-card-animate,
+            .faq-section-animate,
+            .faq-seq,
+            .faq-item-animate {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -352,7 +388,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedSelectors = ['.about-animate', '.method-section-animate', '.cta-section-animate', '.pricing-section-animate', '.results-section-animate'];
+            const animatedSelectors = ['.about-animate', '.method-section-animate', '.cta-section-animate', '.pricing-section-animate', '.results-section-animate', '.faq-section-animate'];
             const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
 
             if (!animatedElements.length) {
@@ -668,22 +704,22 @@
 </section>
 
 <!-- FAQ Section -->
-<section id="faq" class="py-20 bg-white">
+<section id="faq" class="py-20 bg-white faq-section-animate">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 faq-seq">
                 Questions fréquentes
             </h2>
-            <p class="text-xl text-gray-600">
+            <p class="text-xl text-gray-600 faq-seq">
                 Tout ce que vous devez savoir avant de commencer
             </p>
         </div>
 
         @if($faqs && $faqs->count() > 0)
-            <div x-data="{ openFaq: null }" class="space-y-4">
+            <div x-data="{ openFaq: null }" class="space-y-4 faq-seq">
                 @foreach($faqs as $index => $faq)
                     <!-- FAQ Item {{ $index + 1 }} -->
-                    <div class="bg-gray-50 rounded-lg overflow-hidden">
+                    <div class="bg-gray-50 rounded-lg overflow-hidden faq-item-animate" style="transition-delay: {{ number_format(0.1 + ($loop->index * 0.08), 2) }}s;">
                         <button @click="openFaq = openFaq === {{ $index + 1 }} ? null : {{ $index + 1 }}" 
                                 class="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-100 transition-colors">
                             <span class="font-semibold text-gray-900">{{ $faq->question }}</span>
@@ -700,7 +736,7 @@
                 @endforeach
             </div>
         @else
-            <div class="text-center py-12">
+            <div class="text-center py-12 faq-seq">
                 <x-lucide-circle-help class="mx-auto h-12 w-12 text-gray-400" />
                 <p class="mt-4 text-gray-600">Aucune question fréquente pour le moment.</p>
             </div>

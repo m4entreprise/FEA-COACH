@@ -88,7 +88,7 @@
                         <div class="text-sm text-gray-600">Satisfaits</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-primary mb-1">{{ $coach->average_rating ?? 5.0 }}★</div>
+                        <div class="text-3xl font-bold text-primary mb-1">{{ $coach->average_rating ?? 5.0 }} ★</div>
                         <div class="text-sm text-gray-600">Note moyenne</div>
                     </div>
                 </div>

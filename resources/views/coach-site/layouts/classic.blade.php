@@ -299,6 +299,28 @@
             transform: translateY(0) scale(1);
         }
 
+        .footer-section-animate {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.1s ease;
+        }
+
+        .footer-section-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .footer-seq {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.95s ease;
+        }
+
+        .footer-section-animate.is-visible .footer-seq {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .hero-background-animate,
             .hero-fade-seq,
@@ -319,7 +341,9 @@
             .faq-item-animate,
             .contact-section-animate,
             .contact-seq,
-            .contact-card-animate {
+            .contact-card-animate,
+            .footer-section-animate,
+            .footer-seq {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -431,7 +455,8 @@
                 '.pricing-section-animate',
                 '.results-section-animate',
                 '.faq-section-animate',
-                '.contact-section-animate'
+                '.contact-section-animate',
+                '.footer-section-animate'
             ];
             const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
 
@@ -1036,13 +1061,13 @@
 @endsection
 
 @section('coach-site-footer')
-    <footer class="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
+    <footer class="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white footer-section-animate">
         <div class="absolute inset-0 opacity-50" style="background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08), transparent 40%), radial-gradient(circle at 80% 0%, rgba(255,255,255,0.04), transparent 35%);"></div>
         <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-transparent via-white/5 to-transparent blur-2xl opacity-70"></div>
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-                <div class="lg:col-span-5 space-y-6">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12 footer-seq">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 footer-seq" style="transition-delay: 0.12s;">
+                <div class="lg:col-span-5 space-y-6 footer-seq" style="transition-delay: 0.18s;">
                     <div class="space-y-3">
                         <p class="text-sm uppercase tracking-[0.3em] text-white/70">Coaching sportif</p>
                         <h3 class="text-3xl font-extrabold leading-tight">
@@ -1073,7 +1098,7 @@
                     @endif
                 </div>
 
-                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 footer-seq" style="transition-delay: 0.24s;">
                     <div class="space-y-4">
                         <p class="text-sm uppercase tracking-[0.35em] text-white/60">Navigation</p>
                         <ul class="space-y-2 text-white/80">
@@ -1095,7 +1120,7 @@
                         </ul>
                     </div>
 
-                    <div class="space-y-4">
+                    <div class="space-y-4 footer-seq" style="transition-delay: 0.3s;">
                         <p class="text-sm uppercase tracking-[0.35em] text-white/60">Contact express</p>
                         <div class="rounded-2xl border border-white/10 bg-white/5 p-5 space-y-3 text-white/80">
                             <p class="text-sm text-white/60">Email</p>
@@ -1110,7 +1135,7 @@
                         </div>
                     </div>
 
-                    <div class="space-y-4">
+                    <div class="space-y-4 footer-seq" style="transition-delay: 0.36s;">
                         <p class="text-sm uppercase tracking-[0.35em] text-white/60">Légal</p>
                         <ul class="space-y-3 text-white/80">
                             @php
@@ -1139,7 +1164,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-col lg:flex-row items-center justify-between gap-4 border-t border-white/10 pt-8 text-sm text-white/60">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-4 border-t border-white/10 pt-8 text-sm text-white/60 footer-seq" style="transition-delay: 0.42s;">
                 <p>&copy; {{ date('Y') }} {{ $coach->name }} — Tous droits réservés.</p>
                 <div class="inline-flex items-center gap-3 text-white/70">
                     <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>

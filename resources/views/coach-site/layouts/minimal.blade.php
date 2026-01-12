@@ -801,35 +801,52 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const animatedSections = document.querySelectorAll('.minimal-about-section, .minimal-method-section, .minimal-pricing-section, .minimal-results-section, .minimal-faq-section, .minimal-contact-section');
+        (function () {
+            const initAnimations = () => {
+                const animatedSelectors = [
+                    '.minimal-about-section',
+                    '.minimal-method-section',
+                    '.minimal-pricing-section',
+                    '.minimal-results-section',
+                    '.minimal-faq-section',
+                    '.minimal-contact-section'
+                ];
 
-            if (!animatedSections.length) {
-                return;
-            }
+                const animatedSections = document.querySelectorAll(animatedSelectors.join(', '));
 
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const reveal = (el) => el.classList.add('is-visible');
+                if (!animatedSections.length) {
+                    return;
+                }
 
-            if (reduceMotion || typeof IntersectionObserver === 'undefined') {
-                animatedSections.forEach(reveal);
-                return;
-            }
+                const reveal = (el) => el.classList.add('is-visible');
+                const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        reveal(entry.target);
-                        obs.unobserve(entry.target);
-                    }
+                if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+                    animatedSections.forEach(reveal);
+                    return;
+                }
+
+                const observer = new IntersectionObserver((entries, obs) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            reveal(entry.target);
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    rootMargin: '0px 0px -10% 0px',
+                    threshold: 0.1,
                 });
-            }, {
-                rootMargin: '0px 0px -15% 0px',
-                threshold: 0.25,
-            });
 
-            animatedSections.forEach((section) => observer.observe(section));
-        });
+                animatedSections.forEach((section) => observer.observe(section));
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initAnimations);
+            } else {
+                initAnimations();
+            }
+        })();
     </script>
 @endpush
 

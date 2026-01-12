@@ -1113,7 +1113,7 @@ onBeforeUnmount(() => {
                     v-show="hasPreviewRequirements && previewHtml"
                     :key="form.site_layout + previewHtml"
                     class="w-full h-[34rem] bg-white overflow-x-hidden"
-                    sandbox="allow-same-origin allow-forms"
+                    sandbox="allow-same-origin allow-forms allow-scripts"
                     :srcdoc="previewHtml"
                   ></iframe>
                 </div>
@@ -1166,7 +1166,7 @@ onBeforeUnmount(() => {
               <iframe
                 v-show="hasPreviewRequirements && previewHtml"
                 class="w-full h-full rounded-2xl bg-white shadow-2xl overflow-x-hidden"
-                sandbox="allow-same-origin allow-forms"
+                sandbox="allow-same-origin allow-forms allow-scripts"
                 :srcdoc="previewHtml"
               ></iframe>
               <div

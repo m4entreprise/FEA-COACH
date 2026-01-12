@@ -1,6 +1,15 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
 import WizardLayout from '@/Components/WizardLayout.vue';
+import {
+    Zap,
+    Rocket,
+    ListChecks,
+    BadgeDollarSign,
+    TrendingUp,
+    Target,
+    Sparkles,
+} from 'lucide-vue-next';
 
 const props = defineProps({
     currentStep: Number,
@@ -42,161 +51,207 @@ const skip = () => {
 <template>
     <Head title="Étape 4 : Sections Avancées" />
     
-    <WizardLayout :current-step="currentStep" :total-steps="totalSteps">
-        <div class="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-8 md:p-12">
-            <!-- Header -->
-            <div class="text-center mb-12">
-                <div class="inline-flex items-center justify-center w-20 h-20 bg-orange-500/20 rounded-full mb-6">
-                    <span class="text-5xl">⚡</span>
+    <WizardLayout :current-step="currentStep" :total-steps="totalSteps" variant="beta">
+        <div class="space-y-6">
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4">
+                    <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <Zap class="h-6 w-6 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Étape 4</p>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-50">Sections avancées</h2>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Personnalisez les sections qui feront la différence.
+                        </p>
+                    </div>
                 </div>
-                <h2 class="text-4xl font-bold text-white mb-4">
-                    Peaufinez les détails
-                </h2>
-                <p class="text-lg text-gray-300">
-                    Personnalisez les sections qui feront la différence
-                </p>
-            </div>
+            </section>
 
             <!-- CTA Button -->
-            <div class="mb-8 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/30 rounded-2xl p-6">
-                <h3 class="text-lg font-bold text-white mb-3 flex items-center">
-                    <span class="text-xl mr-2">🚀</span>
-                    Texte du bouton principal
-                </h3>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <Rocket class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">CTA</p>
+                        <h3 class="text-base font-semibold text-slate-50">Texte du bouton principal</h3>
+                        <p class="text-xs text-slate-400 mt-1">Le texte affiché sur le bouton principal de votre site.</p>
+                    </div>
+                </div>
                 <input
                     type="text"
                     v-model="form.cta_text"
-                    class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-purple-500 focus:ring-purple-500"
                     placeholder="Réserver ma séance découverte"
                 />
-            </div>
+            </section>
 
             <!-- Method Steps -->
-            <div class="mb-8 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-400/30 rounded-2xl p-6">
-                <h3 class="text-lg font-bold text-white mb-4">📋 Les 3 étapes de votre méthode</h3>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-sky-500 to-cyan-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <ListChecks class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Méthode</p>
+                        <h3 class="text-base font-semibold text-slate-50">Les 3 étapes de votre méthode</h3>
+                        <p class="text-xs text-slate-400 mt-1">Ces textes apparaissent dans la section “Méthode” de votre site.</p>
+                    </div>
+                </div>
                 
                 <div class="space-y-4">
                     <input
                         type="text"
                         v-model="form.method_title"
-                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-sky-500 focus:ring-sky-500"
                         placeholder="Titre de la section"
                     />
+                    <input
+                        type="text"
+                        v-model="form.method_subtitle"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-sky-500 focus:ring-sky-500"
+                        placeholder="Sous-titre de la section"
+                    />
                     
-                    <div v-for="i in [1, 2, 3]" :key="i" class="bg-white/5 rounded-lg p-4">
-                        <p class="text-sm font-medium text-gray-300 mb-2">{{ i }}️⃣ Étape {{ i }}</p>
+                    <div v-for="i in [1, 2, 3]" :key="i" class="rounded-xl border border-slate-800 bg-slate-950/70 p-4">
+                        <p class="text-xs font-semibold text-slate-200 mb-2">Étape {{ i }}</p>
                         <input
                             type="text"
                             v-model="form[`method_step${i}_title`]"
-                            class="w-full px-3 py-2 mb-2 bg-white/5 border border-white/10 rounded text-white text-sm"
+                            class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 mb-2 text-sm text-slate-50 placeholder-slate-500 focus:border-sky-500 focus:ring-sky-500"
                             :placeholder="`Titre étape ${i}`"
                         />
                         <textarea
                             v-model="form[`method_step${i}_description`]"
                             rows="2"
-                            class="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-white text-sm resize-none"
+                            class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 placeholder-slate-500 focus:border-sky-500 focus:ring-sky-500 resize-none"
                             :placeholder="`Description étape ${i}`"
                         ></textarea>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- Pricing Section -->
-            <div class="mb-8 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-400/30 rounded-2xl p-6">
-                <h3 class="text-lg font-bold text-white mb-3 flex items-center">
-                    <span class="text-xl mr-2">💰</span>
-                    Section Tarifs
-                </h3>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <BadgeDollarSign class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Tarifs</p>
+                        <h3 class="text-base font-semibold text-slate-50">Section Tarifs</h3>
+                        <p class="text-xs text-slate-400 mt-1">Ne modifie que le titre et le sous-titre de la section.</p>
+                    </div>
+                </div>
                 <div class="space-y-3">
                     <input
                         type="text"
                         v-model="form.pricing_title"
-                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-emerald-500 focus:ring-emerald-500"
                         placeholder="Mes formules de coaching"
                     />
                     <input
                         type="text"
                         v-model="form.pricing_subtitle"
-                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-emerald-500 focus:ring-emerald-500"
                         placeholder="Choisissez la formule qui vous correspond"
                     />
                 </div>
-            </div>
+            </section>
 
             <!-- Intermediate CTA -->
-            <div class="mb-8 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/30 rounded-2xl p-6">
-                <h3 class="text-lg font-bold text-white mb-3 flex items-center">
-                    <span class="text-xl mr-2">⚡</span>
-                    CTA intermédiaire (après Méthode)
-                </h3>
-                <p class="text-xs text-gray-400 mb-4">Section d'appel à l'action entre "Méthode" et "Tarifs"</p>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-2">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <Zap class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">CTA</p>
+                        <h3 class="text-base font-semibold text-slate-50">CTA intermédiaire (après Méthode)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Section d'appel à l'action entre “Méthode” et “Tarifs”.</p>
+                    </div>
+                </div>
                 <div class="space-y-3">
                     <input
                         type="text"
                         v-model="form.intermediate_cta_title"
-                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-purple-500 focus:ring-purple-500"
                         placeholder="Prêt à transformer votre corps et votre vie ?"
                     />
                     <textarea
                         v-model="form.intermediate_cta_subtitle"
                         rows="2"
-                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm resize-none"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-purple-500 focus:ring-purple-500 resize-none"
                         placeholder="Ne restez pas seul face à vos objectifs..."
                     ></textarea>
                 </div>
-            </div>
+            </section>
 
             <!-- Transformations Section -->
-            <div class="mb-8 bg-gradient-to-r from-teal-500/10 to-blue-500/10 border border-teal-400/30 rounded-2xl p-6">
-                <h3 class="text-lg font-bold text-white mb-3 flex items-center">
-                    <span class="text-xl mr-2">📈</span>
-                    Section Transformations
-                </h3>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-teal-500 to-blue-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <TrendingUp class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Transformations</p>
+                        <h3 class="text-base font-semibold text-slate-50">Section Transformations</h3>
+                        <p class="text-xs text-slate-400 mt-1">Ne modifie que le titre et le sous-titre de la section.</p>
+                    </div>
+                </div>
                 <div class="space-y-3">
                     <input
                         type="text"
                         v-model="form.transformations_title"
-                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-teal-500 focus:ring-teal-500"
                         placeholder="Leurs transformations"
                     />
                     <input
                         type="text"
                         v-model="form.transformations_subtitle"
-                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-teal-500 focus:ring-teal-500"
                         placeholder="Des résultats réels de personnes comme vous"
                     />
                 </div>
-            </div>
+            </section>
 
             <!-- Final CTA -->
-            <div class="mb-10 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-400/30 rounded-2xl p-6">
-                <h3 class="text-lg font-bold text-white mb-3 flex items-center">
-                    <span class="text-xl mr-2">🎯</span>
-                    Appel à l'action final
-                </h3>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <Target class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">CTA</p>
+                        <h3 class="text-base font-semibold text-slate-50">Appel à l'action final</h3>
+                        <p class="text-xs text-slate-400 mt-1">Section juste avant le footer.</p>
+                    </div>
+                </div>
                 <div class="space-y-3">
                     <input
                         type="text"
                         v-model="form.final_cta_title"
-                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-amber-500 focus:ring-amber-500"
                         placeholder="Prêt à commencer votre transformation ?"
                     />
                     <textarea
                         v-model="form.final_cta_subtitle"
                         rows="2"
-                        class="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm resize-none"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-amber-500 focus:ring-amber-500 resize-none"
                         placeholder="Ne laissez pas vos objectifs être de simples rêves..."
                     ></textarea>
                 </div>
-            </div>
+            </section>
 
             <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4">
+            <div class="flex flex-col sm:flex-row gap-3">
                 <button
                     @click="skip"
                     type="button"
                     :disabled="form.processing"
-                    class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 font-semibold rounded-xl transition disabled:opacity-50"
+                    class="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900 px-6 py-3 text-xs font-semibold text-slate-200 hover:border-slate-500 hover:bg-slate-800 transition-colors disabled:opacity-50"
                 >
                     Passer →
                 </button>
@@ -205,16 +260,17 @@ const skip = () => {
                     @click="submit('demo')"
                     type="button"
                     :disabled="form.processing"
-                    class="px-8 py-4 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 text-blue-300 font-semibold rounded-xl transition disabled:opacity-50"
+                    class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-800/80 px-6 py-3 text-xs font-semibold text-slate-100 hover:bg-slate-700 transition-colors disabled:opacity-50"
                 >
-                    ✨ Remplir avec la démo
+                    <Sparkles class="h-4 w-4" />
+                    Remplir avec la démo
                 </button>
                 
                 <button
                     @click="submit('save')"
                     type="button"
                     :disabled="form.processing"
-                    class="flex-1 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-xl shadow-lg transition transform hover:scale-[1.02] disabled:opacity-50"
+                    class="flex-1 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600 transition-colors disabled:opacity-50"
                 >
                     <span v-if="!form.processing">Continuer →</span>
                     <span v-else>Enregistrement...</span>

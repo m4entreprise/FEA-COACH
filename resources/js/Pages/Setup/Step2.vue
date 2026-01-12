@@ -2,6 +2,7 @@
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import WizardLayout from '@/Components/WizardLayout.vue';
+import { Image as ImageIcon, User as UserIcon, Upload, Info, Sparkles } from 'lucide-vue-next';
 
 const props = defineProps({
     currentStep: Number,
@@ -49,39 +50,44 @@ const skip = () => {
 <template>
     <Head title="Étape 2 : Images" />
     
-    <WizardLayout :current-step="currentStep" :total-steps="totalSteps">
-        <div class="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-8 md:p-12">
+    <WizardLayout :current-step="currentStep" :total-steps="totalSteps" variant="beta">
+        <div class="space-y-6">
             <!-- Header -->
-            <div class="text-center mb-12">
-                <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-500/20 rounded-full mb-6">
-                    <span class="text-5xl">📸</span>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4">
+                    <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <ImageIcon class="h-6 w-6 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Étape 2</p>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-50">Images</h2>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Ajoutez des images qui captiveront vos visiteurs dès la première seconde.
+                        </p>
+                    </div>
                 </div>
-                <h2 class="text-4xl font-bold text-white mb-4">
-                    Donnez vie à votre site
-                </h2>
-                <p class="text-lg text-gray-300 max-w-2xl mx-auto">
-                    Ajoutez des images qui captiveront vos visiteurs dès la première seconde
-                </p>
-            </div>
+            </section>
 
             <!-- Hero Image -->
-            <div class="mb-10">
-                <div class="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/30 rounded-2xl p-8">
-                    <div class="flex items-start space-x-4 mb-6">
-                        <span class="text-4xl">🎬</span>
-                        <div>
-                            <h3 class="text-2xl font-bold text-white mb-2">Image Hero (arrière-plan d'accueil)</h3>
-                            <p class="text-gray-300">
-                                La première impression compte ! Cette image apparaîtra en grand format sur votre page d'accueil.
-                            </p>
-                        </div>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <ImageIcon class="h-5 w-5 text-white" />
                     </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Image</p>
+                        <h3 class="text-base font-semibold text-slate-50">Image Hero (arrière-plan d'accueil)</h3>
+                        <p class="text-xs text-slate-400 mt-1">
+                            La première impression compte ! Cette image apparaîtra en grand format sur votre page d'accueil.
+                        </p>
+                    </div>
+                </div>
 
                     <div v-if="heroPreview" class="mb-6">
                         <img 
                             :src="heroPreview" 
                             alt="Hero preview" 
-                            class="w-full h-64 object-cover rounded-xl border-2 border-white/20"
+                            class="w-full h-64 object-cover rounded-xl border border-slate-800"
                         />
                     </div>
 
@@ -94,51 +100,51 @@ const skip = () => {
                     />
                     <label
                         for="hero-upload"
-                        class="inline-flex items-center px-8 py-4 bg-blue-600/20 hover:bg-blue-600/30 border-2 border-blue-500/50 text-blue-200 font-bold rounded-xl cursor-pointer transition transform hover:scale-105"
+                        class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 px-5 py-3 text-xs font-semibold text-white shadow-lg hover:from-sky-600 hover:to-indigo-600 cursor-pointer transition"
                     >
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                        <Upload class="h-4 w-4" />
                         {{ heroPreview ? 'Changer l\'image hero' : 'Choisir une image hero' }}
                     </label>
 
-                    <div class="mt-4 p-4 bg-blue-500/10 border border-blue-400/20 rounded-lg">
-                        <p class="text-sm text-gray-300">
-                            💡 <strong>Conseils :</strong>
+                    <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950/70 p-4">
+                        <p class="text-xs font-semibold text-slate-200 flex items-center gap-2">
+                            <Info class="h-4 w-4 text-sky-300" />
+                            Conseils
                         </p>
-                        <ul class="mt-2 text-sm text-gray-400 space-y-1 ml-6 list-disc">
+                        <ul class="mt-2 text-xs text-slate-400 space-y-1 ml-5 list-disc">
                             <li>Image large recommandée (minimum 1920x1080)</li>
                             <li>Utilisez une image inspirante liée au fitness/sport</li>
                             <li>Taille maximale : 5MB</li>
                         </ul>
                     </div>
-                </div>
-            </div>
+            </section>
 
             <!-- Profile Photo -->
-            <div class="mb-10">
-                <div class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/30 rounded-2xl p-8">
-                    <div class="flex items-start space-x-4 mb-6">
-                        <span class="text-4xl">👤</span>
-                        <div>
-                            <h3 class="text-2xl font-bold text-white mb-2">Photo de profil</h3>
-                            <p class="text-gray-300">
-                                Montrez votre visage ! Une photo professionnelle et souriante crée la confiance.
-                            </p>
-                        </div>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <UserIcon class="h-5 w-5 text-white" />
                     </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Image</p>
+                        <h3 class="text-base font-semibold text-slate-50">Photo de profil</h3>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Montrez votre visage ! Une photo professionnelle et souriante crée la confiance.
+                        </p>
+                    </div>
+                </div>
 
                     <div class="flex items-start space-x-6">
                         <div v-if="profilePreview" class="flex-shrink-0">
                             <img 
                                 :src="profilePreview" 
                                 alt="Profile preview" 
-                                class="w-40 h-40 object-cover rounded-full border-4 border-white/20 shadow-xl"
+                                class="w-40 h-40 object-cover rounded-full border-2 border-slate-800 shadow-xl"
                             />
                         </div>
                         <div v-else class="flex-shrink-0">
-                            <div class="w-40 h-40 bg-white/5 border-4 border-dashed border-white/20 rounded-full flex items-center justify-center">
-                                <span class="text-6xl text-gray-500">?</span>
+                            <div class="w-40 h-40 bg-slate-950/60 border-2 border-dashed border-slate-700 rounded-full flex items-center justify-center">
+                                <UserIcon class="h-12 w-12 text-slate-600" />
                             </div>
                         </div>
 
@@ -152,19 +158,18 @@ const skip = () => {
                             />
                             <label
                                 for="profile-upload"
-                                class="inline-flex items-center px-8 py-4 bg-purple-600/20 hover:bg-purple-600/30 border-2 border-purple-500/50 text-purple-200 font-bold rounded-xl cursor-pointer transition transform hover:scale-105"
+                                class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-3 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600 cursor-pointer transition"
                             >
-                                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
+                                <Upload class="h-4 w-4" />
                                 {{ profilePreview ? 'Changer la photo' : 'Ajouter une photo' }}
                             </label>
 
-                            <div class="mt-4 p-4 bg-purple-500/10 border border-purple-400/20 rounded-lg">
-                                <p class="text-sm text-gray-300">
-                                    💡 <strong>Conseils :</strong>
+                            <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950/70 p-4">
+                                <p class="text-xs font-semibold text-slate-200 flex items-center gap-2">
+                                    <Info class="h-4 w-4 text-purple-300" />
+                                    Conseils
                                 </p>
-                                <ul class="mt-2 text-sm text-gray-400 space-y-1 ml-6 list-disc">
+                                <ul class="mt-2 text-xs text-slate-400 space-y-1 ml-5 list-disc">
                                     <li>Photo professionnelle et souriante</li>
                                     <li>Format carré recommandé (500x500px minimum)</li>
                                     <li>Fond neutre ou sportif</li>
@@ -173,34 +178,31 @@ const skip = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+            </section>
 
             <!-- Info Box -->
-            <div class="mb-10 p-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-400/30 rounded-2xl">
-                <div class="flex items-start space-x-3">
-                    <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+            <section class="rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-6 shadow-xl">
+                <div class="flex items-start gap-3">
+                    <Sparkles class="h-5 w-5 text-emerald-300 flex-shrink-0 mt-0.5" />
                     <div>
-                        <p class="text-white font-medium mb-2">
-                            ✨ Ces images sont optionnelles
+                        <p class="text-sm font-semibold text-emerald-100 mb-1">
+                            Ces images sont optionnelles
                         </p>
-                        <p class="text-sm text-gray-300">
-                            Vous pouvez passer cette étape et ajouter vos images plus tard depuis le dashboard. 
-                            Cependant, des visuels de qualité augmentent considérablement votre crédibilité !
+                        <p class="text-xs text-emerald-100/80">
+                            Vous pouvez passer cette étape et ajouter vos images plus tard depuis le dashboard.
+                            Cependant, des visuels de qualité augmentent considérablement votre crédibilité.
                         </p>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4">
+            <div class="flex flex-col sm:flex-row gap-3">
                 <button
                     @click="skip"
                     type="button"
                     :disabled="form.processing"
-                    class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 font-semibold rounded-xl transition disabled:opacity-50"
+                    class="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900 px-6 py-3 text-xs font-semibold text-slate-200 hover:border-slate-500 hover:bg-slate-800 transition-colors disabled:opacity-50"
                 >
                     Passer cette étape →
                 </button>
@@ -209,7 +211,7 @@ const skip = () => {
                     @click="submit('save')"
                     type="button"
                     :disabled="form.processing"
-                    class="flex-1 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-xl shadow-lg transition transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    class="flex-1 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <span v-if="!form.processing">Continuer →</span>
                     <span v-else class="flex items-center justify-center">

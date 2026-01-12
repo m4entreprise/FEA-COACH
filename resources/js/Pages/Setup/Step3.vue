@@ -1,6 +1,7 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
 import WizardLayout from '@/Components/WizardLayout.vue';
+import { FileText, Target, BarChart3, User as UserIcon, Zap, Sparkles, Star } from 'lucide-vue-next';
 
 const props = defineProps({
     currentStep: Number,
@@ -33,67 +34,81 @@ const skip = () => {
 <template>
     <Head title="Étape 3 : Contenu Principal" />
     
-    <WizardLayout :current-step="currentStep" :total-steps="totalSteps">
-        <div class="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-8 md:p-12">
-            <!-- Header -->
-            <div class="text-center mb-12">
-                <div class="inline-flex items-center justify-center w-20 h-20 bg-green-500/20 rounded-full mb-6">
-                    <span class="text-5xl">✍️</span>
+    <WizardLayout :current-step="currentStep" :total-steps="totalSteps" variant="beta">
+        <div class="space-y-6">
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4">
+                    <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <FileText class="h-6 w-6 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Étape 3</p>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-50">Contenu principal</h2>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Créez une connexion authentique avec vos futurs clients.
+                        </p>
+                    </div>
                 </div>
-                <h2 class="text-4xl font-bold text-white mb-4">
-                    Racontez votre histoire
-                </h2>
-                <p class="text-lg text-gray-300 max-w-2xl mx-auto">
-                    Créez une connexion authentique avec vos futurs clients
-                </p>
-            </div>
+            </section>
 
             <!--Hero Section -->
-            <div class="mb-8 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/30 rounded-2xl p-6">
-                <h3 class="text-xl font-bold text-white mb-4 flex items-center">
-                    <span class="text-2xl mr-2">🎯</span>
-                    Section Hero (Première impression)
-                </h3>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <Target class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Hero</p>
+                        <h3 class="text-base font-semibold text-slate-50">Section Hero (première impression)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Optimisez le titre et le sous-titre affichés en haut de votre page.</p>
+                    </div>
+                </div>
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-200 mb-2">
+                        <label class="block text-xs font-semibold text-slate-200 mb-2">
                             Titre principal
                         </label>
                         <input
                             type="text"
                             v-model="form.hero_title"
-                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-purple-500 focus:ring-purple-500"
                             placeholder="Transformez votre vie dès aujourd'hui"
                         />
-                        <p class="mt-1 text-xs text-gray-400">{{ form.hero_title.length }}/255</p>
+                        <p class="mt-1 text-[11px] text-slate-500">{{ form.hero_title.length }}/255</p>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-200 mb-2">
+                        <label class="block text-xs font-semibold text-slate-200 mb-2">
                             Sous-titre
                         </label>
                         <textarea
                             v-model="form.hero_subtitle"
                             rows="2"
-                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                            class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-purple-500 focus:ring-purple-500 resize-none"
                             placeholder="Coaching personnalisé pour atteindre vos objectifs"
                         ></textarea>
-                        <p class="mt-1 text-xs text-gray-400">{{ form.hero_subtitle.length }}/500</p>
+                        <p class="mt-1 text-[11px] text-slate-500">{{ form.hero_subtitle.length }}/500</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- Stats -->
-            <div class="mb-8 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-400/30 rounded-2xl p-6">
-                <h3 class="text-xl font-bold text-white mb-4 flex items-center">
-                    <span class="text-2xl mr-2">📊</span>
-                    Statistiques
-                </h3>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-sky-500 to-cyan-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <BarChart3 class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Stats</p>
+                        <h3 class="text-base font-semibold text-slate-50">Statistiques</h3>
+                        <p class="text-xs text-slate-400 mt-1">Ces valeurs apparaissent dans la section À propos sur votre site.</p>
+                    </div>
+                </div>
                 
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-200 mb-2">
+                        <label class="block text-xs font-semibold text-slate-200 mb-2">
                             Taux de satisfaction (%)
                         </label>
                         <div class="flex items-center space-x-3">
@@ -102,14 +117,14 @@ const skip = () => {
                                 v-model.number="form.satisfaction_rate"
                                 min="0"
                                 max="100"
-                                class="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="flex-1 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 focus:border-sky-500 focus:ring-sky-500"
                             />
-                            <span class="text-2xl font-bold text-blue-300">{{ form.satisfaction_rate }}%</span>
+                            <span class="text-sm font-semibold text-sky-200">{{ form.satisfaction_rate }}%</span>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-200 mb-2">
+                        <label class="block text-xs font-semibold text-slate-200 mb-2">
                             Note moyenne (étoiles)
                         </label>
                         <div class="flex items-center space-x-3">
@@ -119,53 +134,68 @@ const skip = () => {
                                 min="0"
                                 max="5"
                                 step="0.1"
-                                class="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="flex-1 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 focus:border-sky-500 focus:ring-sky-500"
                             />
-                            <span class="text-2xl font-bold text-yellow-300">{{ form.average_rating }}★</span>
+                            <span class="inline-flex items-center gap-1 text-sm font-semibold text-amber-200">
+                                <Star class="h-4 w-4" />
+                                {{ form.average_rating }}
+                            </span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- About -->
-            <div class="mb-8 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-400/30 rounded-2xl p-6">
-                <h3 class="text-xl font-bold text-white mb-4 flex items-center">
-                    <span class="text-2xl mr-2">👤</span>
-                    À propos de vous
-                </h3>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <UserIcon class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">À propos</p>
+                        <h3 class="text-base font-semibold text-slate-50">À propos de vous</h3>
+                        <p class="text-xs text-slate-400 mt-1">Présentez votre parcours et votre expertise.</p>
+                    </div>
+                </div>
                 
                 <textarea
                     v-model="form.about_text"
                     rows="4"
-                    class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                    class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-emerald-500 focus:ring-emerald-500 resize-none"
                     placeholder="Partagez votre parcours, vos certifications, votre passion pour le coaching..."
                 ></textarea>
-                <p class="mt-1 text-xs text-gray-400">{{ form.about_text.length }}/5000</p>
-            </div>
+                <p class="mt-1 text-[11px] text-slate-500">{{ form.about_text.length }}/5000</p>
+            </section>
 
             <!-- Method -->
-            <div class="mb-8 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-400/30 rounded-2xl p-6">
-                <h3 class="text-xl font-bold text-white mb-4 flex items-center">
-                    <span class="text-2xl mr-2">⚡</span>
-                    Votre méthode de coaching
-                </h3>
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <Zap class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Méthode</p>
+                        <h3 class="text-base font-semibold text-slate-50">Votre méthode de coaching</h3>
+                        <p class="text-xs text-slate-400 mt-1">Expliquez ce qui rend votre accompagnement unique.</p>
+                    </div>
+                </div>
                 
                 <textarea
                     v-model="form.method_text"
                     rows="4"
-                    class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+                    class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-amber-500 focus:ring-amber-500 resize-none"
                     placeholder="Décrivez votre approche unique du coaching..."
                 ></textarea>
-                <p class="mt-1 text-xs text-gray-400">{{ form.method_text.length }}/5000</p>
-            </div>
+                <p class="mt-1 text-[11px] text-slate-500">{{ form.method_text.length }}/5000</p>
+            </section>
 
             <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4">
+            <div class="flex flex-col sm:flex-row gap-3">
                 <button
                     @click="skip"
                     type="button"
                     :disabled="form.processing"
-                    class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 font-semibold rounded-xl transition disabled:opacity-50"
+                    class="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900 px-6 py-3 text-xs font-semibold text-slate-200 hover:border-slate-500 hover:bg-slate-800 transition-colors disabled:opacity-50"
                 >
                     Passer →
                 </button>
@@ -174,16 +204,17 @@ const skip = () => {
                     @click="submit('demo')"
                     type="button"
                     :disabled="form.processing"
-                    class="px-8 py-4 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 text-blue-300 font-semibold rounded-xl transition disabled:opacity-50"
+                    class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-800/80 px-6 py-3 text-xs font-semibold text-slate-100 hover:bg-slate-700 transition-colors disabled:opacity-50"
                 >
-                    ✨ Utiliser le contenu de démo
+                    <Sparkles class="h-4 w-4" />
+                    Utiliser le contenu de démo
                 </button>
                 
                 <button
                     @click="submit('save')"
                     type="button"
                     :disabled="form.processing"
-                    class="flex-1 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-xl shadow-lg transition transform hover:scale-[1.02] disabled:opacity-50"
+                    class="flex-1 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 text-xs font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600 transition-colors disabled:opacity-50"
                 >
                     <span v-if="!form.processing">Continuer →</span>
                     <span v-else>Enregistrement...</span>

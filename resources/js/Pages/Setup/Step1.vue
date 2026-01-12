@@ -3,6 +3,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import WizardLayout from '@/Components/WizardLayout.vue';
 import axios from 'axios';
+import { Globe2, ImageUp, Palette, Droplet } from 'lucide-vue-next';
 
 const props = defineProps({
     currentStep: Number,
@@ -73,7 +74,7 @@ const skip = () => {
             <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
                 <div class="flex items-start gap-4">
                     <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                        <span class="text-xl">🎨</span>
+                        <Palette class="h-6 w-6 text-white" />
                     </div>
                     <div class="flex-1">
                         <p class="text-xs uppercase tracking-wide text-slate-500">Étape 1</p>
@@ -90,7 +91,7 @@ const skip = () => {
             <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl space-y-4">
                 <div class="flex items-start gap-4">
                     <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                        <span class="text-lg">🌐</span>
+                        <Globe2 class="h-5 w-5 text-white" />
                     </div>
                     <div class="flex-1">
                         <p class="text-xs uppercase tracking-wide text-slate-500">Adresse web</p>
@@ -162,7 +163,7 @@ const skip = () => {
                 <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
                     <div class="flex items-start gap-4">
                         <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                            <span class="text-lg">🎨</span>
+                            <Droplet class="h-5 w-5 text-white" />
                         </div>
                         <div class="flex-1">
                             <p class="text-xs uppercase tracking-wide text-slate-500">Couleurs</p>
@@ -194,7 +195,7 @@ const skip = () => {
                 <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
                     <div class="flex items-start gap-4">
                         <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                            <span class="text-lg">🌈</span>
+                            <Droplet class="h-5 w-5 text-white" />
                         </div>
                         <div class="flex-1">
                             <p class="text-xs uppercase tracking-wide text-slate-500">Couleurs</p>
@@ -227,7 +228,7 @@ const skip = () => {
             <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
                 <div class="flex items-start gap-4">
                     <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-slate-600 to-slate-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                        <span class="text-lg">📷</span>
+                        <ImageUp class="h-5 w-5 text-white" />
                     </div>
                     <div class="flex-1">
                         <p class="text-xs uppercase tracking-wide text-slate-500">Branding</p>

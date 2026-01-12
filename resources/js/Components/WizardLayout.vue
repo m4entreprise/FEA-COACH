@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { Palette, Image as ImageIcon, FileText, Zap, Sparkles, Check } from 'lucide-vue-next';
 
 const props = defineProps({
     currentStep: Number,
@@ -15,11 +16,11 @@ const progress = computed(() => (props.currentStep / props.totalSteps) * 100);
 const isBeta = computed(() => props.variant === 'beta');
 
 const steps = [
-    { number: 1, title: 'Branding', icon: '🎨' },
-    { number: 2, title: 'Images', icon: '📸' },
-    { number: 3, title: 'Contenu', icon: '✍️' },
-    { number: 4, title: 'Avancé', icon: '⚡' },
-    { number: 5, title: 'Finalisation', icon: '🎉' },
+    { number: 1, title: 'Branding', icon: Palette },
+    { number: 2, title: 'Images', icon: ImageIcon },
+    { number: 3, title: 'Contenu', icon: FileText },
+    { number: 4, title: 'Avancé', icon: Zap },
+    { number: 5, title: 'Finalisation', icon: Sparkles },
 ];
 </script>
 
@@ -74,8 +75,8 @@ const steps = [
                                         : 'bg-slate-950/60 border border-slate-800'
                                 ]"
                             >
-                                <span v-if="step.number < currentStep" class="text-white">✓</span>
-                                <span v-else>{{ step.icon }}</span>
+                                <Check v-if="step.number < currentStep" class="h-5 w-5 text-white" />
+                                <component v-else :is="step.icon" class="h-5 w-5 text-white" />
                             </div>
                             <span
                                 class="text-xs font-medium transition-colors"
@@ -100,8 +101,8 @@ const steps = [
                                         : 'bg-slate-950/60 border border-slate-800'
                                 ]"
                             >
-                                <span v-if="step.number < currentStep" class="text-white text-sm">✓</span>
-                                <span v-else class="text-sm">{{ step.icon }}</span>
+                                <Check v-if="step.number < currentStep" class="h-4 w-4 text-white" />
+                                <component v-else :is="step.icon" class="h-4 w-4 text-white" />
                             </div>
                         </div>
                     </div>
@@ -178,8 +179,8 @@ const steps = [
                                     : 'bg-white/5 border-2 border-white/10'
                             ]"
                         >
-                            <span v-if="step.number < currentStep" class="text-white">✓</span>
-                            <span v-else>{{ step.icon }}</span>
+                            <Check v-if="step.number < currentStep" class="h-6 w-6 text-white" />
+                            <component v-else :is="step.icon" class="h-6 w-6 text-white" />
                         </div>
                         <span 
                             class="text-sm font-medium transition-colors"
@@ -205,8 +206,8 @@ const steps = [
                                     : 'bg-white/5 border border-white/10'
                             ]"
                         >
-                            <span v-if="step.number < currentStep" class="text-white text-sm">✓</span>
-                            <span v-else class="text-sm">{{ step.icon }}</span>
+                            <Check v-if="step.number < currentStep" class="h-5 w-5 text-white" />
+                            <component v-else :is="step.icon" class="h-5 w-5 text-white" />
                         </div>
                     </div>
                 </div>

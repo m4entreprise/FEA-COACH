@@ -139,7 +139,7 @@
 
                     <!-- Mobile menu button -->
                     <button
-                        @click="mobileMenuOpen = !mobileMenuOpen"
+                        x-on:click="mobileMenuOpen = !mobileMenuOpen"
                         class="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary focus:outline-none"
                         :aria-expanded="mobileMenuOpen.toString()"
                         aria-controls="coach-site-mobile-menu"
@@ -158,7 +158,7 @@
                 <div
                     class="fixed inset-x-0 top-16 bottom-0 bg-black/20 backdrop-blur-sm"
                     x-transition.opacity
-                    @click="mobileMenuOpen = false"
+                    x-on:click="mobileMenuOpen = false"
                 ></div>
                 <div
                     id="coach-site-mobile-menu"
@@ -174,14 +174,14 @@
                         @foreach($navLinks as $link)
                             <a
                                 href="{{ $link['href'] }}"
-                                @click="mobileMenuOpen = false"
+                                x-on:click="mobileMenuOpen = false"
                                 class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50"
                             >
                                 {{ $link['label'] }}
                             </a>
                         @endforeach
                         <div class="pt-2">
-                            <a href="#tarifs" class="block w-full text-center px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-all" @click="mobileMenuOpen = false">
+                            <a href="#tarifs" class="block w-full text-center px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-all" x-on:click="mobileMenuOpen = false">
                                 {{ $coach->cta_text ?? 'Commencer' }}
                             </a>
                         </div>

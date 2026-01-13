@@ -95,8 +95,8 @@ const complete = () => {
                             <p class="text-xs uppercase tracking-wide text-slate-500">Contenu</p>
                             <h3 class="text-base font-semibold text-slate-50">Contenu</h3>
                             <div class="mt-3 space-y-2 text-xs text-slate-300">
-                                <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Textes personnalisés</p>
-                                <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Statistiques configurées</p>
+                                <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Textes personnalisés</p><br>
+                                <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Statistiques configurées</p><br>
                                 <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Sections optimisées</p>
                             </div>
                         </div>
@@ -112,9 +112,9 @@ const complete = () => {
                             <p class="text-xs uppercase tracking-wide text-slate-500">Fonctionnalités</p>
                             <h3 class="text-base font-semibold text-slate-50">Fonctionnalités</h3>
                             <div class="mt-3 space-y-2 text-xs text-slate-300">
-                                <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Dashboard complet</p>
-                                <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Gestion des plans</p>
-                                <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Galerie transformations</p>
+                                <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Dashboard complet</p><br>
+                                <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Gestion des plans</p><br>
+                                <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />Galerie transformations</p><br>
                                 <p class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-emerald-300" />FAQ personnalisable</p>
                             </div>
                         </div>
@@ -130,9 +130,9 @@ const complete = () => {
                             <p class="text-xs uppercase tracking-wide text-slate-500">À faire</p>
                             <h3 class="text-base font-semibold text-slate-50">Prochaines étapes</h3>
                             <div class="mt-3 space-y-2 text-xs text-slate-300">
-                                <p class="inline-flex items-center gap-2"><ImageIcon class="h-4 w-4 text-slate-200" />Ajouter des transformations</p>
-                                <p class="inline-flex items-center gap-2"><BadgeDollarSign class="h-4 w-4 text-slate-200" />Créer vos plans tarifaires</p>
-                                <p class="inline-flex items-center gap-2"><HelpCircle class="h-4 w-4 text-slate-200" />Remplir votre FAQ</p>
+                                <p class="inline-flex items-center gap-2"><ImageIcon class="h-4 w-4 text-slate-200" />Ajouter des transformations</p><br>
+                                <p class="inline-flex items-center gap-2"><BadgeDollarSign class="h-4 w-4 text-slate-200" />Créer vos plans tarifaires</p><br>
+                                <p class="inline-flex items-center gap-2"><HelpCircle class="h-4 w-4 text-slate-200" />Remplir votre FAQ</p><br>
                                 <p class="inline-flex items-center gap-2"><Target class="h-4 w-4 text-slate-200" />Partager votre site</p>
                             </div>
                         </div>

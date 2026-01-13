@@ -28,6 +28,10 @@
             --color-primary-light: color-mix(in srgb, var(--color-primary) 90%, white);
         }
 
+        [x-cloak] {
+            display: none !important;
+        }
+
         .bg-primary {
             background-color: var(--color-primary);
         }
@@ -90,6 +94,8 @@
                 window.addEventListener('scroll', onScroll);
                 onScroll();
             "
+            x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileMenuOpen)"
+            x-on:keydown.escape.window="mobileMenuOpen = false"
             :class="scrolled ? 'bg-white/95 shadow-lg border-b border-white/30' : 'bg-white/70 shadow-sm border-b border-white/10'"
             class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl transition-all duration-300"
         >
@@ -102,14 +108,14 @@
                         @else
                             <img src="{{ asset('images/unicoach-logo.svg') }}" alt="UNICOACH" class="h-10 w-auto">
                         @endif
-                        <div class="hidden md:flex flex-col ml-3 text-xs uppercase tracking-[0.4em] text-gray-400">
+                        <div class="hidden lg:flex flex-col ml-3 text-xs uppercase tracking-[0.4em] text-gray-400">
                             <span class="text-gray-900 font-semibold">{{ $coach->name }}</span>
                             <span class="text-primary tracking-[0.3em]">Coaching</span>
                         </div>
                     </div>
 
                     <!-- Desktop Navigation -->
-                    <div class="hidden md:flex items-center space-x-6">
+                    <div class="hidden lg:flex items-center space-x-6">
                         @foreach($navLinks as $link)
                             <a
                                 href="{{ $link['href'] }}"
@@ -122,7 +128,7 @@
                     </div>
 
                     <!-- CTA Button -->
-                    <div class="hidden md:block">
+                    <div class="hidden lg:block">
                         <a href="#tarifs" class="inline-flex items-center gap-2 px-6 py-2.5 bg-white text-primary font-semibold rounded-full transition-all shadow-md hover:shadow-2xl hover:-translate-y-0.5 border border-primary/20">
                             {{ $coach->cta_text ?? 'Commencer' }}
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,7 +138,13 @@
                     </div>
 
                     <!-- Mobile menu button -->
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary focus:outline-none">
+                    <button
+                        @click="mobileMenuOpen = !mobileMenuOpen"
+                        class="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary focus:outline-none"
+                        :aria-expanded="mobileMenuOpen.toString()"
+                        aria-controls="coach-site-mobile-menu"
+                        aria-label="Ouvrir le menu"
+                    >
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -142,29 +154,37 @@
             </div>
 
             <!-- Mobile Navigation -->
-            <div x-show="mobileMenuOpen" 
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 -translate-y-1"
-                 x-transition:enter-end="opacity-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100 translate-y-0"
-                 x-transition:leave-end="opacity-0 -translate-y-1"
-                 class="md:hidden border-t border-gray-200 bg-white"
-                 style="display: none;">
-                <div class="px-2 pt-2 pb-3 space-y-1">
-                    @foreach($navLinks as $link)
-                        <a
-                            href="{{ $link['href'] }}"
-                            @click="mobileMenuOpen = false"
-                            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50"
-                        >
-                            {{ $link['label'] }}
-                        </a>
-                    @endforeach
-                    <div class="pt-2">
-                        <a href="#tarifs" class="block w-full text-center px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-all">
-                            {{ $coach->cta_text ?? 'Commencer' }}
-                        </a>
+            <div x-cloak x-show="mobileMenuOpen" class="lg:hidden" style="display: none;">
+                <div
+                    class="fixed inset-x-0 top-16 bottom-0 bg-black/20 backdrop-blur-sm"
+                    x-transition.opacity
+                    @click="mobileMenuOpen = false"
+                ></div>
+                <div
+                    id="coach-site-mobile-menu"
+                    class="fixed inset-x-0 top-16 bottom-0 border-t border-gray-200 bg-white"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 -translate-y-1"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 -translate-y-1"
+                >
+                    <div class="h-full overflow-y-auto px-4 pt-4 pb-6 space-y-2">
+                        @foreach($navLinks as $link)
+                            <a
+                                href="{{ $link['href'] }}"
+                                @click="mobileMenuOpen = false"
+                                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50"
+                            >
+                                {{ $link['label'] }}
+                            </a>
+                        @endforeach
+                        <div class="pt-2">
+                            <a href="#tarifs" class="block w-full text-center px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-all" @click="mobileMenuOpen = false">
+                                {{ $coach->cta_text ?? 'Commencer' }}
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

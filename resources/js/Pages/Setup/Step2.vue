@@ -46,7 +46,6 @@ const submit = (action) => {
     form.action = action;
     form.post(route('setup.step2.save'), {
         forceFormData: true,
-        preserveScroll: true,
     });
 };
 

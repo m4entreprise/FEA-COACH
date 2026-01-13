@@ -115,10 +115,7 @@ onBeforeUnmount(() => {
             </div>
         </div>
 
-        <div
-            class="mt-5 rounded-2xl border border-slate-800 bg-slate-950/50 overflow-hidden relative"
-            :class="isFullscreen ? 'fixed inset-4 z-50' : ''"
-        >
+        <div class="mt-5 rounded-2xl border border-slate-800 bg-slate-950/50 overflow-hidden relative">
             <div v-if="previewError" class="p-6 text-sm text-rose-200">
                 <p class="font-semibold mb-2">Erreur d’aperçu</p>
                 <p class="text-xs text-rose-200/80">{{ previewError }}</p>
@@ -134,11 +131,57 @@ onBeforeUnmount(() => {
             <iframe
                 v-show="previewHtml"
                 :key="payloadKey + String(isFullscreen)"
-                class="w-full bg-white overflow-x-hidden"
-                :class="isFullscreen ? 'h-full rounded-2xl' : 'h-[34rem]'"
+                class="w-full h-[34rem] bg-white overflow-x-hidden"
                 sandbox="allow-same-origin allow-forms allow-scripts"
                 :srcdoc="previewHtml"
             ></iframe>
         </div>
+
+        <teleport to="body">
+            <div
+                v-if="isFullscreen"
+                class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-xl flex flex-col"
+            >
+                <div class="flex flex-wrap items-start justify-between gap-4 px-6 py-4 border-b border-slate-800 text-slate-200">
+                    <div class="flex items-center gap-3">
+                        <MonitorPlay class="h-5 w-5 text-indigo-300" />
+                        <div>
+                            <p class="text-sm font-semibold">Aperçu plein écran</p>
+                            <p class="text-xs text-slate-400">{{ title }}</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-slate-300">
+                        <span v-if="previewLoading" class="animate-pulse text-yellow-300">Mise à jour…</span>
+                        <button
+                            type="button"
+                            class="inline-flex items-center gap-1 rounded-full border border-slate-600 px-3 py-1 hover:text-white hover:border-slate-400"
+                            @click="toggleFullscreen"
+                        >
+                            Fermer
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-1 overflow-hidden p-4">
+                    <iframe
+                        v-if="previewHtml"
+                        class="w-full h-full rounded-2xl bg-white shadow-2xl overflow-x-hidden"
+                        sandbox="allow-same-origin allow-forms allow-scripts"
+                        :srcdoc="previewHtml"
+                    ></iframe>
+                    <div
+                        v-else-if="previewError"
+                        class="flex h-full items-center justify-center text-center text-red-300 text-sm px-10"
+                    >
+                        {{ previewError }}
+                    </div>
+                    <div
+                        v-else
+                        class="flex h-full items-center justify-center text-center text-slate-300 text-sm px-10"
+                    >
+                        Chargement de l’aperçu...
+                    </div>
+                </div>
+            </div>
+        </teleport>
     </section>
 </template>

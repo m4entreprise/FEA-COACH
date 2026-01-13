@@ -35,7 +35,6 @@ const previewPayload = () => ({
 const submit = (action) => {
     form.action = action;
     form.post(route('setup.step3.save'), {
-        preserveScroll: true,
     });
 };
 

@@ -29,6 +29,8 @@ const form = useForm({
     method_step2_description: props.coach.method_step2_description || '',
     method_step3_title: props.coach.method_step3_title || '',
     method_step3_description: props.coach.method_step3_description || '',
+    intermediate_cta_title: props.coach.intermediate_cta_title || '',
+    intermediate_cta_subtitle: props.coach.intermediate_cta_subtitle || '',
     pricing_title: props.coach.pricing_title || '',
     pricing_subtitle: props.coach.pricing_subtitle || '',
     transformations_title: props.coach.transformations_title || '',
@@ -50,6 +52,8 @@ const previewPayload = () => ({
     method_step2_description: form.method_step2_description,
     method_step3_title: form.method_step3_title,
     method_step3_description: form.method_step3_description,
+    intermediate_cta_title: form.intermediate_cta_title,
+    intermediate_cta_subtitle: form.intermediate_cta_subtitle,
     pricing_title: form.pricing_title,
     pricing_subtitle: form.pricing_subtitle,
     transformations_title: form.transformations_title,
@@ -156,6 +160,35 @@ const skip = () => {
                             :placeholder="`Description étape ${i}`"
                         ></textarea>
                     </div>
+                </div>
+            </section>
+
+            <!-- Intermediate CTA -->
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4 mb-2">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <Zap class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">CTA</p>
+                        <h3 class="text-base font-semibold text-slate-50">CTA intermédiaire (après Méthode)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Section d'appel à l'action entre “Méthode” et “Tarifs”.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <input
+                        type="text"
+                        v-model="form.intermediate_cta_title"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-purple-500 focus:ring-purple-500"
+                        placeholder="Prêt à transformer votre corps et votre vie ?"
+                    />
+                    <textarea
+                        v-model="form.intermediate_cta_subtitle"
+                        rows="2"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-purple-500 focus:ring-purple-500 resize-none"
+                        placeholder="Ne restez pas seul face à vos objectifs..."
+                    ></textarea>
                 </div>
             </section>
 

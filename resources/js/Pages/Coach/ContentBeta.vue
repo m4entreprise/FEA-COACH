@@ -42,6 +42,8 @@ const form = useForm({
   final_cta_title: props.coach?.final_cta_title || '',
   final_cta_subtitle: props.coach?.final_cta_subtitle || '',
   cta_text: props.coach?.cta_text || 'Réserver une séance',
+  intermediate_cta_title: props.coach?.intermediate_cta_title || '',
+  intermediate_cta_subtitle: props.coach?.intermediate_cta_subtitle || '',
   satisfaction_rate: props.coach?.show_stats === false ? null : (props.coach?.satisfaction_rate ?? 100),
   average_rating: props.coach?.show_stats === false ? null : (props.coach?.average_rating ?? 5.0),
   facebook_url: props.coach?.facebook_url || '',
@@ -753,6 +755,42 @@ onBeforeUnmount(() => {
                       <InputError
                         class="mt-1 text-xs"
                         :message="form.errors.cta_text"
+                      />
+                    </div>
+
+                    <div>
+                      <InputLabel
+                        for="intermediate_cta_title"
+                        value="CTA intermédiaire - Titre"
+                        class="text-xs text-slate-200"
+                      />
+                      <TextInput
+                        id="intermediate_cta_title"
+                        v-model="form.intermediate_cta_title"
+                        type="text"
+                        class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
+                      />
+                      <InputError
+                        class="mt-1 text-xs"
+                        :message="form.errors.intermediate_cta_title"
+                      />
+                    </div>
+
+                    <div>
+                      <InputLabel
+                        for="intermediate_cta_subtitle"
+                        value="CTA intermédiaire - Sous-titre"
+                        class="text-xs text-slate-200"
+                      />
+                      <textarea
+                        id="intermediate_cta_subtitle"
+                        v-model="form.intermediate_cta_subtitle"
+                        rows="2"
+                        class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                      <InputError
+                        class="mt-1 text-xs"
+                        :message="form.errors.intermediate_cta_subtitle"
                       />
                     </div>
                   </div>

@@ -187,27 +187,6 @@ const skip = () => {
                 <p class="mt-1 text-[11px] text-slate-500">{{ form.about_text.length }}/5000</p>
             </section>
 
-            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                        <Zap class="h-5 w-5 text-white" />
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-xs uppercase tracking-wide text-slate-500">Approche</p>
-                        <h3 class="text-base font-semibold text-slate-50">Votre approche (optionnel)</h3>
-                        <p class="text-xs text-slate-400 mt-1">Décrivez comment vous accompagnez vos clients.</p>
-                    </div>
-                </div>
-
-                <textarea
-                    v-model="form.method_text"
-                    rows="4"
-                    class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-amber-500 focus:ring-amber-500 resize-none"
-                    placeholder="Ex: bilan initial, plan personnalisé, suivi hebdomadaire..."
-                ></textarea>
-                <p class="mt-1 text-[11px] text-slate-500">{{ form.method_text.length }}/5000</p>
-            </section>
-
             <SetupLivePreview
                 :payload="previewPayload()"
                 title="Aperçu en direct"

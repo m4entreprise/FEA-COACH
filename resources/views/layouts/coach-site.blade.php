@@ -160,7 +160,7 @@
                 <div
                     x-show="mobileMenuOpen"
                     x-transition.opacity
-                    class="fixed inset-x-0 top-16 bottom-0 z-40 bg-black/20 backdrop-blur-sm"
+                    class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
                     style="display: none;"
                     x-on:click="mobileMenuOpen = false"
                 ></div>
@@ -173,10 +173,10 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-1"
-                    class="fixed inset-x-0 top-16 bottom-0 z-50 border-t border-gray-200 bg-white"
+                    class="fixed inset-0 z-50 bg-white"
                     style="display: none;"
                 >
-                    <div class="h-full overflow-y-auto px-4 pt-4 pb-6 space-y-2">
+                    <div class="h-[calc(100vh-4rem)] mt-16 overflow-y-auto px-4 pt-4 pb-6 space-y-2">
                         @foreach($navLinks as $link)
                             <a
                                 href="{{ $link['href'] }}"

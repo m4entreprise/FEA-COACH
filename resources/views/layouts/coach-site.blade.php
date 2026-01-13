@@ -160,7 +160,7 @@
                 <div
                     x-show="mobileMenuOpen"
                     x-transition.opacity
-                    class="fixed inset-x-0 top-16 bottom-0 z-40 bg-black/20 backdrop-blur-sm"
+                    class="fixed inset-x-0 top-16 bottom-0 z-40 bg-white/80 backdrop-blur-sm"
                     style="display: none;"
                     x-on:click="mobileMenuOpen = false"
                 ></div>

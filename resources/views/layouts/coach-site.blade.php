@@ -176,7 +176,7 @@
                     class="fixed inset-x-0 top-16 bottom-0 z-50 border-t border-gray-200 bg-white"
                     style="display: none;"
                 >
-                    <div class="overflow-y-auto px-4 pt-4 pb-6 space-y-2">
+                    <div class="overflow-y-auto px-4 pt-4 pb-6 space-y-2 bg-white">
                         @foreach($navLinks as $link)
                             <a
                                 href="{{ $link['href'] }}"

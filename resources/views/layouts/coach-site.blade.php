@@ -145,30 +145,36 @@
                         aria-controls="coach-site-mobile-menu"
                         aria-label="Ouvrir le menu"
                     >
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <svg x-cloak x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: none;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg x-cloak x-show="mobileMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: none;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
             </div>
 
             <!-- Mobile Navigation -->
-            <div x-cloak x-show="mobileMenuOpen" class="lg:hidden" style="display: none;">
+            <div x-cloak class="lg:hidden">
                 <div
-                    class="fixed inset-x-0 top-16 bottom-0 bg-black/20 backdrop-blur-sm"
+                    x-show="mobileMenuOpen"
                     x-transition.opacity
+                    class="fixed inset-x-0 top-16 bottom-0 z-40 bg-black/20 backdrop-blur-sm"
+                    style="display: none;"
                     x-on:click="mobileMenuOpen = false"
                 ></div>
                 <div
                     id="coach-site-mobile-menu"
-                    class="fixed inset-x-0 top-16 bottom-0 border-t border-gray-200 bg-white"
+                    x-show="mobileMenuOpen"
                     x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0 -translate-y-1"
                     x-transition:enter-end="opacity-100 translate-y-0"
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-1"
+                    class="fixed inset-x-0 top-16 bottom-0 z-50 border-t border-gray-200 bg-white"
+                    style="display: none;"
                 >
                     <div class="h-full overflow-y-auto px-4 pt-4 pb-6 space-y-2">
                         @foreach($navLinks as $link)

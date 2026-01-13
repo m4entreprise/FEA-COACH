@@ -426,19 +426,21 @@
                 </div>
 
                 <!-- Stats -->
-                <div class="grid grid-cols-3 gap-6 mt-8">
+                <div class="grid gap-6 mt-8 {{ ($coach->show_stats ?? true) ? 'grid-cols-3' : 'grid-cols-1' }}">
                     <div class="text-center">
                         <div class="text-3xl font-bold text-primary mb-1">{{ isset($transformations) ? $transformations->count() : 0 }}+</div>
                         <div class="text-sm text-gray-600">Transformations</div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-primary mb-1">{{ $coach->satisfaction_rate ?? 100 }}%</div>
-                        <div class="text-sm text-gray-600">Satisfaits</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-primary mb-1">{{ $coach->average_rating ?? 5.0 }} ★</div>
-                        <div class="text-sm text-gray-600">Note moyenne</div>
-                    </div>
+                    @if($coach->show_stats ?? true)
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary mb-1">{{ $coach->satisfaction_rate ?? 100 }}%</div>
+                            <div class="text-sm text-gray-600">Satisfaits</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary mb-1">{{ $coach->average_rating ?? 5.0 }} ★</div>
+                            <div class="text-sm text-gray-600">Note moyenne</div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -575,22 +577,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<!-- CTA Section -->
-<section class="py-20 text-white cta-section-animate" style="background: linear-gradient(to bottom right, {{ $coach->color_primary ?? '#3B82F6' }}, {{ $coach->color_secondary ?? '#10B981' }});">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-6 cta-seq cta-delay-1">
-            {{ $coach->intermediate_cta_title ?? 'Prêt à transformer votre corps et votre vie ?' }}
-        </h2>
-        <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto cta-seq cta-delay-2">
-            {{ $coach->intermediate_cta_subtitle ?? 'Ne restez pas seul face à vos objectifs. Bénéficiez d\'un accompagnement personnalisé qui vous mènera au succès.' }}
-        </p>
-        <a href="#tarifs" class="inline-flex items-center justify-center px-8 py-4 bg-white text-lg font-bold rounded-lg hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 cta-seq cta-delay-3" style="color: {{ $coach->color_primary ?? '#3B82F6' }};">
-            {{ $coach->cta_text ?? 'Commencer maintenant' }}
-            <x-lucide-arrow-right class="ml-2 w-5 h-5" />
-        </a>
     </div>
 </section>
 

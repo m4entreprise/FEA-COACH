@@ -14,6 +14,7 @@ import {
     Info,
     Check,
 } from 'lucide-vue-next';
+import SetupLivePreview from '@/Components/SetupLivePreview.vue';
 
 const props = defineProps({
     currentStep: Number,
@@ -23,6 +24,13 @@ const props = defineProps({
 });
 
 const form = useForm({});
+
+const previewPayload = () => ({
+    color_primary: props.coach.color_primary,
+    color_secondary: props.coach.color_secondary,
+    site_layout: props.coach.site_layout,
+    show_stats: props.coach.show_stats,
+});
 
 const complete = () => {
     form.post(route('setup.step5.save'));
@@ -47,6 +55,12 @@ const complete = () => {
                 </div>
             </section>
 
+            <SetupLivePreview
+                :payload="previewPayload()"
+                title="Aperçu en direct"
+                subtitle="Vérifiez l’affichage final de votre site avant de terminer."
+            />
+
             <section class="grid md:grid-cols-2 gap-6">
                 <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
                     <div class="flex items-start gap-4">
@@ -63,8 +77,8 @@ const complete = () => {
                                 </p>
                                 <p class="font-mono text-purple-300">{{ coach.slug }}.unicoach.app</p>
                                 <div class="flex items-center gap-2 pt-1">
-                                    <div class="w-7 h-7 rounded border border-slate-800" :style="{ backgroundColor: coach.primary_color }"></div>
-                                    <div class="w-7 h-7 rounded border border-slate-800" :style="{ backgroundColor: coach.secondary_color }"></div>
+                                    <div class="w-7 h-7 rounded border border-slate-800" :style="{ backgroundColor: coach.color_primary }"></div>
+                                    <div class="w-7 h-7 rounded border border-slate-800" :style="{ backgroundColor: coach.color_secondary }"></div>
                                     <span class="text-[11px] text-slate-500">Vos couleurs</span>
                                 </div>
                             </div>

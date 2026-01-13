@@ -171,6 +171,7 @@ Route::middleware(['auth', 'onboarding.completed'])->prefix('setup')->group(func
     Route::get('/', [SetupWizardController::class, 'index'])->name('setup.index');
     Route::get('/step/{step}', [SetupWizardController::class, 'showStep'])->name('setup.step');
     Route::post('/check-slug', [SetupWizardController::class, 'checkSlugAvailability'])->name('setup.check-slug');
+    Route::post('/preview', [SetupWizardController::class, 'preview'])->name('setup.preview');
     Route::post('/step/1', [SetupWizardController::class, 'saveStep1'])->name('setup.step1.save');
     Route::post('/step/2', [SetupWizardController::class, 'saveStep2'])->name('setup.step2.save');
     Route::post('/step/3', [SetupWizardController::class, 'saveStep3'])->name('setup.step3.save');

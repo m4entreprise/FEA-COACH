@@ -42,10 +42,8 @@ const form = useForm({
   final_cta_title: props.coach?.final_cta_title || '',
   final_cta_subtitle: props.coach?.final_cta_subtitle || '',
   cta_text: props.coach?.cta_text || 'Réserver une séance',
-  intermediate_cta_title: props.coach?.intermediate_cta_title || '',
-  intermediate_cta_subtitle: props.coach?.intermediate_cta_subtitle || '',
-  satisfaction_rate: props.coach?.satisfaction_rate || 100,
-  average_rating: props.coach?.average_rating || 5.0,
+  satisfaction_rate: props.coach?.show_stats === false ? null : (props.coach?.satisfaction_rate ?? 100),
+  average_rating: props.coach?.show_stats === false ? null : (props.coach?.average_rating ?? 5.0),
   facebook_url: props.coach?.facebook_url || '',
   instagram_url: props.coach?.instagram_url || '',
   twitter_url: props.coach?.twitter_url || '',
@@ -677,24 +675,26 @@ onBeforeUnmount(() => {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="space-y-3">
                     <h3 class="text-sm font-semibold">Statistiques</h3>
+                    <p class="text-xs text-slate-400">
+                      Optionnel : vous pouvez laisser vide et les ajouter plus tard, quand vous aurez des clients.
+                    </p>
                     <div>
                       <InputLabel
                         for="satisfaction_rate"
-                        value="Taux de satisfaction (%) *"
+                        value="Taux de satisfaction (%)"
                         class="text-xs text-slate-200"
                       />
                       <div class="mt-1 flex items-center gap-3">
                         <input
                           id="satisfaction_rate"
-                          v-model.number="form.satisfaction_rate"
+                          v-model="form.satisfaction_rate"
                           type="number"
                           min="0"
                           max="100"
                           class="block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
-                          required
                         />
                         <span class="text-lg font-semibold text-emerald-400">
-                          {{ form.satisfaction_rate }}%
+                          {{ form.satisfaction_rate ?? '—' }}%
                         </span>
                       </div>
                       <InputError
@@ -706,22 +706,21 @@ onBeforeUnmount(() => {
                     <div>
                       <InputLabel
                         for="average_rating"
-                        value="Note moyenne (étoiles) *"
+                        value="Note moyenne (étoiles)"
                         class="text-xs text-slate-200"
                       />
                       <div class="mt-1 flex items-center gap-3">
                         <input
                           id="average_rating"
-                          v-model.number="form.average_rating"
+                          v-model="form.average_rating"
                           type="number"
                           min="0"
                           max="5"
                           step="0.1"
                           class="block w-full rounded-md border-slate-700 bg-slate-950 text-sm text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
-                          required
                         />
                         <span class="text-lg font-semibold text-amber-400">
-                          {{ form.average_rating }}★
+                          {{ form.average_rating ?? '—' }}★
                         </span>
                       </div>
                       <InputError
@@ -755,35 +754,6 @@ onBeforeUnmount(() => {
                         class="mt-1 text-xs"
                         :message="form.errors.cta_text"
                       />
-                    </div>
-
-                    <div class="grid grid-cols-1 gap-3">
-                      <div>
-                        <InputLabel
-                          for="intermediate_cta_title"
-                          value="Titre CTA intermédiaire"
-                          class="text-xs text-slate-200"
-                        />
-                        <TextInput
-                          id="intermediate_cta_title"
-                          v-model="form.intermediate_cta_title"
-                          type="text"
-                          class="mt-1 block w-full bg-slate-950 border-slate-700 text-slate-50"
-                        />
-                      </div>
-                      <div>
-                        <InputLabel
-                          for="intermediate_cta_subtitle"
-                          value="Sous-titre CTA intermédiaire"
-                          class="text-xs text-slate-200"
-                        />
-                        <textarea
-                          id="intermediate_cta_subtitle"
-                          v-model="form.intermediate_cta_subtitle"
-                          rows="2"
-                          class="mt-1 block w-full rounded-md border-slate-700 bg-slate-950 text-xs text-slate-50 focus:border-indigo-500 focus:ring-indigo-500"
-                        />
-                      </div>
                     </div>
                   </div>
                 </div>

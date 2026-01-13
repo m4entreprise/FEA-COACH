@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Coach;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class SetupWizardController extends Controller
@@ -51,6 +52,8 @@ class SetupWizardController extends Controller
             'totalSteps' => self::TOTAL_STEPS,
             'coach' => $coach,
             'user' => $user,
+            'availableLayouts' => config('coach_site.layouts', []),
+            'defaultLayout' => config('coach_site.default_layout', 'classic'),
         ]);
     }
 
@@ -64,20 +67,27 @@ class SetupWizardController extends Controller
 
         if ($request->action === 'demo') {
             $coach->update([
-                'primary_color' => '#9333ea',
-                'secondary_color' => '#ec4899',
+                'color_primary' => '#9333ea',
+                'color_secondary' => '#ec4899',
+                'site_layout' => config('coach_site.default_layout', 'classic'),
             ]);
         } elseif ($request->action === 'save') {
             $request->validate([
                 'slug' => 'required|string|max:255|unique:coaches,slug,' . $coach->id,
-                'primary_color' => 'required|string|max:7',
-                'secondary_color' => 'required|string|max:7',
+                'color_primary' => ['required', 'string', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                'color_secondary' => ['required', 'string', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                'site_layout' => [
+                    'required',
+                    'string',
+                    Rule::in(array_keys(config('coach_site.layouts', []))),
+                ],
             ]);
 
             $coach->update([
                 'slug' => $request->slug,
-                'primary_color' => $request->primary_color,
-                'secondary_color' => $request->secondary_color,
+                'color_primary' => $request->color_primary,
+                'color_secondary' => $request->color_secondary,
+                'site_layout' => $request->site_layout,
             ]);
 
             if ($request->hasFile('logo')) {
@@ -130,6 +140,7 @@ class SetupWizardController extends Controller
                 'method_text' => 'Ma méthode combine entraînement personnalisé, nutrition adaptée et suivi psychologique pour des résultats durables.',
                 'satisfaction_rate' => 100,
                 'average_rating' => 5.0,
+                'show_stats' => true,
             ]);
         } elseif ($request->action === 'save') {
             $request->validate([
@@ -137,14 +148,26 @@ class SetupWizardController extends Controller
                 'hero_subtitle' => 'nullable|string|max:500',
                 'about_text' => 'nullable|string|max:5000',
                 'method_text' => 'nullable|string|max:5000',
-                'satisfaction_rate' => 'nullable|integer|min:0|max:100',
-                'average_rating' => 'nullable|numeric|min:0|max:5',
+                'satisfaction_rate' => 'nullable|integer|min:0|max:100|required_with:average_rating',
+                'average_rating' => 'nullable|numeric|min:0|max:5|required_with:satisfaction_rate',
             ]);
 
-            $coach->update($request->only([
-                'hero_title', 'hero_subtitle', 'about_text', 'method_text',
-                'satisfaction_rate', 'average_rating'
-            ]));
+            $showStats = !is_null($request->input('satisfaction_rate')) && !is_null($request->input('average_rating'));
+
+            $coach->update(array_merge(
+                $request->only([
+                    'hero_title',
+                    'hero_subtitle',
+                    'about_text',
+                    'method_text',
+                ]),
+                [
+                    'show_stats' => $showStats,
+                ],
+                $showStats
+                    ? $request->only(['satisfaction_rate', 'average_rating'])
+                    : []
+            ));
         }
 
         $user->update(['setup_step' => 4]);
@@ -170,8 +193,6 @@ class SetupWizardController extends Controller
                 'method_step2_description' => 'Création d\'un programme adapté à vos objectifs',
                 'method_step3_title' => 'Suivi et ajustements',
                 'method_step3_description' => 'Accompagnement continu pour garantir vos résultats',
-                'intermediate_cta_title' => 'Prêt à transformer votre corps et votre vie ?',
-                'intermediate_cta_subtitle' => 'Ne restez pas seul face à vos objectifs. Bénéficiez d\'un accompagnement personnalisé qui vous mènera au succès.',
                 'pricing_title' => 'Mes formules de coaching',
                 'pricing_subtitle' => 'Choisissez la formule qui vous correspond',
                 'transformations_title' => 'Leurs transformations',
@@ -185,7 +206,6 @@ class SetupWizardController extends Controller
                 'method_step1_title', 'method_step1_description',
                 'method_step2_title', 'method_step2_description',
                 'method_step3_title', 'method_step3_description',
-                'intermediate_cta_title', 'intermediate_cta_subtitle',
                 'pricing_title', 'pricing_subtitle',
                 'transformations_title', 'transformations_subtitle',
                 'final_cta_title', 'final_cta_subtitle',
@@ -209,7 +229,7 @@ class SetupWizardController extends Controller
             'setup_step' => 5,
         ]);
 
-        return redirect()->route('dashboard')->with('success', '🎉 Félicitations ! Votre site est configuré et prêt à accueillir vos clients !');
+        return redirect()->route('dashboard')->with('success', 'Félicitations ! Votre site est configuré et prêt à accueillir vos clients !');
     }
 
     /**
@@ -242,5 +262,80 @@ class SetupWizardController extends Controller
 
         $user->update(['setup_step' => $nextStep]);
         return redirect()->route('setup.step', ['step' => $nextStep]);
+    }
+
+    /**
+     * Live preview of the public coach site (using unsaved setup wizard data).
+     */
+    public function preview(Request $request)
+    {
+        $coach = $request->user()->coach;
+
+        if (!$coach) {
+            abort(404, 'Coach introuvable.');
+        }
+
+        $data = $request->validate([
+            'slug' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'color_primary' => ['sometimes', 'nullable', 'string', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'color_secondary' => ['sometimes', 'nullable', 'string', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'site_layout' => ['sometimes', 'nullable', 'string', Rule::in(array_keys(config('coach_site.layouts', [])))],
+            'hero_title' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'hero_subtitle' => ['sometimes', 'nullable', 'string', 'max:500'],
+            'about_text' => ['sometimes', 'nullable', 'string', 'max:5000'],
+            'method_text' => ['sometimes', 'nullable', 'string', 'max:5000'],
+            'cta_text' => ['sometimes', 'nullable', 'string', 'max:100'],
+            'method_title' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'method_subtitle' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'method_step1_title' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'method_step1_description' => ['sometimes', 'nullable', 'string', 'max:1000'],
+            'method_step2_title' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'method_step2_description' => ['sometimes', 'nullable', 'string', 'max:1000'],
+            'method_step3_title' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'method_step3_description' => ['sometimes', 'nullable', 'string', 'max:1000'],
+            'pricing_title' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'pricing_subtitle' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'transformations_title' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'transformations_subtitle' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'final_cta_title' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'final_cta_subtitle' => ['sometimes', 'nullable', 'string', 'max:500'],
+            'satisfaction_rate' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:100', 'required_with:average_rating'],
+            'average_rating' => ['sometimes', 'nullable', 'numeric', 'min:0', 'max:5', 'required_with:satisfaction_rate'],
+            'show_stats' => ['sometimes', 'nullable', 'boolean'],
+        ]);
+
+        if (
+            array_key_exists('satisfaction_rate', $data)
+            || array_key_exists('average_rating', $data)
+        ) {
+            $data['show_stats'] = !is_null($data['satisfaction_rate'] ?? null) && !is_null($data['average_rating'] ?? null);
+        }
+
+        $coach->fill($data);
+
+        $coach->loadMissing([
+            'user',
+            'media',
+            'transformations' => fn ($query) => $query->orderBy('order'),
+            'serviceTypes' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('price'),
+            'faqs' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('created_at'),
+        ]);
+
+        $layouts = config('coach_site.layouts', []);
+        $defaultLayout = config('coach_site.default_layout', 'classic');
+        $layoutKey = $data['site_layout'] ?? ($coach->site_layout ?: $defaultLayout);
+        $layoutKey = array_key_exists($layoutKey, $layouts) ? $layoutKey : $defaultLayout;
+        $viewName = $layouts[$layoutKey]['view'] ?? 'coach-site.layouts.classic';
+
+        $html = view($viewName, [
+            'coach' => $coach,
+            'services' => $coach->serviceTypes,
+            'transformations' => $coach->transformations,
+            'faqs' => $coach->faqs,
+        ])->render();
+
+        return response()->json([
+            'html' => $html,
+        ]);
     }
 }

@@ -3,6 +3,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import WizardLayout from '@/Components/WizardLayout.vue';
 import { Image as ImageIcon, User as UserIcon, Upload, Info, Sparkles } from 'lucide-vue-next';
+import SetupLivePreview from '@/Components/SetupLivePreview.vue';
 
 const props = defineProps({
     currentStep: Number,
@@ -14,6 +15,12 @@ const form = useForm({
     action: 'save',
     hero_image: null,
     profile_photo: null,
+});
+
+const previewPayload = () => ({
+    site_layout: props.coach.site_layout,
+    color_primary: props.coach.color_primary,
+    color_secondary: props.coach.color_secondary,
 });
 
 const heroPreview = ref(null);
@@ -38,6 +45,7 @@ const handleProfileUpload = (e) => {
 const submit = (action) => {
     form.action = action;
     form.post(route('setup.step2.save'), {
+        forceFormData: true,
         preserveScroll: true,
     });
 };
@@ -67,6 +75,12 @@ const skip = () => {
                     </div>
                 </div>
             </section>
+
+            <SetupLivePreview
+                :payload="previewPayload()"
+                title="Aperçu en direct"
+                subtitle="Prévisualisez votre site en temps réel (les images apparaîtront après enregistrement)."
+            />
 
             <!-- Hero Image -->
             <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">

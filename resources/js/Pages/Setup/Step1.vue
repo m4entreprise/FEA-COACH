@@ -3,20 +3,31 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import WizardLayout from '@/Components/WizardLayout.vue';
 import axios from 'axios';
-import { Globe2, ImageUp, Palette, Droplet } from 'lucide-vue-next';
+import { Globe2, ImageUp, Palette, Droplet, LayoutPanelLeft } from 'lucide-vue-next';
+import SetupLivePreview from '@/Components/SetupLivePreview.vue';
 
 const props = defineProps({
     currentStep: Number,
     totalSteps: Number,
     coach: Object,
+    availableLayouts: Object,
+    defaultLayout: String,
 });
 
 const form = useForm({
     action: 'save',
     slug: props.coach.slug || '',
-    primary_color: props.coach.primary_color || '#9333ea',
-    secondary_color: props.coach.secondary_color || '#ec4899',
+    color_primary: props.coach.color_primary || '#9333ea',
+    color_secondary: props.coach.color_secondary || '#ec4899',
+    site_layout: props.coach.site_layout || props.defaultLayout || 'classic',
     logo: null,
+});
+
+const previewPayload = () => ({
+    slug: form.slug,
+    color_primary: form.color_primary,
+    color_secondary: form.color_secondary,
+    site_layout: form.site_layout,
 });
 
 const slugChecking = ref(false);
@@ -57,6 +68,7 @@ const handleLogoUpload = (e) => {
 const submit = (action) => {
     form.action = action;
     form.post(route('setup.step1.save'), {
+        forceFormData: true,
         preserveScroll: true,
     });
 };
@@ -87,6 +99,12 @@ const skip = () => {
                     </div>
                 </div>
             </section>
+
+            <SetupLivePreview
+                :payload="previewPayload()"
+                title="Aperçu en direct"
+                subtitle="Prévisualisez votre site en temps réel avec vos couleurs et votre layout."
+            />
 
             <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl space-y-4">
                 <div class="flex items-start gap-4">
@@ -175,20 +193,20 @@ const skip = () => {
                     <div class="mt-4 flex items-center gap-4">
                         <input
                             type="color"
-                            v-model="form.primary_color"
+                            v-model="form.color_primary"
                             class="w-16 h-16 rounded-xl cursor-pointer border-2 border-slate-700 bg-slate-950"
                         />
                         <div class="flex-1">
                             <input
                                 type="text"
-                                v-model="form.primary_color"
+                                v-model="form.color_primary"
                                 class="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 font-mono focus:border-purple-500 focus:ring-purple-500"
                             />
                         </div>
                     </div>
                     <div
                         class="mt-4 h-12 rounded-xl border border-slate-800"
-                        :style="{ backgroundColor: form.primary_color }"
+                        :style="{ backgroundColor: form.color_primary }"
                     ></div>
                 </div>
 
@@ -207,21 +225,53 @@ const skip = () => {
                     <div class="mt-4 flex items-center gap-4">
                         <input
                             type="color"
-                            v-model="form.secondary_color"
+                            v-model="form.color_secondary"
                             class="w-16 h-16 rounded-xl cursor-pointer border-2 border-slate-700 bg-slate-950"
                         />
                         <div class="flex-1">
                             <input
                                 type="text"
-                                v-model="form.secondary_color"
+                                v-model="form.color_secondary"
                                 class="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 font-mono focus:border-purple-500 focus:ring-purple-500"
                             />
                         </div>
                     </div>
                     <div
                         class="mt-4 h-12 rounded-xl border border-slate-800"
-                        :style="{ backgroundColor: form.secondary_color }"
+                        :style="{ backgroundColor: form.color_secondary }"
                     ></div>
+                </div>
+            </section>
+
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start gap-4">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                        <LayoutPanelLeft class="h-5 w-5 text-white" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Layout</p>
+                        <h3 class="text-base font-semibold text-slate-50">Choisissez votre design</h3>
+                        <p class="text-xs text-slate-400 mt-1">Vous pourrez le changer plus tard depuis le dashboard.</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 grid gap-3 md:grid-cols-3">
+                    <button
+                        v-for="(layout, key) in (props.availableLayouts || {})"
+                        :key="key"
+                        type="button"
+                        @click="form.site_layout = key"
+                        class="rounded-2xl border p-4 text-left transition"
+                        :class="form.site_layout === key
+                            ? 'border-purple-500/60 bg-purple-500/10'
+                            : 'border-slate-800 bg-slate-950/40 hover:border-slate-700'"
+                    >
+                        <p class="text-sm font-semibold text-slate-50">{{ layout.label || key }}</p>
+                        <p class="mt-1 text-xs text-slate-400">{{ layout.description || '' }}</p>
+                        <p class="mt-2 text-[11px] text-slate-500">
+                            <span class="font-mono">{{ key }}</span>
+                        </p>
+                    </button>
                 </div>
             </section>
 

@@ -81,10 +81,8 @@ class ContentController extends Controller
             'final_cta_title' => ['nullable', 'string', 'max:255'],
             'final_cta_subtitle' => ['nullable', 'string', 'max:500'],
             'cta_text' => ['required', 'string', 'max:100'],
-            'intermediate_cta_title' => ['nullable', 'string', 'max:255'],
-            'intermediate_cta_subtitle' => ['nullable', 'string', 'max:500'],
-            'satisfaction_rate' => ['required', 'integer', 'min:0', 'max:100'],
-            'average_rating' => ['required', 'numeric', 'min:0', 'max:5'],
+            'satisfaction_rate' => ['nullable', 'integer', 'min:0', 'max:100', 'required_with:average_rating'],
+            'average_rating' => ['nullable', 'numeric', 'min:0', 'max:5', 'required_with:satisfaction_rate'],
             'facebook_url' => ['nullable', 'url', 'max:255'],
             'instagram_url' => ['nullable', 'url', 'max:255'],
             'twitter_url' => ['nullable', 'url', 'max:255'],
@@ -93,7 +91,19 @@ class ContentController extends Controller
             'tiktok_url' => ['nullable', 'url', 'max:255'],
         ]);
 
-        $coach->update($validated);
+        $showStats = !is_null($validated['satisfaction_rate'] ?? null) && !is_null($validated['average_rating'] ?? null);
+
+        $updateData = $validated;
+        if (! $showStats) {
+            unset($updateData['satisfaction_rate'], $updateData['average_rating']);
+        }
+
+        $coach->update(array_merge(
+            $updateData,
+            [
+                'show_stats' => $showStats,
+            ],
+        ));
 
         return redirect()->route('dashboard.content')
             ->with('success', 'Contenu mis à jour avec succès.');
@@ -172,10 +182,8 @@ class ContentController extends Controller
             'final_cta_title' => ['nullable', 'string', 'max:255'],
             'final_cta_subtitle' => ['nullable', 'string', 'max:500'],
             'cta_text' => ['required', 'string', 'max:100'],
-            'intermediate_cta_title' => ['nullable', 'string', 'max:255'],
-            'intermediate_cta_subtitle' => ['nullable', 'string', 'max:500'],
-            'satisfaction_rate' => ['required', 'integer', 'min:0', 'max:100'],
-            'average_rating' => ['required', 'numeric', 'min:0', 'max:5'],
+            'satisfaction_rate' => ['nullable', 'integer', 'min:0', 'max:100', 'required_with:average_rating'],
+            'average_rating' => ['nullable', 'numeric', 'min:0', 'max:5', 'required_with:satisfaction_rate'],
             'facebook_url' => ['nullable', 'url', 'max:255'],
             'instagram_url' => ['nullable', 'url', 'max:255'],
             'twitter_url' => ['nullable', 'url', 'max:255'],
@@ -185,12 +193,15 @@ class ContentController extends Controller
             'site_layout' => ['nullable', 'string', Rule::in(array_keys(config('coach_site.layouts', [])))],
         ]);
 
+        $data['show_stats'] = !is_null($data['satisfaction_rate'] ?? null) && !is_null($data['average_rating'] ?? null);
+
         $coach->fill($data);
 
         $coach->loadMissing([
             'user',
             'transformations' => fn ($query) => $query->orderBy('order'),
             'plans' => fn ($query) => $query->where('is_active', true)->orderBy('price'),
+            'serviceTypes' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('price'),
             'faqs' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('created_at'),
         ]);
 
@@ -203,6 +214,7 @@ class ContentController extends Controller
         $html = view($viewName, [
             'coach' => $coach,
             'plans' => $coach->plans,
+            'services' => $coach->serviceTypes,
             'transformations' => $coach->transformations,
             'faqs' => $coach->faqs,
         ])->render();

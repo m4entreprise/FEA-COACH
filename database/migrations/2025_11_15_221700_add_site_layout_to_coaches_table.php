@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('coaches', function (Blueprint $table) {
-            $table->string('site_layout')
-                ->default('classic')
-                ->after('subdomain');
-        });
+        if (! Schema::hasColumn('coaches', 'site_layout')) {
+            Schema::table('coaches', function (Blueprint $table) {
+                $table->string('site_layout')
+                    ->default('classic')
+                    ->after('subdomain');
+            });
+        }
     }
 
     /**
@@ -23,8 +25,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('coaches', function (Blueprint $table) {
-            $table->dropColumn('site_layout');
-        });
+        if (Schema::hasColumn('coaches', 'site_layout')) {
+            Schema::table('coaches', function (Blueprint $table) {
+                $table->dropColumn('site_layout');
+            });
+        }
     }
 };

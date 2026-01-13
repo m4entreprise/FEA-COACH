@@ -2,6 +2,7 @@
 import { Head, useForm } from '@inertiajs/vue3';
 import WizardLayout from '@/Components/WizardLayout.vue';
 import { FileText, Target, BarChart3, User as UserIcon, Zap, Sparkles, Star } from 'lucide-vue-next';
+import SetupLivePreview from '@/Components/SetupLivePreview.vue';
 
 const props = defineProps({
     currentStep: Number,
@@ -9,14 +10,26 @@ const props = defineProps({
     coach: Object,
 });
 
+const isStatsEnabled = props.coach?.show_stats !== false;
+
 const form = useForm({
     action: 'save',
     hero_title: props.coach.hero_title || '',
     hero_subtitle: props.coach.hero_subtitle || '',
     about_text: props.coach.about_text || '',
     method_text: props.coach.method_text || '',
-    satisfaction_rate: props.coach.satisfaction_rate || 100,
-    average_rating: props.coach.average_rating || 5.0,
+    satisfaction_rate: isStatsEnabled ? (props.coach.satisfaction_rate ?? 100) : null,
+    average_rating: isStatsEnabled ? (props.coach.average_rating ?? 5.0) : null,
+});
+
+const previewPayload = () => ({
+    hero_title: form.hero_title,
+    hero_subtitle: form.hero_subtitle,
+    about_text: form.about_text,
+    method_text: form.method_text,
+    satisfaction_rate: form.satisfaction_rate,
+    average_rating: form.average_rating,
+    site_layout: props.coach.site_layout,
 });
 
 const submit = (action) => {
@@ -105,6 +118,13 @@ const skip = () => {
                         <p class="text-xs text-slate-400 mt-1">Ces valeurs apparaissent dans la section À propos sur votre site.</p>
                     </div>
                 </div>
+
+                <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950/70 p-4">
+                    <p class="text-xs font-semibold text-slate-200">Optionnel</p>
+                    <p class="mt-1 text-xs text-slate-400">
+                        Vous pouvez ne rien mettre pour le moment et ajouter ces statistiques plus tard, quand vous aurez des clients.
+                    </p>
+                </div>
                 
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
@@ -114,12 +134,12 @@ const skip = () => {
                         <div class="flex items-center space-x-3">
                             <input
                                 type="number"
-                                v-model.number="form.satisfaction_rate"
+                                v-model="form.satisfaction_rate"
                                 min="0"
                                 max="100"
                                 class="flex-1 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 focus:border-sky-500 focus:ring-sky-500"
                             />
-                            <span class="text-sm font-semibold text-sky-200">{{ form.satisfaction_rate }}%</span>
+                            <span class="text-sm font-semibold text-sky-200">{{ form.satisfaction_rate ?? '—' }}%</span>
                         </div>
                     </div>
 
@@ -130,7 +150,7 @@ const skip = () => {
                         <div class="flex items-center space-x-3">
                             <input
                                 type="number"
-                                v-model.number="form.average_rating"
+                                v-model="form.average_rating"
                                 min="0"
                                 max="5"
                                 step="0.1"
@@ -138,7 +158,7 @@ const skip = () => {
                             />
                             <span class="inline-flex items-center gap-1 text-sm font-semibold text-amber-200">
                                 <Star class="h-4 w-4" />
-                                {{ form.average_rating }}
+                                {{ form.average_rating ?? '—' }}
                             </span>
                         </div>
                     </div>
@@ -167,27 +187,32 @@ const skip = () => {
                 <p class="mt-1 text-[11px] text-slate-500">{{ form.about_text.length }}/5000</p>
             </section>
 
-            <!-- Method -->
             <section class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
                 <div class="flex items-start gap-4 mb-4">
                     <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg flex-shrink-0">
                         <Zap class="h-5 w-5 text-white" />
                     </div>
                     <div class="flex-1">
-                        <p class="text-xs uppercase tracking-wide text-slate-500">Méthode</p>
-                        <h3 class="text-base font-semibold text-slate-50">Votre méthode de coaching</h3>
-                        <p class="text-xs text-slate-400 mt-1">Expliquez ce qui rend votre accompagnement unique.</p>
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Approche</p>
+                        <h3 class="text-base font-semibold text-slate-50">Votre approche (optionnel)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Décrivez comment vous accompagnez vos clients.</p>
                     </div>
                 </div>
-                
+
                 <textarea
                     v-model="form.method_text"
                     rows="4"
                     class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:border-amber-500 focus:ring-amber-500 resize-none"
-                    placeholder="Décrivez votre approche unique du coaching..."
+                    placeholder="Ex: bilan initial, plan personnalisé, suivi hebdomadaire..."
                 ></textarea>
                 <p class="mt-1 text-[11px] text-slate-500">{{ form.method_text.length }}/5000</p>
             </section>
+
+            <SetupLivePreview
+                :payload="previewPayload()"
+                title="Aperçu en direct"
+                subtitle="Prévisualisez votre site en temps réel."
+            />
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3">

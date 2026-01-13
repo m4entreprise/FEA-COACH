@@ -319,14 +319,16 @@
                         <p class="text-4xl font-bold text-gray-900">{{ isset($transformations) ? $transformations->count() : 0 }}+</p>
                         <p class="text-sm text-gray-500">clients suivis</p>
                     </div>
-                    <div>
-                        <p class="text-4xl font-bold text-gray-900">{{ $coach->satisfaction_rate ?? 100 }}%</p>
-                        <p class="text-sm text-gray-500">satisfaction</p>
-                    </div>
-                    <div>
-                        <p class="text-4xl font-bold text-gray-900">{{ $coach->average_rating ?? 5.0 }} ★</p>
-                        <p class="text-sm text-gray-500">note moyenne</p>
-                    </div>
+                    @if($coach->show_stats ?? true)
+                        <div>
+                            <p class="text-4xl font-bold text-gray-900">{{ $coach->satisfaction_rate ?? 100 }}%</p>
+                            <p class="text-sm text-gray-500">satisfaction</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-bold text-gray-900">{{ $coach->average_rating ?? 5.0 }} ★</p>
+                            <p class="text-sm text-gray-500">note moyenne</p>
+                        </div>
+                    @endif
                     <div class="text-sm text-gray-500">
                         <p>Programmes épurés, focus sur l’essentiel.</p>
                     </div>
@@ -346,19 +348,21 @@
         <div class="text-lg text-gray-600 leading-relaxed space-y-4 mb-12 max-w-3xl mx-auto minimal-about-seq" style="transition-delay: 0.28s;">
             {!! nl2br(e($coach->about_text ?? 'Coach sportif certifié avec plusieurs années d\'expérience dans l\'accompagnement personnalisé.')) !!}
         </div>
-        <div class="grid gap-6 sm:grid-cols-3 minimal-about-seq" style="transition-delay: 0.36s;">
+        <div class="grid gap-6 sm:grid-cols-{{ ($coach->show_stats ?? true) ? 3 : 1 }} minimal-about-seq" style="transition-delay: 0.36s;">
             <div class="border border-gray-200 rounded-2xl p-6 minimal-about-card" style="transition-delay: 0.42s;">
                 <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Clients suivis</p>
                 <p class="text-4xl font-bold text-gray-900">{{ isset($transformations) ? $transformations->count() : 0 }}+</p>
             </div>
-            <div class="border border-gray-200 rounded-2xl p-6 minimal-about-card" style="transition-delay: 0.5s;">
-                <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Satisfaction</p>
-                <p class="text-4xl font-bold text-gray-900">{{ $coach->satisfaction_rate ?? 100 }}%</p>
-            </div>
-            <div class="border border-gray-200 rounded-2xl p-6 minimal-about-card" style="transition-delay: 0.58s;">
-                <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Note moyenne</p>
-                <p class="text-4xl font-bold text-gray-900">{{ $coach->average_rating ?? 5.0 }} ★</p>
-            </div>
+            @if($coach->show_stats ?? true)
+                <div class="border border-gray-200 rounded-2xl p-6 minimal-about-card" style="transition-delay: 0.5s;">
+                    <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Satisfaction</p>
+                    <p class="text-4xl font-bold text-gray-900">{{ $coach->satisfaction_rate ?? 100 }}%</p>
+                </div>
+                <div class="border border-gray-200 rounded-2xl p-6 minimal-about-card" style="transition-delay: 0.58s;">
+                    <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Note moyenne</p>
+                    <p class="text-4xl font-bold text-gray-900">{{ $coach->average_rating ?? 5.0 }} ★</p>
+                </div>
+            @endif
         </div>
     </div>
 </section>

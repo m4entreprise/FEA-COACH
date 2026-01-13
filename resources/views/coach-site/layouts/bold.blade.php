@@ -378,19 +378,21 @@
             {{ $coach->hero_subtitle ?? 'Coaching sportif personnalisé' }}
         </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-3xl mx-auto mb-12 bold-hero-stats">
+        <div class="grid grid-cols-1 sm:grid-cols-{{ ($coach->show_stats ?? true) ? 3 : 1 }} gap-4 sm:gap-8 max-w-3xl mx-auto mb-12 bold-hero-stats">
             <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center bold-hero-stat-card">
                 <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ isset($transformations) ? $transformations->count() : 0 }}+</div>
                 <div class="text-xs sm:text-sm uppercase tracking-wider">Clients</div>
             </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center bold-hero-stat-card">
-                <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ $coach->satisfaction_rate ?? 100 }}%</div>
-                <div class="text-xs sm:text-sm uppercase tracking-wider">Satisfaction</div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center bold-hero-stat-card">
-                <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ $coach->average_rating ?? 5.0 }}</div>
-                <div class="text-xs sm:text-sm uppercase tracking-wider">Note</div>
-            </div>
+            @if($coach->show_stats ?? true)
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center bold-hero-stat-card">
+                    <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ $coach->satisfaction_rate ?? 100 }}%</div>
+                    <div class="text-xs sm:text-sm uppercase tracking-wider">Satisfaction</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 sm:p-6 border border-white/20 text-center bold-hero-stat-card">
+                    <div class="text-4xl sm:text-5xl font-black mb-1 sm:mb-2">{{ $coach->average_rating ?? 5.0 }}</div>
+                    <div class="text-xs sm:text-sm uppercase tracking-wider">Note</div>
+                </div>
+            @endif
         </div>
 
         <a href="#tarifs" class="inline-flex items-center px-12 py-5 bg-white text-primary text-xl font-black rounded-full hover:bg-gray-100 transition-all shadow-2xl transform hover:scale-110 bold-hero-cta">

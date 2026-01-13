@@ -124,6 +124,7 @@ class BrandingController extends Controller
             'media',
             'transformations' => fn ($query) => $query->orderBy('order'),
             'plans' => fn ($query) => $query->where('is_active', true)->orderBy('price'),
+            'serviceTypes' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('price'),
             'faqs' => fn ($query) => $query->where('is_active', true)->orderBy('order')->orderBy('created_at'),
         ]);
 
@@ -136,6 +137,7 @@ class BrandingController extends Controller
         $html = view($viewName, [
             'coach' => $coach,
             'plans' => $coach->plans,
+            'services' => $coach->serviceTypes,
             'transformations' => $coach->transformations,
             'faqs' => $coach->faqs,
         ])->render();
